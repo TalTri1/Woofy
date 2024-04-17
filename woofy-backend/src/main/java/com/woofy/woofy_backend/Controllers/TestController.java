@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("/api/hello")
     public ResponseEntity<String> getHello() {
-        return ResponseEntity.ok("Hello from the backend!");
+        return ResponseEntity.ok("Hello from the backend! Test Naor clone");
     }
 }
 
