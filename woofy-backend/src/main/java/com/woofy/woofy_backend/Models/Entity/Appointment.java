@@ -8,31 +8,44 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "dog")
-public class Dog {
+@AllArgsConstructor
+@Table(name = "appointment")
+public class Appointment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
+
+    @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer owner;
+    private Customer customer;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "dog_id", nullable = false)
+    private Dog dog;
 
-    @Column(name = "breed", nullable = false)
-    private String breed;
+    @Column(nullable = false)
+    private String serviceType;
 
-    @Column(name = "age")
-    private int age;
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
