@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Auditing;
 
 
-import com.woofy.woofy_backend.Models.Entity.User;
+import com.woofy.woofy_backend.Models.Entity.UserEntity;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ public class ApplicationAuditAware implements AuditorAware<Integer> {
             return Optional.empty();
         }
 
-        User userPrincipal = (User) authentication.getPrincipal();
+        UserEntity userPrincipal = (UserEntity) authentication.getPrincipal();
         return Optional.ofNullable(userPrincipal.getId());
     }
 }

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woofy.woofy_backend.DTO.AuthenticationRequest;
 import com.woofy.woofy_backend.DTO.AuthenticationResponse;
 import com.woofy.woofy_backend.DTO.RegisterRequest;
-import com.woofy.woofy_backend.Models.Entity.Token;
-import com.woofy.woofy_backend.Models.Entity.User;
-import com.woofy.woofy_backend.Models.Enums.TokenType;
+import com.woofy.woofy_backend.Models.Entity.TokenEntity;
+import com.woofy.woofy_backend.Models.Entity.UserEntity;
+import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
 import com.woofy.woofy_backend.Repository.TokenRepository;
 import com.woofy.woofy_backend.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,7 +42,7 @@ public class AuthenticationService {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
-        var user = User.builder()
+        var user = UserEntity.builder()
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -83,18 +83,18 @@ public class AuthenticationService {
     }
 
 
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+    private void saveUserToken(UserEntity user, String jwtToken) {
+        var token = TokenEntity.builder()
                 .user(user)
                 .token(jwtToken)
-                .tokenType(TokenType.BEARER)
+                .tokenType(TokenTypeEnum.BEARER)
                 .expired(false)
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(User user) {
+    private void revokeAllUserTokens(UserEntity user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;

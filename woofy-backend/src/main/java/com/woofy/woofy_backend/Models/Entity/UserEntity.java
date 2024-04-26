@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Models.Entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.woofy.woofy_backend.Models.Enums.Role;
+import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -35,6 +34,12 @@ public class User implements UserDetails {
     @Email(message = "Email should be valid")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "first_name", unique = true, nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", unique = true, nullable = false)
+    private String lastName;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
@@ -46,11 +51,11 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "roles", nullable = false)
-    private Role role;
+    private RoleEnum role;
 
     @OneToMany(mappedBy = "user")
     @Column(name = "tokens")
-    private List<Token> tokens;
+    private List<TokenEntity> tokens;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

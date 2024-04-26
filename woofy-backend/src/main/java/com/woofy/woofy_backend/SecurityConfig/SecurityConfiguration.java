@@ -14,8 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
-import static com.woofy.woofy_backend.Models.Enums.Permission.*;
-import static com.woofy.woofy_backend.Models.Enums.Role.ADMIN;
+import static com.woofy.woofy_backend.Models.Enums.PermissionEnum.*;
+import static com.woofy.woofy_backend.Models.Enums.RoleEnum.ADMIN;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;

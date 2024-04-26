@@ -2,7 +2,7 @@ package com.woofy.woofy_backend.Services;
 
 
 import com.woofy.woofy_backend.DTO.ChangePasswordRequest;
-import com.woofy.woofy_backend.Models.Entity.User;
+import com.woofy.woofy_backend.Models.Entity.UserEntity;
 import com.woofy.woofy_backend.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +21,7 @@ public class UserService {
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         // check if the current password is correct
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {

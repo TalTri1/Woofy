@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customer")
-public class Customer  {
+public class CustomerEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -26,6 +26,6 @@ public class Customer  {
 
     @OneToMany
     @Column(name = "dogs")
-    private List<Dog> dogs;
+    private List<DogEntity> dogs;
 
 }

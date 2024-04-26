@@ -1,12 +1,13 @@
 package com.woofy.woofy_backend.Models.Entity;
 
+import com.woofy.woofy_backend.Models.Entity.Business.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "picture")
-public class Picture {
+public class PictureEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,10 +18,10 @@ public class Picture {
 
     @ManyToOne
     @JoinColumn(name = "dog_id")
-    private Dog dog;
+    private DogEntity dog;
 
     @ManyToOne
     @JoinColumn(name = "business_id")
-    private Business business;
+    private BusinessEntity business;
 
 }

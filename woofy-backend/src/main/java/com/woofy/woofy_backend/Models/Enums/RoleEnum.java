@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.woofy.woofy_backend.Models.Enums.Permission.*;
+import static com.woofy.woofy_backend.Models.Enums.PermissionEnum.*;
 
 
 @RequiredArgsConstructor
-public enum Role {
+public enum RoleEnum {
 
     USER(Collections.emptySet()),
     ADMIN(
@@ -26,7 +26,7 @@ public enum Role {
     );
 
     @Getter
-    private final Set<Permission> permissions;
+    private final Set<PermissionEnum> permissions;
 
     public List<SimpleGrantedAuthority> getAuthorities() {
         var authorities = getPermissions()
