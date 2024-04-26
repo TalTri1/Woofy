@@ -29,8 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# Editor directories and files
 .vscode/
+*.swp
+*.swo
+*.swn
 
 ### Logs ###
 logs/
