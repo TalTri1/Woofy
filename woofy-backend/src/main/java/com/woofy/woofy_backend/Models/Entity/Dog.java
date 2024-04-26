@@ -1,5 +1,8 @@
 package com.woofy.woofy_backend.Models.Entity;
 
+import com.woofy.woofy_backend.Models.Enums.Dog.AgeCategory;
+import com.woofy.woofy_backend.Models.Enums.Dog.Size;
+import com.woofy.woofy_backend.Models.Enums.Dog.TrainingLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +11,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,8 +36,26 @@ public class Dog {
     @Column(name = "breed", nullable = false)
     private String breed;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "age")
-    private int age;
+    private AgeCategory age;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "size")
+    private Size size;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "training_level")
+    private TrainingLevel trainingLevel;
+
+    @Column(name = "about", length = 2000)
+    private String about;
+
+    @Column(name = "special_requirements")
+    private String specialRequirements = "";
+
+    @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Picture> pictures = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
