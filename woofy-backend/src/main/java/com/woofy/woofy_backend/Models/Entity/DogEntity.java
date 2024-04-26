@@ -1,8 +1,8 @@
 package com.woofy.woofy_backend.Models.Entity;
 
-import com.woofy.woofy_backend.Models.Enums.Dog.AgeCategory;
-import com.woofy.woofy_backend.Models.Enums.Dog.Size;
-import com.woofy.woofy_backend.Models.Enums.Dog.TrainingLevel;
+import com.woofy.woofy_backend.Models.Enums.DogEnums.DogAgeCategoryEnum;
+import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
+import com.woofy.woofy_backend.Models.Enums.DogEnums.DogTrainingEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "dog")
-public class Dog {
+public class DogEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,7 +28,7 @@ public class Dog {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer owner;
+    private CustomerEntity owner;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -38,15 +38,15 @@ public class Dog {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "age")
-    private AgeCategory age;
+    private DogAgeCategoryEnum age;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "size")
-    private Size size;
+    private DogSizeEnum size;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "training_level")
-    private TrainingLevel trainingLevel;
+    private DogTrainingEnum trainingLevel;
 
     @Column(name = "about", length = 2000)
     private String about;
@@ -55,7 +55,7 @@ public class Dog {
     private String specialRequirements = "";
 
     @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Picture> pictures = new ArrayList<>();
+    private List<PictureEntity> pictures = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

@@ -1,6 +1,8 @@
-package com.woofy.woofy_backend.Models.Entity;
+package com.woofy.woofy_backend.Models.Entity.Business;
 
-import com.woofy.woofy_backend.Models.Enums.BusinessType;
+import com.woofy.woofy_backend.Models.Entity.AppointmentEntity;
+import com.woofy.woofy_backend.Models.Entity.Business.BusinessTypes.BusinessTypeBaseEntity;
+import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "business")
-public class Business {
+public class BusinessEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
@@ -22,14 +24,17 @@ public class Business {
     @Column(name = "business_name", nullable = false)
     private String businessName;
 
-    @Column(name = "business_type", nullable = false)
-    private List<BusinessType> businessType;
+    @OneToMany(mappedBy = "business_list", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusinessTypeBaseEntity> businessList;
 
-//    @Column(name = "address", nullable = false)
-//    private String address;
+    @Column(name = "acceptable_dog_sizes", nullable = false)
+    private List<DogSizeEnum> acceptableDogSizes;
 
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Appointment> appointments;
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @OneToMany(mappedBy = "appointments", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AppointmentEntity> appointments;
 
     @Column(name = "description")
     private String description;
@@ -48,5 +53,6 @@ public class Business {
 
     @Column(name = "social_media")
     private String socialMedia;
+
 
 }

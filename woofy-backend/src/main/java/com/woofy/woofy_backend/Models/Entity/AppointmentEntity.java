@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entity;
 
+import com.woofy.woofy_backend.Models.Entity.Business.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "appointment")
-public class Appointment {
+public class AppointmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +26,15 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "business_id", nullable = false)
-    private Business business;
+    private BusinessEntity business;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    private CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
-    private Dog dog;
+    private DogEntity dog;
 
     @Column(nullable = false)
     private String serviceType;

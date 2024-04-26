@@ -1,6 +1,6 @@
 package com.woofy.woofy_backend.Models.Entity;
 
-import com.woofy.woofy_backend.Models.Enums.TokenType;
+import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Token {
+public class TokenEntity {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class Token {
     public String token;
 
     @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
+    public TokenTypeEnum tokenType = TokenTypeEnum.BEARER;
 
     public boolean revoked;
 
@@ -38,5 +38,5 @@ public class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    public User user;
+    public UserEntity user;
 }
