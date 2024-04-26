@@ -3,7 +3,7 @@ package com.woofy.woofy_backend.Models.Entity.Business.BusinessTypes.StayAtBusin
 import com.woofy.woofy_backend.Models.Entity.Business.BusinessTypes.BusinessTypeBaseEntity;
 import jakarta.persistence.*;
 
-@Inheritance
+@MappedSuperclass
 public class StayAtBusinessBaseEntity extends BusinessTypeBaseEntity {
 
 }

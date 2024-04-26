@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-@Inheritance
+@MappedSuperclass
 public class HomestayBaseEntity extends BusinessTypeBaseEntity {
 
     @Column(name = "home_conditions")
