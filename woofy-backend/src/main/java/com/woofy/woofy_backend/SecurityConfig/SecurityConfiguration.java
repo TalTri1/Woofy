@@ -45,6 +45,15 @@ public class SecurityConfiguration {
                                 .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name())
                                 .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name())
                                 .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name())
+
+                                // ***** remember to remove this section *****
+                                .requestMatchers(GET, "/api/v1/business/**").hasAnyAuthority(ADMIN_READ.name())
+                                .requestMatchers(POST, "/api/v1/business/**").hasAnyAuthority(ADMIN_CREATE.name())
+                                .requestMatchers(PUT, "/api/v1/business/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/business/**").hasAnyAuthority(ADMIN_DELETE.name())
+                                // *****
+
+
                                 .anyRequest()
                                 .authenticated()
                 )
