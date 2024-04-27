@@ -2,10 +2,12 @@ import { FunctionComponent, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import TypeOfUser from "../components/TypeOfUser";
 import UserRegistrationFormFields from "../components/FormFields";
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const UserRegistrationPage: FunctionComponent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { email, password } = location.state;
 
   const onBackButtonTextClick = useCallback(() => {
     navigate("/sign-up-page");

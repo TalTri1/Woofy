@@ -4,9 +4,11 @@ package com.woofy.woofy_backend.Services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woofy.woofy_backend.DTO.AuthenticationRequest;
 import com.woofy.woofy_backend.DTO.AuthenticationResponse;
+import com.woofy.woofy_backend.DTO.EmailValidationRequest;
 import com.woofy.woofy_backend.DTO.RegisterRequest;
 import com.woofy.woofy_backend.Models.Entity.TokenEntity;
 import com.woofy.woofy_backend.Models.Entity.UserEntity;
+import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
 import com.woofy.woofy_backend.Repository.TokenRepository;
 import com.woofy.woofy_backend.Repository.UserRepository;
@@ -43,7 +45,6 @@ public class AuthenticationService {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
         var user = UserEntity.builder()
-                .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
@@ -132,4 +133,16 @@ public class AuthenticationService {
             }
         }
     }
+
+    public ResponseEntity<?> check_valid_email(EmailValidationRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok("Email is valid");
+    }
+
 }

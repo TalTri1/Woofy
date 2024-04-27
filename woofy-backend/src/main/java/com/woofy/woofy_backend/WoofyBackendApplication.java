@@ -17,18 +17,5 @@ public class WoofyBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WoofyBackendApplication.class, args);
 	}
-	@Bean
-	public CommandLineRunner commandLineRunner(
-			AuthenticationService service
-	) {
-		return args -> {
-			var admin = RegisterRequest.builder()
-					.email("admin@mail.com")
-					.password("password")
-					.phoneNumber("123456789")
-					.role(ADMIN)
-					.build();
-		};
-	}
 
 }

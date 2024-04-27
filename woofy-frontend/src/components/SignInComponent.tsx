@@ -1,7 +1,7 @@
 import { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Modal: FunctionComponent = () => {
+const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const onSignUpLinkClick = useCallback(() => {
@@ -128,4 +128,4 @@ const Modal: FunctionComponent = () => {
   );
 };
 
-export default Modal;
+export default SignInComponent;
