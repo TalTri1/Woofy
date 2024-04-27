@@ -1,9 +1,9 @@
 package com.woofy.woofy_backend.Services;
 
 
-import com.woofy.woofy_backend.DTO.ChangePasswordRequest;
-import com.woofy.woofy_backend.Models.Entity.UserEntity;
-import com.woofy.woofy_backend.Repository.UserRepository;
+import com.woofy.woofy_backend.DTOs.ChangePasswordRequest;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

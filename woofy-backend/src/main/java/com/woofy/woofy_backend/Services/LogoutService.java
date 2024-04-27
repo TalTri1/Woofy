@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Services;
 
 
-import com.woofy.woofy_backend.Repository.TokenRepository;
+import com.woofy.woofy_backend.Repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

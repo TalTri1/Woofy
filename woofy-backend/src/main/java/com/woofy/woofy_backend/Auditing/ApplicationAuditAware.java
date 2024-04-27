@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Auditing;
 
 
-import com.woofy.woofy_backend.Models.Entity.UserEntity;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

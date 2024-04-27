@@ -2,7 +2,7 @@ package com.woofy.woofy_backend.SecurityConfig;
 
 
 import com.woofy.woofy_backend.Auditing.ApplicationAuditAware;
-import com.woofy.woofy_backend.Repository.UserRepository;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

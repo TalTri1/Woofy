@@ -2,16 +2,15 @@ package com.woofy.woofy_backend.Services;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woofy.woofy_backend.DTO.AuthenticationRequest;
-import com.woofy.woofy_backend.DTO.AuthenticationResponse;
-import com.woofy.woofy_backend.DTO.EmailValidationRequest;
-import com.woofy.woofy_backend.DTO.RegisterRequest;
-import com.woofy.woofy_backend.Models.Entity.TokenEntity;
-import com.woofy.woofy_backend.Models.Entity.UserEntity;
-import com.woofy.woofy_backend.Models.Enums.RoleEnum;
+import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
+import com.woofy.woofy_backend.DTOs.AuthenticationResponse;
+import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
+import com.woofy.woofy_backend.DTOs.RegisterRequest;
+import com.woofy.woofy_backend.Models.Entities.TokenEntity;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
-import com.woofy.woofy_backend.Repository.TokenRepository;
-import com.woofy.woofy_backend.Repository.UserRepository;
+import com.woofy.woofy_backend.Repositories.TokenRepository;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

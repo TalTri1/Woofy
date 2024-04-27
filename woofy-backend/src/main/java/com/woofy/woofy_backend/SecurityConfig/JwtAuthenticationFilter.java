@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.SecurityConfig;
 
 
-import com.woofy.woofy_backend.Repository.TokenRepository;
+import com.woofy.woofy_backend.Repositories.TokenRepository;
 import com.woofy.woofy_backend.Services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
