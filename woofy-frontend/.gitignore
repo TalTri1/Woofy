@@ -24,7 +24,6 @@ pids
 *.log
 
 # Editor directories and files
-.idea
 .vscode/
 *.swp
 *.swo
@@ -38,3 +37,5 @@ Thumbs.db
 *.iws
 *.iml
 *.ipr
+/.vite/deps/_metadata.json
+/.vite/deps/package.json

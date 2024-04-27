@@ -3,6 +3,7 @@ package com.woofy.woofy_backend.Models.Entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,6 +42,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "last_name", unique = true, nullable = false)
     private String lastName;
 
+    @Pattern(regexp="(^$|[0-9]{10})", message="Phone number must be exactly 10 digits long")
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
