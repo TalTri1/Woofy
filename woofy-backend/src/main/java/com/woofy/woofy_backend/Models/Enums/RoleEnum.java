@@ -15,7 +15,8 @@ import static com.woofy.woofy_backend.Models.Enums.PermissionEnum.*;
 @RequiredArgsConstructor
 public enum RoleEnum {
 
-    USER(Collections.emptySet()),
+    CUSTOMER(Collections.emptySet()),
+    BUSINESS(Collections.emptySet()),
     ADMIN(
             Set.of(
                     ADMIN_READ,
