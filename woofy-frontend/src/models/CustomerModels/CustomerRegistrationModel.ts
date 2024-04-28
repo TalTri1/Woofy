@@ -15,6 +15,7 @@ class CustomerRegistrationModel {
         this.basicSignUpModel = basicSignUpModel;
         this.dog = dog;
     }
+
 }
 
 export default CustomerRegistrationModel;

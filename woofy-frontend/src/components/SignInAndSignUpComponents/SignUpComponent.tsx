@@ -17,29 +17,24 @@ const SignUpModal = () => {
         setShowPassword(!showPassword);
     };
 
-    const [user, setUserDetails] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
+    const [user, setUserDetails] = useState(
+        new BasicSignUpModel('', '', ''));
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setUserDetails({ ...user, [name]: value, });
+        setUserDetails(prevState => ({ ...prevState, [name]: value }));
     };
 
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Create a new BasicSignUpModel
-        const basicSignUpModel = new BasicSignUpModel(user.email, user.password, user.confirmPassword);
-        console.log(`basic signup model has been created:\n ${JSON.stringify(basicSignUpModel)}`);
+        console.log(`basic signup model has been created:\n ${JSON.stringify(user)}`);
 
         // Make the Axios request
         try {
             const res = await api.post("auth/check-valid-email", user);
             console.log(res.data);
-            navigate("/user-registration-page", { state: basicSignUpModel });
+            navigate("/registration-page", { state: user });
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
         }

@@ -9,6 +9,7 @@ import SignInPage from "./layouts/LogInAndSignUpPages/SignInPage";
 import SignUpPage from "./layouts/LogInAndSignUpPages/SignUpPage";
 import BusinessRegistrationPage from "./layouts/BusinessPages/BusinessRegistrationPage";
 import UserRegistrationPage from "./layouts/UserPages/UserRegistrationPage";
+import RegistrationPage from "./layouts/LogInAndSignUpPages/RegistrationPage";
 
 function App() {
   const action = useNavigationType();
@@ -34,14 +35,11 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/business-registration-page":
+      case "/registration-page":
         title = "";
         metaDescription = "";
         break;
-      case "/user-registration-page":
-        title = "";
-        metaDescription = "";
-        break;
+
     }
 
     if (title) {
@@ -63,12 +61,8 @@ function App() {
       <Route path="/" element={<SignInPage />} />
       <Route path="/sign-up-page" element={<SignUpPage />} />
       <Route
-        path="/business-registration-page"
-        element={<BusinessRegistrationPage />}
-      />
-      <Route
-        path="/user-registration-page"
-        element={<UserRegistrationPage />}
+        path="/registration-page"
+        element={<RegistrationPage/>}
       />
     </Routes>
   );

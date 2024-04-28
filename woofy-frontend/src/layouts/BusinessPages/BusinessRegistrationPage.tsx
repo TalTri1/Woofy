@@ -7,7 +7,7 @@ const BusinessRegistrationPage: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const onDogOwnerButtonClick = useCallback(() => {
-    navigate("/user-registration-page");
+    navigate("/registration-page");
   }, [navigate]);
 
   return (
