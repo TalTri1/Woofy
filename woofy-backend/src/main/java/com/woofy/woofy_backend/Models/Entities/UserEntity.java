@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import jakarta.persistence.*;
@@ -57,6 +58,7 @@ public abstract class UserEntity extends BaseEntity implements UserDetails {
     private RoleEnum role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     @Column(name = "tokens")
     private List<TokenEntity> tokens;
 

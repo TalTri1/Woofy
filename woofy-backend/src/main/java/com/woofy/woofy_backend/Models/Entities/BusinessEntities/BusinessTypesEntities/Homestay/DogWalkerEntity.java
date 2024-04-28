@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class DogWalkerEntity extends HomestayBaseEntity {
     private Integer id;
 
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "business_id", nullable = false)
     private BusinessEntity business;
 

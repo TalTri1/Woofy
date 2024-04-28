@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,7 @@ public class TokenEntity {
 
     public boolean expired;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public UserEntity user;

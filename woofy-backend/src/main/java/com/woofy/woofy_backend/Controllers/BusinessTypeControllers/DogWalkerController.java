@@ -32,6 +32,7 @@ public class DogWalkerController {
         DogWalkerEntity dogWalkerEntity = new DogWalkerEntity();
         dogWalkerEntity.setHomeConditions(dogWalkerDTO.getHomeConditions());
         dogWalkerEntity.setPetsInHome(dogWalkerDTO.getPetsInHome());
+        dogWalkerEntity.setAcceptableDogSizes(dogWalkerDTO.getAcceptableDogSizes());
         dogWalkerEntity.setBusiness(business);
 
         return dogWalkerService.createDogWalker(dogWalkerEntity, businessId);

@@ -27,11 +27,18 @@ public class DogWalkerService {
             DogWalkerEntity existingDogWalker = business.getDogWalkerEntity();
             existingDogWalker.setHomeConditions(dogWalker.getHomeConditions());
             existingDogWalker.setPetsInHome(dogWalker.getPetsInHome());
+            existingDogWalker.setAcceptableDogSizes(dogWalker.getAcceptableDogSizes());
             return dogWalkerRepository.save(existingDogWalker);
         }
 
         dogWalker.setBusiness(business);
-        return dogWalkerRepository.save(dogWalker);
+        dogWalker.setAcceptableDogSizes(dogWalker.getAcceptableDogSizes());
+        DogWalkerEntity savedDogWalker = dogWalkerRepository.save(dogWalker);
+
+        business.setDogWalkerEntity(savedDogWalker);
+        businessRepository.save(business);
+
+        return savedDogWalker;
     }
 
     public void deleteDogWalker(Integer id) {
