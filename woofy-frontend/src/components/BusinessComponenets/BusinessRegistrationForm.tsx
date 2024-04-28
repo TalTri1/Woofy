@@ -274,11 +274,11 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
           About
         </div>
         <textarea
-          className="bg-background-color-primary [outline:none] self-stretch box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-text-medium-normal text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
+          className="bg-background-color-primary [outline:none] self-stretch box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-roboto text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
           placeholder="Tell us about yourself..."
           maxLength={1500}
-          id="AboutPlaceholder"          
-          />
+          id="AboutPlaceholder"
+        />
       </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[8px] max-w-full">
         <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
@@ -290,7 +290,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
           maxLength={750}
           id="SpecialRequirements"
         />
-        </div>
+      </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[24px]">
         <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
           Add Pictures of Your Services (at least 2 photos*)

@@ -5,10 +5,10 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import BusinessRegistrationPage from "./pages/BusinessRegistrationPage";
-import UserRegistrationPage from "./pages/UserRegistrationPage";
+import SignInPage from "./layouts/LogInAndSignUpPages/SignInPage";
+import SignUpPage from "./layouts/LogInAndSignUpPages/SignUpPage";
+import BusinessRegistrationPage from "./layouts/BusinessPages/BusinessRegistrationPage";
+import UserRegistrationPage from "./layouts/UserPages/UserRegistrationPage";
 
 function App() {
   const action = useNavigationType();

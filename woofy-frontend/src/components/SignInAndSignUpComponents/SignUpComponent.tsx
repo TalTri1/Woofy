@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import BasicSignUpModel from "../../models/UserModels/BasicSignUpModel";
+import api from "../../api/api";
 
 const SignUpModal = () => {
 
@@ -30,11 +31,15 @@ const SignUpModal = () => {
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // Create a new BasicSignUpModel
+        const basicSignUpModel = new BasicSignUpModel(user.email, user.password, user.confirmPassword);
+        console.log(`basic signup model has been created:\n ${JSON.stringify(basicSignUpModel)}`);
+
         // Make the Axios request
         try {
-            const res = await axios.post("http://localhost:8080/api/v1/auth/check-valid-email", user);
+            const res = await api.post("auth/check-valid-email", user);
             console.log(res.data);
-            navigate("/user-registration-page", { state: { email: user.email, password: user.password } });
+            navigate("/user-registration-page", { state: basicSignUpModel });
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
         }
