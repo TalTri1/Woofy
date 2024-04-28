@@ -2,7 +2,9 @@ package com.woofy.woofy_backend.Controllers;
 
 import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
 import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.RegisterRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterBusinessRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
 import com.woofy.woofy_backend.Services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,9 +31,14 @@ public class AuthenticationController {
         return service.check_valid_email(request, result);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult result) {
-        return service.register(request, result);
+    @PostMapping("/register-business")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterBusinessRequest request, BindingResult result) {
+        return service.registerBusiness(request, result);
+    }
+
+    @PostMapping("/register-customer")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterCustomerRequest request, BindingResult result) {
+        return service.registerCustomer(request, result);
     }
 
     @PostMapping("/login")

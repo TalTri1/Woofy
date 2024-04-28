@@ -1,57 +1,42 @@
-package com.woofy.woofy_backend.Models.Entities;
+package com.woofy.woofy_backend.DTOs.DogDTOs;
 
+import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
+import com.woofy.woofy_backend.Models.Entities.PictureEntity;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogAgeCategoryEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogTrainingEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "dog")
-public class DogEntity extends BaseEntity {
+public class DogRegisterRequest {
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity owner;
-
-    @Column(name = "dog_name", nullable = false)
+    @NotEmpty
     private String dogName;
-
-    @Column(name = "breed", nullable = false)
+    @NotEmpty
     private String dog_breed;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "age")
     private DogAgeCategoryEnum age;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "size")
     private DogSizeEnum size;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "training_level")
     private DogTrainingEnum trainingLevel;
 
-    @Column(name = "about", length = 2000)
     private String about;
 
-    @Column(name = "special_requirements")
     private String specialRequirements = "";
 
-    @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PictureEntity> pictures = new ArrayList<>();
-
 
 }

@@ -5,10 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
 import com.woofy.woofy_backend.DTOs.AuthenticationResponse;
 import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.RegisterRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterBusinessRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.TokenEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
+import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Models.Enums.TokenTypeEnum;
+import com.woofy.woofy_backend.Repositories.BusinessRepository;
+import com.woofy.woofy_backend.Repositories.CustomerRepository;
 import com.woofy.woofy_backend.Repositories.TokenRepository;
 import com.woofy.woofy_backend.Repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,30 +32,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final BusinessRepository businessRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> register(RegisterRequest request, BindingResult result) {
+    public ResponseEntity<?> registerBusiness(RegisterBusinessRequest request, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError().getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
-        var user = UserEntity.builder()
+        var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
+                .businessName(Optional.ofNullable(request.getBusinessName()).orElse(""))
+                .address(request.getAddress())
+                .city(request.getCity())
+                .zipCode(request.getZipCode())
+                .businessTypes(request.getBusinessTypes())
+                .about(Optional.ofNullable(request.getAbout()).orElse(""))
+                .role(RoleEnum.BUSINESS)
                 .build();
-        var savedUser = repository.save(user);
+        var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
@@ -57,6 +76,32 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build());
     }
+    public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+        var user = CustomerEntity.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
+                .role(RoleEnum.CUSTOMER)
+                .build();
+        var savedUser = userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(savedUser, jwtToken);
+        return ResponseEntity.ok(AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build());
+    }
+
 
     public ResponseEntity<?> authenticate(AuthenticationRequest request) {
         try {
@@ -70,7 +115,7 @@ public class AuthenticationService {
             return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
         }
 
-        var user = repository.findByEmail(request.getEmail())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -118,7 +163,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
+            var user = this.userRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
@@ -138,7 +183,7 @@ public class AuthenticationService {
             String errorMessage = result.getFieldError().getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok("Email is valid");

@@ -1,0 +1,11 @@
+package com.woofy.woofy_backend.DTOs.UserDTOs;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+public class RegisterCustomerRequest extends BaseRegisterRequest {
+
+}

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,35 +16,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "_user")
-public class UserEntity implements UserDetails {
+@Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public abstract class UserEntity extends BaseEntity implements UserDetails {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private Integer id;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private PictureEntity profilePhoto;
 
     @Email(message = "Email should be valid")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "first_name", unique = true, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", unique = true, nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Pattern(regexp="(^$|[0-9]{10})", message="Phone number must be exactly 10 digits long")
-    @Column(name = "phone_number", nullable = false)
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "Phone number must be exactly 10 digits long")
+    @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -55,17 +56,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "roles", nullable = false)
     private RoleEnum role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name = "tokens")
     private List<TokenEntity> tokens;
-
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
