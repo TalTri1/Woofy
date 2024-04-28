@@ -1,5 +1,7 @@
 import { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
 
 const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -7,6 +9,12 @@ const SignInComponent: FunctionComponent = () => {
   const onSignUpLinkClick = useCallback(() => {
     navigate("/sign-up-page");
   }, [navigate]);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+  setShowPassword(!showPassword);
+};
 
   return (
     <div className="w-[480px] rounded-mini bg-background-color-primary flex flex-col items-start justify-start p-12 box-border gap-[24px] max-w-full text-center text-21xl text-text-primary font-text-medium-normal mq700:py-[31px] mq700:px-6 mq700:box-border">
@@ -30,11 +38,14 @@ const SignInComponent: FunctionComponent = () => {
           <input
             className="w-[calc(100%_-_48px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[150px] max-w-[calc(100%_-_32px)] p-0"
             placeholder="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
           />
-          <button
-            className="cursor-pointer [border:none] p-0 bg-[transparent] h-6 w-6 relative overflow-hidden shrink-0"
-            id="Show Password Button"
+          <img
+          className="cursor-pointer [border:none] p-0 bg-[transparent] h-6 w-6 relative overflow-hidden shrink-0"
+          id="Show Password Button"
+          alt=""
+          src="/icon--show.svg"
+          onClick={togglePasswordVisibility}
           />
         </div>
         <button className="cursor-pointer [border:none] py-3 px-5 bg-app1 self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap shrink-0 hover:bg-cornflowerblue">

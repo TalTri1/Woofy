@@ -60,7 +60,7 @@ const UserRegistrationFormFields: FunctionComponent<
             src="/icon--phone.svg"
           />
           <input
-            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-roboto text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
+            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
             placeholder="Phone Number*"
             type="tel"
           />
@@ -181,7 +181,7 @@ const UserRegistrationFormFields: FunctionComponent<
           About
         </div>
         <textarea
-          className="bg-background-color-primary [outline:none] self-stretch h-[180px] box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-roboto text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
+          className="bg-background-color-primary [outline:none] self-stretch h-[180px] box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-text-medium-normal text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
           placeholder="Tell us about your dog..."
         />
       </div>
@@ -189,7 +189,7 @@ const UserRegistrationFormFields: FunctionComponent<
         <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
           Any special requirements for your dog?
         </div>
-        <select className="self-stretch h-12 bg-background-color-primary box-border flex flex-row items-center justify-start py-2.5 px-[11px] font-roboto text-base text-color-neutral-neutral max-w-full border-[1px] border-solid border-color-neutral-neutral-light" />
+        <select className="self-stretch h-12 bg-background-color-primary box-border flex flex-row items-center justify-start py-2.5 px-[11px] font-text-medium-normal text-base text-color-neutral-neutral max-w-full border-[1px] border-solid border-color-neutral-neutral-light" />
       </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[24px]">
         <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">

@@ -63,7 +63,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
             src="/icon--phone.svg"
           />
           <input
-            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-roboto text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
+            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
             placeholder="Phone Number*"
             type="tel"
           />
@@ -77,7 +77,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
             src="/icon--home.svg"
           />
           <input
-            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-roboto text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
+            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
             placeholder="Permanent Address*"
             type="text"
           />
@@ -91,7 +91,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
             src="/icon--buildinghouse.svg"
           />
           <input
-            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-roboto text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
+            className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
             placeholder="City*"
             type="text"
           />
@@ -100,7 +100,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
       <div className="self-stretch flex flex-col items-start justify-start max-w-full">
         <div className="self-stretch bg-background-color-primary box-border flex flex-row items-center justify-start py-2.5 px-[11px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light">
           <input
-            className="w-full [border:none] [outline:none] font-roboto text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
+            className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
             placeholder="Zip Code*"
             type="text"
           />
@@ -190,7 +190,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
           >
             <div className="relative text-base leading-[150%] font-text-medium-normal text-color-neutral-neutral-dark text-center">
               <p className="m-0">Large</p>
-              <p className="m-0">22-45 kg</p>
+              <p className="m-0">22-45kg</p>
             </div>
           </button>
           <button
@@ -274,10 +274,23 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
           About
         </div>
         <textarea
-          className="bg-background-color-primary [outline:none] self-stretch box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-roboto text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
+          className="bg-background-color-primary [outline:none] self-stretch box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-2.5 pl-3 font-text-medium-normal text-base text-color-neutral-neutral min-w-[250px] min-h-[180px] max-w-full border-[1px] border-solid border-color-neutral-neutral-light"
           placeholder="Tell us about yourself..."
-        />
+          maxLength={1500}
+          id="AboutPlaceholder"          
+          />
       </div>
+      <div className="self-stretch flex flex-col items-start justify-start gap-[8px] max-w-full">
+        <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
+          Any special requirements for your dog?
+        </div>
+        <textarea
+          className="bg-text-alternate [outline:none] self-stretch h-[100px] box-border flex flex-row items-start justify-start pt-0.5 pb-[1.8px] pr-0.5 pl-3 font-text-medium-normal text-base text-color-neutral-neutral border-[1px] border-solid border-border-secondary"
+          placeholder="Let us know about your dog needs..."
+          maxLength={750}
+          id="SpecialRequirements"
+        />
+        </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[24px]">
         <div className="self-stretch relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
           Add Pictures of Your Services (at least 2 photos*)

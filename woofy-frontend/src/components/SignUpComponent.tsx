@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const SignUpModal = () => {
@@ -10,6 +10,12 @@ const SignUpModal = () => {
         navigate("/");
     }, [navigate]);
 
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     const [user, setUserDetails] = useState({
         email: "",
         password: "",
@@ -17,8 +23,8 @@ const SignUpModal = () => {
     });
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setUserDetails({...user, [name]: value,});
+        const { name, value } = e.target;
+        setUserDetails({ ...user, [name]: value, });
     };
 
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +34,7 @@ const SignUpModal = () => {
         try {
             const res = await axios.post("http://localhost:8080/api/v1/auth/check-valid-email", user);
             console.log(res.data);
-            navigate("/user-registration-page", {state: {email: user.email, password: user.password}});
+            navigate("/user-registration-page", { state: { email: user.email, password: user.password } });
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
         }
@@ -46,7 +52,7 @@ const SignUpModal = () => {
                 </div>
             </div>
             <form onSubmit={signupHandler}
-                  className="m-0 self-stretch h-[416px] flex flex-col items-start justify-start gap-[15.5px] max-w-full mq450:h-auto">
+                className="m-0 self-stretch h-[416px] flex flex-col items-start justify-start gap-[15.5px] max-w-full mq450:h-auto">
                 <div
                     className="self-stretch h-[50px] bg-background-color-primary box-border flex flex-row items-start justify-start p-3 max-w-full shrink-0 border-[1px] border-solid border-color-neutral-neutral-lighter">
                     <input
@@ -64,7 +70,7 @@ const SignUpModal = () => {
                     <input
                         className="w-[calc(100%_-_48px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[150px] max-w-[calc(100%_-_32px)] p-0"
                         placeholder="Password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         onChange={changeHandler}
                         value={user.password}
@@ -73,9 +79,11 @@ const SignUpModal = () => {
                         required={true}
                     />
                     <img
-                        className="h-6 w-6 relative overflow-hidden shrink-0"
+                        className="cursor-pointer [border:none] p-0 bg-[transparent] h-6 w-6 relative overflow-hidden shrink-0"
+                        id="Show Password Button"
                         alt=""
                         src="/icon--show.svg"
+                        onClick={togglePasswordVisibility}
                     />
                 </div>
                 <div
@@ -83,7 +91,7 @@ const SignUpModal = () => {
                     <input
                         className="w-[calc(100%_-_48px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[150px] max-w-[calc(100%_-_32px)] p-0"
                         placeholder="Password Confirmation"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="confirmPassword"
                         onChange={changeHandler}
                         value={user.confirmPassword}
@@ -98,7 +106,13 @@ const SignUpModal = () => {
                             }
                         }}
                     />
-                    <div className="h-6 w-6 relative overflow-hidden shrink-0"/>
+                    <img
+                        className="cursor-pointer [border:none] p-0 bg-[transparent] h-6 w-6 relative overflow-hidden shrink-0"
+                        id="Show Password Confirmation Button"
+                        alt=""
+                        src="/icon--show.svg"
+                        onClick={togglePasswordVisibility}
+                    />
                 </div>
                 <button
                     className="cursor-pointer py-3 px-5 bg-app1 self-stretch h-[53px] rounded-11xl box-border flex flex-row items-start justify-center whitespace-nowrap shrink-0 border-[1px] border-solid border-color-neutral-neutral-lighter hover:bg-cornflowerblue hover:box-border hover:border-[1px] hover:border-solid hover:border-darkgray">
@@ -111,7 +125,7 @@ const SignUpModal = () => {
                 <div
                     className="self-stretch h-8 flex flex-row items-start justify-start pt-4 px-0 pb-[15px] box-border max-w-full shrink-0">
                     <div
-                        className="self-stretch flex-1 relative box-border max-w-full border-t-[1px] border-solid border-color-neutral-neutral-light"/>
+                        className="self-stretch flex-1 relative box-border max-w-full border-t-[1px] border-solid border-color-neutral-neutral-light" />
                 </div>
                 <button
                     className="cursor-pointer py-3 px-5 bg-[transparent] self-stretch h-[50px] rounded-11xl box-border flex flex-row items-start justify-center gap-[12px] shrink-0 border-[1px] border-solid border-color-neutral-neutral-light">
