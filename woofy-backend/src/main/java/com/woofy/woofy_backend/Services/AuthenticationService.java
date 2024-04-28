@@ -46,13 +46,6 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public ResponseEntity<?> registerBusiness(RegisterBusinessRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError().getDefaultMessage();
-            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
-        }
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
-        }
         var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -77,13 +70,6 @@ public class AuthenticationService {
                 .build());
     }
     public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError().getDefaultMessage();
-            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
-        }
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
-        }
         var user = CustomerEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
