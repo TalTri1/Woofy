@@ -2,10 +2,12 @@ package com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEn
 
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 
+@Data
 @MappedSuperclass
 public class BusinessTypeBaseEntity {
 
@@ -13,7 +15,4 @@ public class BusinessTypeBaseEntity {
     @Column(name = "acceptable_dog_sizes", nullable = false)
     private List<DogSizeEnum> acceptableDogSizes;
 
-/*    @OneToOne
-    @JoinColumn(name = "business_id")
-    private BusinessEntity business;*/
 }

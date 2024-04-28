@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogSitterEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
@@ -43,18 +44,22 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "about", length = 2000)
     private String about;
 
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dog_sitter_id", referencedColumnName = "dog_sitter_id")
     private DogSitterEntity dogSitterEntity;
 
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dog_walker_id", referencedColumnName = "dog_walker_id")
     private DogWalkerEntity dogWalkerEntity;
 
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "boarding_id", referencedColumnName = "boarding_id")
     private BoardingEntity boardingEntity;
 
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_care_id", referencedColumnName = "day_care_id")
     private DayCareEntity dayCareEntity;
