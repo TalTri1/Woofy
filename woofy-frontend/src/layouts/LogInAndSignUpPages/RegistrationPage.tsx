@@ -49,10 +49,23 @@ const RegistrationPage: FunctionComponent = () => {
     const signupHandler = async (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
 
-        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
 
-        // TODO: The completeRegistrationUser object can be sent to the backend using the api.post method. ####@@@@@#@#@#@#@#@#@#@#@#@#@#        
+        const { basicSignUpModel, ...rest } = completeRegistrationUser;
+        const flattenedUser = { ...basicSignUpModel, ...rest };
 
+        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(flattenedUser)}`);
+
+        try {
+            let response;
+            if (flattenedUser.userType === USERTYPE.CUSTOMER) {
+                response = await api.post("/auth/register-customer", flattenedUser);
+            } else if (flattenedUser.userType === USERTYPE.BUSINESS) {
+                response = await api.post("/auth/register-business", flattenedUser);
+            }
+            console.log(`Response from the Backend: ${response}`);
+        } catch (error) {
+            console.error(`Error from the Backend: ${error}`);
+        }
 
     };
 
