@@ -48,6 +48,15 @@ public abstract class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "zip_code", nullable = false)
+    private String zipCode;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "password", nullable = false)

@@ -76,9 +76,12 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
+                .address(request.getAddress())
+                .city(request.getCity())
+                .zipCode(request.getZipCode())
                 .role(RoleEnum.CUSTOMER)
                 .build();
-        var savedUser = userRepository.save(user);
+        var savedUser = customerRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);

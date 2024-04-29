@@ -42,4 +42,13 @@ public abstract class BaseRegisterRequest {
     @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
 
+    @NotEmpty(message = "Address is required")
+    private String address;
+
+    @NotEmpty(message = "City is required")
+    private String city;
+
+    @NotEmpty(message = "Zip code is required")
+    private String zipCode;
+
 }
