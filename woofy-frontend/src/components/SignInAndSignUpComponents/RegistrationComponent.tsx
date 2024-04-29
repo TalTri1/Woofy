@@ -1,13 +1,19 @@
-import React, {FunctionComponent} from "react";
+import React, { ChangeEvent, FunctionComponent } from "react";
+import RegistrationModel from "../../models/RegistrationModel";
 
 
-const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
-    const changeHandler = (e) => {
-        setUserRegistrationDetails((prev) => ({
-            ...prev,
-            [e.target.id]: e.target.value
-        }));
+interface RegistrationComponentProps {
+    updateCompleteRegistrationUser: (updatedData: Partial<RegistrationModel>) => void;
+}
+
+const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ updateCompleteRegistrationUser }) => {
+    // In RegistrationComponent.tsx
+    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(`changeHandler has been triggered`);
+        const { name, value } = e.target;
+        updateCompleteRegistrationUser({ [name]: value });
     };
+
 
     return (
         <form className="m-0 w-[600px] flex flex-col items-start justify-start py-0 px-5 box-border gap-[24px] max-w-full">
@@ -35,8 +41,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
                         placeholder="First Name*"
                         type="text"
-                        value={user.firstName}
                         onChange={changeHandler}
+                        name="firstName"
                     />
                 </div>
             </div>
@@ -46,8 +52,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
                         placeholder="Last Name*"
                         type="text"
-                        value={user.lastName}
                         onChange={changeHandler}
+                        name="lastName"
                     />
                 </div>
             </div>
@@ -62,6 +68,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
                         placeholder="Phone Number*"
                         type="tel"
+                        onChange={changeHandler}
+                        name="phoneNumber"
                     />
                 </div>
             </div>
@@ -76,6 +84,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
                         placeholder="Permanent Address*"
                         type="text"
+                        onChange={changeHandler}
+                        name="address"
                     />
                 </div>
             </div>
@@ -90,6 +100,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
                         placeholder="City*"
                         type="text"
+                        onChange={changeHandler}
+                        name="city"
                     />
                 </div>
             </div>
@@ -99,6 +111,8 @@ const RegistrationComponent = ({ user, setUserRegistrationDetails }) => {
                         className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
                         placeholder="Zip Code*"
                         type="text"
+                        onChange={changeHandler}
+                        name="zipCode"
                     />
                 </div>
             </div>

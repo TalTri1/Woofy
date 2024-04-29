@@ -1,51 +1,64 @@
-import React, {FunctionComponent, useCallback, useState} from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 import Navbar from "../../components/Navbar";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import RegistrationComponent from "../../components/SignInAndSignUpComponents/RegistrationComponent";
 
 import api from "../../api/api";
-import RegistrationModel, {USERTYPE} from "../../models/RegistrationModel";
+import RegistrationModel, { USERTYPE } from "../../models/RegistrationModel";
 
 const RegistrationPage: FunctionComponent = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const basicSignUpModel = location.state;
+    const basicSignUpUser = location.state;
+
+    const [completeRegistrationUser, setCompleteRegistrationUser] = useState
+        (new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', ''));
+
+    // Function to update completeRegistrationUser
+    const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
+        setCompleteRegistrationUser(prevState => ({
+            ...prevState,
+            ...updatedData
+        }));
+    };
 
     const onBackButtonTextClick = useCallback(() => {
         navigate("/sign-up-page");
     }, [navigate]);
 
     const onDogOwnerButtonClick = useCallback(() => {
-        setUserRegistrationDetails(prevState => ({...prevState, userType: USERTYPE.CUSTOMER}));
+        console.log('Dog Owner Button Clicked');
+        setCompleteRegistrationUser(prevState => {
+            const updatedState = { ...prevState, userType: USERTYPE.CUSTOMER };
+            console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
+            return updatedState;
+        });
     }, []);
+
 
     const onCaregiverButtonClick = useCallback(() => {
-        setUserRegistrationDetails(prevState => ({...prevState, userType: USERTYPE.BUISNESS}));
+        console.log('Caregiver Button Clicked');
+        setCompleteRegistrationUser(prevState => {
+            const updatedState = { ...prevState, userType: USERTYPE.BUSINESS };
+            console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
+            return updatedState;
+        });
     }, []);
 
-    const [user, setUserRegistrationDetails] = useState
-    (new RegistrationModel(basicSignUpModel, USERTYPE.CUSTOMER, '', '', '', '', '', ''));
+    const signupHandler = async (e?: React.FormEvent<HTMLFormElement>) => {
+        e?.preventDefault();
+
+        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
+
+        // TODO: The completeRegistrationUser object can be sent to the backend using the api.post method. ####@@@@@#@#@#@#@#@#@#@#@#@#@#        
 
 
-    const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        console.log(`basic signup model has been created:\n ${JSON.stringify(user)}`);
-
-        // Make the Axios request
-        try {
-            const res = await api.post("auth/check-valid-email", user);
-            console.log(res.data);
-            navigate("/registration-page", {state: user});
-        } catch (error) {
-            console.error("Error occurred while registering user: ", error);
-        }
     };
 
     const formSubmitHandler = async () => {
         console.log("Submit has been pressed");
-        console.log(`Customer Registration Model has been created:\n ${JSON.stringify(user)}`);
+        signupHandler();
 
         // Todo After this works - add api.post call to the backend for saving in DB.
     };
@@ -53,7 +66,7 @@ const RegistrationPage: FunctionComponent = () => {
     return (
         <div
             className="w-full relative flex flex-col items-start justify-start tracking-[normal] leading-[normal] text-left text-37xl text-background-color-primary font-text-medium-normal">
-            <Navbar woofyTextFrameWidth="unset"/>
+            <Navbar woofyTextFrameWidth="unset" />
             <div
                 className="self-stretch overflow-hidden flex flex-row items-start justify-start py-28 px-16 box-border bg-[url('/public/header--54@3x.png')] bg-cover bg-no-repeat bg-[top] max-w-full mq450:gap-[20px] mq450:pt-[73px] mq450:pb-[73px] mq450:box-border mq1025:gap-[40px] mq1025:pl-8 mq1025:pr-8 mq1025:box-border">
                 <div
@@ -111,7 +124,7 @@ const RegistrationPage: FunctionComponent = () => {
                             </div>
                         </div>
                     </div>
-                    <RegistrationComponent user={user} setUserRegistrationDetails={setUserRegistrationDetails} />
+                    <RegistrationComponent updateCompleteRegistrationUser={updateCompleteRegistrationUser} />
                 </section>
                 <section
                     className="self-stretch flex flex-row items-center justify-center py-6 px-5 box-border gap-[16px] min-h-[104px] mq450:flex-wrap">

@@ -24,7 +24,7 @@ class RegistrationModel {
 
 export enum USERTYPE {
     CUSTOMER,
-    BUISNESS
+    BUSINESS
 }
 
 export default RegistrationModel;

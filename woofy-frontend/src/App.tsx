@@ -7,8 +7,6 @@ import {
 } from "react-router-dom";
 import SignInPage from "./layouts/LogInAndSignUpPages/SignInPage";
 import SignUpPage from "./layouts/LogInAndSignUpPages/SignUpPage";
-import BusinessRegistrationPage from "./layouts/BusinessPages/BusinessRegistrationPage";
-import UserRegistrationPage from "./layouts/UserPages/UserRegistrationPage";
 import RegistrationPage from "./layouts/LogInAndSignUpPages/RegistrationPage";
 
 function App() {
@@ -62,7 +60,7 @@ function App() {
       <Route path="/sign-up-page" element={<SignUpPage />} />
       <Route
         path="/registration-page"
-        element={<RegistrationPage/>}
+        element={<RegistrationPage />}
       />
     </Routes>
   );
