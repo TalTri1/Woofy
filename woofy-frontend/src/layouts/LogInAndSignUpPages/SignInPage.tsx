@@ -1,7 +1,7 @@
 import { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import SignInComponent from "../components/SignInComponent";
+import Navbar from "../../components/Navbar";
+import SignInComponent from "../../components/SignInAndSignUpComponents/SignInComponent";
 
 const SignInPage: FunctionComponent = () => {
   const navigate = useNavigate();

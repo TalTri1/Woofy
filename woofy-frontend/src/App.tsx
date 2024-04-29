@@ -5,10 +5,9 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import BusinessRegistrationPage from "./pages/BusinessRegistrationPage";
-import UserRegistrationPage from "./pages/UserRegistrationPage";
+import SignInPage from "./layouts/LogInAndSignUpPages/SignInPage";
+import SignUpPage from "./layouts/LogInAndSignUpPages/SignUpPage";
+import RegistrationPage from "./layouts/LogInAndSignUpPages/RegistrationPage";
 
 function App() {
   const action = useNavigationType();
@@ -34,14 +33,11 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/business-registration-page":
+      case "/registration-page":
         title = "";
         metaDescription = "";
         break;
-      case "/user-registration-page":
-        title = "";
-        metaDescription = "";
-        break;
+
     }
 
     if (title) {
@@ -63,12 +59,8 @@ function App() {
       <Route path="/" element={<SignInPage />} />
       <Route path="/sign-up-page" element={<SignUpPage />} />
       <Route
-        path="/business-registration-page"
-        element={<BusinessRegistrationPage />}
-      />
-      <Route
-        path="/user-registration-page"
-        element={<UserRegistrationPage />}
+        path="/registration-page"
+        element={<RegistrationPage />}
       />
     </Routes>
   );

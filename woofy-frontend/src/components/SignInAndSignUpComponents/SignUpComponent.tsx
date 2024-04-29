@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import BasicSignUpModel from "../../models/UserModels/BasicSignUpModel";
+import api from "../../api/api";
 
 const SignUpModal = () => {
 
@@ -16,25 +17,24 @@ const SignUpModal = () => {
         setShowPassword(!showPassword);
     };
 
-    const [user, setUserDetails] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
+    const [basicSignUpUser, setUserDetails] = useState(
+        new BasicSignUpModel('', '', ''));
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setUserDetails({ ...user, [name]: value, });
+        setUserDetails(prevState => ({ ...prevState, [name]: value }));
     };
 
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        console.log(`basic signup model has been created:\n ${JSON.stringify(basicSignUpUser)}`);
+
         // Make the Axios request
         try {
-            const res = await axios.post("http://localhost:8080/api/v1/auth/check-valid-email", user);
+            const res = await api.post("auth/check-valid-email", basicSignUpUser);
             console.log(res.data);
-            navigate("/user-registration-page", { state: { email: user.email, password: user.password } });
+            navigate("/registration-page", { state: basicSignUpUser });
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
         }
@@ -60,7 +60,7 @@ const SignUpModal = () => {
                         placeholder="Email"
                         type="email"
                         name="email"
-                        value={user.email}
+                        value={basicSignUpUser.email}
                         onChange={changeHandler}
                         required={true}
                     />
@@ -73,7 +73,7 @@ const SignUpModal = () => {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         onChange={changeHandler}
-                        value={user.password}
+                        value={basicSignUpUser.password}
                         pattern=".{8,}"
                         title="Password must be at least 8 characters long"
                         required={true}
@@ -94,12 +94,12 @@ const SignUpModal = () => {
                         type={showPassword ? "text" : "password"}
                         name="confirmPassword"
                         onChange={changeHandler}
-                        value={user.confirmPassword}
+                        value={basicSignUpUser.confirmPassword}
                         pattern=".{8,}"
                         title="Password must be at least 8 characters long"
                         required={true}
                         onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            if (e.target.value !== user.password) {
+                            if (e.target.value !== basicSignUpUser.password) {
                                 e.target.setCustomValidity("Passwords do not match");
                             } else {
                                 e.target.setCustomValidity("");

@@ -1,13 +1,33 @@
-import { FunctionComponent, useCallback } from "react";
-import Navbar from "../components/Navbar";
-import TypeOfUser from "../components/TypeOfUser";
-import UserRegistrationFormFields from "../components/FormFields";
-import {useLocation, useNavigate} from "react-router-dom";
+import React, { FunctionComponent, useCallback } from "react";
+import Navbar from "../../components/Navbar";
+import TypeOfUser from "../../components/TypeOfUser";
+import UserRegistrationFormFields from "../../components/CustomerComponenets/CustomerRegistrationForm";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Age, Size, TrainingLevel } from "../../models/DogModels/DogModel";
+import CustomerRegistrationModel from "../../models/CustomerModels/CustomerRegistrationModel";
+import DogModel from "../../models/DogModels/DogModel";
+import customerRegistrationModel from "../../models/CustomerModels/CustomerRegistrationModel";
 
 const UserRegistrationPage: FunctionComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { email, password } = location.state;
+  const basicSignUpModel = location.state;
+
+  const [user, setUserRegistrationDetails] = useState
+  (new CustomerRegistrationModel(basicSignUpModel, '', '', '', new DogModel('', '', Age.PUPPY, Size.SMALL, TrainingLevel.BEGINNER, '', '')));
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserRegistrationDetails(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const formSubmitHandler = async () => {
+    console.log("Submit has been pressed");
+    console.log(`Customer Registration Model has been created:\n ${JSON.stringify(customerRegistrationModel)}`);
+
+    // Todo After this works - add api.post call to the backend for saving in DB.
+  };
 
   const onBackButtonTextClick = useCallback(() => {
     navigate("/sign-up-page");
@@ -55,7 +75,8 @@ const UserRegistrationPage: FunctionComponent = () => {
               Back
             </div>
           </button>
-          <button className="cursor-pointer [border:none] py-2 px-5 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue">
+          <button className="cursor-pointer [border:none] py-2 px-5 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue"
+            onClick={formSubmitHandler}>
             <div className="relative text-base leading-[150%] font-semibold font-text-medium-normal text-background-color-primary text-left inline-block min-w-[55px]">{`Submit `}</div>
           </button>
         </section>
