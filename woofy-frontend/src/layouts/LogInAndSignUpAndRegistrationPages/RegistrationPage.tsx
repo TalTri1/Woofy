@@ -11,6 +11,9 @@ const RegistrationPage: FunctionComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const basicSignUpUser = location.state;
+    const [isDogOwnerButtonClicked, setDogOwnerButtonClicked] = useState(false);
+    const [isCaregiverButtonClicked, setCaregiverButtonClicked] = useState(false);
+    const [activeButton, setActiveButton] = useState('');
 
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState
         (new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', ''));
@@ -29,6 +32,8 @@ const RegistrationPage: FunctionComponent = () => {
 
     const onDogOwnerButtonClick = useCallback(() => {
         console.log('Dog Owner Button Clicked');
+        setDogOwnerButtonClicked(!isDogOwnerButtonClicked);
+        setActiveButton('dogOwner');
         setCompleteRegistrationUser(prevState => {
             const updatedState = { ...prevState, userType: USERTYPE.CUSTOMER };
             console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
@@ -39,33 +44,23 @@ const RegistrationPage: FunctionComponent = () => {
 
     const onCaregiverButtonClick = useCallback(() => {
         console.log('Caregiver Button Clicked');
+        setCaregiverButtonClicked(!isCaregiverButtonClicked);
+        setActiveButton('caregiver');
         setCompleteRegistrationUser(prevState => {
             const updatedState = { ...prevState, userType: USERTYPE.BUSINESS };
             console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
             return updatedState;
         });
     }, []);
+    
 
     const signupHandler = async (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
 
+        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
 
-        const { basicSignUpModel, ...rest } = completeRegistrationUser;
-        const flattenedUser = { ...basicSignUpModel, ...rest };
+        // TODO: The completeRegistrationUser object can be sent to the backend using the api.post method. ####@@@@@#@#@#@#@#@#@#@#@#@#@#        
 
-        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(flattenedUser)}`);
-
-        try {
-            let response;
-            if (flattenedUser.userType === USERTYPE.CUSTOMER) {
-                response = await api.post("/auth/register-customer", flattenedUser);
-            } else if (flattenedUser.userType === USERTYPE.BUSINESS) {
-                response = await api.post("/auth/register-business", flattenedUser);
-            }
-            console.log(`Response from the Backend: ${JSON.stringify(response)}`);
-        } catch (error) {
-            console.error(`Error from the Backend: ${JSON.stringify(error)}`);
-        }
 
     };
 
@@ -117,19 +112,22 @@ const RegistrationPage: FunctionComponent = () => {
                             <div
                                 className="self-stretch flex flex-row items-center justify-center pt-4 px-5 pb-0 gap-[16px] mq450:flex-wrap">
                                 <button
-                                    className="cursor-pointer py-1.5 px-[19px] bg-silver rounded-11xl flex flex-row items-center justify-center whitespace-nowrap border-[1px] border-solid border-text-primary hover:bg-gray-300 hover:box-border hover:border-[1px] hover:border-solid hover:border-darkslategray">
+                                    className={activeButton === 'dogOwner' ? "cursor-pointer [border:none] py-2 px-5 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue" : "cursor-pointer py-1.5 px-[19px] bg-silver rounded-11xl flex flex-row items-center justify-center whitespace-nowrap border-[1px] border-solid border-text-primary hover:bg-gray-300 hover:box-border hover:border-[1px] hover:border-solid hover:border-darkslategray"}
+                                    onClick={onDogOwnerButtonClick}
+                                >
                                     <div
-                                        className="relative text-base leading-[150%] font-semibold font-text-medium-normal text-text-primary text-left inline-block min-w-[87px] cursor-pointer"
-                                        onClick={onDogOwnerButtonClick}
+                                        className={activeButton === 'dogOwner' ? "relative text-base leading-[150%] font-semibold font-text-medium-normal text-background-color-primary text-left inline-block min-w-[87px]" : "relative text-base leading-[150%] font-semibold font-text-medium-normal text-text-primary text-left inline-block min-w-[87px] cursor-pointer"}
                                     >
                                         Dog Owner
                                     </div>
                                 </button>
+
                                 <button
-                                    className="cursor-pointer [border:none] py-2 px-5 bg-app1 rounded-11xl flex flex-row items-center justify-center hover:bg-cornflowerblue">
+                                    className={activeButton === 'caregiver' ? "cursor-pointer [border:none] py-2 px-5 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue" : "cursor-pointer py-1.5 px-[19px] bg-silver rounded-11xl flex flex-row items-center justify-center whitespace-nowrap border-[1px] border-solid border-text-primary hover:bg-gray-300 hover:box-border hover:border-[1px] hover:border-solid hover:border-darkslategray"}
+                                    onClick={onCaregiverButtonClick}
+                                >
                                     <div
-                                        className="relative text-base leading-[150%] font-semibold font-text-medium-normal text-background-color-primary text-left inline-block min-w-[76px]"
-                                        onClick={onCaregiverButtonClick}
+                                        className={activeButton === 'caregiver' ? "relative text-base leading-[150%] font-semibold font-text-medium-normal text-background-color-primary text-left inline-block min-w-[76px] cursor-pointer" : "relative text-base leading-[150%] font-semibold font-text-medium-normal text-text-primary text-left inline-block min-w-[76px] cursor-pointer"}
                                     >
                                         Caregiver
                                     </div>
