@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FunctionComponent } from "react";
-import RegistrationModel from "../../models/RegistrationModel";
+import RegistrationModel from "../../../models/RegistrationModel";
 
 
 interface RegistrationComponentProps {
