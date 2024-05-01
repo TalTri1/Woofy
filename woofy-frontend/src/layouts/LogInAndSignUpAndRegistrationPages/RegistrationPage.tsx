@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../NavBarPage/NavbarPage";
 import { useLocation, useNavigate } from "react-router-dom";
-import RegistrationComponent from "../../components/SignInAndSignUpComponents/RegistrationComponent";
+import RegistrationComponent from "./component/RegistrationComponent";
 
 import api from "../../api/api";
 import RegistrationModel, { USERTYPE } from "../../models/RegistrationModel";
@@ -62,9 +62,9 @@ const RegistrationPage: FunctionComponent = () => {
             } else if (flattenedUser.userType === USERTYPE.BUSINESS) {
                 response = await api.post("/auth/register-business", flattenedUser);
             }
-            console.log(`Response from the Backend: ${response}`);
+            console.log(`Response from the Backend: ${JSON.stringify(response)}`);
         } catch (error) {
-            console.error(`Error from the Backend: ${error}`);
+            console.error(`Error from the Backend: ${JSON.stringify(error)}`);
         }
 
     };

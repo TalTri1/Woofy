@@ -1,7 +1,7 @@
 import { FunctionComponent, useCallback } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../NavBarPage/NavbarPage";
 import { useNavigate } from "react-router-dom";
-import BusinessRegistrationFormFields from "../../components/BusinessComponenets/BusinessRegistrationForm";
+import BusinessRegistrationFormFields from "./components/BusinessRegistrationForm";
 
 const BusinessRegistrationPage: FunctionComponent = () => {
   const navigate = useNavigate();

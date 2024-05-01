@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BasicSignUpModel from "../../models/UserModels/BasicSignUpModel";
-import api from "../../api/api";
+import BasicSignUpModel from "../../../models/UserModels/BasicSignUpModel";
+import api from "../../../api/api";
 
 const SignUpModal = () => {
 

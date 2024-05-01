@@ -5,9 +5,9 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import SignInPage from "./layouts/LogInAndSignUpPages/SignInPage";
-import SignUpPage from "./layouts/LogInAndSignUpPages/SignUpPage";
-import RegistrationPage from "./layouts/LogInAndSignUpPages/RegistrationPage";
+import SignInPage from "./layouts/LogInAndSignUpAndRegistrationPages/SignInPage";
+import SignUpPage from "./layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
+import RegistrationPage from "./layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 
 function App() {
   const action = useNavigationType();

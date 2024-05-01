@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import DogNameInput from "../DogNameInput";
+import DogNameInput from "../DogPage/component/DogNameInput";
 
 export type UserRegistrationFormFieldsType = {
   showPuppyRadioButton?: boolean;
