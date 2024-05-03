@@ -5,6 +5,7 @@ import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
+import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
 
 const Routes = () => {
     const { token } = useAuth();
@@ -20,6 +21,14 @@ const Routes = () => {
             path: "/about-us",
             element: <div>About Us</div>,
         },
+        {
+            path: "/business-dashboard",
+            element: <BusinessDashboardPageHome/>,
+        },
+        {   path: "/serivces-section",
+            element: <SerivcesSection/>,
+        }
+
     ];
 
     // Define routes accessible only to authenticated users
@@ -43,7 +52,11 @@ const Routes = () => {
                 {
                     path: "/business-dashboard",
                     element: <BusinessDashboardPageHome/>,
-                }
+                },
+                {   path: "/serivces-section",
+                element: <SerivcesSection/>,
+            }
+
             ],
         },
     ];
