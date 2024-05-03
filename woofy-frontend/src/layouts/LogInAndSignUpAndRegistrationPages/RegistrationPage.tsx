@@ -52,17 +52,33 @@ const RegistrationPage: FunctionComponent = () => {
             return updatedState;
         });
     }, []);
-    
+
 
     const signupHandler = async (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
 
+        // Spread the properties of basicSignUpModel into completeRegistrationUser
+        const { basicSignUpModel, ...rest } = completeRegistrationUser;
+
         console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
 
-        // TODO: The completeRegistrationUser object can be sent to the backend using the api.post method. ####@@@@@#@#@#@#@#@#@#@#@#@#@#        
-
-
+        // API call for the backend for saving the user
+        try {
+            const response = await api.post('/auth/register-customer', {
+                ...rest, // Spread the rest of the properties
+                ...basicSignUpModel, // Spread the properties of basicSignUpModel
+            });
+            console.log(`Response from the backend: ${response}`);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(`Error from the backend: ${error.message}`);
+                console.error(`Stack trace: ${error.stack}`);
+            } else {
+                console.error(`Error from the backend: ${error}`);
+            }
+        }
     };
+
 
     const formSubmitHandler = async () => {
         console.log("Submit has been pressed");
