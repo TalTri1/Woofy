@@ -7,7 +7,7 @@ const SignUpPage: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const onSignInButtonClick = useCallback(() => {
-    navigate("/");
+    navigate("/login");
   }, [navigate]);
 
   return (

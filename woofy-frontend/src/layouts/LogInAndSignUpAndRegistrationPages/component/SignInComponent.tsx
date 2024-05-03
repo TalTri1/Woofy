@@ -1,13 +1,17 @@
-import { FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import BasicSignInModel from "../../../models/UserModels/BasicSignInModel";
+import api from "../../../api/api";
+import {useAuth} from "../../../provider/AuthProvider";
 
 
 const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const onSignUpLinkClick = useCallback(() => {
-    navigate("/sign-up-page");
+    navigate("/sign-up");
   }, [navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +19,31 @@ const SignInComponent: FunctionComponent = () => {
   const togglePasswordVisibility = () => {
   setShowPassword(!showPassword);
 };
+
+  const [basicSignInUser, setUserDetails] = useState(
+      new BasicSignInModel('', ''));
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserDetails(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log(`basic signin model has been created:\n ${JSON.stringify(basicSignInUser)}`);
+
+    // Make the Axios request
+    try {
+      const res = await api.post("auth/login", basicSignInUser);
+      console.log(res.data);
+      setToken(res.data.accessToken);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Error occurred while registering user: ", error);
+    }
+  };
+
 
   return (
     <div className="w-[480px] rounded-mini bg-background-color-primary flex flex-col items-start justify-start p-12 box-border gap-[24px] max-w-full text-center text-21xl text-text-primary font-text-medium-normal mq700:py-[31px] mq700:px-6 mq700:box-border">
