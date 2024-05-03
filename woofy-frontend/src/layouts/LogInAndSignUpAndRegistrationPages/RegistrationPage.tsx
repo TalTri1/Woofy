@@ -62,9 +62,12 @@ const RegistrationPage: FunctionComponent = () => {
 
         console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
 
+        // Determine the API endpoint based on the user type
+        const apiEndpoint = rest.userType === USERTYPE.BUSINESS ? '/auth/register-business' : '/auth/register-customer';
+
         // API call for the backend for saving the user
         try {
-            const response = await api.post('/auth/register-customer', {
+            const response = await api.post(apiEndpoint, {
                 ...rest, // Spread the rest of the properties
                 ...basicSignUpModel, // Spread the properties of basicSignUpModel
             });

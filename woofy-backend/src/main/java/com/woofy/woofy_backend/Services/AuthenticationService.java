@@ -52,15 +52,12 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
-                .businessName(Optional.ofNullable(request.getBusinessName()).orElse(""))
                 .address(request.getAddress())
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
-                .businessTypes(request.getBusinessTypes())
-                .about(Optional.ofNullable(request.getAbout()).orElse(""))
                 .role(RoleEnum.BUSINESS)
                 .build();
-        var savedUser = userRepository.save(user);
+        var savedUser = businessRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
@@ -69,6 +66,7 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build());
     }
+
     public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request, BindingResult result) {
         var user = CustomerEntity.builder()
                 .email(request.getEmail())
