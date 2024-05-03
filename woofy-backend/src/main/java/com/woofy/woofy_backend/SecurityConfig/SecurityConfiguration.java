@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
 import static com.woofy.woofy_backend.Models.Enums.PermissionEnum.*;
-import static com.woofy.woofy_backend.Models.Enums.RoleEnum.ADMIN;
+import static com.woofy.woofy_backend.Models.Enums.RoleEnum.*;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -40,11 +40,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name())
-                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name())
-                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name())
-                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name())
+                                .requestMatchers("/api/v1/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers("/api/v1/business/**").hasAnyRole(BUSINESS.name())
+//                                .requestMatchers(GET, "/api/v1/business/**").hasAnyAuthority(BUSINESS_READ.name())
+//                                .requestMatchers(POST, "/api/v1/business/**").hasAnyAuthority(BUSINESS_CREATE.name())
+//                                .requestMatchers(PUT, "/api/v1/business/**").hasAnyAuthority(BUSINESS_UPDATE.name())
+//                                .requestMatchers(DELETE, "/api/v1/business/**").hasAnyAuthority(BUSINESS_DELETE.name())
+                                .requestMatchers("/api/v1/customer/**").hasAnyRole(CUSTOMER.name())
                                 .anyRequest()
                                 .authenticated()
                 )
