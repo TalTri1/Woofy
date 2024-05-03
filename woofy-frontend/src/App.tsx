@@ -8,6 +8,7 @@ import {
 import SignInPage from "./layouts/LogInAndSignUpAndRegistrationPages/SignInPage";
 import SignUpPage from "./layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "./layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
+import BusinessDashboardPageHome from "./layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 
 function App() {
   const action = useNavigationType();
@@ -30,6 +31,10 @@ function App() {
         metaDescription = "";
         break;
       case "/sign-up-page":
+        title = "";
+        metaDescription = "";
+        break;
+      case "/business-dashboard-page-home-section":
         title = "";
         metaDescription = "";
         break;
@@ -58,6 +63,10 @@ function App() {
     <Routes>
       <Route path="/" element={<SignInPage />} />
       <Route path="/sign-up-page" element={<SignUpPage />} />
+      <Route
+        path="/business-dashboard-page-home-section"
+        element={<BusinessDashboardPageHome />}
+      />
       <Route
         path="/registration-page"
         element={<RegistrationPage />}

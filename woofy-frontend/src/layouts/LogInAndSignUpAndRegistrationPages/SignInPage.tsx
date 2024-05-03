@@ -6,6 +6,10 @@ import SignInComponent from "./component/SignInComponent";
 const SignInPage: FunctionComponent = () => {
   const navigate = useNavigate();
 
+  const onHomeLinkTextClick = useCallback(() => {
+    navigate("/business-dashboard-page-home-section");
+  }, [navigate]);
+
   const onBecomeACaregiverClick = useCallback(() => {
     navigate("/sign-up-page");
   }, [navigate]);
@@ -17,6 +21,7 @@ const SignInPage: FunctionComponent = () => {
   return (
     <div className="w-full relative flex flex-col items-start justify-start tracking-[normal] leading-[normal]">
       <Navbar
+        onHomeLinkTextClick={onHomeLinkTextClick}
         onBecomeACaregiverClick={onBecomeACaregiverClick}
         onJoinNowButtonClick={onJoinNowButtonClick}
       />

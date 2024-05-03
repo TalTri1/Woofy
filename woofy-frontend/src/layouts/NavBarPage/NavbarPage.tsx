@@ -5,6 +5,7 @@ export type NavbarType = {
   woofyTextFrameWidth?: CSSProperties["width"];
 
   /** Action props */
+  onHomeLinkTextClick?: () => void;
   onBecomeACaregiverClick?: () => void;
   onJoinNowButtonClick?: () => void;
   onSignInButtonClick?: () => void;
@@ -12,6 +13,7 @@ export type NavbarType = {
 
 const Navbar: FunctionComponent<NavbarType> = ({
   woofyTextFrameWidth,
+  onHomeLinkTextClick,
   onBecomeACaregiverClick,
   onJoinNowButtonClick,
   onSignInButtonClick,
@@ -53,6 +55,7 @@ const Navbar: FunctionComponent<NavbarType> = ({
             <button
               className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left inline-block min-w-[45px]"
               id="Home Link Button"
+              onClick={onHomeLinkTextClick}
             >
               Home
             </button>
