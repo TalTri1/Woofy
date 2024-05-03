@@ -1,13 +1,17 @@
-import { FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import BasicSignInModel from "../../../models/UserModels/BasicSignInModel";
+import api from "../../../api/api";
+import {useAuth} from "../../../provider/AuthProvider";
 
 
 const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const onSignUpLinkClick = useCallback(() => {
-    navigate("/sign-up-page");
+    navigate("/sign-up");
   }, [navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +19,31 @@ const SignInComponent: FunctionComponent = () => {
   const togglePasswordVisibility = () => {
   setShowPassword(!showPassword);
 };
+
+  const [basicSignInUser, setUserDetails] = useState(
+      new BasicSignInModel('', ''));
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserDetails(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log(`basic signin model has been created:\n ${JSON.stringify(basicSignInUser)}`);
+
+    // Make the Axios request
+    try {
+      const res = await api.post("auth/login", basicSignInUser);
+      console.log(res.data);
+      setToken(res.data.access_token);
+      navigate("/business-dashboard", { replace: true });
+    } catch (error) {
+      console.error("Error occurred while registering user: ", error);
+    }
+  };
+
 
   return (
     <div className="w-[480px] rounded-mini bg-background-color-primary flex flex-col items-start justify-start p-12 box-border gap-[24px] max-w-full text-center text-21xl text-text-primary font-text-medium-normal mq700:py-[31px] mq700:px-6 mq700:box-border">
@@ -26,12 +55,17 @@ const SignInComponent: FunctionComponent = () => {
           Welcome back! Sign in here.
         </div>
       </div>
-      <form className="m-0 self-stretch h-[355px] flex flex-col items-start justify-start gap-[16px] max-w-full mq450:h-auto">
+      <form onSubmit={signupHandler}
+          className="m-0 self-stretch h-[355px] flex flex-col items-start justify-start gap-[16px] max-w-full mq450:h-auto">
         <div className="self-stretch h-[50px] bg-background-color-primary box-border flex flex-row items-start justify-start p-3 max-w-full border-[1px] border-solid border-color-neutral-neutral-lighter">
           <input
             className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[216px] max-w-full p-0"
             placeholder="Email"
             type="email"
+            name="email"
+            value={basicSignInUser.email}
+            onChange={changeHandler}
+            required={true}
           />
         </div>
         <div className="self-stretch bg-background-color-primary box-border flex flex-row flex-wrap items-start justify-start p-3 gap-[8px] min-h-[50px] max-w-full shrink-0 border-[1px] border-solid border-color-neutral-neutral-lighter">
@@ -39,6 +73,12 @@ const SignInComponent: FunctionComponent = () => {
             className="w-[calc(100%_-_48px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[150px] max-w-[calc(100%_-_32px)] p-0"
             placeholder="Password"
             type={showPassword ? "text" : "password"}
+            name="password"
+            onChange={changeHandler}
+            value={basicSignInUser.password}
+            pattern=".{8,}"
+            title="Password must be at least 8 characters long"
+            required={true}
           />
           <img
           className="cursor-pointer [border:none] p-0 bg-[transparent] h-6 w-6 relative overflow-hidden shrink-0"
