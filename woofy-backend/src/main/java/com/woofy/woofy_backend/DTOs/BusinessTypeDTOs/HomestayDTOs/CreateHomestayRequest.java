@@ -1,17 +1,18 @@
-package com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs.DogSitterDTOs;
+package com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs;
 
-import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs.CreateHomestayRequest;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.HomeConditionsEnum;
 import com.woofy.woofy_backend.Models.Enums.PetsInHomeEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateDogSitterRequest extends CreateHomestayRequest {
+public class CreateHomestayRequest {
     private List<HomeConditionsEnum> homeConditions;
     private List<PetsInHomeEnum> petsInHome;
     private List<DogSizeEnum> acceptableDogSizes;
