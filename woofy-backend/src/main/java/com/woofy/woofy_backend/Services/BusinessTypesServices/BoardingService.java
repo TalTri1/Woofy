@@ -4,7 +4,6 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.BoardingRepository;
-import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.BoardingDTOs.CreateBoardingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class BoardingService {
         this.businessRepository = businessRepository;
     }
 
-    public BoardingEntity createBoarding(CreateBoardingRequest boardingDTO, Integer businessId) {
+    public BoardingEntity createBoarding(BoardingEntity boardingDTO, Integer businessId) {
         BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
@@ -32,6 +31,7 @@ public class BoardingService {
         }
 
         boardingEntity.setBusiness(business);
+        boardingEntity.setAcceptableDogSizes(boardingDTO.getAcceptableDogSizes());
         BoardingEntity savedBoarding = boardingRepository.save(boardingEntity);
 
         business.setBoardingEntity(savedBoarding);

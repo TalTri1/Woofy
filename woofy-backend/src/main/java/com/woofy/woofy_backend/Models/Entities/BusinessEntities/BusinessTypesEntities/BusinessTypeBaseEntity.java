@@ -13,6 +13,7 @@ import java.util.List;
 @MappedSuperclass
 public class BusinessTypeBaseEntity {
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "acceptable_dog_sizes", nullable = false)
     private List<DogSizeEnum> acceptableDogSizes;

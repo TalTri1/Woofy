@@ -2,8 +2,7 @@ package com.woofy.woofy_backend.Controllers;
 
 import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
 import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterBusinessRequest;
+import com.woofy.woofy_backend.DTOs.BusinessDTOs.RegisterBusinessRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
 import com.woofy.woofy_backend.Services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;

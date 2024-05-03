@@ -4,7 +4,6 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.DayCareRepository;
-import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.DayCareDTOs.CreateDayCareRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class DayCareService {
         this.businessRepository = businessRepository;
     }
 
-    public DayCareEntity createDayCare(CreateDayCareRequest dayCareDTO, Integer businessId) {
+    public DayCareEntity createDayCare(DayCareEntity dayCareDTO, Integer businessId) {
         BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
@@ -32,6 +31,7 @@ public class DayCareService {
         }
 
         dayCareEntity.setBusiness(business);
+        dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
         DayCareEntity savedDayCare = dayCareRepository.save(dayCareEntity);
 
         business.setDayCareEntity(savedDayCare);
