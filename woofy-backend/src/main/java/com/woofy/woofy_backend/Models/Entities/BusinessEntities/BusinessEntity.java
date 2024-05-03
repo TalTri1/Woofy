@@ -28,6 +28,7 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "business_name")
     private String businessName;
 
+    @ElementCollection(targetClass = BusinessTypeEnum.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "business_types")
     private List<BusinessTypeEnum> businessTypes;

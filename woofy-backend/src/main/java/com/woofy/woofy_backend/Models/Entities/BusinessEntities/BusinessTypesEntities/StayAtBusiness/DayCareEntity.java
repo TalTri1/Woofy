@@ -1,5 +1,7 @@
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
 import com.woofy.woofy_backend.DTOs.AuthenticationResponse;
 import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterBusinessRequest;
+import com.woofy.woofy_backend.DTOs.BusinessDTOs.RegisterBusinessRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
@@ -32,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
