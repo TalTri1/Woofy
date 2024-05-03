@@ -7,11 +7,11 @@ const SignInPage: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const onBecomeACaregiverClick = useCallback(() => {
-    navigate("/sign-up-page");
+    navigate("/sign-up");
   }, [navigate]);
 
   const onJoinNowButtonClick = useCallback(() => {
-    navigate("/sign-up-page");
+    navigate("/sign-up");
   }, [navigate]);
 
   return (

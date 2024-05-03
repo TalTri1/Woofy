@@ -27,7 +27,7 @@ const RegistrationPage: FunctionComponent = () => {
     };
 
     const onBackButtonTextClick = useCallback(() => {
-        navigate("/sign-up-page");
+        navigate("/sign-up");
     }, [navigate]);
 
     const onDogOwnerButtonClick = useCallback(() => {

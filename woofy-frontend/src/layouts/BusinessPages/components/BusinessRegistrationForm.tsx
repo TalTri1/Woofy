@@ -5,7 +5,7 @@ const BusinessRegistrationFormFields: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const onBackButtonTextClick = useCallback(() => {
-    navigate("/sign-up-page");
+    navigate("/sign-up");
   }, [navigate]);
 
   return (
