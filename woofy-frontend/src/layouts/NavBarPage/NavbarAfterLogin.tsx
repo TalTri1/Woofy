@@ -1,10 +1,12 @@
 import { FunctionComponent } from "react";
+import { Link } from "react-router-dom";
 
 const NavbarAfterLogin: FunctionComponent = () => {
   return (
     <nav className="m-0 self-stretch bg-text-alternate flex flex-row items-start justify-start py-4 px-16 box-border sticky top-[0] z-[99] max-w-full mq1050:hidden mq750:pl-8 mq750:pr-8 mq750:box-border">
       <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px]">
         <div className="w-[168px] flex flex-row items-start justify-start">
+          <Link to="/" style={{ textDecoration: 'none' }}>
           <button className="cursor-pointer [border:none] p-0 bg-[transparent] h-10 flex-1 flex flex-row items-center justify-between relative">
             <div className="!m-[0] absolute top-[-10px] left-[0px] flex flex-row items-center justify-start">
               <img
@@ -22,6 +24,7 @@ const NavbarAfterLogin: FunctionComponent = () => {
               </div>
             </div>
           </button>
+          </Link>
         </div>
         <div className="w-[605px] flex flex-row items-start justify-start gap-[32px] max-w-full mq750:gap-[16px]">
           <div className="flex-1 flex flex-col items-start justify-start pt-[6.5px] px-0 pb-0 box-border max-w-full">
