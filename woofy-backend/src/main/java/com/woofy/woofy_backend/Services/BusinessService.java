@@ -23,6 +23,8 @@ public class BusinessService {
         business.setBusinessName(request.getBusinessName());
         business.setAbout(request.getAbout());
         business.setBusinessTypes(request.getBusinessTypes());
+        business.setWebsite(request.getWebsite());
+        business.setSocialMedia(request.getSocialMedia());
 
         businessRepository.save(business);
 
