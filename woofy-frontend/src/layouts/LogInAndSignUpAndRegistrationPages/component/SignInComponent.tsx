@@ -37,8 +37,8 @@ const SignInComponent: FunctionComponent = () => {
     try {
       const res = await api.post("auth/login", basicSignInUser);
       console.log(res.data);
-      setToken(res.data.accessToken);
-      navigate("/", { replace: true });
+      setToken(res.data.access_token);
+      navigate("/business-dashboard", { replace: true });
     } catch (error) {
       console.error("Error occurred while registering user: ", error);
     }

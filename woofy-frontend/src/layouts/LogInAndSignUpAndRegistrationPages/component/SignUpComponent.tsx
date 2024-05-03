@@ -36,8 +36,7 @@ const SignUpModal = () => {
         try {
             const res = await api.post("auth/check-valid-email", basicSignUpUser);
             console.log(res.data);
-            setToken(res.data.accessToken);
-            navigate("/registration-page", { replace: true });
+            navigate("/registration", { state: basicSignUpUser });
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
         }

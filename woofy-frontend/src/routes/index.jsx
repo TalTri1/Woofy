@@ -3,6 +3,8 @@ import { useAuth } from "../provider/AuthProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage";
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
+import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
+import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 
 const Routes = () => {
     const { token } = useAuth();
@@ -28,7 +30,7 @@ const Routes = () => {
             children: [
                 {
                     path: "",
-                    element: <div>User Home Page</div>,
+                    element: <BusinessDashboardPageHome/>,
                 },
                 {
                     path: "/profile",
@@ -38,6 +40,10 @@ const Routes = () => {
                     path: "/logout",
                     element: <div>Logout</div>,
                 },
+                {
+                    path: "/business-dashboard",
+                    element: <BusinessDashboardPageHome/>,
+                }
             ],
         },
     ];
@@ -55,6 +61,10 @@ const Routes = () => {
         {
             path: "/sign-up",
             element: <SignUpPage/>,
+        },
+        {
+            path: "/registration",
+            element: <RegistrationPage/>,
         }
     ];
 
