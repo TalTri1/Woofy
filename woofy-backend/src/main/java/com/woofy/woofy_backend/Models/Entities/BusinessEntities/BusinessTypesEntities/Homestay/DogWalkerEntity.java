@@ -19,9 +19,5 @@ public class DogWalkerEntity extends HomestayBaseEntity {
     @Column(name = "dog_walker_id", nullable = false)
     private Integer id;
 
-    @OneToOne
-    @JsonManagedReference
-    @JoinColumn(name = "business_id", nullable = false)
-    private BusinessEntity business;
 
 }

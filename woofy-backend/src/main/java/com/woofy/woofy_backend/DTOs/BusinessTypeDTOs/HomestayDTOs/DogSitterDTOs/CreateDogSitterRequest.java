@@ -10,9 +10,5 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class CreateDogSitterRequest extends CreateHomestayRequest {
-    private List<HomeConditionsEnum> homeConditions;
-    private List<PetsInHomeEnum> petsInHome;
-    private List<DogSizeEnum> acceptableDogSizes;
 }

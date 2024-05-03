@@ -19,11 +19,9 @@ public class DayCareController {
         this.dayCareService = dayCareService;
     }
 
-    @PostMapping("/create")
-    public DayCareEntity createDayCare(@RequestBody CreateDayCareRequest dayCareDTO) {
-        DayCareEntity dayCareEntity = new DayCareEntity();
-        //dayCareEntity.setId(dayCareDTO.getId());  // TODO add all daycare details
-        return dayCareService.createDayCare(dayCareEntity);
+    @PostMapping("/create/{businessId}")
+    public DayCareEntity createDayCare(@PathVariable Integer businessId, @RequestBody CreateDayCareRequest dayCareDTO) {
+        return dayCareService.createDayCare(dayCareDTO, businessId);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -19,11 +19,9 @@ public class BoardingController {
         this.boardingService = boardingService;
     }
 
-    @PostMapping("/create")
-    public BoardingEntity createBoarding(@RequestBody CreateBoardingRequest boardingDTO) {
-        BoardingEntity boardingEntity = new BoardingEntity();
-        //boardingEntity.setId(boardingDTO.getId());  // TODO add all boarding details
-        return boardingService.createBoarding(boardingEntity);
+    @PostMapping("/create/{businessId}")
+    public BoardingEntity createBoarding(@PathVariable Integer businessId, @RequestBody CreateBoardingRequest boardingDTO) {
+        return boardingService.createBoarding(boardingDTO, businessId);
     }
 
     @DeleteMapping("/delete/{id}")
