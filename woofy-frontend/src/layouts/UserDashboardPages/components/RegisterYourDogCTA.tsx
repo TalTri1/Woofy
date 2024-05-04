@@ -3,7 +3,7 @@ import { FunctionComponent, useCallback } from "react";
 import { Link } from 'react-router-dom';
 
 
-const RegisterYourBusinessCTA: FunctionComponent = () => {
+const RegisterYourUserCTA: FunctionComponent = () => {
     return (
     <div className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-center justify-start pt-[50px] px-16 pb-0 box-border max-w-full text-left text-13xl text-text-primary font-text-medium-normal lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px]">
       <div className="self-stretch rounded-31xl flex flex-col items-start justify-start max-w-full">
@@ -16,7 +16,7 @@ const RegisterYourBusinessCTA: FunctionComponent = () => {
                     Final Steps to Start Enjoying Woofy!
                   </b>
                   <div className="self-stretch relative text-lg leading-[150%]">
-                    Please enter your business and services details in order to
+                    Please enter your user and services details in order to
                     start serving costumers.
                   </div>
                   <button
@@ -24,7 +24,7 @@ const RegisterYourBusinessCTA: FunctionComponent = () => {
                   >
                     <Link to="/serivces-section" style={{ textDecoration: 'none', color: 'inherit' }}>
                       <div className="relative text-lg leading-[150%] font-semibold font-text-medium-normal text-white text-left">
-                        Register your Business
+                        Register your Dog
                       </div>
                     </Link>
                   </button>
@@ -38,4 +38,4 @@ const RegisterYourBusinessCTA: FunctionComponent = () => {
   );
 };
 
-export default RegisterYourBusinessCTA;
+export default RegisterYourUserCTA;

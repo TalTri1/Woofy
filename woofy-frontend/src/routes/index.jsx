@@ -6,6 +6,7 @@ import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
+import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
 
 const Routes = () => {
     const { token } = useAuth();
@@ -27,6 +28,9 @@ const Routes = () => {
         },
         {   path: "/serivces-section",
             element: <SerivcesSection/>,
+        },
+        {   path: "/user-dashboard",
+            element: <UserDashboardPageHome/>,
         }
 
     ];
@@ -55,7 +59,10 @@ const Routes = () => {
                 },
                 {   path: "/serivces-section",
                 element: <SerivcesSection/>,
-            }
+            },
+            {   path: "/user-dashboard",
+            element: <UserDashboardPageHome/>,
+        }
 
             ],
         },
