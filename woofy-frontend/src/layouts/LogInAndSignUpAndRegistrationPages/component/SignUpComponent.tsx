@@ -2,13 +2,15 @@ import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicSignUpModel from "../../../models/UserModels/BasicSignUpModel";
 import api from "../../../api/api";
+import {useAuth} from "../../../provider/AuthProvider";
 
 const SignUpModal = () => {
 
     const navigate = useNavigate();
+    const { setToken } = useAuth();
 
     const onSignUpLinkClick = useCallback(() => {
-        navigate("/");
+        navigate("/sign-up");
     }, [navigate]);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +34,7 @@ const SignUpModal = () => {
         try {
             const res = await api.post("auth/check-valid-email", basicSignUpUser);
             console.log(res.data);
-            navigate("/registration-page", { state: basicSignUpUser });
+            navigate("/registration", { state: basicSignUpUser });
         } catch (error) {
             // pop up that the email is already taken or not valid
             alert("Email is already taken or not valid");

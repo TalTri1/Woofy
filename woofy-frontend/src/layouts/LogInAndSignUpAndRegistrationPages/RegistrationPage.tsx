@@ -5,11 +5,13 @@ import RegistrationComponent from "./component/RegistrationComponent";
 
 import api from "../../api/api";
 import RegistrationModel, { USERTYPE } from "../../models/RegistrationModel";
+import {useAuth} from "../../provider/AuthProvider";
 
 const RegistrationPage: FunctionComponent = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { setToken } = useAuth();
     const basicSignUpUser = location.state;
     const [isDogOwnerButtonClicked, setDogOwnerButtonClicked] = useState(false);
     const [isCaregiverButtonClicked, setCaregiverButtonClicked] = useState(false);
@@ -27,7 +29,7 @@ const RegistrationPage: FunctionComponent = () => {
     };
 
     const onBackButtonTextClick = useCallback(() => {
-        navigate("/sign-up-page");
+        navigate("/sign-up");
     }, [navigate]);
 
     const onDogOwnerButtonClick = useCallback(() => {
@@ -74,11 +76,13 @@ const RegistrationPage: FunctionComponent = () => {
 
         // API call for the backend for saving the user
         try {
-            const response = await api.post(`${apiEndpoint}?profilePhotoId=${profilePhotoId}`, {
+            const res = await api.post(`${apiEndpoint}?profilePhotoId=${profilePhotoId}`, {
                 ...rest, // Spread the rest of the properties
                 ...basicSignUpModel, // Spread the properties of basicSignUpModel
             });
-            console.log(`Response from the backend: ${response}`);
+            console.log(`Response from the backend: ${res}`);
+            setToken(res.data.access_token);
+            navigate("/business-dashboard", { replace: true });
         } catch (error) {
             // Delete failed profile photo from the DB
             await api.delete(`/image/delete/${profilePhotoId}`);

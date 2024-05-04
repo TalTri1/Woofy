@@ -1,30 +1,29 @@
-package com.woofy.woofy_backend.DTOs.UserDTOs;
+package com.woofy.woofy_backend.DTOs.BusinessDTOs;
 
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class RegisterBusinessRequest extends BaseRegisterRequest {
+public class UpdateBusinessRequest {
 
     @Column(name = "business_name")
     private String businessName;
+
+    @Column(name = "about", length = 2000)
+    private String about;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "business_types", nullable = false)
     private List<BusinessTypeEnum> businessTypes;
 
-    @Column(name = "about", length = 2000)
-    private String about;
+    @Column(name = "website")
+    private String website;
 
-
+    @Column(name = "social_media")
+    private String socialMedia;
 }

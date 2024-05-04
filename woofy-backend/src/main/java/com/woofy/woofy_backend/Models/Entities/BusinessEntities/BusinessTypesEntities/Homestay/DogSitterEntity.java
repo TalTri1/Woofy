@@ -19,9 +19,4 @@ public class DogSitterEntity extends HomestayBaseEntity {
     @Column(name = "dog_sitter_id", nullable = false)
     private Integer id;
 
-    @OneToOne
-    @JsonBackReference
-    @JoinColumn(name = "business_id", nullable = false)
-    private BusinessEntity business;
-
 }

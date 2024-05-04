@@ -15,16 +15,26 @@ import static com.woofy.woofy_backend.Models.Enums.PermissionEnum.*;
 @RequiredArgsConstructor
 public enum RoleEnum {
 
-    CUSTOMER(Collections.emptySet()),
-    BUSINESS(Collections.emptySet()),
-    ADMIN(
-            Set.of(
-                    ADMIN_READ,
-                    ADMIN_UPDATE,
-                    ADMIN_DELETE,
-                    ADMIN_CREATE
-            )
-    );
+    CUSTOMER(Set.of(
+            CUSTOMER_READ,
+            CUSTOMER_UPDATE,
+            CUSTOMER_DELETE,
+            CUSTOMER_CREATE
+    )),
+
+    BUSINESS(Set.of(
+            BUSINESS_READ,
+            BUSINESS_UPDATE,
+            BUSINESS_DELETE,
+            BUSINESS_CREATE
+    )),
+
+    ADMIN(Set.of(
+            ADMIN_READ,
+            ADMIN_UPDATE,
+            ADMIN_DELETE,
+            ADMIN_CREATE
+    ));
 
     @Getter
     private final Set<PermissionEnum> permissions;
