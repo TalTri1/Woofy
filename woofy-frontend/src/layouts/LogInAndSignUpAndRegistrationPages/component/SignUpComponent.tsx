@@ -28,14 +28,14 @@ const SignUpModal = () => {
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(`basic signup model has been created:\n ${JSON.stringify(basicSignUpUser)}`);
-
         // Make the Axios request
         try {
             const res = await api.post("auth/check-valid-email", basicSignUpUser);
             console.log(res.data);
             navigate("/registration-page", { state: basicSignUpUser });
         } catch (error) {
+            // pop up that the email is already taken or not valid
+            alert("Email is already taken or not valid");
             console.error("Error occurred while registering user: ", error);
         }
     };

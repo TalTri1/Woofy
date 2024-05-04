@@ -71,6 +71,9 @@ public abstract class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "tokens")
     private List<TokenEntity> tokens;
 
+    @Column(name = "profile_photo_id")
+    private Long profilePhotoID;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

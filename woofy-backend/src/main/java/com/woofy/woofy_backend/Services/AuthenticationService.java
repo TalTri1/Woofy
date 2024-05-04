@@ -45,7 +45,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> registerBusiness(RegisterBusinessRequest request, BindingResult result) {
+    public ResponseEntity<?> registerBusiness(RegisterBusinessRequest request, Long profilePhotoId , BindingResult result) {
         var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -56,6 +56,7 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.BUSINESS)
+                .profilePhotoID(profilePhotoId)
                 .build();
         var savedUser = businessRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -67,7 +68,7 @@ public class AuthenticationService {
                 .build());
     }
 
-    public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request, BindingResult result) {
+    public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request,Long profilePhotoId, BindingResult result) {
         var user = CustomerEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -78,6 +79,7 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.CUSTOMER)
+                .profilePhotoID(profilePhotoId)
                 .build();
         var savedUser = customerRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

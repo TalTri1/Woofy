@@ -13,7 +13,7 @@ const RegistrationPage: FunctionComponent = () => {
     const basicSignUpUser = location.state;
     const [isDogOwnerButtonClicked, setDogOwnerButtonClicked] = useState(false);
     const [isCaregiverButtonClicked, setCaregiverButtonClicked] = useState(false);
-    const [activeButton, setActiveButton] = useState('');
+    const [activeButton, setActiveButton] = useState('dogOwner');
 
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState
         (new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', ''));
@@ -31,48 +31,57 @@ const RegistrationPage: FunctionComponent = () => {
     }, [navigate]);
 
     const onDogOwnerButtonClick = useCallback(() => {
-        console.log('Dog Owner Button Clicked');
         setDogOwnerButtonClicked(!isDogOwnerButtonClicked);
         setActiveButton('dogOwner');
         setCompleteRegistrationUser(prevState => {
             const updatedState = { ...prevState, userType: USERTYPE.CUSTOMER };
-            console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
             return updatedState;
         });
     }, []);
 
 
     const onCaregiverButtonClick = useCallback(() => {
-        console.log('Caregiver Button Clicked');
         setCaregiverButtonClicked(!isCaregiverButtonClicked);
         setActiveButton('caregiver');
         setCompleteRegistrationUser(prevState => {
             const updatedState = { ...prevState, userType: USERTYPE.BUSINESS };
-            console.log(`Updated completeRegistrationUser: ${JSON.stringify(updatedState)}`);
             return updatedState;
         });
     }, []);
 
+    // @@@@@@ Handle profile photo @@@@@@ //////////
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+    const handleFileSelect = (file: File) => {
+        setSelectedImage(file);
+    };
 
     const signupHandler = async (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
 
+        let profilePhotoId = 0; // If no profile photo is selected, the default value is 0 - no image
+
+        // Save the profile photo to the DB if exists
+        if (selectedImage) {
+            profilePhotoId = await saveProfilePhotoToDB(selectedImage);
+        }
+
         // Spread the properties of basicSignUpModel into completeRegistrationUser
         const { basicSignUpModel, ...rest } = completeRegistrationUser;
-
-        console.log(`The completeRegistrationUser to be sent to the Backend:\n ${JSON.stringify(completeRegistrationUser)}`);
 
         // Determine the API endpoint based on the user type
         const apiEndpoint = rest.userType === USERTYPE.BUSINESS ? '/auth/register-business' : '/auth/register-customer';
 
         // API call for the backend for saving the user
         try {
-            const response = await api.post(apiEndpoint, {
+            const response = await api.post(`${apiEndpoint}?profilePhotoId=${profilePhotoId}`, {
                 ...rest, // Spread the rest of the properties
                 ...basicSignUpModel, // Spread the properties of basicSignUpModel
             });
             console.log(`Response from the backend: ${response}`);
         } catch (error) {
+            // Delete failed profile photo from the DB
+            await api.delete(`/delete/image/${profilePhotoId}`);
             if (error instanceof Error) {
                 console.error(`Error from the backend: ${error.message}`);
                 console.error(`Stack trace: ${error.stack}`);
@@ -84,10 +93,24 @@ const RegistrationPage: FunctionComponent = () => {
 
 
     const formSubmitHandler = async () => {
-        console.log("Submit has been pressed");
         signupHandler();
+    };
 
-        // Todo After this works - add api.post call to the backend for saving in DB.
+    const saveProfilePhotoToDB = async (file: File) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await api.post('/upload/image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log(`Response from the backend: ${response}`);
+            return response.data.imageID; // return the ID of the saved image
+        } catch (error) {
+            console.error(`Error uploading image: ${error}`);
+        }
     };
 
     return (
@@ -154,7 +177,9 @@ const RegistrationPage: FunctionComponent = () => {
                             </div>
                         </div>
                     </div>
-                    <RegistrationComponent updateCompleteRegistrationUser={updateCompleteRegistrationUser} />
+                    <RegistrationComponent
+                        updateCompleteRegistrationUser={updateCompleteRegistrationUser}
+                        onFileSelect={handleFileSelect} />
                 </section>
                 <section
                     className="self-stretch flex flex-row items-center justify-center py-6 px-5 box-border gap-[16px] min-h-[104px] mq450:flex-wrap">
