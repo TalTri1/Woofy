@@ -20,7 +20,7 @@ public class ImageController {
     @Autowired
     ImageRepository imageRepository;
 
-    @PostMapping("/upload/image")
+    @PostMapping("/image/upload")
     public ResponseEntity<ImageEntity> uploadImage(@RequestParam("image") MultipartFile file)
             throws IOException {
 
@@ -33,7 +33,7 @@ public class ImageController {
     }
 
 
-    @GetMapping(path = {"/get/image/{id}"})
+    @GetMapping(path = {"/image/get/{id}"})
     public ResponseEntity<byte[]> getImageById(@PathVariable("id") Long id) throws IOException {
         Optional<ImageEntity> dbImage = imageRepository.findById(id);
 
@@ -56,7 +56,7 @@ public class ImageController {
     }
 
     // Delete image by id if exists
-    @DeleteMapping("/delete/image/{id}")
+    @DeleteMapping("/image/delete/{id}")
     public ResponseEntity<?> deleteImage(@PathVariable("id") Long id) {
         Optional<ImageEntity> dbImage = imageRepository.findById(id);
         if (dbImage.isPresent()) {

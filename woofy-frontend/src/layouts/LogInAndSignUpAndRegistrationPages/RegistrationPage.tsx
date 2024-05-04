@@ -81,7 +81,8 @@ const RegistrationPage: FunctionComponent = () => {
             console.log(`Response from the backend: ${response}`);
         } catch (error) {
             // Delete failed profile photo from the DB
-            await api.delete(`/delete/image/${profilePhotoId}`);
+            await api.delete(`/image/delete/${profilePhotoId}`);
+            alert(`Error in registration. Please make sure you have filled all the fields correctly.`);
             if (error instanceof Error) {
                 console.error(`Error from the backend: ${error.message}`);
                 console.error(`Stack trace: ${error.stack}`);
@@ -101,7 +102,7 @@ const RegistrationPage: FunctionComponent = () => {
         formData.append('image', file);
 
         try {
-            const response = await api.post('/upload/image', formData, {
+            const response = await api.post('/image/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
