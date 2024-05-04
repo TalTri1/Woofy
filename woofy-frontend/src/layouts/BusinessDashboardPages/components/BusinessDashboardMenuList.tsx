@@ -220,6 +220,49 @@ const BusinessDashboardMenuList: FunctionComponent = () => {
             </div>
           </div>
         </button>
+
+        <div className="self-stretch flex flex-col items-start justify-start pt-0 px-4 pb-6 mq450:gap-[16px]">
+            <div className="self-stretch flex flex-col items-start justify-start pt-20 px-0 pb-0">
+              <button className="cursor-pointer [border:none] p-2 bg-[transparent] self-stretch flex flex-row items-center justify-start">
+                <div className="flex-1 flex flex-row items-start justify-start gap-[12px]">
+                  <img
+                    className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                    loading="lazy"
+                    alt=""
+                    src="/buttoniconhelpcircle.svg"
+                  />
+                  <div className="flex-1 relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
+                    Support
+                  </div>
+                </div>
+              </button>
+              <button className="cursor-pointer [border:none] p-2 bg-[transparent] self-stretch flex flex-row items-center justify-start">
+                <div className="flex-1 flex flex-row items-start justify-start gap-[12px]">
+                  <img
+                    className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                    loading="lazy"
+                    alt=""
+                    src="./icon--cog.svg"
+                  />
+                  <div className="flex-1 relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
+                    Settings
+                  </div>
+                </div>
+              </button>
+              <button className="cursor-pointer [border:none] p-2 bg-[transparent] self-stretch flex flex-row items-center justify-start">
+            <div className="flex-1 flex flex-row items-start justify-start gap-[12px]">
+              <img
+                className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                alt=""
+                src="/icon--log-out.svg"
+              />
+              <div className="flex-1 relative text-base leading-[150%] font-text-regular-normal text-text-primary text-left">
+                Log out
+              </div>
+            </div>
+          </button>
+            </div>
+          </div>
       </div>
     </div>
   );
