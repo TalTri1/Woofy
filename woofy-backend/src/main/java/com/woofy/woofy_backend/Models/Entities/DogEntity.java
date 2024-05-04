@@ -7,12 +7,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -50,8 +47,8 @@ public class DogEntity extends BaseEntity {
     @Column(name = "special_requirements")
     private String specialRequirements = "";
 
-    @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PictureEntity> pictures = new ArrayList<>();
+    @OneToMany(mappedBy = "imageID", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImageEntity> images = new ArrayList<>();
 
 
 }

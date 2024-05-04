@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.DTOs.DogDTOs;
 
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
-import com.woofy.woofy_backend.Models.Entities.PictureEntity;
+import com.woofy.woofy_backend.Models.Entities.ImageEntity;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogAgeCategoryEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogTrainingEnum;
@@ -37,6 +37,6 @@ public class DogRegisterRequest {
 
     private String specialRequirements = "";
 
-    private List<PictureEntity> pictures = new ArrayList<>();
+    private List<ImageEntity> pictures = new ArrayList<>();
 
 }
