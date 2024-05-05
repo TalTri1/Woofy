@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.DTOs.BusinessDTOs;
 
+import com.woofy.woofy_backend.DTOs.UserDTOs.UpdateUserRequest;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -9,7 +10,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UpdateBusinessRequest {
+public class UpdateBusinessRequest extends UpdateUserRequest {
 
     @Column(name = "business_name")
     private String businessName;

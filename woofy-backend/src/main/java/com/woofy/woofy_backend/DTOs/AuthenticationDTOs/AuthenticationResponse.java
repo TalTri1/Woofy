@@ -1,4 +1,4 @@
-package com.woofy.woofy_backend.DTOs;
+package com.woofy.woofy_backend.DTOs.AuthenticationDTOs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

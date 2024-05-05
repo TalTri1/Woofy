@@ -30,4 +30,9 @@ public class BusinessService {
 
         return ResponseEntity.ok("Business updated successfully");
     }
+
+    public BusinessEntity getBusiness(Long businessId) {
+        return businessRepository.findById(businessId)
+                .orElseThrow(() -> new RuntimeException("Business not found with id " + businessId));
+    }
 }

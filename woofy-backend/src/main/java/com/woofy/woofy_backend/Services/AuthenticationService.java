@@ -2,11 +2,10 @@ package com.woofy.woofy_backend.Services;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
-import com.woofy.woofy_backend.DTOs.AuthenticationResponse;
-import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.BusinessDTOs.RegisterBusinessRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
+import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.AuthenticationRequest;
+import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.AuthenticationResponse;
+import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.EmailValidationRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.TokenEntity;
@@ -43,7 +42,11 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> registerBusiness(RegisterBusinessRequest request, Long profilePhotoId , BindingResult result) {
+    public ResponseEntity<?> registerBusiness(BaseRegisterRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
         var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -54,7 +57,6 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.BUSINESS)
-                .profilePhotoID(profilePhotoId)
                 .build();
         var savedUser = businessRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -66,7 +68,11 @@ public class AuthenticationService {
                 .build());
     }
 
-    public ResponseEntity<?> registerCustomer(RegisterCustomerRequest request,Long profilePhotoId, BindingResult result) {
+    public ResponseEntity<?> registerCustomer(BaseRegisterRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
         var user = CustomerEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -77,7 +83,6 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.CUSTOMER)
-                .profilePhotoID(profilePhotoId)
                 .build();
         var savedUser = customerRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

@@ -1,14 +1,17 @@
-import React, { FunctionComponent, useCallback } from "react";
+import React, {FunctionComponent, useCallback, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import BasicSignInModel from "../../../models/UserModels/BasicSignInModel";
 import api from "../../../api/api";
 import {useAuth} from "../../../provider/AuthProvider";
+import {toast} from "react-toastify";
+import {UserContext} from "../../../provider/UserProvider";
 
 
 const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, setRefreshToken } = useAuth();
+  const { setIsLoggedIn } = useContext(UserContext);
 
   const onSignUpLinkClick = useCallback(() => {
     navigate("/sign-up");
@@ -28,19 +31,29 @@ const SignInComponent: FunctionComponent = () => {
     setUserDetails(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const signInHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log(`basic signin model has been created:\n ${JSON.stringify(basicSignInUser)}`);
-
     // Make the Axios request
     try {
       const res = await api.post("auth/login", basicSignInUser);
-      console.log(res.data);
-      setToken(res.data.access_token);
-      navigate("/business-dashboard", { replace: true });
+      if (res.status >= 400) {
+        // Login failed
+
+      } else {
+        console.log("Login success: ",res.data);
+        setToken(res.data.access_token);
+        setRefreshToken(res.data.refresh_token);
+        setIsLoggedIn(true);
+        navigate("/", { replace: true });
+      }
     } catch (error) {
       console.error("Error occurred while registering user: ", error);
+      // @ts-ignore
+      toast.error(error.response.data || "An error occurred");
+      // Reset the state here
+      setUserDetails(new BasicSignInModel('', ''));
     }
   };
 
@@ -55,7 +68,7 @@ const SignInComponent: FunctionComponent = () => {
           Welcome back! Sign in here.
         </div>
       </div>
-      <form onSubmit={signupHandler}
+      <form onSubmit={signInHandler}
           className="m-0 self-stretch h-[355px] flex flex-col items-start justify-start gap-[16px] max-w-full mq450:h-auto">
         <div className="self-stretch h-[50px] bg-background-color-primary box-border flex flex-row items-start justify-start p-3 max-w-full border-[1px] border-solid border-color-neutral-neutral-lighter">
           <input
@@ -63,6 +76,8 @@ const SignInComponent: FunctionComponent = () => {
             placeholder="Email"
             type="email"
             name="email"
+            autoFocus
+            autoComplete="email"
             value={basicSignInUser.email}
             onChange={changeHandler}
             required={true}
@@ -74,6 +89,7 @@ const SignInComponent: FunctionComponent = () => {
             placeholder="Password"
             type={showPassword ? "text" : "password"}
             name="password"
+            autoComplete="current-password"
             onChange={changeHandler}
             value={basicSignInUser.password}
             pattern=".{8,}"

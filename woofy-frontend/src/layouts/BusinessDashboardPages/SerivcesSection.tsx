@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback, useState } from "react";
-import NavbarAfterLogin1 from "../NavBarPage/NavbarAfterLogin";
-import BusinessDashboardMenuList1 from "../BusinessDashboardPages/components/BusinessDashboardMenuList";
+import NavbarAfterLogin from "../NavBarPage/NavbarAfterLogin";
+import BusinessDashboardMenuList from "../BusinessDashboardPages/components/BusinessDashboardMenuList";
 import DogSizeInput from "../BusinessDashboardPages/components/DogSizeInput";
 
 const SerivcesSection: FunctionComponent = () => {
@@ -40,10 +40,10 @@ const SerivcesSection: FunctionComponent = () => {
 
     return (
         <div className="w-full relative bg-text-alternate overflow-hidden flex flex-col items-start justify-start leading-[normal] tracking-[normal]">
-            <NavbarAfterLogin1 />
+            <NavbarAfterLogin />
             <main className="self-stretch flex flex-row items-start justify-start max-w-full text-left text-base text-text-primary font-text-medium-normal mq1050:pl-5 mq1050:pr-5 mq1050:box-border">
                 <div className="w-[312px] bg-text-alternate overflow-hidden shrink-0 flex flex-col items-start justify-start pt-0 px-0 pb-[2997px] box-border lg:pb-[1266px] lg:box-border mq1050:hidden mq1050:pb-[823px] mq1050:box-border mq750:pb-[535px] mq750:box-border">
-                    <BusinessDashboardMenuList1 />
+                    <BusinessDashboardMenuList />
                 </div>
                 <section className="flex-1 flex flex-col items-start justify-start max-w-[calc(100%_-_312px)] text-center text-29xl text-text-alternate font-text-medium-normal mq1050:max-w-full">
                     <div className="self-stretch bg-app1 overflow-hidden flex flex-col items-center justify-start pt-[90px] px-5 pb-[60px] box-border gap-[0px] max-w-full">

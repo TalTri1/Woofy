@@ -1,4 +1,4 @@
-package com.woofy.woofy_backend.DTOs;
+package com.woofy.woofy_backend.DTOs.AuthenticationDTOs;
 
 import jakarta.validation.constraints.Size;
 import lombok.Builder;

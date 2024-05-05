@@ -1,16 +1,12 @@
+// AuthProvider.jsx
+import {createContext, useContext, useEffect, useMemo, useState} from "react";
 import axios from "axios";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    // State to hold the authentication token
-    const [token, setToken_] = useState(localStorage.getItem("token"));
-
-    // Function to set the authentication token
-    const setToken = (newToken) => {
-        setToken_(newToken);
-    };
+    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
 
     useEffect(() => {
         if (token) {
@@ -27,11 +23,12 @@ const AuthProvider = ({ children }) => {
         () => ({
             token,
             setToken,
+            refreshToken,
+            setRefreshToken,
         }),
-        [token]
+        [token, refreshToken]
     );
 
-    // Provide the authentication context to the children components
     return (
         <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
     );

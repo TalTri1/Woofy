@@ -1,7 +1,17 @@
 import React, { useState, useRef } from 'react';
+import {toast} from "react-toastify";
+import api from "../../../api/api";
 
 type ImageComponentProps = {
     onFileSelect: (file: File) => void;
+};
+export const getImage = async (id: number) => {
+    try {
+        const res = await api.post(`/image/get/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error getting image", error);
+    }
 };
 
 const ImageComponent: React.FC<ImageComponentProps> = ({ onFileSelect }) => {
@@ -19,7 +29,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ onFileSelect }) => {
 
         // Check if the selected file is an image
         if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            toast.error('Please select an image file');
             return;
         }
 
@@ -33,6 +43,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ onFileSelect }) => {
         };
         reader.readAsDataURL(file);
     };
+
 
     return (
         <div className="flex flex-row items-center justify-start py-0 pr-[318px] pl-0 gap-[24px] mq450:pr-5 mq450:box-border mq750:flex-wrap mq750:pr-[159px] mq750:box-border">

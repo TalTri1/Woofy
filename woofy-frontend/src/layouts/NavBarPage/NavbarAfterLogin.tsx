@@ -1,7 +1,27 @@
-import { FunctionComponent } from "react";
+import React, {FunctionComponent, useContext, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
+import {UserContext} from "../../provider/UserProvider";
+import api from "../../api/api";
+import {toast} from "react-toastify";
+import BasicSignInModel from "../../models/UserModels/BasicSignInModel";
+import {getImage} from "../LogInAndSignUpAndRegistrationPages/component/imageComponent";
 
 const NavbarAfterLogin: FunctionComponent = () => {
+
+  const { userDetails } = useContext(UserContext);
+  const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (userDetails?.profilePicture) {
+        const image = await getImage(userDetails.profilePhotoID);
+        setImageSrc(image);
+      }
+    };
+
+    fetchImage();
+  }, [userDetails]);
+
   return (
     <nav className="m-0 self-stretch bg-text-alternate flex flex-row items-start justify-start py-4 px-16 box-border sticky top-[0] z-[99] max-w-full mq1050:hidden mq750:pl-8 mq750:pr-8 mq750:box-border">
       <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px]">
@@ -56,14 +76,14 @@ const NavbarAfterLogin: FunctionComponent = () => {
               className="h-10 w-10 relative object-cover min-h-[40px]"
               loading="lazy"
               alt=""
-              src="/user-avatar-image@2x.png"
+              src={imageSrc}
             />
             <div className="flex flex-col items-start justify-start pt-2 px-0 pb-0">
               <button
                 className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base leading-[150%] font-text-small-normal text-text-primary text-left inline-block min-w-[111px] whitespace-nowrap"
                 id="Settings Button"
               >
-                Name Surname
+                {userDetails?.firstName + " " + userDetails?.lastName}
               </button>
             </div>
           </div>

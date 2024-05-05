@@ -66,7 +66,7 @@ public abstract class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "roles", nullable = false)
     private RoleEnum role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     @Column(name = "tokens")
     private List<TokenEntity> tokens;

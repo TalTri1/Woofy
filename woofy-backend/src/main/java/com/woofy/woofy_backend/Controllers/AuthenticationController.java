@@ -1,9 +1,8 @@
 package com.woofy.woofy_backend.Controllers;
 
-import com.woofy.woofy_backend.DTOs.AuthenticationRequest;
-import com.woofy.woofy_backend.DTOs.EmailValidationRequest;
-import com.woofy.woofy_backend.DTOs.BusinessDTOs.RegisterBusinessRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.RegisterCustomerRequest;
+import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.AuthenticationRequest;
+import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.EmailValidationRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
 import com.woofy.woofy_backend.Services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,13 +27,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-business")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterBusinessRequest request, @RequestParam Long profilePhotoId, BindingResult result) {
-        return service.registerBusiness(request, profilePhotoId, result);
+    public ResponseEntity<?> register_business(@Valid @RequestBody BaseRegisterRequest request, BindingResult result) {
+        return service.registerBusiness(request, result);
     }
 
     @PostMapping("/register-customer")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterCustomerRequest request,@RequestParam Long profilePhotoId, BindingResult result) {
-        return service.registerCustomer(request, profilePhotoId, result);
+    public ResponseEntity<?> register_customer(@Valid @RequestBody BaseRegisterRequest request, BindingResult result) {
+        return service.registerCustomer(request, result);
     }
 
     @PostMapping("/login")

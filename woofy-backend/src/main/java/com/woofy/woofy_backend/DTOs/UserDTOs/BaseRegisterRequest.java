@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
-public abstract class BaseRegisterRequest {
+public class BaseRegisterRequest {
 
     @Email(message = "Email should be valid")
     @NotEmpty(message = "Email is required")
@@ -41,7 +40,5 @@ public abstract class BaseRegisterRequest {
 
     @NotEmpty(message = "Zip code is required")
     private String zipCode;
-
-    private Long profilePhotoID;
 
 }

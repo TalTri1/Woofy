@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import BasicSignUpModel from "../../../models/UserModels/BasicSignUpModel";
 import api from "../../../api/api";
 import {useAuth} from "../../../provider/AuthProvider";
+import {toast} from "react-toastify";
 
 const SignUpModal = () => {
 
     const navigate = useNavigate();
-    const { setToken } = useAuth();
 
     const onSignUpLinkClick = useCallback(() => {
         navigate("/sign-up");
@@ -37,7 +37,7 @@ const SignUpModal = () => {
             navigate("/registration", { state: basicSignUpUser });
         } catch (error) {
             // pop up that the email is already taken or not valid
-            alert("Email is already taken or not valid");
+            toast.error("Email is already taken or not valid");
             console.error("Error occurred while registering user: ", error);
         }
     };
@@ -62,6 +62,7 @@ const SignUpModal = () => {
                         placeholder="Email"
                         type="email"
                         name="email"
+                        autoComplete="email"
                         value={basicSignUpUser.email}
                         onChange={changeHandler}
                         required={true}
