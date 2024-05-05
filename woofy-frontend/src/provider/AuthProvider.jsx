@@ -1,12 +1,17 @@
-// AuthProvider.jsx
 import {createContext, useContext, useEffect, useMemo, useState} from "react";
 import axios from "axios";
+import api from "../api/api";
+import {toast} from "react-toastify";
+import {UserContext} from "./UserProvider";
+
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({children}) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
+    const {setIsLoggedIn} = useContext(UserContext);
+
 
     useEffect(() => {
         if (token) {
@@ -18,6 +23,19 @@ const AuthProvider = ({ children }) => {
         }
     }, [token]);
 
+    const login = async (basicSignInUser) => {
+        try {
+            const res = await api.post("auth/login", basicSignInUser);
+            setToken(res.data.access_token);
+            setRefreshToken(res.data.refresh_token);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error("Error occurred while registering user: ", error);
+            // @ts-ignore
+            toast.error(error.response.data || "An error occurred");
+        }
+    };
+
     // Memoized value of the authentication context
     const contextValue = useMemo(
         () => ({
@@ -25,6 +43,7 @@ const AuthProvider = ({ children }) => {
             setToken,
             refreshToken,
             setRefreshToken,
+            login,
         }),
         [token, refreshToken]
     );

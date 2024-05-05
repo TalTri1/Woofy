@@ -10,8 +10,7 @@ import {UserContext} from "../../../provider/UserProvider";
 
 const SignInComponent: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { setToken, setRefreshToken } = useAuth();
-  const { setIsLoggedIn } = useContext(UserContext);
+  const { login } = useAuth();
 
   const onSignUpLinkClick = useCallback(() => {
     navigate("/sign-up");
@@ -33,28 +32,9 @@ const SignInComponent: FunctionComponent = () => {
 
   const signInHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     console.log(`basic signin model has been created:\n ${JSON.stringify(basicSignInUser)}`);
-    // Make the Axios request
-    try {
-      const res = await api.post("auth/login", basicSignInUser);
-      if (res.status >= 400) {
-        // Login failed
-
-      } else {
-        console.log("Login success: ",res.data);
-        setToken(res.data.access_token);
-        setRefreshToken(res.data.refresh_token);
-        setIsLoggedIn(true);
-        navigate("/", { replace: true });
-      }
-    } catch (error) {
-      console.error("Error occurred while registering user: ", error);
-      // @ts-ignore
-      toast.error(error.response.data || "An error occurred");
-      // Reset the state here
-      setUserDetails(new BasicSignInModel('', ''));
-    }
+      login(basicSignInUser);
+      navigate("/", { replace: true });
   };
 
 

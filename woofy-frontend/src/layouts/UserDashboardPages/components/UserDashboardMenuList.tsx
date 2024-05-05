@@ -14,6 +14,7 @@ const UserDashboardMenuList: FunctionComponent = () => {
     const onUserDetailsButtonClick = useCallback(() => {
         // Please sync "User Dashboard Page / User Details" to the project
     }, []);
+
     const onLogoutButtonClick = useCallback(async () => {
         setToken()
         setRefreshToken()
@@ -21,10 +22,8 @@ const UserDashboardMenuList: FunctionComponent = () => {
         try {
             const res = await api.post("auth/logout",);
         } catch (error) {
-            // @ts-ignore
-            toast.error(error.response.data || "An error occurred");
+            toast.error("An error occurred while logging out. Please try again.");
         }
-        navigate("/", {replace: true});
     }, []);
 
     return (

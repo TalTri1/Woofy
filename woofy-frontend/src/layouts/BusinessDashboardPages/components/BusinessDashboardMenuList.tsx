@@ -24,10 +24,8 @@ const BusinessDashboardMenuList: FunctionComponent = () => {
         try {
             const res = await api.post("auth/logout",);
         } catch (error) {
-            // @ts-ignore
-            toast.error(error.response.data || "An error occurred");
+            toast.error("An error occurred while logging out. Please try again.");
         }
-        navigate("/", {replace: true});
     }, []);
 
     return (

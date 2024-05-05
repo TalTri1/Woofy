@@ -91,7 +91,7 @@ const RegistrationPage: FunctionComponent = () => {
                 console.error(`Error uploading image: ${error}`);
             }
             setIsLoggedIn(true);
-            navigate("/business-dashboard", {replace: true});
+            navigate("/", {replace: true});
         } catch (error) {
             toast.error(`Error in registration. Please make sure you have filled all the fields correctly.`);
             if (error instanceof Error) {
