@@ -1,14 +1,21 @@
 import React, { useState, useRef } from 'react';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import api from "../../../api/api";
 
 type ImageComponentProps = {
     onFileSelect: (file: File) => void;
 };
+
 export const getImage = async (id: number) => {
     try {
-        const res = await api.post(`/image/get/${id}`);
-        return res.data;
+        const res = await api.get(`/image/get/${id}`, { responseType: 'arraybuffer' });
+        const imageInBase64 = btoa(
+            new Uint8Array(res.data).reduce(
+                (data, byte) => data + String.fromCharCode(byte),
+                '',
+            ),
+        );
+        return `data:${res.headers['content-type'].toLowerCase()};base64,${imageInBase64}`;
     } catch (error) {
         console.error("Error getting image", error);
     }
