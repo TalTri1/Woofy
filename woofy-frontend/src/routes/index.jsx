@@ -1,48 +1,37 @@
 import {RouterProvider, createBrowserRouter, useNavigationType, useLocation} from "react-router-dom";
-import { useAuth } from "../provider/AuthProvider";
-import { ProtectedRoute } from "./ProtectedRoute";
+import {useAuth} from "../provider/AuthProvider";
+import {ProtectedRoute} from "./ProtectedRoute";
 import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage";
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
 import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
+import {USERTYPE} from "../models/RegistrationModel";
+import {UserContext} from "../provider/UserProvider";
+import {useContext} from "react";
 
 const Routes = () => {
-    const { token } = useAuth();
-
+    const {token} = useAuth();
+    const {userDetails} = useContext(UserContext);
 
     // Define public routes accessible to all users
     const routesForPublic = [
         {
-            path: "/service",
-            element: <div>Service Page</div>,
+            path: "/",
+            element: <SignInPage/>,
         },
-        {
-            path: "/about-us",
-            element: <div>About Us</div>,
-        },
-        {
-            path: "/business-dashboard",
-            element: <BusinessDashboardPageHome/>,
-        },
-        {   path: "/serivces-section",
-            element: <SerivcesSection/>,
-        },
-        {   path: "/user-dashboard",
-            element: <UserDashboardPageHome/>,
-        }
 
     ];
 
     // Define routes accessible only to authenticated users
-    const routesForAuthenticatedOnly = [
+    const routesForAuthenticatedBusinessOnly = [
         {
             path: "/",
-            element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+            element: <ProtectedRoute/>, // Wrap the component in ProtectedRoute
             children: [
                 {
-                    path: "",
+                    path: "/",
                     element: <BusinessDashboardPageHome/>,
                 },
                 {
@@ -54,15 +43,23 @@ const Routes = () => {
                     element: <div>Logout</div>,
                 },
                 {
-                    path: "/business-dashboard",
-                    element: <BusinessDashboardPageHome/>,
+                    path: "/serivces-section",
+                    element: <SerivcesSection/>,
                 },
-                {   path: "/serivces-section",
-                element: <SerivcesSection/>,
-            },
-            {   path: "/user-dashboard",
-            element: <UserDashboardPageHome/>,
-        }
+
+            ],
+        },
+    ]
+
+    const routesForAuthenticatedCustomerOnly = [
+        {
+            path: "/",
+            element: <ProtectedRoute/>,
+            children: [
+                {
+                    path: "/",
+                    element: <UserDashboardPageHome/>,
+                },
 
             ],
         },
@@ -90,13 +87,14 @@ const Routes = () => {
 
     // Combine and conditionally include routes based on authentication status
     const router = createBrowserRouter([
-        ...routesForPublic,
         ...(!token ? routesForNotAuthenticatedOnly : []),
-        ...routesForAuthenticatedOnly,
+        ...(userDetails?.role === USERTYPE[USERTYPE.BUSINESS] ? routesForAuthenticatedBusinessOnly : []),
+        ...(userDetails?.role === USERTYPE[USERTYPE.CUSTOMER] ? routesForAuthenticatedCustomerOnly : []),
+        ...routesForPublic,
     ]);
 
     // Provide the router configuration using RouterProvider
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={router}/>;
 };
 
 export default Routes;

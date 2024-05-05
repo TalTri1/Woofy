@@ -15,7 +15,7 @@ const NavbarAfterLogin: FunctionComponent = () => {
     const fetchImage = async () => {
       if (userDetails?.profilePhotoID) {
         const image = await getImage(userDetails.profilePhotoID);
-        setImageSrc(image ?? "");
+        setImageSrc(image || "/user-avatar-image@2x.png");
       }
     };
 
