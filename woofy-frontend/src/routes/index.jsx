@@ -7,6 +7,7 @@ import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/Regi
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
 import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
+import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
 import {USERTYPE} from "../models/RegistrationModel";
 import {UserContext} from "../provider/UserProvider";
 import {useContext} from "react";
@@ -20,6 +21,10 @@ const Routes = () => {
         {
             path: "/",
             element: <SignInPage/>,
+        },
+        {
+                    path: "/dogdetails-section",
+                    element: <DogDetailsSection/>,
         },
 
     ];
