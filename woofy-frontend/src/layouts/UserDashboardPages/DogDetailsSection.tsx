@@ -184,7 +184,7 @@ const DogDetailsSection: FunctionComponent = () => {
                                     <div className="self-stretch flex flex-row flex-wrap items-start justify-start pt-1.5 pb-0 pr-[26px] pl-0 gap-[16px]">
                                         <button
                                             onClick={onAddDogButtonClick}
-                                            className="cursor-pointer py-2.5 px-[23px] bg-[transparent] rounded-11xl flex flex-row items-center justify-center gap-[8px] whitespace-nowrap border-[1px] border-solid border-app1 hover:bg-cornflowerblue-200 hover:box-border hover:border-[1px] hover:border-solid hover:border-cornflowerblue-100">
+                                            className="cursor-pointer py-2.5 px-[23px] bg-[transparent] rounded-11xl flex flex-row items-center justify-center gap-[8px] whitespace-nowrap border-[1px] border-solid border-app1 hover:bg-gray-400 hover:box-border hover:border-[1px] hover:border-solid hover:border-gray-200">
                                             <img
                                                 className="h-6 w-6 relative overflow-hidden shrink-0"
                                                 alt=""
