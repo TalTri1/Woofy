@@ -4,6 +4,8 @@ import com.woofy.woofy_backend.DTOs.DogDTOs.DogRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.DogEntity;
 import com.woofy.woofy_backend.Services.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 // DogController.java
@@ -18,7 +20,14 @@ public class DogController {
     }
 
     @PostMapping("/create/{customerId}")
-    public DogEntity createDog(@PathVariable Long customerId, @RequestBody DogRegisterRequest dogDTO) {
-        return dogService.createDog(dogDTO, customerId);
+    public ResponseEntity<Void> createDog(@PathVariable Long customerId, @RequestBody DogRegisterRequest dogDTO) {
+        dogService.createDog(dogDTO, customerId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDog(@PathVariable Long id) {
+        dogService.deleteDog(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

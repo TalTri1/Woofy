@@ -34,6 +34,22 @@ public class DogService {
         dog.setImages(dogDTO.getPictures());
         dog.setOwner(customer);
 
-        return dogRepository.save(dog);
+        DogEntity savedDog = dogRepository.save(dog);
+
+        // Set the saved dog to the customer and save the customer
+        customer.setDog(savedDog);
+        customerRepository.save(customer);
+
+        return savedDog;
     }
+
+    public void deleteDog(Long id) {
+        DogEntity dog = dogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dog not found"));
+        CustomerEntity customer = dog.getOwner();
+        customer.setDog(null);
+        customerRepository.save(customer);
+        dogRepository.deleteById(id);
+    }
+
 }
