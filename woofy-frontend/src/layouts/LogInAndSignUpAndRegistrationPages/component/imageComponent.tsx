@@ -76,7 +76,10 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ onFileSelect }) => {
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
             />
-            <button onClick={handleUploadButtonClick} className="cursor-pointer py-2 px-[16.5px] bg-[transparent] h-[42px] rounded-11xl box-border flex flex-row items-center justify-center whitespace-nowrap border-[1px] border-solid border-color-neutral-neutral-light hover:bg-gray-400 hover:box-border hover:border-[1px] hover:border-solid hover:border-gray-200">
+            <button
+                type="button"
+                onClick={handleUploadButtonClick}
+                className="cursor-pointer py-2 px-[16.5px] bg-[transparent] h-[42px] rounded-11xl box-border flex flex-row items-center justify-center whitespace-nowrap border-[1px] border-solid border-color-neutral-neutral-light hover:bg-gray-400 hover:box-border hover:border-[1px] hover:border-solid hover:border-gray-200">
                 <div className="relative text-base leading-[150%] font-text-medium-normal text-color-neutral-neutral-dark text-left inline-block min-w-[103px]">
                     Upload photo
                 </div>

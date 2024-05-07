@@ -1,15 +1,15 @@
-import {FunctionComponent, useCallback, useContext} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../../provider/AuthProvider";
-import {UserContext} from "../../../provider/UserProvider";
+import { FunctionComponent, useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../provider/AuthProvider";
+import { UserContext } from "../../../provider/UserProvider";
 import api from "../../../api/api";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const UserDashboardMenuList: FunctionComponent = () => {
 
     const navigate = useNavigate();
-    const {setToken, setRefreshToken} = useAuth();
-    const {setIsLoggedIn} = useContext(UserContext);
+    const { setToken, setRefreshToken } = useAuth();
+    const { setIsLoggedIn } = useContext(UserContext);
 
     const onUserDetailsButtonClick = useCallback(() => {
         // Please sync "User Dashboard Page / User Details" to the project
