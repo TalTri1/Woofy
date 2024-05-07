@@ -20,8 +20,10 @@ import java.util.List;
 public class DogRegisterRequest {
 
     private CustomerEntity owner;
+
     @NotEmpty
     private String dogName;
+
     @NotEmpty
     private String dog_breed;
 
@@ -35,8 +37,8 @@ public class DogRegisterRequest {
 
     private String about;
 
-    private String specialRequirements = "";
+    private String specialRequirements;
 
-    private List<ImageEntity> pictures = new ArrayList<>();
+    private List<ImageEntity> pictures;
 
 }

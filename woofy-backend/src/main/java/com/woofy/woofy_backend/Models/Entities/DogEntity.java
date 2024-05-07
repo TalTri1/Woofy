@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "dog")
 public class DogEntity extends BaseEntity {
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity owner;
 
