@@ -7,9 +7,13 @@ import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/Regi
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
 import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
 import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
-import { USERTYPE } from "../models/RegistrationModel";
-import { UserContext } from "../provider/UserProvider";
-import { useContext } from "react";
+import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
+import PersonalDetailsSection from "../layouts/BusinessDashboardPages/PersonalDetailsSection";
+import BusinessDetailsSection from "../layouts/BusinessDashboardPages/BusinessDetailsSection";
+import {USERTYPE} from "../models/RegistrationModel";
+import {UserContext} from "../provider/UserProvider";
+import {useContext} from "react";
+
 
 const Routes = () => {
     const { token } = useAuth();
@@ -20,6 +24,14 @@ const Routes = () => {
         {
             path: "/",
             element: <SignInPage />,
+        },
+        {
+                    path: "/business-personaldetails-section",
+                    element: <PersonalDetailsSection/>,
+        },
+        {
+                    path: "/business-personaldetails-section",
+                    element: <BusinessDetailsSection/>,
         },
 
     ];
