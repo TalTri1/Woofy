@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,11 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customer")
-public class CustomerEntity extends UserEntity{
+public class CustomerEntity extends UserEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    @Column(name = "dogs")
-    private List<DogEntity> dogs;
-
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "dog_id", referencedColumnName = "dog_id")
+    private DogEntity dog;
 }

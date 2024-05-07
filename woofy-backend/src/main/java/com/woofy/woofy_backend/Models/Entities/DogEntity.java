@@ -17,9 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "dog")
-public class DogEntity extends BaseEntity {
+public class DogEntity {
 
-    @ManyToOne
+    @Id
+    @GeneratedValue
+    @Column(name = "dog_id", nullable = false)
+    private Integer id;
+
+    @OneToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity owner;
 
