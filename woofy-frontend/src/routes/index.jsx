@@ -1,6 +1,6 @@
-import {RouterProvider, createBrowserRouter, useNavigationType, useLocation} from "react-router-dom";
-import {useAuth} from "../provider/AuthProvider";
-import {ProtectedRoute} from "./ProtectedRoute";
+import { RouterProvider, createBrowserRouter, useNavigationType, useLocation } from "react-router-dom";
+import { useAuth } from "../provider/AuthProvider";
+import { ProtectedRoute } from "./ProtectedRoute";
 import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage";
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
@@ -14,19 +14,16 @@ import {USERTYPE} from "../models/RegistrationModel";
 import {UserContext} from "../provider/UserProvider";
 import {useContext} from "react";
 
+
 const Routes = () => {
-    const {token} = useAuth();
-    const {userDetails} = useContext(UserContext);
+    const { token } = useAuth();
+    const { userDetails } = useContext(UserContext);
 
     // Define public routes accessible to all users
     const routesForPublic = [
         {
             path: "/",
-            element: <SignInPage/>,
-        },
-        {
-                    path: "/dogdetails-section",
-                    element: <DogDetailsSection/>,
+            element: <SignInPage />,
         },
         {
                     path: "/business-personaldetails-section",
@@ -43,11 +40,11 @@ const Routes = () => {
     const routesForAuthenticatedBusinessOnly = [
         {
             path: "/",
-            element: <ProtectedRoute/>, // Wrap the component in ProtectedRoute
+            element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
             children: [
                 {
                     path: "/",
-                    element: <BusinessDashboardPageHome/>,
+                    element: <BusinessDashboardPageHome />,
                 },
                 {
                     path: "/profile",
@@ -59,7 +56,7 @@ const Routes = () => {
                 },
                 {
                     path: "/serivces-section",
-                    element: <SerivcesSection/>,
+                    element: <SerivcesSection />,
                 },
 
             ],
@@ -69,11 +66,11 @@ const Routes = () => {
     const routesForAuthenticatedCustomerOnly = [
         {
             path: "/",
-            element: <ProtectedRoute/>,
+            element: <ProtectedRoute />,
             children: [
                 {
                     path: "/",
-                    element: <UserDashboardPageHome/>,
+                    element: <UserDashboardPageHome />,
                 },
 
             ],
@@ -84,19 +81,19 @@ const Routes = () => {
     const routesForNotAuthenticatedOnly = [
         {
             path: "/",
-            element: <SignInPage/>,
+            element: <SignInPage />,
         },
         {
             path: "/login",
-            element: <SignInPage/>,
+            element: <SignInPage />,
         },
         {
             path: "/sign-up",
-            element: <SignUpPage/>,
+            element: <SignUpPage />,
         },
         {
             path: "/registration",
-            element: <RegistrationPage/>,
+            element: <RegistrationPage />,
         }
     ];
 
@@ -109,7 +106,7 @@ const Routes = () => {
     ]);
 
     // Provide the router configuration using RouterProvider
-    return <RouterProvider router={router}/>;
+    return <RouterProvider router={router} />;
 };
 
 export default Routes;
