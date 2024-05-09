@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 // DogController.java
 @RestController
 @RequestMapping("/api/v1/dogs")
@@ -20,14 +22,25 @@ public class DogController {
     }
 
     @PostMapping("/create/{customerId}")
-    public ResponseEntity<Void> createDog(@PathVariable Long customerId, @RequestBody DogRegisterRequest dogDTO) {
-        dogService.createDog(dogDTO, customerId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public Integer createDog(@PathVariable Long customerId, @RequestBody DogRegisterRequest dogDTO) {
+        return dogService.createDog(dogDTO, customerId).getId();
+//        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDog(@PathVariable Long id) {
         dogService.deleteDog(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/update/images/{dogId}")
+    public ResponseEntity<Void> updateDogImages(@PathVariable Long dogId, @RequestBody List<Long> imageIds) {
+        try {
+            dogService.updateDogImages(dogId, imageIds);
+        } catch (Exception e) {
+            deleteDog(dogId);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -1,10 +1,10 @@
-import { FunctionComponent, useContext } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import NavbarAfterLogin from "../NavBarPage/NavbarAfterLogin";
 import UserDashboardMenuList from "../UserDashboardPages/components/UserDashboardMenuList";
 import RegisterYourDogCTA from "../UserDashboardPages/components/RegisterYourDogCTA";
 import UpcomingBookingsSection from "../UserDashboardPages/components/UpcomingBookingsSection";
-import PastBookingsSection from "./components/PastBookingsSection";
 import { UserContext } from "../../provider/UserProvider";
+import IsDogRegistrationComplete from "../UserDashboardPages/DogDetailsSection";
 
 
 

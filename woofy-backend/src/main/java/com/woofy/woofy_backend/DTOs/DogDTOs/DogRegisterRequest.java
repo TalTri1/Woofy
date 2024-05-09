@@ -5,6 +5,7 @@ import com.woofy.woofy_backend.Models.Entities.ImageEntity;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogAgeCategoryEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogTrainingEnum;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -19,14 +20,15 @@ import java.util.List;
 @NoArgsConstructor
 public class DogRegisterRequest {
 
-    private CustomerEntity owner;
+//    private CustomerEntity owner;
 
     @NotEmpty
     private String dogName;
 
     @NotEmpty
-    private String dog_breed;
+    private String dogBreed;
 
+    @Enumerated(EnumType.STRING)
     private DogAgeCategoryEnum age;
 
     @Enumerated(EnumType.STRING)

@@ -85,7 +85,7 @@ const RegistrationPage: FunctionComponent = () => {
             let profilePhotoId = 0
             try {
                 if (selectedImage) {
-                    profilePhotoId = await saveProfilePhotoToDB(selectedImage); // Save the image and get the ID
+                    profilePhotoId = await savePhotoToDB(selectedImage); // Save the image and get the ID
                     await api.patch('/user/update', { // Update the user with the profile photo ID
                         profilePhotoId: profilePhotoId,
                     });
@@ -105,7 +105,7 @@ const RegistrationPage: FunctionComponent = () => {
         }
     };
 
-    const saveProfilePhotoToDB = async (file: File) => {
+    const savePhotoToDB = async (file: File) => {
         const formData = new FormData();
         formData.append('image', file);
 

@@ -10,9 +10,9 @@ import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPa
 import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
 import PersonalDetailsSection from "../layouts/BusinessDashboardPages/PersonalDetailsSection";
 import BusinessDetailsSection from "../layouts/BusinessDashboardPages/BusinessDetailsSection";
-import {USERTYPE} from "../models/RegistrationModel";
-import {UserContext} from "../provider/UserProvider";
-import {useContext} from "react";
+import { USERTYPE } from "../models/RegistrationModel";
+import { UserContext } from "../provider/UserProvider";
+import { useContext } from "react";
 
 
 const Routes = () => {
@@ -26,12 +26,12 @@ const Routes = () => {
             element: <SignInPage />,
         },
         {
-                    path: "/business-personaldetails-section",
-                    element: <PersonalDetailsSection/>,
+            path: "/business-personaldetails-section",
+            element: <PersonalDetailsSection />,
         },
         {
-                    path: "/business-personaldetails-section",
-                    element: <BusinessDetailsSection/>,
+            path: "/business-personaldetails-section",
+            element: <BusinessDetailsSection />,
         },
 
     ];
@@ -72,6 +72,10 @@ const Routes = () => {
                     path: "/",
                     element: <UserDashboardPageHome />,
                 },
+                {
+                    path: "/dogdetails-section",
+                    element: <DogDetailsSection />,
+                }
 
             ],
         },

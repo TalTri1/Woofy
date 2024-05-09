@@ -52,8 +52,9 @@ public class DogEntity {
     @Column(name = "special_requirements")
     private String specialRequirements = "";
 
-    @OneToMany(mappedBy = "imageID", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageEntity> images = new ArrayList<>();
-
+    @ElementCollection
+    @CollectionTable(name = "dog_images", joinColumns = @JoinColumn(name = "dog_id"))
+    @Column(name = "image_id")
+    private List<Long> images = new ArrayList<>();
 
 }
