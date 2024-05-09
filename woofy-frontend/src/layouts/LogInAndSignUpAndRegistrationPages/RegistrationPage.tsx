@@ -81,6 +81,7 @@ const RegistrationPage: FunctionComponent = () => {
             setToken(res.data.access_token);
             setRefreshToken(res.data.refresh_token);
             navigate("/", { replace: true });
+            window.scrollTo(0, 0);
             // Save the profile photo to the DB if exists
             let profilePhotoId = 0
             try {
