@@ -1,10 +1,14 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent } from "react";
 
 import { Link } from 'react-router-dom';
 
 
-const RegisterYourUserCTA: FunctionComponent = () => {
-    return (
+const RegisterYourDogCTA: FunctionComponent = () => {
+
+
+
+
+  return (
     <div className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-center justify-start pt-[50px] px-16 pb-0 box-border max-w-full text-left text-13xl text-text-primary font-text-medium-normal lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px]">
       <div className="self-stretch rounded-31xl flex flex-col items-start justify-start max-w-full">
         <div className="self-stretch box-border flex flex-col items-start justify-start py-0 px-[31px] max-w-full border-[1px] border-solid border-app1">
@@ -22,7 +26,7 @@ const RegisterYourUserCTA: FunctionComponent = () => {
                   <button
                     className="cursor-pointer [border:none] py-3 px-6 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue"
                   >
-                    <Link to="/serivces-section" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link to="/dogdetails-section" style={{ textDecoration: 'none', color: 'inherit' }}>
                       <div className="relative text-lg leading-[150%] font-semibold font-text-medium-normal text-white text-left">
                         Register your Dog
                       </div>
@@ -38,4 +42,4 @@ const RegisterYourUserCTA: FunctionComponent = () => {
   );
 };
 
-export default RegisterYourUserCTA;
+export default RegisterYourDogCTA;

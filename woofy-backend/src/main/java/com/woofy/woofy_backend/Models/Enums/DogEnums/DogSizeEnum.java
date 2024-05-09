@@ -4,5 +4,5 @@ public enum DogSizeEnum {
     SMALL,
     MEDIUM,
     LARGE,
-    XL
+    GIANT
 }

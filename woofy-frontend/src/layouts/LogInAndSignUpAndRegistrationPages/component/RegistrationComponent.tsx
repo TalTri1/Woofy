@@ -54,7 +54,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         src="/icon--phone.svg"
                     />
                     <input
-                        className="w-[calc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
+                        className="w-[registrlc(100%_-_46px)] [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-[calc(100%_-_36px)] p-0"
                         placeholder="Phone Number*"
                         type="tel"
                         onChange={changeHandler}
