@@ -1,7 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogSitterAppointmentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +17,9 @@ public class DogSitterEntity extends HomestayBaseEntity {
     @GeneratedValue
     @Column(name = "dog_sitter_id", nullable = false)
     private Integer id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dog_sitter_appointment_id", referencedColumnName = "dog_sitter_appointmet_id")
+    private DogSitterAppointmentEntity dogSitterAppointmentEntity;
 
 }
