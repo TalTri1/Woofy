@@ -6,6 +6,7 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEnt
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Services.BusinessTypesServices.DayCareService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/auth/business-type/day-care")
+@RequestMapping("/api/v1/business/business-type/day-care")
+@RequiredArgsConstructor
 public class DayCareController {
 
     private final DayCareService dayCareService;
     private final BusinessRepository businessRepository;
-
-    @Autowired
-    public DayCareController(DayCareService dayCareService, BusinessRepository businessRepository) {
-        this.dayCareService = dayCareService;
-        this.businessRepository = businessRepository;
-    }
 
     @PostMapping("/create")
     public DayCareEntity createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {

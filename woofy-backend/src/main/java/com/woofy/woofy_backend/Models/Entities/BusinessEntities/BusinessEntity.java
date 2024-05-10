@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,8 +34,6 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "business_types")
     private List<BusinessTypeEnum> businessTypes;
 
-    @Column(name = "about", length = 2000)
-    private String about;
 
     @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
@@ -62,5 +61,12 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "social_media")
     private String socialMedia;
 
+    @Column(name = "about", length = 2000)
+    private String about;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "business_images", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "image_id")
+    private List<Integer> images = new ArrayList<>();
 
 }

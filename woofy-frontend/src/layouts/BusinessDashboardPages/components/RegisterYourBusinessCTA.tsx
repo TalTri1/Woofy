@@ -22,7 +22,7 @@ const RegisterYourBusinessCTA: FunctionComponent = () => {
                   <button
                     className="cursor-pointer [border:none] py-3 px-6 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue"
                   >
-                    <Link to="/serivces-section" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link to="/services-section" style={{ textDecoration: 'none', color: 'inherit' }}>
                       <div className="relative text-lg leading-[150%] font-semibold font-text-medium-normal text-white text-left">
                         Register your Business
                       </div>

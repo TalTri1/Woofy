@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/auth/business-type/dog-sitter")
+@RequestMapping("/api/v1/business/business-type/dog-sitter")
 public class DogSitterController {
 
     private final DogSitterService dogSitterService;

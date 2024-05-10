@@ -23,4 +23,13 @@ public class BusinessTypeBaseEntity {
     @JoinColumn(name = "business_id", nullable = false)
     private BusinessEntity business;
 
+    @Column(name = "dog_capacity", nullable = false)
+    private int dogCapacity;
+
+    @Column(name = "price", nullable = false)
+    private int price;
+
+    @Column(name = "about", length = 2000)
+    private String about;
+
 }

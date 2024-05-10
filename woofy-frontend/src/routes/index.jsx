@@ -5,7 +5,7 @@ import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
-import SerivcesSection from "../layouts/BusinessDashboardPages/SerivcesSection";
+import ServicesSection from "../layouts/BusinessDashboardPages/ServicesSection";
 import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
 import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
 import PersonalDetailsSection from "../layouts/BusinessDashboardPages/PersonalDetailsSection";
@@ -25,14 +25,6 @@ const Routes = () => {
             path: "/",
             element: <SignInPage />,
         },
-        {
-            path: "/business-personaldetails-section",
-            element: <PersonalDetailsSection />,
-        },
-        {
-            path: "/business-personaldetails-section",
-            element: <BusinessDetailsSection />,
-        },
 
     ];
 
@@ -47,16 +39,8 @@ const Routes = () => {
                     element: <BusinessDashboardPageHome />,
                 },
                 {
-                    path: "/profile",
-                    element: <div>User Profile</div>,
-                },
-                {
-                    path: "/logout",
-                    element: <div>Logout</div>,
-                },
-                {
-                    path: "/serivces-section",
-                    element: <SerivcesSection />,
+                    path: "/services-section",
+                    element: <ServicesSection />,
                 },
 
             ],

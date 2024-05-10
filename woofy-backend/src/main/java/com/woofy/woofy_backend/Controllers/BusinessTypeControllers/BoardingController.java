@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/auth/business-type/boarding")
+@RequestMapping("/api/v1/business/business-type/boarding")
 public class BoardingController {
 
     private final BoardingService boardingService;

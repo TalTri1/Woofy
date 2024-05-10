@@ -1,4 +1,3 @@
-// This information is retrieved from user-registration-page
 class DogModel {
     dogName: string;
     dogBreed: string;
