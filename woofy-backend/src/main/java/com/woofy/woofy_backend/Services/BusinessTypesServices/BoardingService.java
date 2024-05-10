@@ -20,7 +20,7 @@ public class BoardingService {
     }
 
     public BoardingEntity createBoarding(BoardingEntity boardingDTO, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
+        BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
         BoardingEntity boardingEntity = new BoardingEntity();

@@ -20,7 +20,7 @@ public class DogSitterService {
     }
 
     public DogSitterEntity createDogSitter(DogSitterEntity dogSitter, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
+        BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
         if (business.getDogSitterEntity() != null) {

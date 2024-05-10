@@ -20,7 +20,7 @@ public class DayCareService {
     }
 
     public DayCareEntity createDayCare(DayCareEntity dayCareDTO, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
+        BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
         DayCareEntity dayCareEntity = new DayCareEntity();

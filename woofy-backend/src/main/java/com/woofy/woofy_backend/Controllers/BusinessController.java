@@ -22,7 +22,8 @@ public class BusinessController {
     }
 
     @PutMapping("/update/{businessId}")
-    public ResponseEntity<?> updateBusiness(@PathVariable Long businessId, @RequestBody UpdateBusinessRequest request) {
-        return businessService.updateBusiness(businessId, request);
+    public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessRequest request, Principal principal) {
+        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        return businessService.updateBusiness(user.getId(), request);
     }
 }

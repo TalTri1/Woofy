@@ -34,7 +34,7 @@ public class ImageController {
 
 
     @GetMapping(path = {"/image/get/{id}"})
-    public ResponseEntity<byte[]> getImageById(@PathVariable("id") Long id) throws IOException {
+    public ResponseEntity<byte[]> getImageById(@PathVariable("id") Integer id) throws IOException {
         Optional<ImageEntity> dbImage = imageRepository.findById(id);
 
         if (dbImage.isPresent()) {
@@ -57,7 +57,7 @@ public class ImageController {
 
     // Delete image by id if exists
     @DeleteMapping("/image/delete/{id}")
-    public ResponseEntity<?> deleteImage(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteImage(@PathVariable("id") Integer id) {
         Optional<ImageEntity> dbImage = imageRepository.findById(id);
         if (dbImage.isPresent()) {
             imageRepository.deleteById(id);

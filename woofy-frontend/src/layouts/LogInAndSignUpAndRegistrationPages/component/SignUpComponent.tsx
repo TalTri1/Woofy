@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicSignUpModel from "../../../models/UserModels/BasicSignUpModel";
 import api from "../../../api/api";
-import {useAuth} from "../../../provider/AuthProvider";
 import {toast} from "react-toastify";
 
 const SignUpModal = () => {

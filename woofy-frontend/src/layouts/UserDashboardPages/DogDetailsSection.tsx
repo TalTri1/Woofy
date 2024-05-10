@@ -71,10 +71,10 @@ const DogDetailsSection: FunctionComponent = () => {
         console.log(`Dog data to be registered: ${JSON.stringify(dogData)}`);
 
         try {
-            const responseAsDogId = await api.post(`/dogs/create/${customerId}`, dogData);
-            console.log(`Response from registering dog: ${responseAsDogId}`);
+            const response = await api.post(`/dogs/create`, dogData);
+            console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
-            const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[], responseAsDogId.data);
+            const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
             navigate("/");
             window.scrollTo(0, 0);
             if (await isUpdateSuccess) {
@@ -145,9 +145,9 @@ const DogDetailsSection: FunctionComponent = () => {
 
     };
 
-    const updateImagesForDogEntity = async (imageIDs: number[], dogId: Number) => {
+    const updateImagesForDogEntity = async (imageIDs: number[]) => {
         try {
-            const response = await api.put(`/dogs/update/images/${dogId}`, imageIDs);
+            const response = await api.put(`/dogs/update/images/`, imageIDs);
             console.log(`Response from updating dog images: ${response}`);
             return true
         } catch (error) {

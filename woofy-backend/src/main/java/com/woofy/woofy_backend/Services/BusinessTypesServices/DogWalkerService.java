@@ -20,7 +20,7 @@ public class DogWalkerService {
     }
 
     public DogWalkerEntity createDogWalker(DogWalkerEntity dogWalker, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(Long.valueOf(businessId))
+        BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
         if (business.getDogWalkerEntity() != null) {

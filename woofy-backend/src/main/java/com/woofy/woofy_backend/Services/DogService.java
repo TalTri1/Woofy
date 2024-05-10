@@ -27,7 +27,7 @@ public class DogService {
         this.customerRepository = customerRepository;
     }
 
-    public DogEntity createDog(DogRegisterRequest dogDTO, Long customerId) {
+    public DogEntity createDog(DogRegisterRequest dogDTO, Integer customerId) {
         CustomerEntity customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -51,7 +51,7 @@ public class DogService {
         return savedDog;
     }
 
-    public void deleteDog(Long id) {
+    public void deleteDog(Integer id) {
         DogEntity dog = dogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Dog not found"));
         CustomerEntity customer = dog.getOwner();
@@ -60,11 +60,11 @@ public class DogService {
         dogRepository.deleteById(id);
     }
 
-    public void updateDogImages(Long dogId, List<Long> imageIds) {
+    public void updateDogImages(Integer dogId, List<Integer> imageIds) {
         DogEntity dog = dogRepository.findById(dogId).orElseThrow(() -> new RuntimeException("Dog not found"));
         List<ImageEntity> images = imageRepository.findAllById(imageIds);
 
-        List<Long> imageIdList = new ArrayList<>();
+        List<Integer> imageIdList = new ArrayList<>();
         for (ImageEntity image : images) {
             imageIdList.add(image.getImageID());
         }

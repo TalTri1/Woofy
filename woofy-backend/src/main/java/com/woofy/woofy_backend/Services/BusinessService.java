@@ -16,7 +16,7 @@ public class BusinessService {
         this.businessRepository = businessRepository;
     }
 
-    public ResponseEntity<?> updateBusiness(Long businessId, UpdateBusinessRequest request) {
+    public ResponseEntity<?> updateBusiness(Integer businessId, UpdateBusinessRequest request) {
         BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
@@ -31,7 +31,7 @@ public class BusinessService {
         return ResponseEntity.ok("Business updated successfully");
     }
 
-    public BusinessEntity getBusiness(Long businessId) {
+    public BusinessEntity getBusiness(Integer businessId) {
         return businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found with id " + businessId));
     }

@@ -55,6 +55,6 @@ public class DogEntity {
     @ElementCollection
     @CollectionTable(name = "dog_images", joinColumns = @JoinColumn(name = "dog_id"))
     @Column(name = "image_id")
-    private List<Long> images = new ArrayList<>();
+    private List<Integer> images = new ArrayList<>();
 
 }

@@ -72,7 +72,7 @@ public abstract class UserEntity extends BaseEntity implements UserDetails {
     private List<TokenEntity> tokens;
 
     @Column(name = "profile_photo_id")
-    private Long profilePhotoID;
+    private Integer profilePhotoID;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

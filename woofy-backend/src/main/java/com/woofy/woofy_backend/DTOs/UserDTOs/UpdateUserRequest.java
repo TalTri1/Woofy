@@ -19,5 +19,5 @@ public class UpdateUserRequest {
     private String address;
     private String city;
     private String zipCode;
-    private Long profilePhotoId;
+    private Integer profilePhotoId;
 }

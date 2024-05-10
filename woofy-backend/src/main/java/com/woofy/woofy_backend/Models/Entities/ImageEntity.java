@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long imageID;
+    private Integer imageID;
 
     private String imageName;
 
@@ -28,7 +28,7 @@ public class ImageEntity {
 
     }
 
-    public ImageEntity(long imageID, String imageName, String type, byte[] picByte) {
+    public ImageEntity(Integer imageID, String imageName, String type, byte[] picByte) {
         this.imageID = imageID;
         this.imageName = imageName;
         this.type = type;
