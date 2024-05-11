@@ -9,6 +9,7 @@ const AuthProvider = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("token"));
 
+
     const login = async (basicSignInUser) => {
         try {
             const res = await api.post("auth/login", basicSignInUser);
@@ -39,8 +40,9 @@ const AuthProvider = ({children}) => {
             isLoggedIn,
             setIsLoggedIn,
             token,
+            setToken,
         }),
-        [isLoggedIn, token]
+        [isLoggedIn, token,setToken]
     );
 
     return (

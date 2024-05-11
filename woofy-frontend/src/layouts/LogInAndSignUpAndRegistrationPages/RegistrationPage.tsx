@@ -12,7 +12,7 @@ const RegistrationPage: FunctionComponent = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const {setIsLoggedIn} = useAuth();
+    const {setIsLoggedIn, setToken} = useAuth();
     const basicSignUpUser = location.state;
     const [isDogOwnerButtonClicked, setDogOwnerButtonClicked] = useState(false);
     const [isCaregiverButtonClicked, setCaregiverButtonClicked] = useState(false);
@@ -76,8 +76,10 @@ const RegistrationPage: FunctionComponent = () => {
                 ...basicSignUpModel, // Spread the properties of basicSignUpModel
             });
             console.log(`Response from the backend: ${res}`);
+            setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
+            setIsLoggedIn(true);
             navigate("/", {replace: true});
             window.scrollTo(0, 0);
             // Save the profile photo to the DB if exists
