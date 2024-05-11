@@ -1,16 +1,15 @@
+// BusinessEntity.java
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogSitterEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
-import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -34,25 +33,20 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "business_types")
     private List<BusinessTypeEnum> businessTypes;
 
-
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dog_sitter_id", referencedColumnName = "dog_sitter_id")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DogSitterEntity dogSitterEntity;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dog_walker_id", referencedColumnName = "dog_walker_id")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DogWalkerEntity dogWalkerEntity;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "boarding_id", referencedColumnName = "boarding_id")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BoardingEntity boardingEntity;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "day_care_id", referencedColumnName = "day_care_id")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DayCareEntity dayCareEntity;
 
     @Column(name = "website")

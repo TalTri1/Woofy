@@ -5,9 +5,9 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import com.woofy.woofy_backend.Services.BusinessTypesServices.DayCareService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,16 +22,15 @@ public class DayCareController {
 
     private final DayCareService dayCareService;
     private final BusinessRepository businessRepository;
+    private final UserRepository userRepository;
 
     @PostMapping("/create")
     public DayCareEntity createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        BusinessEntity business = businessRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
         DayCareEntity dayCareEntity = new DayCareEntity();
-        dayCareEntity.setBusiness(business);
+        dayCareEntity.setBusiness((BusinessEntity)user);
         dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
-        return dayCareService.createDayCare(dayCareEntity, user.getId());
+        return dayCareService.createDayCare(dayCareEntity, (BusinessEntity)user);
     }
 
     @DeleteMapping("/delete")

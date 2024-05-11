@@ -19,23 +19,22 @@ public class DayCareService {
         this.businessRepository = businessRepository;
     }
 
-    public DayCareEntity createDayCare(DayCareEntity dayCareDTO, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(businessId)
-                .orElseThrow(() -> new RuntimeException("Business not found"));
+    public DayCareEntity createDayCare(DayCareEntity dayCareDTO, BusinessEntity businessEntity) {
+
 
         DayCareEntity dayCareEntity = new DayCareEntity();
 
-        if (business.getDayCareEntity() != null) {
-            DayCareEntity existingDayCare = business.getDayCareEntity();
+        if (businessEntity.getDayCareEntity() != null) {
+            DayCareEntity existingDayCare = businessEntity.getDayCareEntity();
             return dayCareRepository.save(existingDayCare);
         }
 
-        dayCareEntity.setBusiness(business);
+        dayCareEntity.setBusiness(businessEntity);
         dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
         DayCareEntity savedDayCare = dayCareRepository.save(dayCareEntity);
 
-        business.setDayCareEntity(savedDayCare);
-        businessRepository.save(business);
+        businessEntity.setDayCareEntity(savedDayCare);
+        businessRepository.save(businessEntity);
 
         return savedDayCare;
     }
