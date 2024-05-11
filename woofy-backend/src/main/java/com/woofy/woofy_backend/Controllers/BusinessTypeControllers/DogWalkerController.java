@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/auth/business-type/dog-walker")
+@RequestMapping("/api/v1/business/business-type/dog-walker")
 public class DogWalkerController {
 
     private final DogWalkerService dogWalkerService;
@@ -29,7 +29,7 @@ public class DogWalkerController {
     }
 
     @PostMapping("/create")
-    public DogWalkerEntity createDogWalker(@RequestBody CreateDogWalkerRequest dogWalkerDTO, Principal principal){
+    public ResponseEntity<Void>  createDogWalker(@RequestBody CreateDogWalkerRequest dogWalkerDTO, Principal principal){
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         BusinessEntity business = businessRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));
@@ -40,8 +40,8 @@ public class DogWalkerController {
         dogWalkerEntity.setAcceptableDogSizes(dogWalkerDTO.getAcceptableDogSizes());
         dogWalkerEntity.setBusiness(business);
 
-        return dogWalkerService.createDogWalker(dogWalkerEntity, user.getId());
-
+        dogWalkerService.createDogWalker(dogWalkerEntity, user.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/delete")

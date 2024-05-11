@@ -2,7 +2,6 @@ package com.woofy.woofy_backend.Controllers;
 
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.ChangePasswordRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.UpdateUserRequest;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Services.UserService;
 import lombok.RequiredArgsConstructor;

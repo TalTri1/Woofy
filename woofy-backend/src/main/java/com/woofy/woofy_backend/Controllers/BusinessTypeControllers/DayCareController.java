@@ -5,8 +5,9 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import com.woofy.woofy_backend.Services.BusinessTypesServices.DayCareService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,27 +16,22 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/auth/business-type/day-care")
+@RequestMapping("/api/v1/business/business-type/day-care")
+@RequiredArgsConstructor
 public class DayCareController {
 
     private final DayCareService dayCareService;
     private final BusinessRepository businessRepository;
-
-    @Autowired
-    public DayCareController(DayCareService dayCareService, BusinessRepository businessRepository) {
-        this.dayCareService = dayCareService;
-        this.businessRepository = businessRepository;
-    }
+    private final UserRepository userRepository;
 
     @PostMapping("/create")
-    public DayCareEntity createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {
+    public ResponseEntity<Void> createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        BusinessEntity business = businessRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
         DayCareEntity dayCareEntity = new DayCareEntity();
-        dayCareEntity.setBusiness(business);
+        dayCareEntity.setBusiness((BusinessEntity)user);
         dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
-        return dayCareService.createDayCare(dayCareEntity, user.getId());
+        dayCareService.createDayCare(dayCareEntity, (BusinessEntity)user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/delete")
