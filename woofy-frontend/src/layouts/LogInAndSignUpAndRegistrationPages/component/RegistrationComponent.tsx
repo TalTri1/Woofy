@@ -32,6 +32,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="text"
                         onChange={changeHandler}
                         name="firstName"
+                        required={true}
                     />
                 </div>
             </div>
@@ -43,6 +44,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="text"
                         onChange={changeHandler}
                         name="lastName"
+                        required={true}
                     />
                 </div>
             </div>
@@ -59,6 +61,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="tel"
                         onChange={changeHandler}
                         name="phoneNumber"
+                        required={true}
                     />
                 </div>
             </div>
@@ -75,6 +78,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="text"
                         onChange={changeHandler}
                         name="address"
+                        required={true}
                     />
                 </div>
             </div>
@@ -91,6 +95,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="text"
                         onChange={changeHandler}
                         name="city"
+                        required={true}
                     />
                 </div>
             </div>
@@ -102,6 +107,7 @@ const RegistrationComponent: FunctionComponent<RegistrationComponentProps> = ({ 
                         type="text"
                         onChange={changeHandler}
                         name="zipCode"
+                        required={true}
                     />
                 </div>
             </div>

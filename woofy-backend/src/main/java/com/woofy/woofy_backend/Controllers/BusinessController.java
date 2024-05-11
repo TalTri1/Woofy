@@ -21,7 +21,7 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    @PutMapping("/update/{businessId}")
+    @PutMapping("/update")
     public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessRequest request, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         return businessService.updateBusiness(user.getId(), request);

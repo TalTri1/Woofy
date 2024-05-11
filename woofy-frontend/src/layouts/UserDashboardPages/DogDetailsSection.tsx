@@ -199,6 +199,7 @@ const DogDetailsSection: FunctionComponent = () => {
                                             type="text"
                                             name="dogName"
                                             onChange={changeHandlerDog}
+                                            required={true}
                                         />
                                     </div>
                                     <div className="self-stretch relative text-base leading-[150%] font-text-regular-normal text-text-primary text-left">
@@ -211,6 +212,7 @@ const DogDetailsSection: FunctionComponent = () => {
                                             type="text"
                                             name="dogBreed"
                                             onChange={changeHandlerDog}
+                                            required={true}
                                         />
                                     </div>
 

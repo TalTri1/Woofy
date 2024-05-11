@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import { Size } from "../../../models/DogModels/DogModel";
 
 type DogSizeInputProps = {
