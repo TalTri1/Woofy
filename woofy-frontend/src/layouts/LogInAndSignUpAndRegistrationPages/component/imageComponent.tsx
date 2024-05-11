@@ -21,6 +21,7 @@ export const getImage = async (id: number) => {
     }
 };
 
+
 const ImageComponent: React.FC<ImageComponentProps> = ({ onFileSelect }) => {
     const [imageData, setImageData] = useState("");
     const fileInputRef = useRef<HTMLInputElement>(null);

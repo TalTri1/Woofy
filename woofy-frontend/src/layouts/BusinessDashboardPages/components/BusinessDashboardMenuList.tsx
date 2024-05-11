@@ -7,8 +7,7 @@ import {UserContext} from "../../../provider/UserProvider";
 
 const BusinessDashboardMenuList: FunctionComponent = () => {
     const navigate = useNavigate();
-    const {setToken, setRefreshToken} = useAuth();
-    const {setIsLoggedIn} = useContext(UserContext);
+    const {logout,setIsLoggedIn} = useAuth();
     const onServicesButtonClick = useCallback(() => {
         // Please sync "Business Dashboard Page / Serivces Section" to the project
     }, []);
@@ -18,8 +17,7 @@ const BusinessDashboardMenuList: FunctionComponent = () => {
     }, []);
 
     const onLogoutButtonClick = useCallback(async () => {
-        setToken()
-        setRefreshToken()
+        logout();
         setIsLoggedIn(false)
         try {
             const res = await api.post("auth/logout",);

@@ -5,19 +5,18 @@ import SignInPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignInPage
 import SignUpPage from "../layouts/LogInAndSignUpAndRegistrationPages/SignUpPage";
 import RegistrationPage from "../layouts/LogInAndSignUpAndRegistrationPages/RegistrationPage";
 import BusinessDashboardPageHome from "../layouts/BusinessDashboardPages/BusinessDashboardPageHome";
-import ServicesSection from "../layouts/BusinessDashboardPages/ServicesSection";
+import ServicesSection from "../layouts/BusinessDashboardPages/ServicesRegistration/ServicesSection";
 import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPageHome";
 import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
-import PersonalDetailsSection from "../layouts/BusinessDashboardPages/PersonalDetailsSection";
-import BusinessDetailsSection from "../layouts/BusinessDashboardPages/BusinessDetailsSection";
 import { USERTYPE } from "../models/RegistrationModel";
 import { UserContext } from "../provider/UserProvider";
-import { useContext } from "react";
+import {useContext} from "react";
 
 
 const Routes = () => {
     const { token } = useAuth();
     const { userDetails } = useContext(UserContext);
+
 
     // Define public routes accessible to all users
     const routesForPublic = [

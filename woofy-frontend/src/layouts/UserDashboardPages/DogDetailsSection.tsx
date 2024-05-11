@@ -55,8 +55,6 @@ const DogDetailsSection: FunctionComponent = () => {
     const registerDogHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        const customerId = userDetails.id;
-
         const dogData = {
             dogName: dog.dogName,
             dogBreed: dog.dogBreed,

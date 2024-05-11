@@ -22,23 +22,22 @@ class DogModel {
 }
 
 export enum Age {
-    PUPPY,
-    ADULT,
-    SENIOR,
-    age
+    PUPPY= 'PUPPY',
+    ADULT = 'ADULT',
+    SENIOR= 'SENIOR',
 }
 
 export enum Size {
-    SMALL,
-    MEDIUM,
-    LARGE,
-    GIANT
+    SMALL= 'SMALL',
+    MEDIUM = 'MEDIUM',
+    LARGE = 'LARGE',
+    GIANT = 'GIANT'
 }
 
 export enum TrainingLevel {
-    BEGINNER,
-    INTERMEDIATE,
-    ADVANCED
+    BEGINNER= 'BEGINNER',
+    INTERMEDIATE = 'INTERMEDIATE',
+    ADVANCED = 'ADVANCED'
 }
 
 export default DogModel;

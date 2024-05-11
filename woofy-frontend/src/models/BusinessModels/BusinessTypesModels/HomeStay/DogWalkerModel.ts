@@ -1,5 +1,4 @@
-import {HomeConditions, HomestayBaseModel, PetsInHome} from "./HomestayBaseModel";
-import {Size} from "../BusinessTypeModel";
+import {HomestayBaseModel} from "./HomestayBaseModel";
 
 export class DogWalkerModel extends HomestayBaseModel {
     constructor() {

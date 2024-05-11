@@ -9,7 +9,7 @@ const DogSizeInput: React.FC<DogSizeInputProps> = ({onSizeClick, selectedSize}) 
 
     return (
         <div
-            className="self-stretch flex flex-col  items-start justify-start gap-[8px] text-left text-base text-text-primary font-text-medium-normal">
+            className="self-stretch flex flex-col flex-wrap items-start justify-start gap-[8px] text-left text-base text-text-primary font-text-medium-normal">
             <div className="self-stretch relative leading-[150%]">
                 Acceptable Dog Sizes
             </div>

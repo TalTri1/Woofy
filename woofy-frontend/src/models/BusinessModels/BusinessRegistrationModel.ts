@@ -25,11 +25,6 @@ class BusinessRegistrationModel {
 // TODO Finish the business class model!@!@##@!$#!@!@#!@@#@!#@!#!@#!@#!@#@!#!@# this is temp.....
 
 
-enum businessType {
-    BOARDING,
-    DOG_WALK,
-    DOG_SITTER,
-    DAY_CARE
-}
+
 
 

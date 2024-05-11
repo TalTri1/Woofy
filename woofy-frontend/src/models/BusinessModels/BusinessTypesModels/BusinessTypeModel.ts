@@ -1,16 +1,21 @@
+import {Size} from "../../DogModels/DogModel";
+
 export abstract class BusinessTypeBaseModel {
-    acceptableDogSizes: Size[];
-    capacity: number;
-    price: number;
-    date: Date | undefined;
+    businessName: string | undefined;
+    businessType: businessType | undefined;
+    acceptableDogSizes: Size[] = [];
+    dogCapacity: number | undefined;
+    price: number | undefined;
+    availability: Date | undefined;
     about: string | undefined;
-    imageIds: number[]; // Will store all dog images id that the user uploads
+    imageIds: number[] = [];
     protected constructor() {}
 }
 
-export enum Size {
-    SMALL,
-    MEDIUM,
-    LARGE,
-    GIANT
+
+export enum businessType {
+    BOARDING= 'BOARDING',
+    DOG_WALK = 'DOG_WALK',
+    DOG_SITTER = 'DOG_SITTER',
+    DAY_CARE = 'DAY_CARE'
 }

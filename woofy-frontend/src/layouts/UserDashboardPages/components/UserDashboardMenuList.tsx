@@ -1,23 +1,21 @@
-import { FunctionComponent, useCallback, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../provider/AuthProvider";
-import { UserContext } from "../../../provider/UserProvider";
+import {FunctionComponent, useCallback, useContext} from "react";
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../../provider/AuthProvider";
+import {UserContext} from "../../../provider/UserProvider";
 import api from "../../../api/api";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
 const UserDashboardMenuList: FunctionComponent = () => {
 
     const navigate = useNavigate();
-    const { setToken, setRefreshToken } = useAuth();
-    const { setIsLoggedIn } = useContext(UserContext);
+    const {logout, setIsLoggedIn} = useAuth();
 
     const onUserDetailsButtonClick = useCallback(() => {
         // Please sync "User Dashboard Page / User Details" to the project
     }, []);
 
     const onLogoutButtonClick = useCallback(async () => {
-        setToken()
-        setRefreshToken()
+        logout()
         setIsLoggedIn(false)
         try {
             const res = await api.post("auth/logout",);
@@ -30,8 +28,6 @@ const UserDashboardMenuList: FunctionComponent = () => {
         <div className="self-stretch flex flex-col items-start justify-start pt-6 px-4 pb-0">
             <button
                 className="cursor-pointer [border:none] p-2 bg-text-alternate self-stretch flex flex-row items-center justify-start">
-                <button
-                    className="cursor-pointer [border:none] p-0 bg-[transparent] flex-1 flex flex-row items-start justify-start gap-[12px]">
                     <img
                         className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
                         alt=""
@@ -41,7 +37,6 @@ const UserDashboardMenuList: FunctionComponent = () => {
                         className="flex-1 relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
                         Home
                     </div>
-                </button>
             </button>
             <button
                 className="cursor-pointer [border:none] p-2 bg-[transparent] self-stretch flex flex-row items-center justify-start"
