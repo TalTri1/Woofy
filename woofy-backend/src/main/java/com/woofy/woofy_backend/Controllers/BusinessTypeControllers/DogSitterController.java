@@ -39,7 +39,7 @@ public class DogSitterController {
         DogSitterEntity dogSitterEntity = new DogSitterEntity();
         dogSitterEntity.setHomeConditions(dogSitterDTO.getHomeConditions());
         dogSitterEntity.setPetsInHome(dogSitterDTO.getPetsInHome());
-        dogSitterEntity.setAcceptableDogSizes(dogSitterDTO.getAcceptableDogSizes()); // Ensure this line is present
+        dogSitterEntity.setAcceptableDogSizes(dogSitterDTO.getAcceptableDogSizes());
         dogSitterEntity.setBusiness((BusinessEntity)business);
 
         dogSitterService.createDogSitter(dogSitterEntity, user.getId());

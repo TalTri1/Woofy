@@ -25,13 +25,12 @@ public class DayCareController {
     private final UserRepository userRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {
+    public DayCareEntity createDayCare(@RequestBody CreateDayCareRequest dayCareDTO, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         DayCareEntity dayCareEntity = new DayCareEntity();
         dayCareEntity.setBusiness((BusinessEntity)user);
         dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
-        dayCareService.createDayCare(dayCareEntity, (BusinessEntity)user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return dayCareService.createDayCare(dayCareEntity, (BusinessEntity)user);
     }
 
     @DeleteMapping("/delete")
