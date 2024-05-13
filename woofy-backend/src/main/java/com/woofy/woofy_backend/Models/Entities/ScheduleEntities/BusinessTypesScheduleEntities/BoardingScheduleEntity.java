@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,12 +19,13 @@ import java.util.Date;
 public class BoardingScheduleEntity extends BaseScheduleEntity {
 
     @Id
-    @Temporal(TemporalType.DATE)
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @JsonBackReference
     @OneToOne(mappedBy = "boardingScheduleEntity")
     private BoardingEntity boardingEntity;
 
+    @Column(name = "current_dog_capacity", nullable = false)
+    private Integer currentDogCapacity;
 }

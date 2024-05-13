@@ -4,5 +4,7 @@ import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypes
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BoardingScheduleRepository extends JpaRepository<BoardingScheduleEntity, Integer> {
+import java.time.LocalDate;
+
+public interface BoardingScheduleRepository extends JpaRepository<BoardingScheduleEntity, LocalDate> {
 }
