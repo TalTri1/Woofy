@@ -19,30 +19,13 @@ import java.security.Principal;
 @RequestMapping("/api/v1/business/business-type/dog-sitter")
 public class DogSitterController {
 
-    private final DogSitterService dogSitterService;
-    private final BusinessRepository businessRepository;
-    private final UserRepository userRepository;
-
     @Autowired
-    public DogSitterController(DogSitterService dogSitterService, BusinessRepository businessRepository, UserRepository userRepository) {
-        this.dogSitterService = dogSitterService;
-        this.businessRepository = businessRepository;
-        this.userRepository = userRepository;
-    }
+    private DogSitterService dogSitterService;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createDogSitter(@RequestBody CreateDogSitterRequest dogSitterDTO, Principal connectedUser) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        UserEntity business = userRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        DogSitterEntity dogSitterEntity = new DogSitterEntity();
-        dogSitterEntity.setHomeConditions(dogSitterDTO.getHomeConditions());
-        dogSitterEntity.setPetsInHome(dogSitterDTO.getPetsInHome());
-        dogSitterEntity.setAcceptableDogSizes(dogSitterDTO.getAcceptableDogSizes());
-        dogSitterEntity.setBusiness((BusinessEntity)business);
-
-        dogSitterService.createDogSitter(dogSitterEntity, user.getId());
+    public ResponseEntity<Void> createDogSitter(@RequestBody CreateDogSitterRequest request, Principal principal) {
+        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        dogSitterService.createDogSitter(request, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

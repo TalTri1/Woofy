@@ -28,6 +28,7 @@ const UserDashboardMenuList: FunctionComponent = () => {
         <div className="self-stretch flex flex-col items-start justify-start pt-6 px-4 pb-0">
             <button
                 className="cursor-pointer [border:none] p-2 bg-text-alternate self-stretch flex flex-row items-center justify-start">
+                <div className="flex-1 flex flex-row items-start justify-start gap-[12px]">
                     <img
                         className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
                         alt=""
@@ -37,6 +38,7 @@ const UserDashboardMenuList: FunctionComponent = () => {
                         className="flex-1 relative text-base leading-[150%] font-text-medium-normal text-text-primary text-left">
                         Home
                     </div>
+                </div>
             </button>
             <button
                 className="cursor-pointer [border:none] p-2 bg-[transparent] self-stretch flex flex-row items-center justify-start"

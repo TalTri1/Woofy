@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Services.BusinessTypesServices;
 
+import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs.DogSitterDTOs.CreateDogSitterRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogSitterEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
@@ -10,33 +11,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class DogSitterService {
 
-    private final DogSitterRepository dogSitterRepository;
-    private final BusinessRepository businessRepository;
+    @Autowired
+    private BusinessTypeService businessTypeService;
 
     @Autowired
-    public DogSitterService(DogSitterRepository dogSitterRepository, BusinessRepository businessRepository) {
-        this.dogSitterRepository = dogSitterRepository;
-        this.businessRepository = businessRepository;
-    }
+    private DogSitterRepository dogSitterRepository;
 
-    public DogSitterEntity createDogSitter(DogSitterEntity dogSitter, Integer businessId) {
-        BusinessEntity business = businessRepository.findById(businessId)
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        if (business.getDogSitterEntity() != null) {
-            DogSitterEntity existingDogSitter = business.getDogSitterEntity();
-            existingDogSitter.setHomeConditions(dogSitter.getHomeConditions());
-            existingDogSitter.setPetsInHome(dogSitter.getPetsInHome());
-            return dogSitterRepository.save(existingDogSitter);
-        }
-
-        dogSitter.setBusiness(business);
-        DogSitterEntity savedDogSitter = dogSitterRepository.save(dogSitter);
-
-        business.setDogSitterEntity(savedDogSitter);
-        businessRepository.save(business);
-
-        return savedDogSitter;
+    public DogSitterEntity createDogSitter(CreateDogSitterRequest request, Integer businessId) {
+        DogSitterEntity dogSitterEntity = new DogSitterEntity();
+        businessTypeService.create(request, businessId, dogSitterEntity);
+        return dogSitterRepository.save(dogSitterEntity);
     }
 
     public void deleteDogSitter(Integer id) {

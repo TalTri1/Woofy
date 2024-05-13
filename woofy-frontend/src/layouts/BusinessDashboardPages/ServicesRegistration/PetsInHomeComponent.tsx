@@ -1,16 +1,16 @@
-
-import {PetsInHome} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/HomestayBaseModel";
 import React from "react";
+import {PETS_IN_HOME} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
+import {formatEnumValue} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
 
 type FormUpdate = {
-    selectedPetsInHome: PetsInHome[];
-    clickPetsInHomeHandler: (homeConditions: PetsInHome) => void;
+    selectedPetsInHome: PETS_IN_HOME[];
+    clickPetsInHomeHandler: (homeConditions: PETS_IN_HOME) => void;
 }
-const PetsInHomeComponent: React.FC<FormUpdate> = ({clickPetsInHomeHandler, selectedPetsInHome}) => {
 
+const PetsInHomeComponent: React.FC<FormUpdate> = ({clickPetsInHomeHandler, selectedPetsInHome}) => {
+    const petsInHomeConditions = Object.values(PETS_IN_HOME);
 
     return (
-
         <div
             className="self-stretch flex flex-col flex-wrap items-start justify-start gap-[8px]">
             <div
@@ -19,31 +19,14 @@ const PetsInHomeComponent: React.FC<FormUpdate> = ({clickPetsInHomeHandler, sele
             </div>
             <div
                 className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 pr-[141px] pl-0 box-border gap-[16px] min-h-[96px] mq1050:pr-[70px] mq1050:box-border mq750:pr-[35px] mq750:box-border">
-                <button
-                    className={selectedPetsInHome.includes(PetsInHome.OWN_A_DOG) ? "PressedButton" : "Button"}
-                    onClick={() => clickPetsInHomeHandler(PetsInHome.OWN_A_DOG)}>
-                    Own a Dog
-                </button>
-                <button
-                    className={selectedPetsInHome.includes(PetsInHome.OWN_A_CAT) ? "PressedButton" : "Button"}
-                    onClick={() => clickPetsInHomeHandler(PetsInHome.OWN_A_CAT)}>
-                    Own a Cat
-                </button>
-                <button
-                    className={selectedPetsInHome.includes(PetsInHome.OWN_CAGED_PET) ? "PressedButton" : "Button"}
-                    onClick={() => clickPetsInHomeHandler(PetsInHome.OWN_CAGED_PET)}>
-                    Own Caged Pets
-                </button>
-                <button
-                    className={selectedPetsInHome.includes(PetsInHome.HAS_CHILDREN) ? "PressedButton" : "Button"}
-                    onClick={() => clickPetsInHomeHandler(PetsInHome.HAS_CHILDREN)}>
-                    Has Children
-                </button>
-                <button
-                    className={selectedPetsInHome.includes(PetsInHome.ONLY_ONE_CLIENT_AT_A_TIME) ? "PressedButton" : "Button"}
-                    onClick={() => clickPetsInHomeHandler(PetsInHome.ONLY_ONE_CLIENT_AT_A_TIME)}>
-                    Only One Client at a Time
-                </button>
+                {petsInHomeConditions.map(condition => (
+                    <button
+                        key={condition}
+                        className={selectedPetsInHome.includes(condition) ? "PressedButton" : "Button"}
+                        onClick={() => clickPetsInHomeHandler(condition)}>
+                        {formatEnumValue(condition)}
+                    </button>
+                ))}
             </div>
         </div>
     )

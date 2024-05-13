@@ -18,29 +18,13 @@ import java.security.Principal;
 @RequestMapping("/api/v1/business/business-type/dog-walker")
 public class DogWalkerController {
 
-    private final DogWalkerService dogWalkerService;
-    private final BusinessRepository businessRepository;
-
-
     @Autowired
-    public DogWalkerController(DogWalkerService dogWalkerService, BusinessRepository businessRepository) {
-        this.dogWalkerService = dogWalkerService;
-        this.businessRepository = businessRepository;
-    }
+    private DogWalkerService dogWalkerService;
 
     @PostMapping("/create")
-    public ResponseEntity<Void>  createDogWalker(@RequestBody CreateDogWalkerRequest dogWalkerDTO, Principal principal){
+    public ResponseEntity<Void> createDogWalker(@RequestBody CreateDogWalkerRequest request, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        BusinessEntity business = businessRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        DogWalkerEntity dogWalkerEntity = new DogWalkerEntity();
-        dogWalkerEntity.setHomeConditions(dogWalkerDTO.getHomeConditions());
-        dogWalkerEntity.setPetsInHome(dogWalkerDTO.getPetsInHome());
-        dogWalkerEntity.setAcceptableDogSizes(dogWalkerDTO.getAcceptableDogSizes());
-        dogWalkerEntity.setBusiness(business);
-
-        dogWalkerService.createDogWalker(dogWalkerEntity, user.getId());
+        dogWalkerService.createDogWalker(request, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
