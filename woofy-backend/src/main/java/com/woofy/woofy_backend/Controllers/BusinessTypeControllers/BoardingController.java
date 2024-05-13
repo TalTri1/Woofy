@@ -1,8 +1,6 @@
 package com.woofy.woofy_backend.Controllers.BusinessTypeControllers;
 
 import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.BoardingDTOs.CreateBoardingRequest;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Services.BusinessTypesServices.BoardingService;
@@ -31,14 +29,9 @@ public class BoardingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createBoarding(@RequestBody CreateBoardingRequest boardingDTO, Principal principal) {
+    public ResponseEntity<Void> createBoarding(@RequestBody CreateBoardingRequest request, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        BusinessEntity business = businessRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-        BoardingEntity boardingEntity = new BoardingEntity();
-        boardingEntity.setBusiness(business);
-        boardingEntity.setAcceptableDogSizes(boardingDTO.getAcceptableDogSizes());
-        boardingService.createBoarding(boardingEntity, user.getId());
+        boardingService.createBoarding(request, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
