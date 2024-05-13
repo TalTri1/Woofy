@@ -10,7 +10,8 @@ import UserDashboardPageHome from "../layouts/UserDashboardPages/UserDashboardPa
 import DogDetailsSection from "../layouts/UserDashboardPages/DogDetailsSection";
 import { USERTYPE } from "../models/RegistrationModel";
 import { UserContext } from "../provider/UserProvider";
-import {useContext} from "react";
+import { useContext } from "react";
+import BookingPage from "../layouts/Appointment/BookingPage";
 
 
 const Routes = () => {
@@ -24,6 +25,10 @@ const Routes = () => {
             path: "/",
             element: <SignInPage />,
         },
+        {
+            path: "book-appointment",
+            element: <BookingPage />,
+        }
 
     ];
 
