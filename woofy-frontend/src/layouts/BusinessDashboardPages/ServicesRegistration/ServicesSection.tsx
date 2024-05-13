@@ -1,95 +1,68 @@
-import {FunctionComponent, useContext, useEffect, useState} from "react";
+import React, {FunctionComponent, useContext, useState} from "react";
 import NavbarAfterLogin from "../../NavBarPage/NavbarAfterLogin";
 import BusinessDashboardMenuList from "../components/BusinessDashboardMenuList";
-import DogSizeInput from "../components/DogSizeInput";
 import {useNavigate} from "react-router-dom";
-import {Age, Size, TrainingLevel} from "../../../models/DogModels/DogModel";
+import {Size} from "../../../models/DogModels/DogModel";
 import {UserContext} from "../../../provider/UserProvider";
 import {BoardingModel} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
 import {DogWalkerModel} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
 import {DayCareModel} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
 import {DogSitterModel} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
-import {
-    HomeConditions,
-    PetsInHome
-} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/HomestayBaseModel";
 import '../../../css/button.css';
 import SelectServiceTypeComponent from "./SelectServiceTypeComponent";
-import {businessType} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {BUSINESS_TYPES, WEEKDAYS} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
 import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "./PetsInHomeComponent";
 import HomeConditionComponent from "./HomeConditionComponent";
 import {toast} from "react-toastify";
 import api from "../../../api/api";
-import RegistrationModel from "../../../models/RegistrationModel";
+import {
+    HOME_CONDITIONS,
+    PETS_IN_HOME
+} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
+
+const serviceTypeMapping = {
+    [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
+    [BUSINESS_TYPES.DOG_SITTER]: 'dog-sitter',
+    [BUSINESS_TYPES.DAY_CARE]: 'day-care',
+    [BUSINESS_TYPES.BOARDING]: 'boarding',
+};
 
 const ServicesSection: FunctionComponent = () => {
 
     const navigate = useNavigate();
     const [selectedSize, setSelectedSize] = useState<Size[]>([]);
-    const [selectedHomeConditions, setHomeConditions] = useState<HomeConditions[]>([]);
-    const [selectedPetsInHome, setPetsInHome] = useState<PetsInHome[]>([]);
+    const [selectedHomeConditions, setHomeConditions] = useState<HOME_CONDITIONS[]>([]);
+    const [selectedPetsInHome, setPetsInHome] = useState<PETS_IN_HOME[]>([]);
+    const [selectedDays, setSelectedDays] = useState<WEEKDAYS[]>([]);
     const {userDetails} = useContext(UserContext); // The user details
     const [images, setImages] = useState<Array<File | null>>([null, null, null, null]);
 
 
     // Boarding, Day Care, Sitter, Walker buttons
-    const [selectedServices, setSelectedServices] = useState<businessType>(businessType.BOARDING);
+    const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
 
     const serviceFormTitles = {
-        [businessType.BOARDING]: "Boarding Service Form",
-        [businessType.DAY_CARE]: "Day Care Service Form",
-        [businessType.DOG_SITTER]: "Sitter Service Form",
-        [businessType.DOG_WALK]: "Walker Service Form",
+        [BUSINESS_TYPES.BOARDING]: "Boarding Service Form",
+        [BUSINESS_TYPES.DAY_CARE]: "Day Care Service Form",
+        [BUSINESS_TYPES.DOG_SITTER]: "Sitter Service Form",
+        [BUSINESS_TYPES.DOG_WALK]: "Walker Service Form",
     };
 
-    const [business, setBusiness] = useState<BoardingModel | DogWalkerModel | DayCareModel | DogSitterModel>();
-
-    useEffect(() => {
-        let newBusiness;
-        switch (selectedServices) {
-            case businessType.BOARDING:
-                newBusiness = new BoardingModel();
-                break;
-            case businessType.DOG_WALK:
-                newBusiness = new DogWalkerModel();
-                break;
-            case businessType.DAY_CARE:
-                newBusiness = new DayCareModel();
-                break;
-            case businessType.DOG_SITTER:
-                newBusiness = new DogSitterModel();
-                break;
-        }
-        // If there is a previous business model, copy over the properties that exist in the new business model
-        if (business) {
-            for (let key in business) {
-                if (key in newBusiness) {
-                    (newBusiness as any)[key] = (business as any)[key];
-                }
-            }
-        }
-
-        setBusiness(newBusiness);
-    }, [selectedServices]);
+    const [businessInput, setBusinessInput] = useState<Record<string, any>>({});
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = event.target;
-        updateBusinessModel({ [name]: value });
+        const {name, value} = event.target;
+        setBusinessInput(prevState => ({...prevState, [name]: value}));
     };
 
     const updateBusinessModel = (updatedData: Partial<BoardingModel | DogWalkerModel | DayCareModel | DogSitterModel>) => {
-        setBusiness(prevState => {
+        setBusinessInput(prevState => {
             if (prevState) {
-                return { ...prevState, ...updatedData };
+                return {...prevState, ...updatedData};
             }
             return prevState;
         });
-    };
-
-    const clickServiceTypeHandler = (serviceType: businessType) => {
-        setSelectedServices(serviceType);
-        updateBusinessModel({ businessType: serviceType });
     };
 
     const clickSizeHandlerDog = (size: Size) => {
@@ -100,12 +73,12 @@ const ServicesSection: FunctionComponent = () => {
             } else {
                 newSizes = [...prevSizes, size];
             }
-            updateBusinessModel({ acceptableDogSizes: newSizes });
+            updateBusinessModel({acceptableDogSizes: newSizes});
             return newSizes;
         });
     };
 
-    const clickHomeConditionsHandler = (homeCondition: HomeConditions) => {
+    const clickHomeConditionsHandler = (homeCondition: HOME_CONDITIONS) => {
         setHomeConditions(prevHomeConditions => {
             let newHomeConditions;
             if (prevHomeConditions.includes(homeCondition)) {
@@ -113,12 +86,12 @@ const ServicesSection: FunctionComponent = () => {
             } else {
                 newHomeConditions = [...prevHomeConditions, homeCondition];
             }
-            updateBusinessModel({ homeConditions: newHomeConditions });
+            updateBusinessModel({homeConditions: newHomeConditions});
             return newHomeConditions;
         });
     }
 
-    const clickPetsInHomeHandler = (petsInHome: PetsInHome) => {
+    const clickPetsInHomeHandler = (petsInHome: PETS_IN_HOME) => {
         setPetsInHome(prevPetsInHome => {
             let newPetsInHome;
             if (prevPetsInHome.includes(petsInHome)) {
@@ -126,29 +99,63 @@ const ServicesSection: FunctionComponent = () => {
             } else {
                 newPetsInHome = [...prevPetsInHome, petsInHome];
             }
-            updateBusinessModel({ petsInHome: newPetsInHome });
+            updateBusinessModel({petsInHome: newPetsInHome});
             return newPetsInHome;
         });
+    }
+    const clickWorkingDaysHandler = (workingDay: string) => {
+        setSelectedDays(prevDays => {
+            let newDays;
+            if (prevDays.includes(workingDay as WEEKDAYS)) {
+                newDays = prevDays.filter(s => s !== workingDay as WEEKDAYS);
+            } else {
+                newDays = [...prevDays, workingDay as WEEKDAYS];
+            }
+            updateBusinessModel({workingDays: newDays});
+            return newDays;
+        })
     }
 
     const registerBusinessHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        console.log(`Business service data to be registered: ${JSON.stringify(businessInput)}`);
+        let business;
+        switch (selectedServices) {
+            case BUSINESS_TYPES.BOARDING:
+                business = new BoardingModel();
+                break;
+            case BUSINESS_TYPES.DOG_WALK:
+                business = new DogWalkerModel();
+                break;
+            case BUSINESS_TYPES.DAY_CARE:
+                business = new DayCareModel();
+                break;
+            case BUSINESS_TYPES.DOG_SITTER:
+                business = new DogSitterModel();
+                break;
+        }
+        // Copy over the relevant fields from the business state
+        for (let key in business) {
+            if (key in businessInput) {
+                (business as any)[key] = (businessInput as any)[key];
+            }
+        }
 
         console.log(`Business service data to be registered: ${JSON.stringify(business)}`);
 
         try {
-            const response = await api.post(`/business/create`, business);
+            const response = await api.post(`/business/business-type/${serviceTypeMapping[selectedServices]}/create`, business);
             console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
             // const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
             navigate("/");
             window.scrollTo(0, 0);
-            if (await isUpdateSuccess) {
-                toast.success("Service registered successfully")
-            }
-            else {
-                toast.error("Failed to register service");
-            }
+            // if (await isUpdateSuccess) {
+            //     toast.success("Service registered successfully")
+            // }
+            // else {
+            //     toast.error("Failed to register service");
+            // }
 
         } catch (error) {
             toast.error("Failed to register service");
@@ -274,10 +281,8 @@ const ServicesSection: FunctionComponent = () => {
                                     </div>
                                 </div>
                                 <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                                    <div className="self-stretch relative leading-[150%]">
-                                        Your Type of Services (You can choose multiple choices)
-                                    </div>
-                                    <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={clickServiceTypeHandler}/>
+                                    <SelectServiceTypeComponent selectedServices={selectedServices}
+                                                                setSelectedServices={setSelectedServices}/>
                                 </div>
                                 <div>
                                     <header
@@ -290,27 +295,38 @@ const ServicesSection: FunctionComponent = () => {
                                             Please fill the necessary information found in the following questions
                                         </div>
                                     </header>
-                                    {(selectedServices === businessType.BOARDING || selectedServices === businessType.DAY_CARE) && (
+                                    {(selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.DAY_CARE) && (
                                         <>
-                                            <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome} clickPetsInHomeHandler={clickPetsInHomeHandler}/>
-                                            <HomeConditionComponent selectedHomeConditions={selectedHomeConditions} clickHomeConditionsHandler={clickHomeConditionsHandler}/>
+                                            <div className="mb-4">
+                                                <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome}
+                                                                     clickPetsInHomeHandler={clickPetsInHomeHandler}/>
+                                            </div>
+                                            <div>
+                                                <HomeConditionComponent selectedHomeConditions={selectedHomeConditions}
+                                                                        clickHomeConditionsHandler={clickHomeConditionsHandler}/>
+                                            </div>
                                         </>
                                     )}
                                 </div>
-                                <BusinessTypesBaseRegistration selectedSize={selectedSize} onSizeClick={clickSizeHandlerDog} handleInputChange={handleInputChange}/>
+                                <BusinessTypesBaseRegistration handleInputChange={handleInputChange}
+                                                               selectedSize={selectedSize}
+                                                               onSizeClick={clickSizeHandlerDog}
+                                                               selectedDays={selectedDays}
+                                                               clickWorkingDaysHandler={clickWorkingDaysHandler}/>
                                 <div className="self-stretch flex flex-col items-start justify-start gap-[24px]">
                                     <div className="self-stretch relative leading-[150%]">
                                         Add Pictures of Your Services
                                     </div>
                                 </div>
-                                <div className="self-stretch flex flex-row items-center justify-start py-0 px-0 gap-[24px] mq750:flex-wrap">
+                                <div
+                                    className="self-stretch flex flex-row items-center justify-start py-0 px-0 gap-[24px] mq750:flex-wrap">
                                     {images.map((image, index) => (
                                         <label key={index} className="relative">
                                             <input
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(event) => handleImageChange(index, event)}
-                                                style={{ display: "none" }}
+                                                style={{display: "none"}}
                                             />
                                             <img
                                                 className="h-[100px] w-[100px] relative object-cover min-h-[100px] shrink-0 cursor-pointer"

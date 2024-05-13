@@ -8,15 +8,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
+
 @MappedSuperclass
 public class HomestayBaseEntity extends BusinessTypeBaseEntity {
 
-    @ElementCollection
-    @Column(name = "home_conditions")
-    private List<HomeConditionsEnum> homeConditions;
-
-    @ElementCollection
-    @Column(name = "pets_in_home")
-    private List<PetsInHomeEnum> petsInHome;
 }

@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Services.BusinessTypesServices;
 
+import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.DayCareDTOs.CreateDayCareRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
@@ -10,33 +11,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class DayCareService {
 
-    private final DayCareRepository dayCareRepository;
-    private final BusinessRepository businessRepository;
+    @Autowired
+    private BusinessTypeService businessTypeService;
 
     @Autowired
-    public DayCareService(DayCareRepository dayCareRepository, BusinessRepository businessRepository) {
-        this.dayCareRepository = dayCareRepository;
-        this.businessRepository = businessRepository;
-    }
+    private DayCareRepository dayCareRepository;
 
-    public DayCareEntity createDayCare(DayCareEntity dayCareDTO, BusinessEntity businessEntity) {
-
-
+    public DayCareEntity createDayCare(CreateDayCareRequest request, Integer businessId) {
         DayCareEntity dayCareEntity = new DayCareEntity();
-
-        if (businessEntity.getDayCareEntity() != null) {
-            DayCareEntity existingDayCare = businessEntity.getDayCareEntity();
-            return dayCareRepository.save(existingDayCare);
-        }
-
-        dayCareEntity.setBusiness(businessEntity);
-        dayCareEntity.setAcceptableDogSizes(dayCareDTO.getAcceptableDogSizes());
-        DayCareEntity savedDayCare = dayCareRepository.save(dayCareEntity);
-
-        businessEntity.setDayCareEntity(savedDayCare);
-        businessRepository.save(businessEntity);
-
-        return savedDayCare;
+        businessTypeService.create(request, businessId, dayCareEntity);
+        return dayCareRepository.save(dayCareEntity);
     }
 
     public void deleteDayCare(Integer id) {

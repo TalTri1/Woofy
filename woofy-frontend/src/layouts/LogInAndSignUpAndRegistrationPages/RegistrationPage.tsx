@@ -79,7 +79,6 @@ const RegistrationPage: FunctionComponent = () => {
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
-            setIsLoggedIn(true);
             navigate("/", {replace: true});
             window.scrollTo(0, 0);
             // Save the profile photo to the DB if exists

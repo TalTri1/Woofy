@@ -1,28 +1,23 @@
 import DogSizeInput from "../components/DogSizeInput";
 import {Size} from "../../../models/DogModels/DogModel";
-import SelectServiceTypeComponent from "./SelectServiceTypeComponent";
-import {ChangeEvent} from "react";
-import {BoardingModel} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
-import {DogWalkerModel} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
-import {DayCareModel} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
-import {DogSitterModel} from "../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
+import React from "react";
+import {WEEKDAYS} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
 
 type FormUpdate = {
     selectedSize: Size[];
     onSizeClick: (size: Size) => void;
+    selectedDays: WEEKDAYS[];
+    clickWorkingDaysHandler: (day: WEEKDAYS) => void;
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+
 }
-const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({onSizeClick, selectedSize, handleInputChange}) => {
-
-    const sizes = [
-        {size: Size.SMALL, text: "Small <br/> 2-9 kg"},
-        {size: Size.MEDIUM, text: "Medium <br/> 9-22 kg"},
-        {size: Size.LARGE, text: "Large <br/> 22-45 kg"},
-        {size: Size.GIANT, text: "Giant <br/> 45 kg +"}
-    ];
-
-
-
+const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
+                                                                 onSizeClick,
+                                                                 selectedSize,
+                                                                 handleInputChange,
+                                                                 selectedDays,
+                                                                 clickWorkingDaysHandler
+                                                             }) => {
     return (
         <form className="m-0 self-stretch flex flex-col items-start justify-start gap-[24px] max-w-full">
             <DogSizeInput selectedSize={selectedSize} onSizeClick={onSizeClick}/>
@@ -40,6 +35,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({onSizeClick, selec
                         name="dogCapacity"
                         required={true}
                         onChange={handleInputChange}
+
                     />
                 </div>
             </div>
@@ -59,36 +55,90 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({onSizeClick, selec
             <div
                 className="self-stretch flex flex-col items-start justify-start gap-[8px] max-w-full text-left text-base text-text-primary font-text-medium-normal">
                 <div className="self-stretch relative leading-[150%]">
-                    Asked Price For Sitter Service (Per Visit)
+                    Asked Price For Service (Per Visit)
                 </div>
                 <div
                     className="self-stretch bg-text-alternate box-border flex flex-row items-center justify-start py-2.5 px-[11px] max-w-full border-[1px] border-solid border-border-secondary">
                     <input
                         className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
                         placeholder="Price*"
-                        type="text"
+                        type="number"
                         required={true}
                         name="price"
                         onChange={handleInputChange}
                     />
                 </div>
             </div>
+            <div className="self-stretch relative leading-[150%]">
+                Availability For Service
+            </div>
             <div
-                className="self-stretch flex flex-col items-start justify-start gap-[8px] max-w-full text-left text-base text-text-primary font-text-medium-normal">
-                <div className="self-stretch relative leading-[150%]">
-                    Availability For Sitter Service
-                </div>
-                <div
-                    className="self-stretch bg-text-alternate box-border flex flex-row items-center justify-start py-2.5 px-[11px] max-w-full border-[1px] border-solid border-border-secondary">
+                className="self-stretch bg-text-alternate box-border flex flex-row items-center justify-start py-2.5 px-[11px] max-w-full border-[1px] border-solid border-border-secondary">
+                <label>
+                    Start Date
                     <input
                         className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
-                        placeholder="Date*"
                         type="date"
-                        name="availability"
+                        name="startDate"
                         required={true}
                         onChange={handleInputChange}
                     />
+                </label>
+                <label>
+                    End Date
+                    <input
+                        className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
+                        type="date"
+                        name="endDate"
+                        required={true}
+                        onChange={handleInputChange}
+                    />
+                </label>
+            </div>
+            <div
+                className="self-stretch flex flex-col flex-wrap items-start justify-start gap-[8px] text-left text-base text-text-primary font-text-medium-normal">
+                <div className="self-stretch relative leading-[150%]">
+                    Working Days
                 </div>
+                <div
+                    className="self-stretch flex flex-row whitespace-nowrap items-start justify-center py-0 pr-[137px] pl-0 gap-[16px] mq450:pr-5 mq450:box-border mq750:pr-[68px] mq750:box-border">
+                    {Object.values(WEEKDAYS).map(day => (
+                        <button
+                            key={day}
+                            type="button"
+                            className={selectedDays.includes(day) ? "PressedButton" : "Button"}
+                            onClick={() => clickWorkingDaysHandler(day)}
+                        >
+                            {day}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <div className="self-stretch relative leading-[150%]">
+                Working Hours
+            </div>
+            <div
+                className="self-stretch bg-text-alternate box-border flex flex-row items-center justify-start py-2.5 px-[11px] max-w-full border-[1px] border-solid border-border-secondary">
+                <label>
+                    Start Time
+                    <input
+                        className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
+                        type="time"
+                        name="startTime"
+                        required={true}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    End Time
+                    <input
+                        className="w-full [border:none] [outline:none] font-text-medium-normal text-base bg-[transparent] h-6 flex-1 relative leading-[150%] text-color-neutral-neutral text-left inline-block min-w-[250px] max-w-full p-0"
+                        type="time"
+                        name="endTime"
+                        required={true}
+                        onChange={handleInputChange}
+                    />
+                </label>
             </div>
         </form>
     )

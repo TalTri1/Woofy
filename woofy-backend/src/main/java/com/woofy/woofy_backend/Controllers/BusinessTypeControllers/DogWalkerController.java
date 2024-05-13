@@ -3,8 +3,10 @@ package com.woofy.woofy_backend.Controllers.BusinessTypeControllers;
 import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs.DogWalkerDTOs.CreateDogWalkerRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
+import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.DogWalkerRepository;
 import com.woofy.woofy_backend.Services.BusinessTypesServices.DogWalkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,34 +15,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/business/business-type/dog-walker")
 public class DogWalkerController {
 
-    private final DogWalkerService dogWalkerService;
-    private final BusinessRepository businessRepository;
-
-
     @Autowired
-    public DogWalkerController(DogWalkerService dogWalkerService, BusinessRepository businessRepository) {
-        this.dogWalkerService = dogWalkerService;
-        this.businessRepository = businessRepository;
-    }
+    private DogWalkerService dogWalkerService;
+    @Autowired
+    private DogWalkerRepository dogWalkerRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<Void>  createDogWalker(@RequestBody CreateDogWalkerRequest dogWalkerDTO, Principal principal){
+    public ResponseEntity<Void> createDogWalker(@RequestBody CreateDogWalkerRequest request, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        BusinessEntity business = businessRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        DogWalkerEntity dogWalkerEntity = new DogWalkerEntity();
-        dogWalkerEntity.setHomeConditions(dogWalkerDTO.getHomeConditions());
-        dogWalkerEntity.setPetsInHome(dogWalkerDTO.getPetsInHome());
-        dogWalkerEntity.setAcceptableDogSizes(dogWalkerDTO.getAcceptableDogSizes());
-        dogWalkerEntity.setBusiness(business);
-
-        dogWalkerService.createDogWalker(dogWalkerEntity, user.getId());
+        dogWalkerService.createDogWalker(request, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -49,5 +38,11 @@ public class DogWalkerController {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         dogWalkerService.deleteDogWalker(user.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<DogWalkerEntity>> getAllBoardings() {
+        List<DogWalkerEntity> boardings = dogWalkerRepository.findAll();
+        return ResponseEntity.ok(boardings);
     }
 }

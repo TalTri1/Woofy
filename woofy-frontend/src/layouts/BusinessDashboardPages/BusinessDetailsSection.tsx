@@ -14,8 +14,8 @@ const BusinessDetailsSection: FunctionComponent = () => {
                     <BusinessDashboardMenuList />
                 </div>
                 <section className="flex-1 flex flex-col items-start justify-start gap-[32px] max-w-[calc(100%_-_312px)] text-center text-29xl text-text-alternate font-text-medium-normal mq1050:max-w-full mq750:gap-[16px]">
-                <div className="self-stretch bg-app1 overflow-hidden flex flex-col items-center justify-start pt-[30px] px-5 pb-[60px] box-border max-w-full">
-                    <div className="flex flex-row items-center justify-center max-w-full">
+                    <div className="self-stretch bg-app1 overflow-hidden flex flex-col items-center justify-start pt-[30px] px-5 pb-[60px] box-border max-w-full">
+                        <div className="flex flex-row items-center justify-center max-w-full">
                             <h1 className="relative text-[48px] leading-[120%] font-inter text-white text-center">
                                 Services Details
                             </h1>
@@ -108,9 +108,9 @@ const BusinessDetailsSection: FunctionComponent = () => {
                             />
                             <TypesOfServiceRow
                                 typesOfServiceLabel="Dog Sizes"
-                                boardingRadioButtoName="radioGroup-2"
+                                boardingRadioButtonName="radioGroup-2"
                                 boarding="Small"
-                                dayCareRadioButtoName="radioGroup-2"
+                                dayCareRadioButtonName="radioGroup-2"
                                 dayCare="Medium"
                                 sittingRadioButtonName="radioGroup-2"
                                 sitting="Large"
@@ -128,9 +128,9 @@ const BusinessDetailsSection: FunctionComponent = () => {
                             />
                             <TypesOfServiceRow
                                 typesOfServiceLabel="Dog Sizes"
-                                boardingRadioButtoName="radioGroup-3"
+                                boardingRadioButtonName="radioGroup-3"
                                 boarding="Small"
-                                dayCareRadioButtoName="radioGroup-3"
+                                dayCareRadioButtonName="radioGroup-3"
                                 dayCare="Medium"
                                 sittingRadioButtonName="radioGroup-3"
                                 sitting="Large"
