@@ -2,9 +2,9 @@ import { FunctionComponent, useMemo, type CSSProperties } from "react";
 
 export type TypesOfServiceRowType = {
   typesOfServiceLabel?: string;
-  boardingRadioButtoName?: string;
+  boardingRadioButtonName?: string;
   boarding?: string;
-  dayCareRadioButtoName?: string;
+  dayCareRadioButtonName?: string;
   dayCare?: string;
   sittingRadioButtonName?: string;
   sitting?: string;
@@ -21,13 +21,18 @@ export type TypesOfServiceRowType = {
   propMinWidth2?: CSSProperties["minWidth"];
   propMinWidth3?: CSSProperties["minWidth"];
   propMinWidth4?: CSSProperties["minWidth"];
+
+  showEditButton?: boolean; // New prop to indicate whether to show the edit button or not
+
+  onServiceChange?: (service: string) => void; // Callback function to handle service change
+
 };
 
 const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
   typesOfServiceLabel,
-  boardingRadioButtoName,
+  boardingRadioButtonName,
   boarding,
-  dayCareRadioButtoName,
+  dayCareRadioButtonName,
   dayCare,
   sittingRadioButtonName,
   sitting,
@@ -42,7 +47,15 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
   propMinWidth2,
   propMinWidth3,
   propMinWidth4,
+  showEditButton = true,
+  onServiceChange
 }) => {
+  const handleServiceChange = (service: string) => {
+    if (onServiceChange) {
+      onServiceChange(service); // Call the callback function with the selected service
+    }
+  };
+
   const typesOfServiceRowStyle: CSSProperties = useMemo(() => {
     return {
       height: propHeight,
@@ -87,6 +100,8 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
     };
   }, [propMinWidth4]);
 
+
+
   return (
     <div
       className="self-stretch h-[88px] box-border flex flex-row items-start justify-start py-6 px-0 gap-[24px] max-w-full text-left text-base text-text-primary font-text-medium-normal border-t-[1px] border-solid border-text-primary mq750:h-auto"
@@ -107,6 +122,8 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
             <input
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
+              name={boardingRadioButtonName}
+              onClick={() => handleServiceChange("Boarding")}
             />
           </div>
           <div
@@ -121,6 +138,8 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
             <input
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
+              name={dayCareRadioButtonName}
+              onClick={() => handleServiceChange("Day Care")}
             />
           </div>
           <div
@@ -136,6 +155,7 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={sittingRadioButtonName}
+              onClick={() => handleServiceChange("Dog Sitter")}
             />
           </div>
           <div
@@ -151,6 +171,7 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={walkingRadioButtonName}
+              onClick={() => handleServiceChange("Dog Walker")}
             />
           </div>
           <div
@@ -161,14 +182,16 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
           </div>
         </div>
       </div>
-      <button className="cursor-pointer py-2 px-5 bg-[transparent] h-[42px] rounded-11xl box-border flex flex-row items-start justify-start gap-[8px] whitespace-nowrap border-[1px] border-solid border-color-neutral-neutral-dark hover:bg-dimgray-200 hover:box-border hover:border-[1px] hover:border-solid hover:border-dimgray-100">
-        <img
-          className="h-6 w-6 relative overflow-hidden shrink-0"
-          alt=""
-          src="/manage-button-icon--editalt.svg"
-        />
-        <div className="relative text-base leading-[150%] font-text-medium-normal text-color-neutral-neutral-darker text-left inline-block min-w-[30px]">{`Edit `}</div>
-      </button>
+      {showEditButton && ( // Conditionally render the edit button
+        <button className="cursor-pointer py-2 px-5 bg-[transparent] h-[42px] rounded-11xl box-border flex flex-row items-start justify-start gap-[8px] whitespace-nowrap border-[1px] border-solid border-color-neutral-neutral-dark hover:bg-dimgray-200 hover:box-border hover:border-[1px] hover:border-solid hover:border-dimgray-100">
+          <img
+            className="h-6 w-6 relative overflow-hidden shrink-0"
+            alt=""
+            src="/manage-button-icon--editalt.svg"
+          />
+          <div className="relative text-base leading-[150%] font-text-medium-normal text-color-neutral-neutral-darker text-left inline-block min-w-[30px]">{`Edit `}</div>
+        </button>
+      )}
     </div>
   );
 };
