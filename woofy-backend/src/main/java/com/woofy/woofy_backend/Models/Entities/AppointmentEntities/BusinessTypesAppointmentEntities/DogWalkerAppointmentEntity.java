@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BaseAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import jakarta.persistence.*;
@@ -16,12 +17,10 @@ public class DogWalkerAppointmentEntity extends BaseAppointmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dog_walker_appointmet_id" , nullable = false)
+    @Column(name = "dog_walker_appointment_id", nullable = false)
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "dog_walker_id")
+    @JsonBackReference
+    @OneToOne(mappedBy = "dogWalkerAppointmentEntity")
     private DogWalkerEntity dogWalkerEntity;
-
-
 }

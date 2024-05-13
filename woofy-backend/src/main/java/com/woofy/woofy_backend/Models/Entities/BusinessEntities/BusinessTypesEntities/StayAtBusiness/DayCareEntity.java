@@ -28,7 +28,7 @@ public class DayCareEntity extends StayAtBusinessBaseEntity {
     private BusinessEntity business;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "dayCareEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DayCareAppointmentEntity dayCareAppointmentEntity;
 
 }

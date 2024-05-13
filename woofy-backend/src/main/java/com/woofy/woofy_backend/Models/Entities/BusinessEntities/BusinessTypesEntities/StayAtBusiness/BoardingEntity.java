@@ -28,6 +28,6 @@ public class BoardingEntity extends StayAtBusinessBaseEntity {
     private BusinessEntity business;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "boardingEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BoardingAppointmentEntity boardingAppointmentEntity;
 }

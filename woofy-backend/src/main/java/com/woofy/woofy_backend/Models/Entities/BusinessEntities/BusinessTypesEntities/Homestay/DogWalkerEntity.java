@@ -28,7 +28,7 @@ public class DogWalkerEntity extends HomestayBaseEntity {
     private BusinessEntity business;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "dogWalkerEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DogWalkerAppointmentEntity dogWalkerAppointmentEntity;
 
 }
