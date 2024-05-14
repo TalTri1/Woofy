@@ -5,7 +5,10 @@ import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypes
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DayCareAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogSitterAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogWalkerAppointmentEntity;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DayCareAppointmentRepository;
@@ -15,8 +18,10 @@ import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.Bo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.DayOfWeek;
 
 @RestController
@@ -39,18 +44,19 @@ public class AppointmentController {
     private BoardingScheduleRepository boardingScheduleRepository;
 
     @PostMapping("/create-boarding-appointment")
-    public ResponseEntity<String> createBoardingAppointment(@RequestBody BoardingAppointmentEntity newAppointment) {
-
+    public ResponseEntity<String> createBoardingAppointment(@RequestBody BoardingAppointmentEntity newAppointment, Principal principal) {
         // TODO add principal and DTO
-        DayOfWeek dayOfWeek = newAppointment.getDate().getDayOfWeek();
-        WorkingDaysEnum workingDay = WorkingDaysEnum.valueOf(dayOfWeek.toString());
 
-        if (!newAppointment.getBoardingEntity().getWorkingDays().contains(workingDay)) {
+        BusinessEntity business = (BusinessEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        BoardingEntity boarding = business.getBoardingEntity();
+        DayOfWeek appointmentdayOfWeek = newAppointment.getDate().getDayOfWeek();
+
+        if (!boarding.getWorkingDays().contains(WorkingDaysEnum.valueOf(appointmentdayOfWeek.name()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Boarding is not available on this day");
         }
 
-        if (newAppointment.getDate().isBefore(newAppointment.getBoardingEntity().getStartDate()) ||
-                newAppointment.getDate().isAfter(newAppointment.getBoardingEntity().getEndDate())) {
+        if (newAppointment.getDate().isBefore(boarding.getStartDate()) ||
+                newAppointment.getDate().isAfter(boarding.getEndDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date is not within the available dates of the boarding");
         }
 
@@ -58,7 +64,7 @@ public class AppointmentController {
 
         if (existingSchedule != null) {
 
-            if (newAppointment.getBoardingEntity().getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
+            if (boarding.getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs");
             }
 
