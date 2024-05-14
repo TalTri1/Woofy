@@ -12,6 +12,7 @@ import { USERTYPE } from "../models/RegistrationModel";
 import { UserContext } from "../provider/UserProvider";
 import { useContext } from "react";
 import BookingPage from "../layouts/Appointment/BookingPage";
+import MapPage from "../layouts/Map/MapPage";
 
 
 const Routes = () => {
@@ -28,6 +29,10 @@ const Routes = () => {
         {
             path: "book-appointment",
             element: <BookingPage />,
+        },
+        {
+            path: "/map",
+            element: <MapPage />,
         }
 
     ];
