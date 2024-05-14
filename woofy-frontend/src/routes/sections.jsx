@@ -18,6 +18,7 @@ import UserProfileView from "../Sections/User/UserProfile/UserProfileView";
 import ServicesDetails from "../Sections/User/Business/ServicesDetails";
 import UpcomingBookingsSectionCont from "../Sections/User/UpComingBookings/UpcomingBookingsView";
 import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
+import MapPage from "../layouts/Map/MapPage";
 
 
 const Router = () => {
@@ -34,6 +35,10 @@ const Router = () => {
         {
             path: "book-appointment",
             element: <BookingPage />,
+        },
+        {
+            path: "/map",
+            element: <MapPage />,
         },
         {
             path: "404",
