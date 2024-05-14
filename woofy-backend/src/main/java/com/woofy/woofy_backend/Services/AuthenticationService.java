@@ -16,9 +16,12 @@ import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Repositories.CustomerRepository;
 import com.woofy.woofy_backend.Repositories.TokenRepository;
 import com.woofy.woofy_backend.Repositories.UserRepository;
+import com.woofy.woofy_backend.Services.Map.GeoLocation;
+import com.woofy.woofy_backend.Services.Map.GeocodingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +44,15 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private GeocodingService geocodingService;
 
     public ResponseEntity<?> registerBusiness(BaseRegisterRequest request, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError().getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
+        GeoLocation geoLocation = geocodingService.geocodeAddress(request.getAddress() + " " + request.getCity());
         var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -54,6 +60,8 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
                 .address(request.getAddress())
+                .lat(geoLocation != null ? geoLocation.getLat() : 0.0)
+                .lon(geoLocation != null ? geoLocation.getLon() : 0.0)
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.BUSINESS)
@@ -73,6 +81,7 @@ public class AuthenticationService {
             String errorMessage = result.getFieldError().getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
+        GeoLocation geoLocation = geocodingService.geocodeAddress(request.getAddress() + " " + request.getCity());
         var user = CustomerEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -83,6 +92,8 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .zipCode(request.getZipCode())
                 .role(RoleEnum.CUSTOMER)
+                .lat(geoLocation != null ? geoLocation.getLat() : 0.0)
+                .lon(geoLocation != null ? geoLocation.getLon() : 0.0)
                 .build();
         var savedUser = customerRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

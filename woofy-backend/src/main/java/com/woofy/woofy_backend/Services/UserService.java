@@ -2,9 +2,8 @@ package com.woofy.woofy_backend.Services;
 
 
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.ChangePasswordRequest;
-import com.woofy.woofy_backend.DTOs.BusinessDTOs.UpdateBusinessRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.UpdateUserRequest;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.DTOs.UserDTOs.UserSummaryDTO;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,6 +70,18 @@ public class UserService {
 
         // save the new password
         userRepository.save(user);
+    }
+
+    public List<UserSummaryDTO> getAllUsersSummary() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserSummaryDTO(
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPhoneNumber(),
+                        user.getAddress(),
+                        user.getCity(),
+                        user.getRole()))
+                .collect(Collectors.toList());
     }
 
 }

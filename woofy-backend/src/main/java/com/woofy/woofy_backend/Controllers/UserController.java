@@ -2,14 +2,18 @@ package com.woofy.woofy_backend.Controllers;
 
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.ChangePasswordRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.UpdateUserRequest;
+import com.woofy.woofy_backend.DTOs.UserDTOs.UserSummaryDTO;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
+import com.woofy.woofy_backend.Repositories.UserRepository;
 import com.woofy.woofy_backend.Services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -17,6 +21,8 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService service;
+    @Autowired
+    private final UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<UserEntity> getUser(Principal principal) {
@@ -35,6 +41,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    // get all
+    @GetMapping("/all")
+    public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
+        List<UserSummaryDTO> users = service.getAllUsersSummary();
+        return ResponseEntity.ok(users);
+    }
 
 }
 
