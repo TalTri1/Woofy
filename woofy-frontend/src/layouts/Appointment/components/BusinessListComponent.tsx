@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/api';
-import TypesOfServiceRow from '../../BusinessDashboardPages/components/TypesOfServiceRow';
+import TypesOfServiceRow from '../../../Sections/User/selectButtons/TypesOfServiceRow';
 
 
 interface business {

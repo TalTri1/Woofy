@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import BusinessListComponent from './components/BusinessListComponent';
-import NavbarAfterLogin from '../NavBarPage/NavbarAfterLogin';
 
 const BookingPage = () => {
     const [selectedBusiness, setSelectedBusiness] = useState(null);
@@ -20,7 +19,6 @@ const BookingPage = () => {
 
     return (
         <div className="w-full relative bg-text-alternate overflow-hidden flex flex-col items-start justify-start leading-[normal] tracking-[normal]">
-            <NavbarAfterLogin />
             {/* Form for selecting a service */}
             <BusinessListComponent />
             {/* Form for selecting a business and a date */}
