@@ -23,10 +23,10 @@ public class BaseAppointmentEntity {
     @Column(nullable = false)
     private Integer dogId;
 
-    @Column(nullable = false, name = "start_time")
+    @Column(name = "start_time")
     private LocalTime startTime;
 
-    @Column(nullable = false, name = "end_time")
+    @Column(name = "end_time")
     private LocalTime endTime;
 
     @CreationTimestamp

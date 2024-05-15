@@ -1,6 +1,7 @@
 package com.woofy.woofy_backend.Controllers;
 
 
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.createBoardingAppointmentRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DayCareAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogSitterAppointmentEntity;
@@ -44,23 +45,22 @@ public class AppointmentController {
     private BoardingScheduleRepository boardingScheduleRepository;
 
     @PostMapping("/create-boarding-appointment")
-    public ResponseEntity<String> createBoardingAppointment(@RequestBody BoardingAppointmentEntity newAppointment, Principal principal) {
-        // TODO add principal and DTO
+    public ResponseEntity<String> createBoardingAppointment(@RequestBody createBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
 
         BusinessEntity business = (BusinessEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         BoardingEntity boarding = business.getBoardingEntity();
-        DayOfWeek appointmentdayOfWeek = newAppointment.getDate().getDayOfWeek();
+        DayOfWeek appointmentdayOfWeek = newAppointmentRequest.getDate().getDayOfWeek();
 
         if (!boarding.getWorkingDays().contains(WorkingDaysEnum.valueOf(appointmentdayOfWeek.name()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Boarding is not available on this day");
         }
 
-        if (newAppointment.getDate().isBefore(boarding.getStartDate()) ||
-                newAppointment.getDate().isAfter(boarding.getEndDate())) {
+        if (newAppointmentRequest.getDate().isBefore(boarding.getStartDate()) ||
+                newAppointmentRequest.getDate().isAfter(boarding.getEndDate())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date is not within the available dates of the boarding");
         }
 
-        BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findById(newAppointment.getDate()).orElse(null);
+        BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findById(newAppointmentRequest.getDate()).orElse(null);
 
         if (existingSchedule != null) {
 
@@ -74,13 +74,16 @@ public class AppointmentController {
 
         else {
             BoardingScheduleEntity newSchedule = new BoardingScheduleEntity();
-            newSchedule.setDate(newAppointment.getDate());
-            newSchedule.setBoardingEntity(newAppointment.getBoardingEntity());
+            newSchedule.setDate(newAppointmentRequest.getDate());
+            newSchedule.setBoardingEntity(boarding);
             newSchedule.setCurrentDogCapacity(1);
             boardingScheduleRepository.save(newSchedule);
         }
 
-        boardingAppointmentRepository.save(newAppointment);
+        BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
+        boardingAppointmentEntity.setDate(newAppointmentRequest.getDate());
+        boardingAppointmentEntity.setBoardingEntity(boarding);
+        boardingAppointmentRepository.save(boardingAppointmentEntity);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
