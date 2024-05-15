@@ -1,15 +1,7 @@
 .ServiceTypeButtonText {
-    @apply relative text-base leading-[150%] px-2 font-text-medium-normal text-color-neutral-neutral-dark text-left inline-block min-w-[70px];
+    @apply relative text-base leading-[150%] px-2  text-left inline-block min-w-[70px];
 }
 
-.PressedButton {
-    @apply cursor-pointer [border:none] py-2 px-4 bg-app1 rounded-3xs flex flex-row items-center justify-center hover:bg-cornflowerblue relative text-base leading-[150%] font-text-medium-normal text-white text-left;
-}
-
-.Button {
-    @apply cursor-pointer py-2 px-4 bg-[transparent] rounded-3xs flex flex-row items-center justify-center border-[1px] border-solid hover:bg-gray-400 hover:box-border hover:border-[1px] hover:border-solid hover:border-gray-200 relative text-base leading-[150%] font-text-medium-normal text-color-neutral-neutral-dark text-center;
-
-}
 .white-text {
     color: white;
 }
