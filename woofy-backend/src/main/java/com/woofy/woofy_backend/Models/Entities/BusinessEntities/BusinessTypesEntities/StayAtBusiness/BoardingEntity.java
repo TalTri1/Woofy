@@ -8,7 +8,9 @@ import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesSch
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor

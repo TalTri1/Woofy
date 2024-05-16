@@ -9,7 +9,6 @@ import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypes
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
-import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DayCareAppointmentRepository;
