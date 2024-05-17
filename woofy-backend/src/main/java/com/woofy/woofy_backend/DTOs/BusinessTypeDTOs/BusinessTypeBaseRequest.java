@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.DTOs.BusinessTypeDTOs;
 
+import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class BusinessTypeBaseRequest {
 
     @Enumerated(EnumType.STRING)
     private List<DogSizeEnum> acceptableDogSizes;
+    private BusinessTypeEnum businessTypes;
     private int dogCapacity;
     private int price;
     private LocalDate startDate;

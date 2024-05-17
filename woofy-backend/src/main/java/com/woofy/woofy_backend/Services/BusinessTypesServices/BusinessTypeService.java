@@ -23,10 +23,10 @@ public class BusinessTypeService {
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
         List<BusinessTypeEnum> businessTypes = new ArrayList<>(business.getBusinessTypes());
-        if (businessTypes.contains(request.getBusinessType())) {
+        if (businessTypes.contains(request.getBusinessTypes())) {
             throw new RuntimeException("Business type already exists");
         }
-        businessTypes.add(request.getBusinessType());
+        businessTypes.add(request.getBusinessTypes());
         business.setBusinessTypes(businessTypes);
 
         entity.setBusiness(business);
