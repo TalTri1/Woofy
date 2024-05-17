@@ -18,11 +18,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "boarding_appointments")
 public class BoardingAppointmentEntity extends BaseAppointmentEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "boarding_appointment_id", nullable = false)
-    private Integer id;
-
     @JsonBackReference
     @OneToOne(mappedBy = "boardingAppointmentEntity")
     private BoardingEntity boardingEntity;

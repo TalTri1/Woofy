@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.AuthenticationRequest;
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.AuthenticationResponse;
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.EmailValidationRequest;
+import com.woofy.woofy_backend.DTOs.BusinessDTOs.BusinessRegisterRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.BaseRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
@@ -47,7 +48,7 @@ public class AuthenticationService {
     @Autowired
     private GeocodingService geocodingService;
 
-    public ResponseEntity<?> registerBusiness(BaseRegisterRequest request, BindingResult result) {
+    public ResponseEntity<?> registerBusiness(BusinessRegisterRequest request, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError().getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -56,6 +57,7 @@ public class AuthenticationService {
         var user = BusinessEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .businessName(request.getBusinessName())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())

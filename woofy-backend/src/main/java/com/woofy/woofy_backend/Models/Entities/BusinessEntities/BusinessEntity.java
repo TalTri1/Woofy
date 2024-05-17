@@ -9,14 +9,13 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEnt
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @SuperBuilder
 @Data
@@ -33,18 +32,22 @@ public class BusinessEntity extends UserEntity {
     @Column(name = "business_types")
     private List<BusinessTypeEnum> businessTypes;
 
+    @ToString.Exclude
     @JsonManagedReference
     @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DogSitterEntity dogSitterEntity;
 
+    @ToString.Exclude
     @JsonManagedReference
     @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DogWalkerEntity dogWalkerEntity;
 
+    @ToString.Exclude
     @JsonManagedReference
     @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BoardingEntity boardingEntity;
 
+    @ToString.Exclude
     @JsonManagedReference
     @OneToOne(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DayCareEntity dayCareEntity;

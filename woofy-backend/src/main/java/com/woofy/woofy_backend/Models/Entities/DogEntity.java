@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class DogEntity {
     @Column(name = "dog_id", nullable = false)
     private Integer id;
 
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity owner;
@@ -52,6 +54,7 @@ public class DogEntity {
     @Column(name = "special_requirements")
     private String specialRequirements = "";
 
+    @ToString.Exclude
     @ElementCollection
     @CollectionTable(name = "dog_images", joinColumns = @JoinColumn(name = "dog_id"))
     @Column(name = "image_id")

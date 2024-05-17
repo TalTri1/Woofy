@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
@@ -30,4 +33,8 @@ public class BoardingEntity extends StayAtBusinessBaseEntity {
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private BoardingAppointmentEntity boardingAppointmentEntity;
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private BoardingScheduleEntity boardingScheduleEntity;
 }
