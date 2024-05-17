@@ -2,13 +2,14 @@ import {createContext, useContext, useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import api from "../api/api";
 import {toast} from "react-toastify";
+import {useRouter} from "../routes/hooks";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("token"));
-
+    const router = useRouter();
 
     const login = async (basicSignInUser) => {
         try {
@@ -30,6 +31,7 @@ const AuthProvider = ({children}) => {
         localStorage.removeItem("userDetails");
         setToken(null);
         setIsLoggedIn(false);
+        router.push("/");
     }
 
     // Memoized value of the authentication context

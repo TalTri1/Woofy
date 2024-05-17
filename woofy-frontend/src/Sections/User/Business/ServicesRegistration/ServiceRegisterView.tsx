@@ -20,6 +20,7 @@ import {
 } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
 import {Box, Button, Container, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import SendIcon from "@mui/icons-material/Send";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -29,14 +30,12 @@ const serviceTypeMapping = {
 };
 
 const ServiceRegisterView: FunctionComponent = () => {
-
     const navigate = useNavigate();
     const [selectedSize, setSelectedSize] = useState<Size[]>([]);
     const [selectedHomeConditions, setHomeConditions] = useState<HOME_CONDITIONS[]>([]);
     const [selectedPetsInHome, setPetsInHome] = useState<PETS_IN_HOME[]>([]);
     const [selectedDays, setSelectedDays] = useState<WEEKDAYS[]>([]);
     const [images, setImages] = useState<Array<File | null>>([null, null, null, null]);
-
 
     // Boarding, Day Care, Sitter, Walker buttons
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
@@ -148,7 +147,6 @@ const ServiceRegisterView: FunctionComponent = () => {
             const imageIDs = await uploadImages();
             // const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
             navigate("/");
-            window.scrollTo(0, 0);
             // if (await isUpdateSuccess) {
             //     toast.success("Service registered successfully")
             // }
@@ -252,13 +250,6 @@ const ServiceRegisterView: FunctionComponent = () => {
                                 </Box>
                             </Box>
                             <Box sx={{ width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', py: 0, px: 2.5, gap: 3 }}>
-                                <TextField
-                                    fullWidth
-                                    placeholder="Business Name (Optional)"
-                                    variant="outlined"
-                                    onChange={handleInputChange}
-                                    InputProps={{ sx: { border: 'none', outline: 'none', fontFamily: 'text-medium-normal', fontSize: 'base', backgroundColor: 'transparent', height: '24px', lineHeight: '150%', color: 'neutral', pl: 1.5, pr: 1.5 } }}
-                                />
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
                                     <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} />
                                 </Box>
@@ -285,7 +276,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                 <BusinessTypesBaseRegistration
                                     handleInputChange={handleInputChange}
                                     selectedSize={selectedSize}
-                                    onSizeClick={clickSizeHandlerDog}
+                                    clickSizeHandlerDog={clickSizeHandlerDog}
                                     selectedDays={selectedDays}
                                     clickWorkingDaysHandler={clickWorkingDaysHandler}
                                 />
@@ -313,14 +304,14 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         </label>
                                     ))}
                                 </Box>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', pt: 1.5, pb: 2.25 }}>
+                                <Box>
                                     <Button
+                                        variant="contained"
+                                        endIcon={<SendIcon />}
                                         onClick={registerBusinessHandler}
-                                        sx={{ cursor: 'pointer', py: 1, px: 2.5, bgcolor: 'app1', borderRadius: '11xl', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', textTransform: 'none', '&:hover': { bgcolor: 'cornflowerblue' } }}
-                                    >
-                                        <Typography sx={{ fontSize: 'base', lineHeight: '150%', fontWeight: 'bold', fontFamily: 'text-medium-normal', color: 'white' }}>
-                                            Submit
-                                        </Typography>
+                                        >
+                                        Submit
+
                                     </Button>
                                 </Box>
                             </Box>

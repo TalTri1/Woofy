@@ -20,7 +20,7 @@ const PetsInHomeComponent: React.FC<FormUpdate> = ({ clickPetsInHomeHandler, sel
                         key={condition}
                         variant={selectedPetsInHome.includes(condition) ? "contained" : "outlined"}
                         onClick={() => clickPetsInHomeHandler(condition)}
-                        sx={{ minWidth: '120px' }}
+                        size={"medium"}
                     >
                         {formatEnumValue(condition)}
                     </Button>

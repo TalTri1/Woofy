@@ -16,7 +16,7 @@ import NotFoundPage from "../Pages/PageNotFound";
 import CustomerReviewsView from "../Sections/User/Business/Reviews/CustomerReviewsView";
 import UserProfileView from "../Sections/User/UserProfile/UserProfileView";
 import ServicesDetails from "../Sections/User/Business/ServicesDetails";
-import UpcomingBookingsSectionCont from "../Sections/User/UpComingBookings/UpcomingBookingsView";
+import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookingsView";
 import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
 import MapPage from "../layouts/Map/MapPage";
 import BusinessProfilePage from "../Pages/BusinessProfilePage";
@@ -108,7 +108,7 @@ const Router = () => {
                 },
                 {
                     path: "/bookings",
-                    element: <UpcomingBookingsSectionCont />,
+                    element: <UpComingBookings />,
                 },
                 {
                     path: "/dog-register",
