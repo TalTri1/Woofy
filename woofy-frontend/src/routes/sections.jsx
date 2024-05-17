@@ -19,7 +19,7 @@ import ServicesDetails from "../Sections/User/Business/ServicesDetails";
 import UpcomingBookingsSectionCont from "../Sections/User/UpComingBookings/UpcomingBookingsView";
 import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
 import MapPage from "../layouts/Map/MapPage";
-
+import BusinessProfilePage from "../Pages/BusinessProfilePage";
 
 const Router = () => {
     const { token } = useAuth();
@@ -47,8 +47,11 @@ const Router = () => {
         {
             path: "*",
             element: <NotFoundPage />,
-        }
-
+        },
+        {
+            path: "/business-profile",
+            element: <BusinessProfilePage />,
+        },
     ];
 
     // Define routes accessible only to authenticated users

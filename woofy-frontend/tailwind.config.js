@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         "background-color-primary": "#fff",
         app1: "#006cbf",
+        "text-alternate": "#fff",
+        "color-neutral-neutral": "#666",
         "text-primary": "#000",
         "color-neutral-neutral-light": "#aaa",
         "color-neutral-neutral-lighter": "#ccc",
@@ -48,6 +50,9 @@ module.exports = {
       "15xl": "34px",
       "26xl": "45px",
       inherit: "inherit",
+      "base": "16px",
+      "xl": "20px",
+      "13xl": "32px",
     },
     screens: {
       mq1125: {
