@@ -23,10 +23,6 @@ export default function SignUpModal() {
 
     const navigate = useNavigate();
 
-    const onSignUpLinkClick = useCallback(() => {
-        navigate("/sign-up");
-    }, [navigate]);
-
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {

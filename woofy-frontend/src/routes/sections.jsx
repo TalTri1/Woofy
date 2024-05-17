@@ -49,7 +49,7 @@ const Router = () => {
             element: <NotFoundPage />,
         },
         {
-            path: "/business-profile",
+            path: "/business-profile/:id",
             element: <BusinessProfilePage />,
         },
     ];

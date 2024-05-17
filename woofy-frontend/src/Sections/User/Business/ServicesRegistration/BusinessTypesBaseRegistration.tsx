@@ -1,8 +1,7 @@
 import React from "react";
 import { TextField, Box, Typography, Button } from '@mui/material';
 import DogSizeInput from "../../selectButtons/DogSizeInput";
-import { Size } from "../../../../models/DogModels/DogModel";
-import { WEEKDAYS } from "../../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {Size, WEEKDAYS} from "../../../../models/Enums/Enums";
 
 type FormUpdate = {
     selectedSize: Size[];

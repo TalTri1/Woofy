@@ -6,12 +6,13 @@ import RegistrationModel, {USERTYPE} from "../models/RegistrationModel";
 import {useAuth} from "../provider/AuthProvider";
 import {toast} from "react-toastify";
 import {Box, Button, Container, Grid, Typography} from '@mui/material';
+import {useRouter} from "../routes/hooks";
 import TextField from "@mui/material/TextField";
 
 
 const Registration: FunctionComponent = () => {
 
-    const navigate = useNavigate();
+    const router = useRouter();
     const location = useLocation();
     const {setIsLoggedIn, setToken} = useAuth();
     const basicSignUpUser = location.state;
@@ -28,10 +29,10 @@ const Registration: FunctionComponent = () => {
     };
 
     const onBackButtonTextClick = useCallback(() => {
-        navigate("/sign-up");
-    }, [navigate]);
+        router.push("/sign-up");
+    }, [router]);
 
-    
+
     const onDogOwnerButtonClick = useCallback(() => {
         setDogOwnerOrCareGiverActiveButton('dogOwner');
         setCompleteRegistrationUser(prevState => {
@@ -76,7 +77,7 @@ const Registration: FunctionComponent = () => {
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
-            navigate("/", {replace: true});
+            router.push("/");
             window.scrollTo(0, 0);
             // Save the profile photo to the DB if exists
             let profilePhotoId = 0

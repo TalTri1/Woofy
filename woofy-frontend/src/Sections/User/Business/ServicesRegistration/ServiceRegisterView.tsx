@@ -1,26 +1,19 @@
 import React, {FunctionComponent, useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {Size} from "../../../../models/DogModels/DogModel";
-import {UserContext} from "../../../../provider/UserProvider";
 import {BoardingModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
 import {DogWalkerModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
 import {DayCareModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
 import {DogSitterModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
 import '../../../../css/button.css';
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
-import {BUSINESS_TYPES, WEEKDAYS} from "../../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
 import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "../../selectButtons/PetsInHomeComponent";
 import HomeConditionComponent from "../../selectButtons/HomeConditionComponent";
 import {toast} from "react-toastify";
 import api from "../../../../api/api";
-import {
-    HOME_CONDITIONS,
-    PETS_IN_HOME
-} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
 import {Box, Button, Container, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
+import {BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS} from "../../../../models/Enums/Enums";
+import {useRouter} from "../../../../routes/hooks";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -30,7 +23,7 @@ const serviceTypeMapping = {
 };
 
 const ServiceRegisterView: FunctionComponent = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [selectedSize, setSelectedSize] = useState<Size[]>([]);
     const [selectedHomeConditions, setHomeConditions] = useState<HOME_CONDITIONS[]>([]);
     const [selectedPetsInHome, setPetsInHome] = useState<PETS_IN_HOME[]>([]);
@@ -146,7 +139,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
             // const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
-            navigate("/");
+            router.push("/");
             // if (await isUpdateSuccess) {
             //     toast.success("Service registered successfully")
             // }

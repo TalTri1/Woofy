@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Box, Typography } from '@mui/material';
-import { PETS_IN_HOME } from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
 import { formatEnumValue } from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {PETS_IN_HOME} from "../../../models/Enums/Enums";
 
 type FormUpdate = {
     selectedPetsInHome: PETS_IN_HOME[];

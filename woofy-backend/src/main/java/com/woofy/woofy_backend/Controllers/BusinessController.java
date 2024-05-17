@@ -35,4 +35,9 @@ public class BusinessController {
         List<BusinessUserSummaryDTO> users = businessService.getAllBusinessUsersSummary();
         return ResponseEntity.ok(users);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<BusinessUserSummaryDTO> getBusiness(@PathVariable Integer id) {
+        BusinessUserSummaryDTO business = businessService.mapToBusinessUserSummaryDTO(businessService.getBusiness(id));
+        return ResponseEntity.ok(business);
+    }
 }

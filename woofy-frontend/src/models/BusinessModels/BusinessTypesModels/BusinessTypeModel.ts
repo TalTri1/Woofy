@@ -1,4 +1,4 @@
-import {Size} from "../../DogModels/DogModel";
+import {Size, WEEKDAYS} from "../../Enums/Enums";
 
 export abstract class BusinessTypeBaseModel {
     acceptableDogSizes: Size[] = [];
@@ -15,22 +15,7 @@ export abstract class BusinessTypeBaseModel {
 }
 
 
-export enum BUSINESS_TYPES {
-    BOARDING= 'BOARDING',
-    DOG_WALK = 'DOG_WALK',
-    DOG_SITTER = 'DOG_SITTER',
-    DAY_CARE = 'DAY_CARE'
-}
 
-export enum WEEKDAYS {
-    SUNDAY = 'SUNDAY',
-    MONDAY = 'MONDAY',
-    TUESDAY = 'TUESDAY',
-    WEDNESDAY = 'WEDNESDAY',
-    THURSDAY = 'THURSDAY',
-    FRIDAY = 'FRIDAY',
-    SATURDAY = 'SATURDAY',
-}
 
 export function formatEnumValue(enumValue: string): string {
     // Replace underscores with spaces

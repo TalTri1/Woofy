@@ -1,12 +1,13 @@
 import { FunctionComponent, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import {useRouter} from "../../../routes/hooks";
 
 const TypeOfUser: FunctionComponent = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const onCaregiverButtonTextClick = useCallback(() => {
-    navigate("/business-registration-page");
-  }, [navigate]);
+    router.push("/business-registration-page");
+  }, [router]);
 
   return (
     <div className="self-stretch bg-background-color-primary flex flex-row items-end justify-start pt-3 px-0 pb-6 box-border max-w-full text-center text-5xl text-text-primary font-text-medium-normal">

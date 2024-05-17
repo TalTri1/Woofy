@@ -1,3 +1,5 @@
+import {Age, Size, TrainingLevel} from "../Enums/Enums";
+
 class DogModel {
     dogName: string;
     dogBreed: string;
@@ -21,24 +23,6 @@ class DogModel {
     }
 }
 
-export enum Age {
-    PUPPY= 'PUPPY',
-    ADULT = 'ADULT',
-    SENIOR= 'SENIOR',
-}
-
-export enum Size {
-    SMALL= 'SMALL',
-    MEDIUM = 'MEDIUM',
-    LARGE = 'LARGE',
-    GIANT = 'GIANT'
-}
-
-export enum TrainingLevel {
-    BEGINNER= 'BEGINNER',
-    INTERMEDIATE = 'INTERMEDIATE',
-    ADVANCED = 'ADVANCED'
-}
 
 export default DogModel;
 

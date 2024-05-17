@@ -2,31 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { icons } from './icons';
+import BusinessIcon from '@mui/icons-material/Business';
+import {Business} from "../../../models/BusinessModels/BusinessModel";
+import {useRouter} from "../../../routes/hooks";
 
-interface Business {
-    id: number;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    address: string;
-    city: string;
-    role: string;
-    about: string | null;
-    businessName: string;
-    businessType: string;
-    socialMedia: string | null;
-    website: string | null;
-    acceptableDogSizes: Array<'SMALL' | 'MEDIUM' | 'LARGE' | 'GIANT'>;
-    dogCapacity: number;
-    startDate: string;
-    endDate: string;
-    startTime: string;
-    endTime: string;
-    price: number;
-    workingDays: Array<'SUNDAY' | 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY'>;
-    lat: number;
-    lon: number;
-}
+
 
 const bookAppointment = (businessName: string) => {
     console.log(`Setting appointment for ${businessName}`);
@@ -34,6 +14,7 @@ const bookAppointment = (businessName: string) => {
 };
 
 const MapComponent: React.FC = () => {
+    const router = useRouter();
     const mapRef = useRef<HTMLDivElement | null>(null);
     const mapInstance = useRef<L.Map | null>(null);
     const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -78,15 +59,13 @@ const MapComponent: React.FC = () => {
                         <b>Phone number:</b> ${business.phoneNumber}<br />
                         <b>Address:</b> ${business.address}, ${business.city}<br />
                         <b>About:</b> ${business.about ? business.about : 'N/A'}<br />
-                        <b>Service:</b> ${business.businessType}<br />
-                        <b>Price:</b> ${business.price}<br />
-                        <b>Working Days:</b> ${business.workingDays.join(', ')}<br />
+                        <b>Service:</b> ${business.businessTypes}<br />
                         <div style="text-align: center;">
                         <button style="background-color: #007bff; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px;" 
-                        onclick="handleAppointment('${business.businessName}')">Book an Appointment</button>
+                        onclick="handleAppointment('${business.id}')">Book an Appointment</button>
                     </div>
                     `;
-                    L.marker([business.lat, business.lon], { icon: icons[business.businessType] })
+                    L.marker([business.lat, business.lon], )
                         .addTo(map)
                         .bindTooltip(business.businessName)
                         .bindPopup(popupContent);
@@ -96,9 +75,10 @@ const MapComponent: React.FC = () => {
     }, [businesses]);
 
     // Wrapper function to handle appointment booking
-    const handleAppointment = (businessName: string) => {
-        bookAppointment(businessName);
+    const handleAppointment = (businessId: string) => {
+        router.push(`/business-profile/${businessId}`)
     };
+
     // Add handleAppointment to the global scope
     (window as any).handleAppointment = handleAppointment;
 

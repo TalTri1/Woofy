@@ -1,9 +1,7 @@
 import React from "react";
 import { Button, Box, Typography } from '@mui/material';
-import {
-    HOME_CONDITIONS
-} from "../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/StayAtBusinessBaseModel";
 import { formatEnumValue } from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {HOME_CONDITIONS} from "../../../models/Enums/Enums";
 
 type FormUpdate = {
     selectedHomeConditions: HOME_CONDITIONS[];

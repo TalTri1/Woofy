@@ -1,7 +1,6 @@
 import React from "react";
 import {Button, Box, Typography} from '@mui/material';
-import {Size} from "../../../models/DogModels/DogModel";
-import {formatEnumValue} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {Size} from "../../../models/Enums/Enums";
 
 type DogSizeInputProps = {
     selectedSize: Size | Size[];

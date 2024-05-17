@@ -1,8 +1,8 @@
 import React, {FunctionComponent, useState} from "react";
 import { Box, Button, Typography } from "@mui/material";
 import UpcomingBookingCard from "./UpcomingBookingCard";
-import { BUSINESS_TYPES } from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
 import SelectServiceTypeComponent from "../selectButtons/SelectServiceTypeComponent";
+import {BUSINESS_TYPES} from "../../../models/Enums/Enums";
 
 
 const UpComingBookings: FunctionComponent = () => {
@@ -22,21 +22,15 @@ const UpComingBookings: FunctionComponent = () => {
     return (
         <Box
             sx={{
-                bgcolor: "text.alternate",
-                overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "start",
                 pt: { xs: 2, lg: 8 },
-                px: 2,
                 pb: { xs: 1, lg: 5 },
                 gap: 2,
                 maxWidth: "100%",
                 textAlign: "center",
                 typography: "h3",
                 color: "text.primary",
-                fontWeight: "medium",
             }}
         >
             <Box sx={{ width: "100%", maxWidth: "768px", textAlign: "center" }}>

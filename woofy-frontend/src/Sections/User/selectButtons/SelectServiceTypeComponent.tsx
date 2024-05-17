@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import {BUSINESS_TYPES} from "../../../models/BusinessModels/BusinessTypesModels/BusinessTypeModel";
+import {BUSINESS_TYPES} from "../../../models/Enums/Enums";
 
 
 type SelectServiceInputProps = {

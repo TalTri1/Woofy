@@ -1,19 +1,20 @@
 import React, { FunctionComponent, useState, useContext } from "react";
 import { Box, Button, Container, TextField, Typography, TextareaAutosize } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import { UserContext } from "../../../../provider/UserProvider";
-import DogModel, { Age, Size, TrainingLevel } from "../../../../models/DogModels/DogModel";
 import DogSizeInput from "../../selectButtons/DogSizeInput";
 import SendIcon from '@mui/icons-material/Send';
+import {Age, Size, TrainingLevel} from "../../../../models/Enums/Enums";
+import DogModel from "../../../../models/DogModels/DogModel";
+import {useRouter} from "../../../../routes/hooks";
 
 type DogRegisterViewProps = {
     variant: 'customer' | 'business';
 };
 
 const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const { userDetails } = useContext(UserContext); // The user details
     const [selectedAge, setSelectedAge] = useState<Age>(Age.PUPPY);
     const [selectedSize, setSelectedSize] = useState<Size>(Size.SMALL);
@@ -64,7 +65,7 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
             console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
             const isUpdateSuccess = await updateImagesForDogEntity(imageIDs as number[]);
-            navigate("/");
+            router.push("/");
             window.scrollTo(0, 0);
             if (isUpdateSuccess) {
                 toast.success("Dog registered successfully");

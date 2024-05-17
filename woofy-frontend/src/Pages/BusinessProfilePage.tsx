@@ -1,27 +1,50 @@
-import { FunctionComponent } from "react";
-import NavbarAfterLogin from "../Sections/User/Business/Profile/NavbarAfterLogin";
+import { FunctionComponent, useEffect, useState } from "react";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
 import Row from "../Sections/User/Business/Profile/Row";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
+import { Business } from "../models/BusinessModels/BusinessModel";
+import { useParams } from "react-router-dom";
+
+type RouteParams = Record<string, string | undefined>;
 
 const BusinessProfilePage: FunctionComponent = () => {
+    const { id } = useParams<RouteParams>();
+    const [business, setBusiness] = useState<Business | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/business/${id}`);
+                const data = await response.json();
+                setBusiness(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [id]);
+
+    if (!business) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="w-full relative shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] overflow-hidden flex flex-col items-start justify-start tracking-[normal] leading-[normal]">
-            <NavbarAfterLogin />
             <main className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-start justify-start py-20 px-16 box-border gap-[122px] max-w-full lg:pt-[34px] lg:pb-[34px] lg:box-border mq750:gap-[61px] mq750:py-[22px] mq750:px-8 mq750:box-border mq450:gap-[30px]">
                 <div className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
                 <div className="w-[616px] hidden max-w-full" />
                 <div className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
                 <div className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
                 <section className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[80px] max-w-full text-center text-13xl text-text-primary font-text-medium-normal mq750:gap-[40px] mq450:gap-[20px]">
-                    <BusinessFrame />
+                    <BusinessFrame business={business}/>
                     <div className="flex-1 flex flex-col items-start justify-start gap-[67px] min-w-[400px] max-w-full mq450:gap-[17px] mq750:gap-[33px] mq750:min-w-full">
                         <div className="self-stretch flex flex-col items-start justify-start gap-[16px] max-w-full">
                             <div className="self-stretch flex flex-row items-start justify-center gap-[16px] mq750:flex-wrap">
                                 <img
                                     className="self-stretch flex-1 relative max-w-[615px] overflow-hidden max-h-full object-cover min-w-[131px] min-h-[96px]"
                                     loading="lazy"
-                                    alt=""
+                                    alt="Placeholder"
                                     src="/placeholder-image1@2x.png"
                                 />
                             </div>
@@ -29,22 +52,22 @@ const BusinessProfilePage: FunctionComponent = () => {
                                 <img
                                     className="self-stretch flex-1 relative max-w-[142px] overflow-hidden max-h-full object-cover min-w-[131px] min-h-[96px]"
                                     loading="lazy"
-                                    alt=""
+                                    alt="Placeholder"
                                     src="/placeholder-image1@2x.png"
                                 />
                                 <img
                                     className="self-stretch flex-1 relative max-w-[142px] overflow-hidden max-h-full object-cover min-w-[131px] min-h-[96px]"
-                                    alt=""
+                                    alt="Placeholder"
                                     src="/placeholder-image1@2x.png"
                                 />
                                 <img
                                     className="self-stretch flex-1 relative max-w-[142px] overflow-hidden max-h-full object-cover min-w-[131px] min-h-[96px]"
-                                    alt=""
+                                    alt="Placeholder"
                                     src="/placeholder-image1@2x.png"
                                 />
                                 <img
                                     className="self-stretch flex-1 relative max-w-[142px] overflow-hidden max-h-full object-cover min-w-[131px] min-h-[96px]"
-                                    alt=""
+                                    alt="Placeholder"
                                     src="/placeholder-image1@2x.png"
                                 />
                             </div>
@@ -57,7 +80,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <img
                                                 className="w-8 h-8 relative overflow-hidden shrink-0"
                                                 loading="lazy"
-                                                alt=""
+                                                alt="Services icon"
                                                 src="/tablerpaw.svg"
                                             />
                                         </div>
@@ -65,7 +88,6 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             Services
                                         </h1>
                                     </div>
-                                    
                                     <div className="w-[616px] rounded-2xl bg-text-alternate box-border overflow-x-auto flex flex-col items-start justify-end max-w-full text-left text-xl border-[1px] border-solid border-color-neutral-neutral">
                                         <div className="w-[616px] rounded-2xl box-border flex flex-row items-center justify-center pt-6 px-0 pb-[22px] border-b-[1px] border-solid border-color-neutral-neutral">
                                             <div className="flex flex-col items-center justify-center py-0.5 px-[77.5px]">
@@ -73,7 +95,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                                     <div className="flex flex-col items-center justify-center py-2 pr-0 pl-2">
                                                         <img
                                                             className="w-6 h-6 relative overflow-hidden shrink-0"
-                                                            alt=""
+                                                            alt="Boarding icon"
                                                             src="/icon--moon.svg"
                                                         />
                                                     </div>
@@ -91,7 +113,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                                             </b>
                                                             <img
                                                                 className="h-6 w-6 relative overflow-hidden shrink-0"
-                                                                alt=""
+                                                                alt="Shekel icon"
                                                                 src="/icon--shekel.svg"
                                                             />
                                                             <div className="relative text-base leading-[150%] font-medium text-color-neutral-neutral text-right inline-block min-w-[72px]">
@@ -107,7 +129,6 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             boardingButton="Day Care"
                                             boardingButton1="Per Day"
                                         />
-
                                         <Row
                                             iconSun="/icon--bed.svg"
                                             boardingButton="Sitting"
@@ -134,7 +155,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <img
                                                 className="w-8 h-8 relative overflow-hidden shrink-0"
                                                 loading="lazy"
-                                                alt=""
+                                                alt="Calendar icon"
                                                 src="/icon--calendarcheck.svg"
                                             />
                                         </div>
@@ -147,7 +168,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <div className="flex flex-col items-center justify-center py-2 pr-0 pl-2">
                                                 <img
                                                     className="w-6 h-6 relative overflow-hidden shrink-0"
-                                                    alt=""
+                                                    alt="Boarding icon"
                                                     src="/icon--moon.svg"
                                                 />
                                             </div>
@@ -159,7 +180,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <div className="flex flex-col items-center justify-center py-2 pr-0 pl-2">
                                                 <img
                                                     className="w-6 h-6 relative overflow-hidden shrink-0"
-                                                    alt=""
+                                                    alt="Day Care icon"
                                                     src="/icon--sun.svg"
                                                 />
                                             </div>
@@ -171,7 +192,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <div className="flex flex-col items-center justify-center py-2 pr-0 pl-2">
                                                 <img
                                                     className="w-6 h-6 relative overflow-hidden shrink-0"
-                                                    alt=""
+                                                    alt="Sitting icon"
                                                     src="/icon--bed.svg"
                                                 />
                                             </div>
@@ -183,7 +204,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                                             <div className="flex flex-col items-center justify-center py-2 pr-0 pl-2">
                                                 <img
                                                     className="w-6 h-6 relative overflow-hidden shrink-0"
-                                                    alt=""
+                                                    alt="Walking icon"
                                                     src="/icon--walk.svg"
                                                 />
                                             </div>

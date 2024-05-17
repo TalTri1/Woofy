@@ -7,7 +7,7 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEnt
 import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Services.Map.GeocodingService;
-import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BusinessService {
                 .collect(Collectors.toList());
     }
 
-    private BusinessUserSummaryDTO mapToBusinessUserSummaryDTO(BusinessEntity businessEntity) {
+    public BusinessUserSummaryDTO mapToBusinessUserSummaryDTO(BusinessEntity businessEntity) {
         BusinessUserSummaryDTO dto = new BusinessUserSummaryDTO();
         dto.setId(businessEntity.getId());
         dto.setFirstName(businessEntity.getFirstName());
@@ -69,36 +69,14 @@ public class BusinessService {
         dto.setWebsite(businessEntity.getWebsite());
         dto.setLat(businessEntity.getLat());
         dto.setLon(businessEntity.getLon());
-
-        Optional.ofNullable(businessEntity.getDogSitterEntity()).ifPresent(dogSitter -> {
-            mapBusinessEntityToDTO(dto, dogSitter, "Dog Sitter");
-        });
-
-        Optional.ofNullable(businessEntity.getBoardingEntity()).ifPresent(boarding -> {
-            mapBusinessEntityToDTO(dto, boarding, "Boarding");
-        });
-
-        Optional.ofNullable(businessEntity.getDayCareEntity()).ifPresent(dayCare -> {
-            mapBusinessEntityToDTO(dto, dayCare, "Day Care");
-        });
-
-        Optional.ofNullable(businessEntity.getDogWalkerEntity()).ifPresent(dogWalker -> {
-            mapBusinessEntityToDTO(dto, dogWalker, "Dog Walker");
-        });
+        dto.setBusinessTypes(businessEntity.getBusinessTypes());
+        Optional.ofNullable(businessEntity.getDogSitterEntity()).ifPresent(dto::setDogSitterEntity);
+        Optional.ofNullable(businessEntity.getBoardingEntity()).ifPresent(dto::setBoardingEntity);
+        Optional.ofNullable(businessEntity.getDayCareEntity()).ifPresent(dto::setDayCareEntity);
+        Optional.ofNullable(businessEntity.getDogWalkerEntity()).ifPresent(dto::setDogWalkerEntity);
 
         return dto;
     }
 
-    private void mapBusinessEntityToDTO(BusinessUserSummaryDTO dto, BusinessTypeBaseEntity entity, String businessType) {
-        dto.setAcceptableDogSizes(entity.getAcceptableDogSizes());
-        dto.setDogCapacity(entity.getDogCapacity());
-        dto.setStartDate(entity.getStartDate());
-        dto.setEndDate(entity.getEndDate());
-        dto.setStartTime(entity.getStartTime());
-        dto.setEndTime(entity.getEndTime());
-        dto.setBusinessType(businessType);
-        dto.setPrice(entity.getPrice());
-        dto.setWorkingDays(entity.getWorkingDays());
-    }
 
 }
