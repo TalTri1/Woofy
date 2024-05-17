@@ -3,10 +3,14 @@ package com.woofy.woofy_backend.Services.BusinessTypesServices;
 import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.BusinessTypeBaseRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
+import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BusinessTypeService {
@@ -17,6 +21,13 @@ public class BusinessTypeService {
     public BusinessTypeBaseEntity create(BusinessTypeBaseRequest  request, Integer businessId, BusinessTypeBaseEntity entity) {
         BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
+
+        List<BusinessTypeEnum> businessTypes = new ArrayList<>(business.getBusinessTypes());
+        if (businessTypes.contains(request.getBusinessType())) {
+            throw new RuntimeException("Business type already exists");
+        }
+        businessTypes.add(request.getBusinessType());
+        business.setBusinessTypes(businessTypes);
 
         entity.setBusiness(business);
         entity.setAcceptableDogSizes(request.getAcceptableDogSizes());
