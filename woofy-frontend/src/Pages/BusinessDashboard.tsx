@@ -2,7 +2,7 @@ import { FunctionComponent, useContext } from "react";
 import RegisterYourBusinessCTA from "../Sections/User/Business/RegisterYourBusinessCTA";
 import { UserContext } from "../provider/UserProvider";
 import {Box, Typography} from "@mui/material";
-import UpcomingBookingsSectionCont from "../Sections/User/UpComingBookings/UpcomingBookingsView";
+import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookingsView";
 
 const BusinessDashboard: FunctionComponent = () => {
 
@@ -24,7 +24,7 @@ const BusinessDashboard: FunctionComponent = () => {
               </Box>
             </Box>
             <RegisterYourBusinessCTA />
-            <UpcomingBookingsSectionCont />
+            <UpComingBookings />
           </Box>
         </main>
       </Box>

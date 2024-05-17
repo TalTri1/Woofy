@@ -6,14 +6,14 @@ import { WEEKDAYS } from "../../../../models/BusinessModels/BusinessTypesModels/
 
 type FormUpdate = {
     selectedSize: Size[];
-    onSizeClick: (size: Size) => void;
+    clickSizeHandlerDog: (size: Size) => void;
     selectedDays: WEEKDAYS[];
     clickWorkingDaysHandler: (day: WEEKDAYS) => void;
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-}
+};
 
 const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
-                                                                 onSizeClick,
+                                                                 clickSizeHandlerDog,
                                                                  selectedSize,
                                                                  handleInputChange,
                                                                  selectedDays,
@@ -21,14 +21,14 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                                                              }) => {
     return (
         <Box component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <DogSizeInput selectedSize={selectedSize} onSizeClick={onSizeClick} />
+            <DogSizeInput selectedSize={selectedSize} onSizeClick={clickSizeHandlerDog} multiple={true} />
             <Typography variant="h6">Dog Capacity Per Day</Typography>
             <TextField
                 fullWidth
                 placeholder="Number of Dogs*"
                 type="number"
                 name="dogCapacity"
-                required={true}
+                required
                 onChange={handleInputChange}
             />
             <Typography variant="h6">About yourself</Typography>
@@ -45,7 +45,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                 fullWidth
                 placeholder="Price*"
                 type="number"
-                required={true}
+                required
                 name="price"
                 onChange={handleInputChange}
             />
@@ -56,7 +56,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     label="Start Date"
                     type="date"
                     name="startDate"
-                    required={true}
+                    required
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
@@ -67,7 +67,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     label="End Date"
                     type="date"
                     name="endDate"
-                    required={true}
+                    required
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
@@ -93,7 +93,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     label="Start Time"
                     type="time"
                     name="startTime"
-                    required={true}
+                    required
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
@@ -104,7 +104,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     label="End Time"
                     type="time"
                     name="endTime"
-                    required={true}
+                    required
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
@@ -112,7 +112,7 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                 />
             </Box>
         </Box>
-    )
-}
+    );
+};
 
 export default BusinessTypesBaseRegistration;

@@ -22,7 +22,7 @@ const HomeConditionComponent: React.FC<FormUpdate> = ({ clickHomeConditionsHandl
                         key={condition}
                         variant={selectedHomeConditions.includes(condition) ? "contained" : "outlined"}
                         onClick={() => clickHomeConditionsHandler(condition)}
-                        sx={{ minWidth: '120px' }}
+                        size={"medium"}
                     >
                         {formatEnumValue(condition)}
                     </Button>
