@@ -79,6 +79,7 @@ const BusinessListComponent = () => {
             <table>
                 <thead>
                     <tr>
+                        <th>id</th>
                         <th>Name</th>
                         <th>About</th>
                         <th>Price</th>
@@ -90,6 +91,7 @@ const BusinessListComponent = () => {
                 <tbody>
                     {availableBusinesses.map((business) => (
                         <tr key={business.id}>
+                            <td>{business.id}</td>
                             <td>{business.name}</td>
                             <td>{business.about}</td>
                             <td>{business.price}</td>
