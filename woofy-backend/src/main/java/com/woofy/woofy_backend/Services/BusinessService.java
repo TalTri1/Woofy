@@ -6,7 +6,6 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
 import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
-import com.woofy.woofy_backend.Services.Map.GeoLocation;
 import com.woofy.woofy_backend.Services.Map.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +56,7 @@ public class BusinessService {
 
     private BusinessUserSummaryDTO mapToBusinessUserSummaryDTO(BusinessEntity businessEntity) {
         BusinessUserSummaryDTO dto = new BusinessUserSummaryDTO();
+        dto.setId(businessEntity.getId());
         dto.setFirstName(businessEntity.getFirstName());
         dto.setLastName(businessEntity.getLastName());
         dto.setPhoneNumber(businessEntity.getPhoneNumber());
