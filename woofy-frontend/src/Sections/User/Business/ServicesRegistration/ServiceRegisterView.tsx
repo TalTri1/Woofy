@@ -309,7 +309,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', pt: 1.5, pb: 2.25 }}>
                                     <Button
                                         onClick={registerBusinessHandler}
-                                        sx={{ cursor: 'pointer', py: 1, px: 2.5, bgcolor: 'app1', borderRadius: '11xl', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', textTransform: 'none', '&:hover': { bgcolor: 'cornflowerblue' } }}
+                                        sx={{ cursor: 'pointer', py: 1, px: 2.5, backgroundColor: '#006cbf', borderRadius: '11xl', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', textTransform: 'none', '&:hover': { backgroundColor: 'cornflowerblue' } }}
                                     >
                                         <Typography sx={{ fontSize: 'base', lineHeight: '150%', fontWeight: 'bold', fontFamily: 'text-medium-normal', color: 'white' }}>
                                             Submit

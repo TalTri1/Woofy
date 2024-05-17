@@ -8,8 +8,11 @@ import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypes
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogWalkerAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
+import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
+import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DayCareAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DogSitterAppointmentRepository;
@@ -43,10 +46,14 @@ public class AppointmentController {
     @Autowired
     private BoardingScheduleRepository boardingScheduleRepository;
 
+    @Autowired
+    private BusinessRepository businessRepository;
+
     @PostMapping("/create-boarding-appointment")
     public ResponseEntity<String> createBoardingAppointment(@RequestBody createBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
 
-        BusinessEntity business = (BusinessEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
         BoardingEntity boarding = business.getBoardingEntity();
         DayOfWeek appointmentdayOfWeek = newAppointmentRequest.getDate().getDayOfWeek();
 
@@ -59,7 +66,7 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date is not within the available dates of the boarding");
         }
 
-        BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findById(newAppointmentRequest.getDate()).orElse(null);
+        BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findByDate(newAppointmentRequest.getDate()).orElse(null);
 
         if (existingSchedule != null) {
 
@@ -82,6 +89,7 @@ public class AppointmentController {
         BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
         boardingAppointmentEntity.setDate(newAppointmentRequest.getDate());
         boardingAppointmentEntity.setBoardingEntity(boarding);
+        boardingAppointmentEntity.setDogId(customer.getDog().getId());
         boardingAppointmentRepository.save(boardingAppointmentEntity);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

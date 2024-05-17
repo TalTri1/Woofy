@@ -18,5 +18,5 @@ public class createBoardingAppointmentRequest {
     private LocalDate date;
 
     @Column(nullable = false)
-    private Integer dogId;
+    private Integer businessId;
 }

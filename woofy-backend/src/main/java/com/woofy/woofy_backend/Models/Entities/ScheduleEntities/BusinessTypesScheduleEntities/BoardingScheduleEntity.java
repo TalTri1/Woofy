@@ -18,14 +18,9 @@ import java.util.Date;
 @Table(name = "boarding_schedule")
 public class BoardingScheduleEntity extends BaseScheduleEntity {
 
-    @Id
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
-
     @JsonBackReference
     @OneToOne(mappedBy = "boardingScheduleEntity")
     private BoardingEntity boardingEntity;
 
-    @Column(name = "current_dog_capacity", nullable = false)
-    private Integer currentDogCapacity;
+
 }

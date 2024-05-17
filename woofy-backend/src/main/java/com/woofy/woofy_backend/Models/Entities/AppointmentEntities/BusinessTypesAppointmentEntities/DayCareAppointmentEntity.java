@@ -17,10 +17,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "day_care_appointments")
 public class DayCareAppointmentEntity extends BaseAppointmentEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "day_care_appointment_id", nullable = false)
-    private Integer id;
 
     @JsonBackReference
     @OneToOne(mappedBy = "dayCareAppointmentEntity")
