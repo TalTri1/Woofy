@@ -1,60 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../api/api';
+import axios from 'axios'; // Changed from custom api import to axios for simplicity
 import TypesOfServiceRow from '../../../Sections/User/selectButtons/TypesOfServiceRow';
 
-
-interface business {
+interface Business {
     id: number;
-    name: string;
-    about: string;
+    businessName: string;
+    about: string | null;
     price: number;
     dogCapacity: number;
-    acceptableDogSizes: string[];
+    acceptableDogSizes: Array<'SMALL' | 'MEDIUM' | 'LARGE' | 'GIANT'>;
     phoneNumber: string;
+    businessType: string;
 }
 
-const BusinessListComponent = () => {
-    const [selectedService, setSelectedService] = useState('day-care');
-    const [availableBusinesses, setAvailableBusinesses] = useState<business[]>([]);
+const BusinessListComponent: React.FC = () => {
+    const [selectedService, setSelectedService] = useState('Day Care');
+    const [availableBusinesses, setAvailableBusinesses] = useState<Business[]>([]);
 
-
-    const fetchAvailableBusinesses = async (service: string) => {
-        console.log(`Fetching available businesses for service: ${service}`);
-        try {
-            // Determine the API endpoint based on the service
-            let apiEndpoint = '/business/business-type';
-            console.log(`service: ${service}`);
-            switch (service) {
-                case 'Dog Walker':
-                    apiEndpoint += '/dog-walker/all';
-                    break;
-                case 'Boarding':
-                    apiEndpoint += '/boarding/all';
-                    break;
-                case 'Dog Sitter':
-                    apiEndpoint += '/dog-sitter/all';
-                    break;
-                case 'Day Care':
-                    apiEndpoint += '/day-care/all';
-                    break;
-                default:
-                    throw new Error('Invalid service');
+    useEffect(() => {
+        const fetchAvailableBusinesses = async () => {
+            console.log(`Fetching available businesses for service: ${selectedService}`);
+            try {
+                const response = await axios.get('http://localhost:8080/api/v1/business/all');
+                const data = response.data;
+                const filteredBusinesses = data.filter((business: Business) => business.businessType === selectedService);
+                setAvailableBusinesses(filteredBusinesses);
+            } catch (error) {
+                console.error(`Failed to fetch available businesses: ${error}`);
             }
-            console.log(`API endpoint: ${apiEndpoint}`);
+        };
 
-            const res = await api.get(apiEndpoint);
-            setAvailableBusinesses(res.data);
-        } catch (error) {
-            console.error(`Failed to fetch available businesses: ${error}`);
-        }
-    };
+        fetchAvailableBusinesses();
+    }, [selectedService]);
 
     const handleServiceChange = (service: string) => {
-        setSelectedService(service); // Update selected service
-        fetchAvailableBusinesses(service); // Trigger fetchAvailableBusinesses with the selected service
+        setSelectedService(service);
     };
-
-
 
     return (
         <div>
@@ -76,26 +57,28 @@ const BusinessListComponent = () => {
                 showEditButton={false}
                 onServiceChange={handleServiceChange}
             />
-            <table>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>About</th>
-                        <th>Price</th>
-                        <th>Dog Capacity</th>
-                        <th>Acceptable Dog Sizes</th>
-                        <th>Phone Number</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>About</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Price</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Dog Capacity</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Acceptable Dog Sizes</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Phone Number</th>
                     </tr>
                 </thead>
                 <tbody>
                     {availableBusinesses.map((business) => (
                         <tr key={business.id}>
-                            <td>{business.name}</td>
-                            <td>{business.about}</td>
-                            <td>{business.price}</td>
-                            <td>{business.dogCapacity}</td>
-                            <td>{business.acceptableDogSizes.join(', ')}</td>
-                            <td>{business.phoneNumber}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.id}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.businessName}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.about || 'N/A'}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.price}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.dogCapacity}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.acceptableDogSizes.join(', ')}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{business.phoneNumber}</td>
                         </tr>
                     ))}
                 </tbody>

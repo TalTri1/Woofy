@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { icons } from './icons';
 
 interface Business {
+    id: number;
     firstName: string;
     lastName: string;
     phoneNumber: string;
@@ -44,6 +45,7 @@ const MapComponent: React.FC = () => {
                 const response = await fetch('http://localhost:8080/api/v1/business/all');
                 const data = await response.json();
                 setBusinesses(data);
+                console.log(`businesses: ${JSON.stringify(data)}`);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

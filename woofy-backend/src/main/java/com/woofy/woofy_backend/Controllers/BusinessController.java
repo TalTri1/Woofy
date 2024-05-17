@@ -1,10 +1,8 @@
 package com.woofy.woofy_backend.Controllers;// In BusinessController.java
+
 import com.woofy.woofy_backend.DTOs.BusinessDTOs.BusinessUserSummaryDTO;
 import com.woofy.woofy_backend.DTOs.BusinessDTOs.UpdateBusinessRequest;
-import com.woofy.woofy_backend.DTOs.UserDTOs.UserSummaryDTO;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
-import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Services.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +17,6 @@ import java.util.List;
 public class BusinessController {
 
     private final BusinessService businessService;
-    @Autowired
-    private BusinessRepository businessRepository;
 
     @Autowired
     public BusinessController(BusinessService businessService) {

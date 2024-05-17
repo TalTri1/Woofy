@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessUserSummaryDTO {
+    private int id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
