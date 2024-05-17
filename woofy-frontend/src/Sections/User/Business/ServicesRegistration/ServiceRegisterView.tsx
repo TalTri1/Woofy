@@ -252,13 +252,6 @@ const ServiceRegisterView: FunctionComponent = () => {
                                 </Box>
                             </Box>
                             <Box sx={{ width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', py: 0, px: 2.5, gap: 3 }}>
-                                <TextField
-                                    fullWidth
-                                    placeholder="Business Name (Optional)"
-                                    variant="outlined"
-                                    onChange={handleInputChange}
-                                    InputProps={{ sx: { border: 'none', outline: 'none', fontFamily: 'text-medium-normal', fontSize: 'base', backgroundColor: 'transparent', height: '24px', lineHeight: '150%', color: 'neutral', pl: 1.5, pr: 1.5 } }}
-                                />
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
                                     <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} />
                                 </Box>

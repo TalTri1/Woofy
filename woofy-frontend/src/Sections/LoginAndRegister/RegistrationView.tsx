@@ -19,9 +19,10 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 type RegistrationComponentProps = {
     updateCompleteRegistrationUser: (updatedData: Partial<RegistrationModel>) => void;
     onFileSelect: (file: File) => void;
+    DogOwnerOrCareGiveractiveButton: string | null
 }
 
-const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ updateCompleteRegistrationUser, onFileSelect }) => {
+const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwnerOrCareGiveractiveButton, updateCompleteRegistrationUser, onFileSelect }) => {
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         updateCompleteRegistrationUser({ [name]: value });
@@ -43,6 +44,19 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ updat
                             <Grid item xs={12}>
                                 <ImageComponent onFileSelect={onFileSelect} />
                             </Grid>
+                            {DogOwnerOrCareGiveractiveButton == 'caregiver' && (
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="businessName"
+                                        label="Business Name"
+                                        name="businessName"
+                                        autoComplete="business-name"
+                                        onChange={changeHandler}
+                                    />
+                                </Grid>
+                            )}
                             <Grid item xs={12}>
                                 <TextField
                                     required

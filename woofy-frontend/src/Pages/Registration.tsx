@@ -6,6 +6,7 @@ import RegistrationModel, {USERTYPE} from "../models/RegistrationModel";
 import {useAuth} from "../provider/AuthProvider";
 import {toast} from "react-toastify";
 import {Box, Button, Container, Grid, Typography} from '@mui/material';
+import TextField from "@mui/material/TextField";
 
 
 const Registration: FunctionComponent = () => {
@@ -14,12 +15,9 @@ const Registration: FunctionComponent = () => {
     const location = useLocation();
     const {setIsLoggedIn, setToken} = useAuth();
     const basicSignUpUser = location.state;
-    const [isDogOwnerButtonClicked, setDogOwnerButtonClicked] = useState(false);
-    const [isCaregiverButtonClicked, setCaregiverButtonClicked] = useState(false);
-    const [activeButton, setActiveButton] = useState('dogOwner');
-
+    const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>(null);
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState
-    (new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', ''));
+    (new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER,'', '', '', '', '', '', ''));
 
     // Function to update completeRegistrationUser
     const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
@@ -33,9 +31,9 @@ const Registration: FunctionComponent = () => {
         navigate("/sign-up");
     }, [navigate]);
 
+    
     const onDogOwnerButtonClick = useCallback(() => {
-        setDogOwnerButtonClicked(!isDogOwnerButtonClicked);
-        setActiveButton('dogOwner');
+        setDogOwnerOrCareGiverActiveButton('dogOwner');
         setCompleteRegistrationUser(prevState => {
             const updatedState = {...prevState, userType: USERTYPE.CUSTOMER};
             return updatedState;
@@ -44,8 +42,7 @@ const Registration: FunctionComponent = () => {
 
 
     const onCaregiverButtonClick = useCallback(() => {
-        setCaregiverButtonClicked(!isCaregiverButtonClicked);
-        setActiveButton('caregiver');
+        setDogOwnerOrCareGiverActiveButton('caregiver');
         setCompleteRegistrationUser(prevState => {
             const updatedState = {...prevState, userType: USERTYPE.BUSINESS};
             return updatedState;
@@ -154,19 +151,19 @@ const Registration: FunctionComponent = () => {
                         <Typography variant="h6">I consider myself a...</Typography>
                         <Grid container spacing={2} justifyContent="center">
                             <Grid item>
-                                <Button variant={activeButton === 'dogOwner' ? "contained" : "outlined"} color="primary"
+                                <Button variant={DogOwnerOrCareGiverActiveButton === 'dogOwner' ? "contained" : "outlined"} color="primary"
                                         onClick={onDogOwnerButtonClick}
                                         sx={{fontSize: '1rem', padding: '10px 20px', margin: '0'}}>Dog Owner</Button>
                             </Grid>
                             <Grid item>
-                                <Button variant={activeButton === 'caregiver' ? "contained" : "outlined"}
+                                <Button variant={DogOwnerOrCareGiverActiveButton === 'caregiver' ? "contained" : "outlined"}
                                         color="primary" onClick={onCaregiverButtonClick}
                                         sx={{fontSize: '1rem', padding: '10px 20px', margin: '0'}}>Caregiver</Button>
                             </Grid>
                         </Grid>
                     </Box>
                     <Grid container justifyContent="center">
-                        <RegistrationView updateCompleteRegistrationUser={updateCompleteRegistrationUser}
+                        <RegistrationView DogOwnerOrCareGiveractiveButton={DogOwnerOrCareGiverActiveButton} updateCompleteRegistrationUser={updateCompleteRegistrationUser}
                                           onFileSelect={handleFileSelect}/>
                     </Grid>
                     <Box mt={3} display="flex" flexDirection="column" alignItems="center">
