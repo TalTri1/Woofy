@@ -20,6 +20,7 @@ public class DogWalkerService {
 
     public DogWalkerEntity createDogWalker(CreateDogWalkerRequest request, Integer businessId) {
         DogWalkerEntity dogWalkerEntity = new DogWalkerEntity();
+        dogWalkerEntity.setAppointmentLength(request.getAppointmentLength());
         businessTypeService.create(request, businessId, dogWalkerEntity);
         return dogWalkerRepository.save(dogWalkerEntity);
     }

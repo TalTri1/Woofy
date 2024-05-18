@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface DayCareScheduleRepository extends JpaRepository<DayCareScheduleEntity, LocalDate> {
+public interface DayCareScheduleRepository extends JpaRepository<DayCareScheduleEntity, Integer> {
     Optional<DayCareScheduleEntity> findByDate(LocalDate date);
 }

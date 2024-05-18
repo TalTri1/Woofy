@@ -13,5 +13,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CreateHomestayRequest extends BusinessTypeBaseRequest {
-
+    private int appointmentLength;
 }
