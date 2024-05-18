@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "day_care_appointments")
 public class DayCareAppointmentEntity extends BaseAppointmentEntity {
 
-
     @JsonBackReference
     @OneToOne(mappedBy = "dayCareAppointmentEntity")
     private DayCareEntity dayCareEntity;
