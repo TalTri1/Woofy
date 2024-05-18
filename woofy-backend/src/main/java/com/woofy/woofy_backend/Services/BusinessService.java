@@ -66,7 +66,6 @@ public class BusinessService {
         dto.setPhoneNumber(businessEntity.getPhoneNumber());
         dto.setAddress(businessEntity.getAddress());
         dto.setCity(businessEntity.getCity());
-        dto.setRole(businessEntity.getRole());
         dto.setAbout(businessEntity.getAbout());
         dto.setProfilePhotoID(businessEntity.getProfilePhotoID());
         dto.setBusinessName(businessEntity.getBusinessName());
