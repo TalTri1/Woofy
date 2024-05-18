@@ -1,8 +1,8 @@
-import {DogSitterModel} from "./BusinessTypesModels/HomeStay/DogSitterModel";
-import {DogWalkerModel} from "./BusinessTypesModels/HomeStay/DogWalkerModel";
-import {BoardingModel} from "./BusinessTypesModels/StayAtBusiness/BoardingModel";
-import {DayCareModel} from "./BusinessTypesModels/StayAtBusiness/DayCareModel";
-import { BUSINESS_TYPES } from "../Enums/Enums";
+import { BUSINESS_TYPES} from "../Enums/Enums";
+import { DogSitterModel } from "./BusinessTypesModels/HomeStay/DogSitterModel";
+import { DogWalkerModel } from "./BusinessTypesModels/HomeStay/DogWalkerModel";
+import { BoardingModel } from "./BusinessTypesModels/StayAtBusiness/BoardingModel";
+import { DayCareModel } from "./BusinessTypesModels/StayAtBusiness/DayCareModel";
 
 export interface Business {
     id: number;
@@ -12,7 +12,6 @@ export interface Business {
     address: string;
     city: string;
     about: string | null;
-    profilePhotoID: number | null;
     businessName: string;
     businessTypes: BUSINESS_TYPES[];
     dogSitterEntity: DogSitterModel;
@@ -23,5 +22,6 @@ export interface Business {
     website: string | null;
     lat: number;
     lon: number;
-    images: Number[];
+    profilePhotoID: number | null;
+    images: number[];
 }

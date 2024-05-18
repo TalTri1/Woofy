@@ -5,9 +5,9 @@ import api from "../../../../api/api";
 import { UserContext } from "../../../../provider/UserProvider";
 import DogSizeInput from "../../selectButtons/DogSizeInput";
 import SendIcon from '@mui/icons-material/Send';
-import {Age, Size, TrainingLevel} from "../../../../models/Enums/Enums";
+import { Age, Size, TrainingLevel } from "../../../../models/Enums/Enums";
 import DogModel from "../../../../models/DogModels/DogModel";
-import {useRouter} from "../../../../routes/hooks";
+import { useRouter } from "../../../../routes/hooks";
 
 type DogRegisterViewProps = {
     variant: 'customer' | 'business';
@@ -127,7 +127,7 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
             console.log(`Response from the backend: ${response}`);
             return response.data.imageID; // return the ID of the saved image
         } catch (error) {
-            toast.error("Failed uploading profile photo");
+            toast.error("Failed uploading images for dog");
         }
     };
 
@@ -206,7 +206,7 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
                                         Senior <br /> 9 years +
                                     </Button>
                                 </Box>
-                                <DogSizeInput selectedSize={selectedSize} onSizeClick={clickSizeHandlerDog}multiple={false} />
+                                <DogSizeInput selectedSize={selectedSize} onSizeClick={clickSizeHandlerDog} multiple={false} />
                                 <Typography variant="h6" sx={{ textAlign: 'left' }}>
                                     Training Level
                                 </Typography>
