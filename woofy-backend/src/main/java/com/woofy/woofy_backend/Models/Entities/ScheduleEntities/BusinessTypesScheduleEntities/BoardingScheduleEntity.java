@@ -21,5 +21,4 @@ public class BoardingScheduleEntity extends BaseScheduleEntity {
     @OneToOne(mappedBy = "boardingScheduleEntity")
     private BoardingEntity boardingEntity;
 
-
 }
