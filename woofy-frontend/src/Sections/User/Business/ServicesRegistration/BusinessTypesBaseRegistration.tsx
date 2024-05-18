@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, Box, Typography, Button } from '@mui/material';
 import DogSizeInput from "../../selectButtons/DogSizeInput";
-import {Size, WEEKDAYS} from "../../../../models/Enums/Enums";
+import { Size, WEEKDAYS } from "../../../../models/Enums/Enums";
 
 type FormUpdate = {
     selectedSize: Size[];
@@ -11,17 +11,34 @@ type FormUpdate = {
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 };
 
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
-                                                                 clickSizeHandlerDog,
-                                                                 selectedSize,
-                                                                 handleInputChange,
-                                                                 selectedDays,
-                                                                 clickWorkingDaysHandler
-                                                             }) => {
+    clickSizeHandlerDog,
+    selectedSize,
+    handleInputChange,
+    selectedDays,
+    clickWorkingDaysHandler
+}) => {
     return (
         <Box component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
             <DogSizeInput selectedSize={selectedSize} onSizeClick={clickSizeHandlerDog} multiple={true} />
-            <Typography variant="h6">Dog Capacity Per Day</Typography>
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                    marginTop: '8px',
+                }}
+            >
+                Dog Capacity Per Day
+            </Typography>
             <TextField
                 fullWidth
                 placeholder="Number of Dogs*"
@@ -30,7 +47,22 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                 required
                 onChange={handleInputChange}
             />
-            <Typography variant="h6">About yourself</Typography>
+
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                }}
+            >
+                About Yourself
+            </Typography>
             <TextField
                 fullWidth
                 multiline
@@ -39,7 +71,21 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                 name="about"
                 onChange={handleInputChange}
             />
-            <Typography variant="h6">Asked Price For Service (Per Visit)</Typography>
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                }}
+            >
+                Asked Price For Service (Per Visit)
+            </Typography>
             <TextField
                 fullWidth
                 placeholder="Price*"
@@ -48,7 +94,24 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                 name="price"
                 onChange={handleInputChange}
             />
-            <Typography variant="h6">Availability For Service</Typography>
+
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                    marginBottom: '10px'
+                }}
+            >
+                Availability For Service
+            </Typography>
+
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                 <TextField
                     fullWidth
@@ -59,6 +122,11 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
+                    }}
+                    inputProps={{
+                        style: {
+                            color: '#aaa', // Light-light neutral color
+                        },
                     }}
                 />
                 <TextField
@@ -71,21 +139,80 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    inputProps={{
+                        style: {
+                            color: '#aaa', // Light-light neutral color
+                        },
+                    }}
                 />
             </Box>
-            <Typography variant="h6">Working Days</Typography>
+
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                    marginTop: '8px',
+                }}
+            >
+                Working Days
+            </Typography>
+
+
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
                 {Object.values(WEEKDAYS).map(day => (
                     <Button
                         key={day}
                         variant={selectedDays.includes(day) ? "contained" : "outlined"}
                         onClick={() => clickWorkingDaysHandler(day)}
+                        sx={{
+                            minWidth: '130px',
+                            height: '45px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            textTransform: 'none',
+                            borderRadius: '10px',
+                            fontFamily: 'Inter',
+                            fontSize: '16px',
+                            fontWeight: 'regular',
+                            border: '1px solid',
+                            borderColor: selectedDays.includes(day) ? 'primary.main' : 'grey.500',
+                            color: selectedDays.includes(day) ? 'white' : 'black',
+                            backgroundColor: selectedDays.includes(day) ? '#006CBF' : 'transparent',
+                            '&:hover': {
+                                borderColor: selectedDays.includes(day) ? 'primary.main' : 'grey.700',
+                                backgroundColor: selectedDays.includes(day) ? '#0056A4' : 'transparent',
+                            },
+                        }}
                     >
-                        {day}
+                        {capitalize(day)}
                     </Button>
                 ))}
             </Box>
-            <Typography variant="h6">Working Hours</Typography>
+            <Typography
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    fontFamily: 'Inter',
+                    fontWeight: 550,
+                    color: 'text.primary',
+                    textAlign: 'left',
+                    display: 'inline-block',
+                    marginBottom: '10px',
+                    marginTop: '8px',
+                }}
+            >
+                Working Hours
+            </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                 <TextField
                     fullWidth
@@ -97,6 +224,11 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    inputProps={{
+                        style: {
+                            color: '#aaa', // Light-light neutral color
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -107,6 +239,11 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
                     onChange={handleInputChange}
                     InputLabelProps={{
                         shrink: true,
+                    }}
+                    inputProps={{
+                        style: {
+                            color: '#aaa', // Light-light neutral color
+                        },
                     }}
                 />
             </Box>

@@ -114,6 +114,24 @@ export function palette() {
       paper: '#FFFFFF',
       default: grey[100],
       neutral: grey[200],
+      app1: '#006cbf', // added from tailwind.config.js
+      'text-alternate': '#fff', // added from tailwind.config.js
+      'color-neutral-neutral': '#666', // added from tailwind.config.js
+      'color-neutral-neutral-light': '#aaa', // added from tailwind.config.js
+      'color-neutral-neutral-lighter': '#ccc', // added from tailwind.config.js
+      cornflowerblue: '#2691e6', // added from tailwind.config.js
+      darkgray: '#b3b3b3', // added from tailwind.config.js
+      gray: {
+        '100': '#808080',
+        '200': '#787878',
+        '300': 'rgba(133, 133, 133, 0.1)',
+        '400': 'rgba(120, 120, 120, 0.09)',
+        '500': 'rgba(128, 128, 128, 0.09)',
+      },
+      'color-neutral-neutral-dark': '#444',
+      silver: 'rgba(185, 185, 185, 0.1)',
+      darkslategray: '#333',
+      'color-neutral-neutral-darker': '#222',
     },
     action: {
       ...base.action,
