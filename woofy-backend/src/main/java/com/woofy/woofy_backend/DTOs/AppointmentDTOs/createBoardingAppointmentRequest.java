@@ -1,22 +1,13 @@
 package com.woofy.woofy_backend.DTOs.AppointmentDTOs;
 
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class createBoardingAppointmentRequest {
+public class createBoardingAppointmentRequest extends createAppointmentRequestBaseDTO{
 
-    @Column(nullable = false)
-    private LocalDate date;
-
-    @Column(nullable = false)
-    private Integer businessId;
 }
