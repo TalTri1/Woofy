@@ -127,7 +127,7 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
             console.log(`Response from the backend: ${response}`);
             return response.data.imageID; // return the ID of the saved image
         } catch (error) {
-            toast.error("Failed uploading profile photo");
+            toast.error("Failed uploading images for dog");
         }
     };
 
