@@ -1,19 +1,19 @@
-import React, {FunctionComponent, useContext, useState} from "react";
-import {BoardingModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
-import {DogWalkerModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
-import {DayCareModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
-import {DogSitterModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
+import React, { FunctionComponent, useContext, useState } from "react";
+import { BoardingModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
+import { DogWalkerModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
+import { DayCareModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
+import { DogSitterModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
 import '../../../../css/button.css';
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "../../selectButtons/PetsInHomeComponent";
 import HomeConditionComponent from "../../selectButtons/HomeConditionComponent";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import api from "../../../../api/api";
-import {Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import {BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS} from "../../../../models/Enums/Enums";
-import {useRouter} from "../../../../routes/hooks";
+import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS } from "../../../../models/Enums/Enums";
+import { useRouter } from "../../../../routes/hooks";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -43,14 +43,14 @@ const ServiceRegisterView: FunctionComponent = () => {
     const [businessInput, setBusinessInput] = useState<Record<string, any>>({});
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = event.target;
-        setBusinessInput(prevState => ({...prevState, [name]: value}));
+        const { name, value } = event.target;
+        setBusinessInput(prevState => ({ ...prevState, [name]: value }));
     };
 
     const updateBusinessModel = (updatedData: Partial<BoardingModel | DogWalkerModel | DayCareModel | DogSitterModel>) => {
         setBusinessInput(prevState => {
             if (prevState) {
-                return {...prevState, ...updatedData};
+                return { ...prevState, ...updatedData };
             }
             return prevState;
         });
@@ -64,7 +64,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newSizes = [...prevSizes, size];
             }
-            updateBusinessModel({acceptableDogSizes: newSizes});
+            updateBusinessModel({ acceptableDogSizes: newSizes });
             return newSizes;
         });
     };
@@ -77,7 +77,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newHomeConditions = [...prevHomeConditions, homeCondition];
             }
-            updateBusinessModel({homeConditions: newHomeConditions});
+            updateBusinessModel({ homeConditions: newHomeConditions });
             return newHomeConditions;
         });
     }
@@ -90,7 +90,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newPetsInHome = [...prevPetsInHome, petsInHome];
             }
-            updateBusinessModel({petsInHome: newPetsInHome});
+            updateBusinessModel({ petsInHome: newPetsInHome });
             return newPetsInHome;
         });
     }
@@ -102,7 +102,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newDays = [...prevDays, workingDay as WEEKDAYS];
             }
-            updateBusinessModel({workingDays: newDays});
+            updateBusinessModel({ workingDays: newDays });
             return newDays;
         })
     }
@@ -138,20 +138,31 @@ const ServiceRegisterView: FunctionComponent = () => {
             const response = await api.post(`/business/business-type/${serviceTypeMapping[selectedServices]}/create`, business);
             console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
-            // const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
+            const isUpdateSuccess = updateImagesForServiceEntity(imageIDs as number[]);
             router.push("/");
-            // if (await isUpdateSuccess) {
-            //     toast.success("Service registered successfully")
-            // }
-            // else {
-            //     toast.error("Failed to register service");
-            // }
+            if (await isUpdateSuccess) {
+                toast.success("Service registered successfully")
+            }
+            else {
+                toast.error("Failed to register service");
+            }
 
         } catch (error) {
             toast.error("Failed to register service");
             console.log(`Error to register service: ${error}`);
         }
 
+    };
+
+    const updateImagesForServiceEntity = async (imageIDs: number[]) => {
+        try {
+            const response = await api.put(`/business/update/images/`, imageIDs);
+            console.log(`Response from updating dog images: ${response}`);
+            return true;
+        } catch (error) {
+            console.error(`Error updating dog images: ${error}`);
+            return false;
+        }
     };
 
     // Handle images
@@ -302,7 +313,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         variant="contained"
                                         endIcon={<SendIcon />}
                                         onClick={registerBusinessHandler}
-                                        >
+                                    >
                                         Submit
 
                                     </Button>
