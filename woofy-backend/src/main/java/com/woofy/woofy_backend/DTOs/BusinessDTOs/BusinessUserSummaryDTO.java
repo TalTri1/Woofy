@@ -22,6 +22,7 @@ public class BusinessUserSummaryDTO {
     private String address;
     private String city;
     private String about;
+    private Integer profilePhotoID;
     private String businessName;
     private String socialMedia;
     private String website;
@@ -32,4 +33,5 @@ public class BusinessUserSummaryDTO {
     private DayCareEntity dayCareEntity;
     private double lat;
     private double lon;
+    private List<Integer> images;
 }
