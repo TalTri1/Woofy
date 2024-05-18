@@ -2,10 +2,11 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
-import {Business} from "../models/BusinessModels/BusinessModel";
-import {BUSINESS_TYPES} from "../models/Enums/Enums";
-import {useRouter} from "../routes/hooks";
+import { Business } from "../models/BusinessModels/BusinessModel";
+import { BUSINESS_TYPES } from "../models/Enums/Enums";
+import { useRouter } from "../routes/hooks";
 import Button from "@mui/material/Button";
+import BookAnAppointment from "../Sections/User/Business/Profile/BookAnAppointment";
 
 type RouteParams = Record<string, string | undefined>;
 
@@ -60,12 +61,12 @@ const BusinessProfilePage: FunctionComponent = () => {
             <main
                 className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-start justify-start py-20 px-16 box-border gap-[122px] max-w-full lg:pt-[34px] lg:pb-[34px] lg:box-border mq750:gap-[61px] mq750:py-[22px] mq750:px-8 mq750:box-border mq450:gap-[30px]">
                 <div
-                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral"/>
-                <div className="w-[616px] hidden max-w-full"/>
+                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
+                <div className="w-[616px] hidden max-w-full" />
                 <div
-                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral"/>
+                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
                 <div
-                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral"/>
+                    className="w-[616px] h-px relative bg-text-primary box-border hidden max-w-full border-[1px] border-solid border-color-neutral-neutral" />
                 <section
                     className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[80px] max-w-full text-center text-13xl text-text-primary font-text-medium-normal mq750:gap-[40px] mq450:gap-[20px]">
                     <div className="flex flex-row gap-4 mb-4 justify-end w-full">
@@ -82,9 +83,10 @@ const BusinessProfilePage: FunctionComponent = () => {
                         ))}
                     </div>
                     <BusinessFrame business={business} serviceData={getServiceData()}
-                                   selectedService={selectedService}/>
+                        selectedService={selectedService} />
                 </section>
-                <TestimonialsContainer/>
+                <BookAnAppointment business={business} selectedService={selectedService} />
+                <TestimonialsContainer />
             </main>
         </div>
     );
