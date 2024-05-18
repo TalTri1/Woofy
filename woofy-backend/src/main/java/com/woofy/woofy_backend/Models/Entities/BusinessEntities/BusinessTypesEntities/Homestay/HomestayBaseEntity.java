@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public class HomestayBaseEntity extends BusinessTypeBaseEntity {
 
-    @Column(name = "appointment_length", nullable = false)
-    private int appointmentLength;
+    @Column(name = "appointment_length_in_minutes", nullable = false)
+    private int appointmentLengthInMinutes;
 }

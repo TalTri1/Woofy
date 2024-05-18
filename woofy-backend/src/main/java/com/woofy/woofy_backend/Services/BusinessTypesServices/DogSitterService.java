@@ -17,7 +17,7 @@ public class DogSitterService {
 
     public DogSitterEntity createDogSitter(CreateDogSitterRequest request, Integer businessId) {
         DogSitterEntity dogSitterEntity = new DogSitterEntity();
-        dogSitterEntity.setAppointmentLength(request.getAppointmentLength());
+        dogSitterEntity.setAppointmentLengthInMinutes(request.getAppointmentLengthInMinutes());
         businessTypeService.create(request, businessId, dogSitterEntity);
         return dogSitterRepository.save(dogSitterEntity);
     }

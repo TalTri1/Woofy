@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimeSlotUtil {
-    public static List<TimeSlot> generateHourlySlots(LocalTime startTime, LocalTime endTime, int appointmentLength) {
+    public static List<TimeSlot> generateSlotsByMinutes(LocalTime startTime, LocalTime endTime, int appointmentLength) {
         List<TimeSlot> timeSlots = new ArrayList<>();
         LocalTime slotStart = startTime;
 
         while (slotStart.isBefore(endTime)) {
-            LocalTime slotEnd = slotStart.plusHours(appointmentLength);
+            LocalTime slotEnd = slotStart.plusMinutes(appointmentLength);
             if (slotEnd.isAfter(endTime)) {
                 slotEnd = endTime;
             }

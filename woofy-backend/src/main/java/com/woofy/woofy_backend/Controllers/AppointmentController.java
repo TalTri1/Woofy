@@ -3,18 +3,21 @@ package com.woofy.woofy_backend.Controllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateBoardingAppointmentRequest;
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateDayCareAppointmentRequest;
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateDogSitterAppointmentRequest;
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateDogWalkerAppointmentRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DayCareAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogSitterAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogWalkerAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogSitterEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DayCareScheduleEntity;
+import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DogSitterScheduleEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DogWalkerScheduleEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
@@ -24,6 +27,7 @@ import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DogWalkerAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.BoardingScheduleRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.DayCareScheduleRepository;
+import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.DogSitterScheduleRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.DogWalkerScheduleRepository;
 import com.woofy.woofy_backend.Utils.TimeSlot;
 import com.woofy.woofy_backend.Utils.TimeSlotUtil;
@@ -69,6 +73,10 @@ public class AppointmentController {
 
     @Autowired
     private DogWalkerScheduleRepository dogWalkerScheduleRepository;
+
+    @Autowired
+    private DogSitterScheduleRepository dogSitterScheduleRepository;
+
 
     @PostMapping("/create-boarding-appointment")
     public ResponseEntity<String> createBoardingAppointment(@RequestBody CreateBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
@@ -126,14 +134,14 @@ public class AppointmentController {
         LocalTime appointmentEndTime = newAppointmentRequest.getEndTime();
         LocalTime dogWalkerStartTime = dogWalker.getStartTime();
         LocalTime dogWalkerEndTime = dogWalker.getEndTime();
-        int appointmentLength = dogWalker.getAppointmentLength();
+        int appointmentLength = dogWalker.getAppointmentLengthInMinutes();
 
         if (appointmentEndTime.isBefore(appointmentStartTime)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("End time of the dog walker appointment cannot be before start time");
         }
 
         List<TimeSlot> timeSlots;
-        timeSlots = TimeSlotUtil.generateHourlySlots(dogWalkerStartTime, dogWalkerEndTime, appointmentLength);
+        timeSlots = TimeSlotUtil.generateSlotsByMinutes(dogWalkerStartTime, dogWalkerEndTime, appointmentLength);
         TimeSlot requestedSlot = new TimeSlot(appointmentStartTime, appointmentEndTime);
 
         if (!timeSlots.contains(requestedSlot)) {
@@ -213,7 +221,54 @@ public class AppointmentController {
     }
 
     @PostMapping("/create-dog-sitter-appointment")
-    public DogSitterAppointmentEntity createDogSitterAppointment(@RequestBody DogSitterAppointmentEntity newAppointment) {
-        return dogSitterAppointmentRepository.save(newAppointment);
+    public ResponseEntity<String> createDogSitterAppointment(@RequestBody CreateDogSitterAppointmentRequest newAppointmentRequest, Principal principal) {
+        CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
+        DogSitterEntity dogSitter = business.getDogSitterEntity();
+        LocalDate appointmentDate = newAppointmentRequest.getDate();
+        LocalTime appointmentStartTime = newAppointmentRequest.getStartTime();
+        LocalTime appointmentEndTime = newAppointmentRequest.getEndTime();
+        LocalTime dogSitterStartTime = dogSitter.getStartTime();
+        LocalTime dogSitterEndTime = dogSitter.getEndTime();
+        int appointmentLength = dogSitter.getAppointmentLengthInMinutes();
+
+        if (appointmentEndTime.isBefore(appointmentStartTime)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("End time of the dog sitter appointment cannot be before start time");
+        }
+
+        List<TimeSlot> timeSlots;
+        timeSlots = TimeSlotUtil.generateSlotsByMinutes(dogSitterStartTime, dogSitterEndTime, appointmentLength);
+        TimeSlot requestedSlot = new TimeSlot(appointmentStartTime, appointmentEndTime);
+
+        if (!timeSlots.contains(requestedSlot)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid time slot");
+        }
+
+        DogSitterScheduleEntity existingSchedule = dogSitterScheduleRepository.findByDateAndStartTimeAndEndTime(appointmentDate, appointmentStartTime, appointmentEndTime).orElse(null);
+
+        if (existingSchedule != null) {
+            if (dogSitter.getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs in this time slot");
+            }
+            existingSchedule.setCurrentDogCapacity(existingSchedule.getCurrentDogCapacity() + 1);
+            dogSitterScheduleRepository.save(existingSchedule);
+        } else {
+            DogSitterScheduleEntity newSchedule = new DogSitterScheduleEntity();
+            newSchedule.setDate(appointmentDate);
+            newSchedule.setStartTime(appointmentStartTime);
+            newSchedule.setEndTime(appointmentEndTime);
+            newSchedule.setDogSitterEntity(dogSitter);
+            newSchedule.setCurrentDogCapacity(1);
+            dogSitterScheduleRepository.save(newSchedule);
+        }
+
+        DogSitterAppointmentEntity dogSitterAppointmentEntity = new DogSitterAppointmentEntity();
+        dogSitterAppointmentEntity.setDate(appointmentDate);
+        dogSitterAppointmentEntity.setStartTime(appointmentStartTime);
+        dogSitterAppointmentEntity.setEndTime(appointmentEndTime);
+        dogSitterAppointmentEntity.setDogId(customer.getDog().getId());
+        dogSitterAppointmentRepository.save(dogSitterAppointmentEntity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
