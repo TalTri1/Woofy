@@ -3,11 +3,10 @@ package com.woofy.woofy_backend.Services;// In BusinessService.java
 import com.woofy.woofy_backend.DTOs.BusinessDTOs.BusinessUserSummaryDTO;
 import com.woofy.woofy_backend.DTOs.BusinessDTOs.UpdateBusinessRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
-import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
 import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
 import com.woofy.woofy_backend.Services.Map.GeocodingService;
-    import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +61,6 @@ public class BusinessService {
         dto.setPhoneNumber(businessEntity.getPhoneNumber());
         dto.setAddress(businessEntity.getAddress());
         dto.setCity(businessEntity.getCity());
-        dto.setRole(businessEntity.getRole());
         dto.setAbout(businessEntity.getAbout());
         dto.setBusinessName(businessEntity.getBusinessName());
         dto.setSocialMedia(businessEntity.getSocialMedia());

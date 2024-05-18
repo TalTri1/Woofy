@@ -1,4 +1,8 @@
 import {BUSINESS_TYPES, Size, WEEKDAYS} from "../Enums/Enums";
+import {DogSitterModel} from "./BusinessTypesModels/HomeStay/DogSitterModel";
+import {DogWalkerModel} from "./BusinessTypesModels/HomeStay/DogWalkerModel";
+import {BoardingModel} from "./BusinessTypesModels/StayAtBusiness/BoardingModel";
+import {DayCareModel} from "./BusinessTypesModels/StayAtBusiness/DayCareModel";
 
 export interface Business {
     id: number;
@@ -7,20 +11,15 @@ export interface Business {
     phoneNumber: string;
     address: string;
     city: string;
-    role: string;
     about: string | null;
     businessName: string;
     businessTypes: BUSINESS_TYPES[];
+    dogSitterEntity: DogSitterModel;
+    dogWalkerEntity: DogWalkerModel;
+    boardingEntity: BoardingModel;
+    dayCareEntity: DayCareModel;
     socialMedia: string | null;
     website: string | null;
-    acceptableDogSizes: Size[];
-    dogCapacity: number;
-    startDate: string;
-    endDate: string;
-    startTime: string;
-    endTime: string;
-    price: number;
-    workingDays: WEEKDAYS[];
     lat: number;
     lon: number;
 }
