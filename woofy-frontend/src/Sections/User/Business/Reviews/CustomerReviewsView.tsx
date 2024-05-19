@@ -3,7 +3,7 @@ import Review from "../../../../components/review/Review";
 
 const CustomerReviewsView: FunctionComponent = () => {
   return (
-    <div className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-center justify-start py-[20px] px-16 box-border gap-[50px] max-w-full text-center text-lg text-text-primary font-text-medium-normal lg:pl-8 lg:pr-8 lg:box-border mq1050:pt-8 mq1050:pb-8 mq1050:box-border mq750:gap-[25px] mq750:pt-[21px] mq750:pb-[21px] mq750:box-border">
+    <div className="self-stretch overflow-hidden flex flex-col items-center justify-start py-[20px] px-16 box-border gap-[50px] max-w-full text-center text-lg text-text-primary font-text-medium-normal lg:pl-8 lg:pr-8 lg:box-border mq1050:pt-8 mq1050:pb-8 mq1050:box-border mq750:gap-[25px] mq750:pt-[21px] mq750:pb-[21px] mq750:box-border">
       <div className="w-[560px] flex flex-col items-center justify-start gap-[16px] max-w-full">
         <h1 className="m-0 self-stretch relative text-29xl leading-[58px] font-bold mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
           Customer Testimonials

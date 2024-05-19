@@ -9,7 +9,7 @@ const RegisterYourDogCTA: FunctionComponent = () => {
 
 
   return (
-    <div className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-center justify-start pt-[50px] px-16 pb-0 box-border max-w-full text-left text-13xl text-text-primary font-text-medium-normal lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px]">
+    <div className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-[50px] px-16 pb-0 box-border max-w-full text-left text-13xl text-text-primary font-text-medium-normal lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px]">
       <div className="self-stretch rounded-31xl flex flex-col items-start justify-start max-w-full">
         <div className="self-stretch box-border flex flex-col items-start justify-start py-0 px-[31px] max-w-full border-[1px] border-solid border-app1">
           <div className="self-stretch flex flex-row items-center justify-start py-5 px-0 box-border max-w-full">

@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useMemo, useState} from "react";
-import axios from "axios";
 import api from "../api/api";
 import {toast} from "react-toastify";
 import {useRouter} from "../routes/hooks";
@@ -7,6 +6,7 @@ import {useRouter} from "../routes/hooks";
 const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("token"));
     const router = useRouter();
 
@@ -16,6 +16,7 @@ const AuthProvider = ({children}) => {
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
+            setIsLoggedIn(true);
         } catch (error) {
             console.error("Error occurred while registering user: ", error);
             // @ts-ignore
@@ -28,6 +29,7 @@ const AuthProvider = ({children}) => {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userDetails");
         setToken(null);
+        setIsLoggedIn(false);
         router.push("/");
         router.reload();
     }
@@ -37,10 +39,12 @@ const AuthProvider = ({children}) => {
         () => ({
             login,
             logout,
+            isLoggedIn,
+            setIsLoggedIn,
             token,
             setToken,
         }),
-        [token,setToken]
+        [isLoggedIn,token,setToken]
     );
 
     return (

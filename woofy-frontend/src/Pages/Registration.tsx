@@ -13,7 +13,7 @@ const Registration: FunctionComponent = () => {
 
     const router = useRouter();
     const location = useLocation();
-    const {setToken} = useAuth();
+    const {setIsLoggedIn,setToken} = useAuth();
     const basicSignUpUser = location.state;
     const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>(null);
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState
@@ -73,13 +73,11 @@ const Registration: FunctionComponent = () => {
                 ...basicSignUpModel, // Spread the properties of basicSignUpModel
             });
             console.log(`Response from the backend: ${res}`);
+            // Save the profile photo to the DB if exists
+            let profilePhotoId = 0
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
-            router.push("/");
-            window.scrollTo(0, 0);
-            // Save the profile photo to the DB if exists
-            let profilePhotoId = 0
             try {
                 if (selectedImage) {
                     profilePhotoId = await savePhotoToDB(selectedImage); // Save the image and get the ID
@@ -89,8 +87,12 @@ const Registration: FunctionComponent = () => {
                 }
             } catch (error) {
                 console.error(`Error uploading image: ${error}`);
+                toast.error("Failed uploading profile photo")
+            }finally{
+                setIsLoggedIn(true);
+                router.push("/");
+                toast.success(`Successfully registered!`);
             }
-            toast.success(`Successfully registered!`);
         } catch (error) {
             toast.error(`Error in registration. Please make sure you have filled all the fields correctly.`);
             if (error instanceof Error) {

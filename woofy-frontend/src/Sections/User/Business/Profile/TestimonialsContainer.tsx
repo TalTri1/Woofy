@@ -3,7 +3,7 @@ import UserReview from "./UserReview";
 
 const TestimonialsContainer: FunctionComponent = () => {
   return (
-    <section className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-start justify-start py-0 px-16 box-border max-w-full text-left text-base text-text-primary font-text-medium-normal lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[40px] mq450:gap-[20px]">
+    <section className="self-stretch overflow-hidden flex flex-col items-start justify-start py-0 px-16 box-border max-w-full text-left text-base text-text-primary font-text-medium-normal lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[40px] mq450:gap-[20px]">
       <div className="self-stretch flex flex-col items-start justify-start max-w-full">
         <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[32px] max-w-full mq750:gap-[16px]">
           <UserReview avatarImage="/avatar-image@2x.png" />

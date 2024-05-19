@@ -6,14 +6,13 @@ export const UserContext = createContext(); // Add export here
 
 const UserProvider = ({children}) => {
     const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem('userDetails')));
-    const {token} = useAuth();
+    const {isLoggedIn} = useAuth();
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 const response = await api.get('/user');
                 setUserDetails(response.data);
-                console.log("User details: ", userDetails)
                 // Store the response data in local storage
                 localStorage.setItem('userDetails', JSON.stringify(response.data));
             } catch (error) {
@@ -21,12 +20,12 @@ const UserProvider = ({children}) => {
             }
         };
 
-        if (token) {
+        if (isLoggedIn) {
             fetchUserDetails();
         }
-    }, [token]);
+    }, [isLoggedIn]);
 
-    const contextValue = useMemo(() => ({userDetails, setUserDetails,}), [userDetails]);
+    const contextValue = useMemo(() => ({userDetails, setUserDetails,}), [userDetails,isLoggedIn]);
 
     return (
         <UserContext.Provider value={contextValue}>

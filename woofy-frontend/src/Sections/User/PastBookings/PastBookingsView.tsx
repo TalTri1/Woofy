@@ -3,7 +3,7 @@ import PastBookingCard from "./PastBookingCard";
 
 const PastBookingsSectionCont: FunctionComponent = () => {
   return (
-    <div className="self-stretch bg-text-alternate overflow-hidden flex flex-col items-center justify-start pt-[50px] px-5 pb-[30px] box-border gap-[20px] max-w-full text-center text-29xl text-text-primary font-text-medium-normal lg:pt-8 lg:pb-5 lg:box-border mq450:gap-[20px] mq750:pt-[21px] mq750:box-border">
+    <div className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-[50px] px-5 pb-[30px] box-border gap-[20px] max-w-full text-center text-29xl text-text-primary font-text-medium-normal lg:pt-8 lg:pb-5 lg:box-border mq450:gap-[20px] mq750:pt-[21px] mq750:box-border">
       <div className="w-[768px] flex flex-col items-start justify-start max-w-full">
         <div className="self-stretch flex flex-col items-center justify-start">
           <h1 className="m-0 self-stretch relative text-29xl leading-[58px] font-bold mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
