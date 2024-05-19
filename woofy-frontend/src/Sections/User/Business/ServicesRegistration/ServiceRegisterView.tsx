@@ -233,8 +233,11 @@ const ServiceRegisterView: FunctionComponent = () => {
         <Box sx={{ width: '100%', position: 'relative', backgroundColor: 'text.alternate', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
             <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'start', px: { md: 5 } }}>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', maxWidth: 'calc(100% - 312px)', textAlign: 'center', fontSize: '29xl', color: 'text.alternate', fontFamily: 'text-medium-normal', px: { md: 5 } }}>
-                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 4, px: 2.5, pb: 7.5, gap: 0 }}>
-                        <Typography variant="h1" sx={{ fontSize: '48px', lineHeight: '120%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
+                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 8, px: 2.5, pb: 7.5, gap: 0 }}>
+                        <Typography component="h1" sx={{
+                            fontSize: '48px', lineHeight: '120%', fontFamily: 'Inter', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '24px',
+                        }}
+                        >
                             Set Up Your Services Details
                         </Typography>
                         <Typography sx={{ fontSize: '18px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
@@ -243,9 +246,12 @@ const ServiceRegisterView: FunctionComponent = () => {
                     </Box>
                     <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 2, pb: 1.5 }}>
+                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>
                                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
-                                    <Typography variant="h3" sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit' }}>
+                                    <Typography variant="h3" sx={{
+                                        m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inter', '@media (max-width: 450px)': { fontSize: '1.125rem', lineHeight: '27px', },
+                                    }}
+                                    >
                                         Services Details
                                     </Typography>
                                     <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
@@ -258,8 +264,21 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} />
                                 </Box>
                                 <Box>
-                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1, textAlign: 'center', fontSize: '5xl', color: 'text.primary', fontFamily: 'text-medium-normal', mb: 1.5 }}>
-                                        <Typography variant="h3" sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit' }}>
+                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1, textAlign: 'center', fontSize: '5xl', color: 'text.primary', fontFamily: 'text-medium-normal' }}>
+                                        <Typography
+                                            sx={{
+                                                width: '100%',
+                                                position: 'relative',
+                                                fontSize: '24px',
+                                                lineHeight: '140%',
+                                                fontWeight: '600',
+                                                fontFamily: 'Inter',
+                                                color: 'text.primary',
+                                                textAlign: 'center',
+                                                display: 'inline-block',
+                                                marginTop: '4px',
+                                            }}
+                                        >
                                             {serviceFormTitles[selectedServices]}
                                         </Typography>
                                         <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
@@ -285,7 +304,20 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     clickWorkingDaysHandler={clickWorkingDaysHandler}
                                 />
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 3 }}>
-                                    <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
+                                    <Typography
+                                        sx={{
+                                            width: '100%',
+                                            position: 'relative',
+                                            fontSize: '16px',
+                                            lineHeight: '150%',
+                                            fontFamily: 'Inter',
+                                            fontWeight: 550,
+                                            color: 'text.primary',
+                                            textAlign: 'left',
+                                            display: 'inline-block',
+                                            marginTop: '8px',
+                                        }}
+                                    >
                                         Add Pictures of Your Services
                                     </Typography>
                                 </Box>
@@ -308,16 +340,28 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         </label>
                                     ))}
                                 </Box>
-                                <Box>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<SendIcon />}
-                                        onClick={registerBusinessHandler}
-                                    >
-                                        Submit
-
-                                    </Button>
-                                </Box>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    onClick={registerBusinessHandler}
+                                    sx={{
+                                        mt: 4,
+                                        mb: 10,
+                                        borderRadius: '30px',
+                                        backgroundColor: '#006CBF',
+                                        '&:hover': {
+                                            backgroundColor: '#0056A4',
+                                        },
+                                        width: '120px', // Adjusted width
+                                        height: '40px', // Adjusted height
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        mx: 'auto', // This will center the button horizontally
+                                    }}
+                                >
+                                    Submit
+                                </Button>
                             </Box>
                         </Box>
                     </Box>

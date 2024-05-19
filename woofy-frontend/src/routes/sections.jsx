@@ -52,6 +52,8 @@ const Router = () => {
             path: "/business-profile/:id",
             element: <BusinessProfilePage />,
         },
+        
+        
     ];
 
     // Define routes accessible only to authenticated users
