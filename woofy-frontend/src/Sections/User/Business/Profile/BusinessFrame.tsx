@@ -8,6 +8,7 @@ import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 import { getImage } from "../../../../components/image/imageComponent";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import Modal from 'react-modal';
 
 interface BusinessFrameProps {
   business: Business;
@@ -19,6 +20,9 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
 
   const [profileImage, setProfileImage] = useState("/user-avatar-image@2x.png");
   const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
 
 
   useEffect(() => {
@@ -110,7 +114,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           </div>
         </div>
         <div className="flex flex-col items-start justify-start max-w-full">
-          <h2 className="self-stretch relative text-inherit leading-[42px] font-bold font-inherit mq450:text-lgi mq450:leading-[25px] mq1050:text-7xl mq1050:leading-[33px]">
+          <h2 className="self-stretch relative text-inherit leading-[42px] font-bold font-inherit mq450:text-lgi mq450:leading-[25px] mq1050:text-7xl mq1050:leading-[33px] pl-20">
             Gallery
           </h2>
           <ImageList
@@ -125,10 +129,29 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                   src={item.img}
                   alt={item.title}
                   loading="lazy"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSelectedImage(item.img);
+                    setModalIsOpen(true);
+                  }}
                 />
               </ImageListItem>
             ))}
           </ImageList>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            contentLabel="Image Modal"
+          >
+            <img src={selectedImage} alt="Selected" />
+            <button
+              onClick={() => setModalIsOpen(false)}
+              style={{ position: 'absolute', top: '10px', right: '10px' }} // Add this line
+            >
+              X
+            </button>
+
+          </Modal>
         </div>
       </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[24px] text-13xl">
