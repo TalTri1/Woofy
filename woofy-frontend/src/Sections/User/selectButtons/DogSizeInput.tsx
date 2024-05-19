@@ -40,7 +40,7 @@ const DogSizeInput: React.FC<DogSizeInputProps> = ({ onSizeClick, selectedSize, 
                     
                 }}
             >
-                {multiple ? "Acceptable Dog Sizes" : "What is your dog's size?"}
+                {multiple ? "Acceptable Dog Sizes" : "What is Your Dog's Size?"}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
                 {dogSizes.map(({ size, label, weight }) => (
