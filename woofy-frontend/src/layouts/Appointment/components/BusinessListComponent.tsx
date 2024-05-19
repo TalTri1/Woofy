@@ -91,7 +91,7 @@ const BusinessListComponent: React.FC = () => {
     };
 
     const navigateToBusinessProfile = (businessId: number) => {
-        window.location.href = `http://localhost:5173/business-profile/${businessId}`;
+        window.open(`http://localhost:5173/business-profile/${businessId}`, '_blank');
     };
 
     return (

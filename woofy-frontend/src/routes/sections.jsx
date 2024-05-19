@@ -8,7 +8,6 @@ import DogRegisterView from "../Sections/User/Customer/DogRegister/DogRegisterVi
 import { USERTYPE } from "../models/RegistrationModel";
 import { UserContext } from "../provider/UserProvider";
 import { Suspense, useContext } from "react";
-import BusinessListPage from "../layouts/Appointment/BusinessListPage";
 import { Outlet, useRoutes } from "react-router-dom";
 import LoginPage from "../Pages/Login";
 import DashboardLayout from "../layouts/dashboard";
@@ -31,10 +30,6 @@ const Router = () => {
         {
             path: "/",
             element: <LoginPage />,
-        },
-        {
-            path: "business-list",
-            element: <BusinessListPage />,
         },
         {
             path: "/map",

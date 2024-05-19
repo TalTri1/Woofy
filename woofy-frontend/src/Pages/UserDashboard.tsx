@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext, useState } from "react";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
-import UpcomingBookingsSection from "../Sections/User/UpComingBookings/UpcomingBookingsView";
 import { UserContext } from "../provider/UserProvider";
+import BusinessListComponent from "../layouts/Appointment/components/BusinessListComponent";
 
 
 const UserDashboard: FunctionComponent = () => {
@@ -24,7 +24,7 @@ const UserDashboard: FunctionComponent = () => {
           </div>
 
           <RegisterYourDogCTA />
-          <UpcomingBookingsSection />
+          <BusinessListComponent />
 
 
 
