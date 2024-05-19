@@ -138,20 +138,31 @@ const ServiceRegisterView: FunctionComponent = () => {
             const response = await api.post(`/business/business-type/${serviceTypeMapping[selectedServices]}/create`, business);
             console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
-            // const isUpdateSuccess = updateImagesForDogEntity(imageIDs as number[]);
+            const isUpdateSuccess = updateImagesForServiceEntity(imageIDs as number[]);
             router.push("/");
-            // if (await isUpdateSuccess) {
-            //     toast.success("Service registered successfully")
-            // }
-            // else {
-            //     toast.error("Failed to register service");
-            // }
+            if (await isUpdateSuccess) {
+                toast.success("Service registered successfully")
+            }
+            else {
+                toast.error("Failed to register service");
+            }
 
         } catch (error) {
             toast.error("Failed to register service");
             console.log(`Error to register service: ${error}`);
         }
 
+    };
+
+    const updateImagesForServiceEntity = async (imageIDs: number[]) => {
+        try {
+            const response = await api.put(`/business/update/images/`, imageIDs);
+            console.log(`Response from updating dog images: ${response}`);
+            return true;
+        } catch (error) {
+            console.error(`Error updating dog images: ${error}`);
+            return false;
+        }
     };
 
     // Handle images
@@ -351,9 +362,6 @@ const ServiceRegisterView: FunctionComponent = () => {
                                 >
                                     Submit
                                 </Button>
-
-
-
                             </Box>
                         </Box>
                     </Box>

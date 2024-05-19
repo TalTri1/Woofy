@@ -5,6 +5,6 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-public class createDayCareAppointmentRequest extends createAppointmentRequestBaseDTO {
+public class CreateDayCareAppointmentRequest extends CreateAppointmentRequestBaseDTO {
 
 }

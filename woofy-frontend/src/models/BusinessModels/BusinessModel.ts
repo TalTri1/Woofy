@@ -1,4 +1,4 @@
-import {BUSINESS_TYPES, Size, WEEKDAYS} from "../Enums/Enums";
+import { BUSINESS_TYPES, Size, WEEKDAYS } from "../Enums/Enums";
 
 export interface Business {
     id: number;
@@ -9,6 +9,7 @@ export interface Business {
     city: string;
     role: string;
     about: string | null;
+    profilePhotoID: number | null;
     businessName: string;
     businessTypes: BUSINESS_TYPES[];
     socialMedia: string | null;
@@ -23,4 +24,5 @@ export interface Business {
     workingDays: WEEKDAYS[];
     lat: number;
     lon: number;
+    images: Number[];
 }

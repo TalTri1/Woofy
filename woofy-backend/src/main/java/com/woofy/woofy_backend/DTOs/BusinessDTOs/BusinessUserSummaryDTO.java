@@ -32,6 +32,7 @@ public class BusinessUserSummaryDTO {
     private String city;
     private RoleEnum role;
     private String about;
+    private Integer profilePhotoID;
     private String businessName;
     private String socialMedia;
     private String website;
@@ -50,4 +51,5 @@ public class BusinessUserSummaryDTO {
     private List<WorkingDaysEnum> workingDays;
     private double lat;
     private double lon;
+    private List<Integer> images;
 }
