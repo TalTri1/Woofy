@@ -7,9 +7,9 @@ import UserDashboard from "../Pages/UserDashboard";
 import DogRegisterView from "../Sections/User/Customer/DogRegister/DogRegisterView";
 import { USERTYPE } from "../models/RegistrationModel";
 import { UserContext } from "../provider/UserProvider";
-import {Suspense, useContext} from "react";
-import BookingPage from "../layouts/Appointment/BookingPage";
-import {Outlet, useRoutes} from "react-router-dom";
+import { Suspense, useContext } from "react";
+import BusinessListPage from "../layouts/Appointment/BusinessListPage";
+import { Outlet, useRoutes } from "react-router-dom";
 import LoginPage from "../Pages/Login";
 import DashboardLayout from "../layouts/dashboard";
 import NotFoundPage from "../Pages/PageNotFound";
@@ -33,8 +33,8 @@ const Router = () => {
             element: <LoginPage />,
         },
         {
-            path: "book-appointment",
-            element: <BookingPage />,
+            path: "business-list",
+            element: <BusinessListPage />,
         },
         {
             path: "/map",
@@ -60,12 +60,12 @@ const Router = () => {
     const routesForAuthenticatedBusinessOnly = [
         {
             path: "/",
-            element:(
-                    <DashboardLayout>
-                        <Suspense>
-                            <Outlet />
-                        </Suspense>
-                    </DashboardLayout>
+            element: (
+                <DashboardLayout>
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                </DashboardLayout>
             ), // Wrap the component in ProtectedRoute
             children: [
                 {
@@ -99,10 +99,10 @@ const Router = () => {
             path: "/",
             element: (
                 <DashboardLayout>
-                <Suspense>
-                    <Outlet />
-                </Suspense>
-            </DashboardLayout>),
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                </DashboardLayout>),
             children: [
                 {
                     path: "/",
@@ -115,14 +115,14 @@ const Router = () => {
                 {
                     path: "/dog-register",
                     element: <DogRegisterView />,
-                },                {
+                }, {
                     path: "/reviews",
                     element: <CustomerReviewsView />,
                 },
                 {
                     path: "/profile",
                     element: <UserProfileView />,
-                },                {
+                }, {
                     path: "/past-bookings",
                     element: <PastBookingsSectionCont />,
                 },
