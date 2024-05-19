@@ -41,17 +41,16 @@ export default function AccountPopover() {
     const [open, setOpen] = useState(null);
     const {userDetails} = useContext(UserContext);
     const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
-    const {logout, setIsLoggedIn} = useAuth();
+    const {logout} = useAuth();
 
     const onLogoutButtonClick = useCallback(async () => {
         logout();
-        setIsLoggedIn(false);
         try {
             const res = await api.post('auth/logout');
         } catch (error) {
             toast.error('An error occurred while logging out. Please try again.');
         }
-    }, [logout, setIsLoggedIn]);
+    }, [logout]);
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
     };
@@ -64,12 +63,14 @@ export default function AccountPopover() {
         const fetchImage = async () => {
             if (userDetails?.profilePhotoID) {
                 const image = await getImage(userDetails.profilePhotoID);
-                setImageSrc(image || "/user-avatar-image@2x.png");
+                setImageSrc(image);
             }
+            else setImageSrc('/default-avatar-image@2x.png')
         };
 
         fetchImage();
     }, [userDetails]);
+
 
 
     return (
@@ -88,14 +89,10 @@ export default function AccountPopover() {
             >
                 <Avatar
                     src={imageSrc}
-                    alt={userDetails?.firstName + " " + userDetails?.lastName}
-                    sx={{
-                        width: 36,
-                        height: 36,
-                        border: (theme) => `solid 2px ${theme.palette.background.default}`,
-                    }}
+                    alt={userDetails ? userDetails.firstName + " " + userDetails.lastName : "Guest User"}
+                    // ... existing code ...
                 >
-                    {userDetails?.firstName.charAt(0).toUpperCase()}
+                    {userDetails ? userDetails.firstName.charAt(0).toUpperCase() : "G"}
                 </Avatar>
             </IconButton>
 
@@ -116,10 +113,10 @@ export default function AccountPopover() {
             >
                 <Box sx={{my: 1.5, px: 2}}>
                     <Typography variant="subtitle2" noWrap>
-                        {userDetails?.firstName + " " + userDetails?.lastName}
+                        {userDetails ? userDetails.firstName + " " + userDetails.lastName : "Guest User"}
                     </Typography>
                     <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
-                        {userDetails?.email}
+                        {userDetails ? userDetails.email : "Not logged in"}
                     </Typography>
                 </Box>
 
@@ -138,14 +135,16 @@ export default function AccountPopover() {
 
                 <Divider sx={{borderStyle: 'dashed', m: 0}}/>
 
-                <MenuItem
-                    disableRipple
-                    disableTouchRipple
-                    onClick={onLogoutButtonClick}
-                    sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
-                >
-                    Logout
-                </MenuItem>
+                {userDetails && (
+                    <MenuItem
+                        disableRipple
+                        disableTouchRipple
+                        onClick={onLogoutButtonClick}
+                        sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+                    >
+                        Logout
+                    </MenuItem>
+                )}
             </Popover>
         </>
     );
