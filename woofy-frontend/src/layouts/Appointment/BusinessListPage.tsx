@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import BusinessListComponent from './components/BusinessListComponent';
 
-const BookingPage = () => {
+const BusinessListPage = () => {
     const [selectedBusiness, setSelectedBusiness] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
-
-    const bookAppointment = async () => {
-        // Send booking details to the backend
-    };
 
     const containerStyle: React.CSSProperties = {
         display: 'flex',
@@ -26,4 +22,4 @@ const BookingPage = () => {
     );
 };
 
-export default BookingPage;
+export default BusinessListPage;
