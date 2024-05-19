@@ -8,6 +8,7 @@ import { useRouter } from "../routes/hooks";
 import Button from "@mui/material/Button";
 import BookAnAppointment from "../Sections/User/Business/Profile/BookAnAppointment";
 
+
 type RouteParams = Record<string, string | undefined>;
 
 const BusinessProfilePage: FunctionComponent = () => {
@@ -22,6 +23,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                 const response = await fetch(`http://localhost:8080/api/v1/business/${id}`);
                 const data = await response.json();
                 setBusiness(data);
+                setSelectedService(data.boardingEntity ? BUSINESS_TYPES.BOARDING : data.dogWalkerEntity ? BUSINESS_TYPES.DOG_WALK : data.dogSitterEntity ? BUSINESS_TYPES.DOG_SITTER : BUSINESS_TYPES.DAY_CARE);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
