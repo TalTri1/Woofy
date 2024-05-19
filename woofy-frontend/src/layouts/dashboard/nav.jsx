@@ -32,7 +32,7 @@ export default function Nav({openNav, onCloseNav}) {
         const fetchImage = async () => {
             if (userDetails?.profilePhotoID) {
                 const image = await getImage(userDetails.profilePhotoID);
-                setImageSrc(image || "/user-avatar-image@2x.png");
+                setImageSrc(image);
             }
         };
 
@@ -63,15 +63,31 @@ export default function Nav({openNav, onCloseNav}) {
                 bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
             }}
         >
-            <Avatar src={imageSrc} alt="photoURL"/>
+            {userDetails ? (
+                <>
+                    <Avatar src={imageSrc} alt="photoURL"/>
 
-            <Box sx={{ml: 2}}>
-                <Typography variant="subtitle2">{userDetails?.firstName + " " + userDetails?.lastName}</Typography>
+                    <Box sx={{ml: 2}}>
+                        <Typography variant="subtitle2">{userDetails?.firstName + " " + userDetails?.lastName}</Typography>
 
-                <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                    {userDetails.role}
-                </Typography>
-            </Box>
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            {userDetails?.role}
+                        </Typography>
+                    </Box>
+                </>
+            ) : (
+                <>
+                    <Avatar src="/default-avatar-image@2x.png" alt="default avatar"/>
+
+                    <Box sx={{ml: 2}}>
+                        <Typography variant="subtitle2">Guest User</Typography>
+
+                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                            Not logged in
+                        </Typography>
+                    </Box>
+                </>
+            )}
         </Box>
     );
 
