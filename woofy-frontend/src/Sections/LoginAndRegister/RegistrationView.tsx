@@ -12,9 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import PhoneIcon from '@mui/icons-material/Phone';
-import HomeIcon from '@mui/icons-material/Home';
-import LocationCityIcon from '@mui/icons-material/LocationCity';
+import SendIcon from '@mui/icons-material/Send';
 
 type RegistrationComponentProps = {
     updateCompleteRegistrationUser: (updatedData: Partial<RegistrationModel>) => void;
@@ -22,7 +20,7 @@ type RegistrationComponentProps = {
     DogOwnerOrCareGiveractiveButton: string | null
 }
 
-const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwnerOrCareGiveractiveButton, updateCompleteRegistrationUser, onFileSelect }) => {
+const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOwnerOrCareGiveractiveButton, updateCompleteRegistrationUser, onFileSelect }) => {
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         updateCompleteRegistrationUser({ [name]: value });
@@ -31,7 +29,7 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
     return (
         <ThemeProvider theme={createTheme()}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline/>
+                <CssBaseline />
                 <Box
                     sx={{
                         display: 'flex',
@@ -39,13 +37,30 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                         alignItems: 'center',
                     }}
                 >
-                    <Box component="form" noValidate sx={{mt: 3}}>
+                    <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <ImageComponent onFileSelect={onFileSelect} />
                             </Grid>
                             {DogOwnerOrCareGiveractiveButton == 'caregiver' && (
                                 <Grid item xs={12}>
+                                    <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    Business Name
+                                </Typography>
                                     <TextField
                                         required
                                         fullWidth
@@ -58,6 +73,23 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                 </Grid>
                             )}
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    First Name
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -69,6 +101,23 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    Last Name
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -80,6 +129,23 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '12px',
+                                    }}
+                                >
+                                    Phone Number
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -89,11 +155,34 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                     autoComplete="tel"
                                     onChange={changeHandler}
                                     InputProps={{
-                                        startAdornment: <PhoneIcon />,
+                                        startAdornment: (
+                                            <img
+                                                className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                                                alt=""
+                                                src="/icon--phone.svg"
+                                            />
+                                        ),
                                     }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '12px',
+                                    }}
+                                >
+                                    Permanent Address
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -103,11 +192,34 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                     autoComplete="address"
                                     onChange={changeHandler}
                                     InputProps={{
-                                        startAdornment: <HomeIcon />,
+                                        startAdornment: (
+                                            <img
+                                                className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                                                alt=""
+                                                src="/icon--home.svg"
+                                            />
+                                        ),
                                     }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '12px',
+                                    }}
+                                >
+                                    City
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -117,11 +229,34 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                     autoComplete="address-level2"
                                     onChange={changeHandler}
                                     InputProps={{
-                                        startAdornment: <LocationCityIcon />,
+                                        startAdornment: (
+                                            <img
+                                                className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
+                                                alt=""
+                                                src="/icon--buildinghouse.svg"
+                                            />
+                                        ),
                                     }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Typography
+                                    sx={{
+                                        width: '100%',
+                                        position: 'relative',
+                                        fontSize: '16px',
+                                        lineHeight: '150%',
+                                        fontFamily: 'Inter',
+                                        fontWeight: '550',
+                                        color: 'text.primary',
+                                        textAlign: 'left',
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        marginBottom: '12px',
+                                    }}
+                                >
+                                    Zip Code
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
@@ -133,7 +268,7 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({DogOwn
                                 />
                             </Grid>
                         </Grid>
-
+                        
                     </Box>
                 </Box>
             </Container>
