@@ -137,6 +137,11 @@ const DogRegisterView: FunctionComponent = () => {
             return false;
         }
     };
+    const dogAges = [
+        { age: Age.PUPPY, label: 'Puppy', years: '0-1 years' },
+        { age: Age.ADULT, label: 'Adult', years: '1-9 years' },
+        { age: Age.SENIOR, label: 'Senior', years: '9 years +' },
+    ];
 
     return (
         <Box sx={{ width: '100%', position: 'relative', backgroundColor: 'text.alternate', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
