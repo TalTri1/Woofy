@@ -7,7 +7,6 @@ import { useAuth } from "../provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useRouter } from "../routes/hooks";
-import TextField from "@mui/material/TextField";
 
 const Registration: FunctionComponent = () => {
     const router = useRouter();
@@ -65,8 +64,6 @@ const Registration: FunctionComponent = () => {
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
-            router.push("/");
-            window.scrollTo(0, 0);
 
             let profilePhotoId = 0;
             try {
