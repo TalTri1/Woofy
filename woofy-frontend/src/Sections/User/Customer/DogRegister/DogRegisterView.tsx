@@ -9,13 +9,9 @@ import { Age, Size, TrainingLevel } from "../../../../models/Enums/Enums";
 import DogModel from "../../../../models/DogModels/DogModel";
 import { useRouter } from "../../../../routes/hooks";
 
-type DogRegisterViewProps = {
-    variant: 'customer' | 'business';
-};
 
-const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) => {
+const DogRegisterView: FunctionComponent = () => {
     const router = useRouter();
-    const { userDetails } = useContext(UserContext); // The user details
     const [selectedAge, setSelectedAge] = useState<Age>(Age.PUPPY);
     const [selectedSize, setSelectedSize] = useState<Size>(Size.SMALL);
     const [selectedTrainingLevel, setSelectedTrainingLevel] = useState<TrainingLevel>(TrainingLevel.BEGINNER);

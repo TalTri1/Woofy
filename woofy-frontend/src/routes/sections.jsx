@@ -60,12 +60,12 @@ const Router = () => {
     const routesForAuthenticatedBusinessOnly = [
         {
             path: "/",
-            element: (
-                <DashboardLayout>
-                    <Suspense>
-                        <Outlet />
-                    </Suspense>
-                </DashboardLayout>
+            element:(
+                    <DashboardLayout>
+                        <Suspense>
+                            <Outlet />
+                        </Suspense>
+                    </DashboardLayout>
             ), // Wrap the component in ProtectedRoute
             children: [
                 {
@@ -99,10 +99,10 @@ const Router = () => {
             path: "/",
             element: (
                 <DashboardLayout>
-                    <Suspense>
-                        <Outlet />
-                    </Suspense>
-                </DashboardLayout>),
+                <Suspense>
+                    <Outlet />
+                </Suspense>
+            </DashboardLayout>),
             children: [
                 {
                     path: "/",
@@ -115,14 +115,14 @@ const Router = () => {
                 {
                     path: "/dog-register",
                     element: <DogRegisterView />,
-                }, {
+                },                {
                     path: "/reviews",
                     element: <CustomerReviewsView />,
                 },
                 {
                     path: "/profile",
                     element: <UserProfileView />,
-                }, {
+                },                {
                     path: "/past-bookings",
                     element: <PastBookingsSectionCont />,
                 },

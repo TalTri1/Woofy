@@ -19,6 +19,8 @@ public class DayCareService {
 
     public DayCareEntity createDayCare(CreateDayCareRequest request, Integer businessId) {
         DayCareEntity dayCareEntity = new DayCareEntity();
+        dayCareEntity.setHomeConditions(request.getHomeConditions());
+        dayCareEntity.setPetsInHome(request.getPetsInHome());
         businessTypeService.create(request, businessId, dayCareEntity);
         return dayCareRepository.save(dayCareEntity);
     }
