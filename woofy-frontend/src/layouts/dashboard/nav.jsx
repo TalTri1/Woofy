@@ -34,6 +34,7 @@ export default function Nav({openNav, onCloseNav}) {
                 const image = await getImage(userDetails.profilePhotoID);
                 setImageSrc(image);
             }
+            else setImageSrc('/default-avatar-image@2x.png')
         };
 
         fetchImage();
@@ -65,23 +66,25 @@ export default function Nav({openNav, onCloseNav}) {
         >
             {userDetails ? (
                 <>
-                    <Avatar src={imageSrc} alt="photoURL"/>
+                    <Avatar src={imageSrc} alt={userDetails.firstName + " " + userDetails.lastName}>
+                        {userDetails.firstName.charAt(0).toUpperCase()}
+                    </Avatar>
 
                     <Box sx={{ml: 2}}>
-                        <Typography variant="subtitle2">{userDetails?.firstName + " " + userDetails?.lastName}</Typography>
-
+                        <Typography variant="subtitle2">{userDetails.firstName + " " + userDetails.lastName}</Typography>
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            {userDetails?.role}
+                            {userDetails.role}
                         </Typography>
                     </Box>
                 </>
             ) : (
                 <>
-                    <Avatar src="/default-avatar-image@2x.png" alt="default avatar"/>
+                    <Avatar src={imageSrc} alt="Guest User">
+                        G
+                    </Avatar>
 
                     <Box sx={{ml: 2}}>
                         <Typography variant="subtitle2">Guest User</Typography>
-
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
                             Not logged in
                         </Typography>
