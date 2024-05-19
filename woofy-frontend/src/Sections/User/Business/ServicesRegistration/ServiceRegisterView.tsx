@@ -246,13 +246,13 @@ const ServiceRegisterView: FunctionComponent = () => {
                     </Box>
                     <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>        
+                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
                                     <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
-                                    Services Details
+                                        Services Details
                                     </Typography>
                                     <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
-                                    Please Complete your business account information.
+                                        Please Complete your business account information.
                                     </Typography>
                                 </Box>
                             </Box>
@@ -261,18 +261,15 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} />
                                 </Box>
                                 <Box>
-                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', gap: 1, textAlign: 'center', fontSize: '5xl', color: 'text.primary', fontFamily: 'text-medium-normal' }}>
-                                    <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
 
-                                            {serviceFormTitles[selectedServices]}
+                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
+                                        <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                                            {serviceFormTitles[selectedServices]}                                    </Typography>
+                                        <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                            Please fill the necessary information found in the following questions.
                                         </Typography>
-                                        <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
-                                            Please fill the necessary information found in the following questions
-                                        </Typography>
-                                        
-                                    
                                     </Box>
-                                    
+
                                     {(selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.DAY_CARE) && (
                                         <>
                                             <Box sx={{ mb: 2 }}>
@@ -339,12 +336,12 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         '&:hover': {
                                             backgroundColor: '#0056A4',
                                         },
-                                        width: '120px', 
+                                        width: '120px',
                                         height: '40px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        mx: 'auto', 
+                                        mx: 'auto',
                                     }}
                                 >
                                     Submit
