@@ -15,6 +15,7 @@ interface BusinessFrameProps {
   serviceData: DogSitterModel | DogWalkerModel | BoardingModel | DayCareModel | null;
   selectedService: BUSINESS_TYPES;
 }
+Modal.setAppElement('#root')
 
 const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService }) => {
 
