@@ -1,15 +1,21 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
+import { BUSINESS_TYPES } from '../../../models/Enums/Enums';
+
+export type ServiceOption = {
+  label: string;
+  value: BUSINESS_TYPES;
+};
 
 export type TypesOfServiceRowType = {
   typesOfServiceLabel?: string;
   boardingRadioButtonName?: string;
-  boarding?: string;
+  boarding?: ServiceOption;
   dayCareRadioButtonName?: string;
-  dayCare?: string;
+  dayCare?: ServiceOption;
   sittingRadioButtonName?: string;
-  sitting?: string;
+  sitting?: ServiceOption;
   walkingRadioButtonName?: string;
-  walking?: string;
+  walking?: ServiceOption;
 
   /** Style props */
   propHeight?: CSSProperties["height"];
@@ -24,7 +30,7 @@ export type TypesOfServiceRowType = {
 
   showEditButton?: boolean; // New prop to indicate whether to show the edit button or not
 
-  onServiceChange?: (service: string) => void; // Callback function to handle service change
+  onServiceChange?: (service: BUSINESS_TYPES) => void; // Callback function to handle service change
 
 };
 
@@ -50,7 +56,7 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
   showEditButton = true,
   onServiceChange
 }) => {
-  const handleServiceChange = (service: string) => {
+  const handleServiceChange = (service: BUSINESS_TYPES) => {
     if (onServiceChange) {
       onServiceChange(service); // Call the callback function with the selected service
     }
@@ -100,8 +106,6 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
     };
   }, [propMinWidth4]);
 
-
-
   return (
     <div
       className="self-stretch h-[88px] box-border flex flex-row items-start justify-start py-6 px-0 gap-[24px] max-w-full text-left text-base text-text-primary font-text-medium-normal border-t-[1px] border-solid border-text-primary mq750:h-auto"
@@ -123,14 +127,14 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={boardingRadioButtonName}
-              onClick={() => handleServiceChange("Boarding")}
+              onClick={() => handleServiceChange(boarding?.value!)}
             />
           </div>
           <div
             className="relative leading-[150%] inline-block min-w-[68px]"
             style={boarding1Style}
           >
-            {boarding}
+            {boarding?.label}
           </div>
         </div>
         <div className="flex flex-row items-start justify-start gap-[12px]">
@@ -139,14 +143,14 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={dayCareRadioButtonName}
-              onClick={() => handleServiceChange("Day Care")}
+              onClick={() => handleServiceChange(dayCare?.value!)}
             />
           </div>
           <div
             className="relative leading-[150%] inline-block min-w-[70px]"
             style={dayCare1Style}
           >
-            {dayCare}
+            {dayCare?.label}
           </div>
         </div>
         <div className="flex flex-row items-start justify-start gap-[12px]">
@@ -155,14 +159,14 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={sittingRadioButtonName}
-              onClick={() => handleServiceChange("Dog Sitter")}
+              onClick={() => handleServiceChange(sitting?.value!)}
             />
           </div>
           <div
             className="relative leading-[150%] inline-block min-w-[49px]"
             style={sittingStyle}
           >
-            {sitting}
+            {sitting?.label}
           </div>
         </div>
         <div className="flex flex-row items-start justify-start gap-[12px]">
@@ -171,14 +175,14 @@ const TypesOfServiceRow: FunctionComponent<TypesOfServiceRowType> = ({
               className="cursor-pointer m-0 w-5 h-5 relative rounded-81xl bg-text-alternate box-border overflow-hidden shrink-0 border-[1px] border-solid border-text-primary"
               type="radio"
               name={walkingRadioButtonName}
-              onClick={() => handleServiceChange("Dog Walker")}
+              onClick={() => handleServiceChange(walking?.value!)}
             />
           </div>
           <div
             className="relative leading-[150%] inline-block min-w-[59px]"
             style={walkingStyle}
           >
-            {walking}
+            {walking?.label}
           </div>
         </div>
       </div>

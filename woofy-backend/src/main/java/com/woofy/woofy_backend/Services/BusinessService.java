@@ -66,15 +66,14 @@ public class BusinessService {
         dto.setPhoneNumber(businessEntity.getPhoneNumber());
         dto.setAddress(businessEntity.getAddress());
         dto.setCity(businessEntity.getCity());
-        dto.setRole(businessEntity.getRole());
         dto.setAbout(businessEntity.getAbout());
-        dto.setProfilePhotoID(businessEntity.getProfilePhotoID());
         dto.setBusinessName(businessEntity.getBusinessName());
         dto.setSocialMedia(businessEntity.getSocialMedia());
         dto.setWebsite(businessEntity.getWebsite());
         dto.setLat(businessEntity.getLat());
         dto.setLon(businessEntity.getLon());
         dto.setBusinessTypes(businessEntity.getBusinessTypes());
+        dto.setProfilePhotoID(businessEntity.getProfilePhotoID());
         dto.setImages(businessEntity.getImages());
         Optional.ofNullable(businessEntity.getDogSitterEntity()).ifPresent(dto::setDogSitterEntity);
         Optional.ofNullable(businessEntity.getBoardingEntity()).ifPresent(dto::setBoardingEntity);

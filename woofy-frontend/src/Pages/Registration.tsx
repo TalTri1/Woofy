@@ -1,5 +1,5 @@
-import React, {FormEvent, FunctionComponent, useCallback, useContext, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import React, {FunctionComponent, useCallback, useState} from "react";
+import {useLocation} from "react-router-dom";
 import RegistrationView from "../Sections/LoginAndRegister/RegistrationView";
 import api from "../api/api";
 import RegistrationModel, {USERTYPE} from "../models/RegistrationModel";
@@ -7,14 +7,13 @@ import {useAuth} from "../provider/AuthProvider";
 import {toast} from "react-toastify";
 import {Box, Button, Container, Grid, Typography} from '@mui/material';
 import {useRouter} from "../routes/hooks";
-import TextField from "@mui/material/TextField";
 
 
 const Registration: FunctionComponent = () => {
 
     const router = useRouter();
     const location = useLocation();
-    const {setIsLoggedIn, setToken} = useAuth();
+    const {setToken} = useAuth();
     const basicSignUpUser = location.state;
     const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>(null);
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState
@@ -91,7 +90,7 @@ const Registration: FunctionComponent = () => {
             } catch (error) {
                 console.error(`Error uploading image: ${error}`);
             }
-            setIsLoggedIn(true);
+            toast.success(`Successfully registered!`);
         } catch (error) {
             toast.error(`Error in registration. Please make sure you have filled all the fields correctly.`);
             if (error instanceof Error) {

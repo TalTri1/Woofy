@@ -3,6 +3,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import UpComingIcon from '@mui/icons-material/Upcoming';
 import ChatIcon from '@mui/icons-material/Chat';
 import StarIcon from '@mui/icons-material/Star';
+import LoginIcon from '@mui/icons-material/Login';
+import SignUpIcon from '@mui/icons-material/AppRegistrationSharp';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SupportIcon from '@mui/icons-material/Support';
@@ -14,7 +16,7 @@ import {USERTYPE} from "../../models/RegistrationModel";
 
 function Navigation() {
     const {userDetails} = useContext(UserContext);
-    const userRole = userDetails.role;
+    const userRole = userDetails?.role;
 
     const dashboardNavConfig = [
         {
@@ -29,6 +31,18 @@ function Navigation() {
             title: 'Services',
             path: '/services',
             icon: <FavoriteBorderIcon/>,
+        },
+    ];
+    const unsignedConfig = [
+        {
+            title: 'Login',
+            path: '/login',
+            icon: <LoginIcon/>,
+        },
+        {
+            title: 'Sign Up',
+            path: "/sign-up",
+            icon: <SignUpIcon/>,
         },
     ];
 
@@ -75,7 +89,9 @@ function Navigation() {
     ];
     const navConfig = [
         ...dashboardNavConfig,
-        ...(userRole === USERTYPE.BUSINESS ? businessNavConfig : customerNavConfig),
+        ...(userRole === USERTYPE.BUSINESS ? businessNavConfig : []),
+        ...(userRole === USERTYPE.CUSTOMER ? customerNavConfig : []),
+        ...(userRole === undefined ? unsignedConfig : []),
         ...publicNavConfig
 
     ];

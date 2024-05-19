@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useContext } from "react";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography, TextareaAutosize } from "@mui/material";
 import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import { UserContext } from "../../../../provider/UserProvider";
@@ -9,13 +9,9 @@ import { Age, Size, TrainingLevel } from "../../../../models/Enums/Enums";
 import DogModel from "../../../../models/DogModels/DogModel";
 import { useRouter } from "../../../../routes/hooks";
 
-type DogRegisterViewProps = {
-    variant: 'customer' | 'business';
-};
 
-const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) => {
+const DogRegisterView: FunctionComponent = () => {
     const router = useRouter();
-    const { userDetails } = useContext(UserContext); // The user details
     const [selectedAge, setSelectedAge] = useState<Age>(Age.PUPPY);
     const [selectedSize, setSelectedSize] = useState<Size>(Size.SMALL);
     const [selectedTrainingLevel, setSelectedTrainingLevel] = useState<TrainingLevel>(TrainingLevel.BEGINNER);
@@ -142,35 +138,26 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
         }
     };
 
-    const dogAges = [
-        { age: Age.PUPPY, label: 'Puppy', years: '0-1 years' },
-        { age: Age.ADULT, label: 'Adult', years: '1-9 years' },
-        { age: Age.SENIOR, label: 'Senior', years: '9 years +' },
-    ];
-
     return (
         <Box sx={{ width: '100%', position: 'relative', backgroundColor: 'text.alternate', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
             <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'start', px: { md: 5 } }}>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', maxWidth: 'calc(100% - 312px)', textAlign: 'center', fontSize: '29xl', color: 'text.alternate', fontFamily: 'text-medium-normal', px: { md: 5 } }}>
-                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 8, px: 2.5, pb: 7.5, gap: 0 }}>
-                        <Typography component="h1" sx={{
-                            fontSize: '38px', lineHeight: '120%', fontFamily: 'Inter', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '20px',
-                        }}
-                        >
+                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 4, px: 2.5, pb: 7.5, gap: 0 }}>
+                        <Typography variant="h1" sx={{ fontSize: '48px', lineHeight: '120%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
                             Set Up Your Dog Details
                         </Typography>
-                        <Typography sx={{ fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
+                        <Typography sx={{ fontSize: '18px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
                             Complete the forms below to provide information about your dog.
                         </Typography>
                     </Box>
                     <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
-                                    <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 2, pb: 1.5 }}>
+                                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
+                                    <Typography variant="h3" sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit' }}>
                                         Dog Details Form
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                    <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
                                         Please fill the necessary information found in the following questions.
                                     </Typography>
                                 </Box>
@@ -499,7 +486,6 @@ const DogRegisterView: FunctionComponent<DogRegisterViewProps> = ({ variant }) =
                                 >
                                     Submit
                                 </Button>
-
                             </Box>
                         </Box>
                     </Box>
