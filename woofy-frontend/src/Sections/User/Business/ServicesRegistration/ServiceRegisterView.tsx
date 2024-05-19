@@ -258,7 +258,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                             </Box>
                             <Box sx={{ width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', py: 0, px: 2.5, gap: 3 }}>
                                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
-                                    <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} />
+                                    <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} labelText="Choose your service" />
                                 </Box>
                                 <Box>
                                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', gap: 1, textAlign: 'center', fontSize: '5xl', color: 'text.primary', fontFamily: 'text-medium-normal' }}>
