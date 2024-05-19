@@ -6,9 +6,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -18,6 +16,7 @@ import { useRouter } from "../../routes/hooks";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import woofyLogo from '/public/assets/logo.png'
 
 export default function SignInComponent() {
     const theme = createTheme();
@@ -67,9 +66,7 @@ export default function SignInComponent() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
+                        <Avatar src={woofyLogo} sx={{ m: 2, width: 100, height: 100 }} />
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
