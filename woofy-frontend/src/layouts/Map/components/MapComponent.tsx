@@ -2,16 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { icons } from './icons';
-import BusinessIcon from '@mui/icons-material/Business';
-import {Business} from "../../../models/BusinessModels/BusinessModel";
-import {useRouter} from "../../../routes/hooks";
+import { Business } from "../../../models/BusinessModels/BusinessModel";
+import { useRouter } from "../../../routes/hooks";
 
 
-
-const bookAppointment = (businessName: string) => {
-    console.log(`Setting appointment for ${businessName}`);
-    // You can add further implementation here, like opening a modal for appointment booking
-};
 
 const MapComponent: React.FC = () => {
     const router = useRouter();
@@ -65,7 +59,7 @@ const MapComponent: React.FC = () => {
                         onclick="handleAppointment('${business.id}')">Book an Appointment</button>
                     </div>
                     `;
-                    L.marker([business.lat, business.lon], )
+                    L.marker([business.lat, business.lon], { icon: icons['business general'] })
                         .addTo(map)
                         .bindTooltip(business.businessName)
                         .bindPopup(popupContent);
