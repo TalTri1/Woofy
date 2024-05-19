@@ -1,8 +1,8 @@
-import React, {FunctionComponent, useState} from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import UpcomingBookingCard from "./UpcomingBookingCard";
 import SelectServiceTypeComponent from "../selectButtons/SelectServiceTypeComponent";
-import {BUSINESS_TYPES} from "../../../models/Enums/Enums";
+import { BUSINESS_TYPES } from "../../../models/Enums/Enums";
 
 
 const UpComingBookings: FunctionComponent = () => {
@@ -40,7 +40,7 @@ const UpComingBookings: FunctionComponent = () => {
             </Box>
 
             <Box sx={{ width: "100%", maxWidth: "768px", display: "flex", flexDirection: "row", alignItems: "center", gap: 2, mb: 2 }}>
-                <SelectServiceTypeComponent setSelectedServices={setSelectedServices} selectedServices={selectedServices} />
+                <SelectServiceTypeComponent setSelectedServices={setSelectedServices} selectedServices={selectedServices} labelText="Choose a service" />
                 <Button onClick={handleViewAll} variant="outlined" sx={{ borderRadius: "24px" }}>
                     View All
                 </Button>
