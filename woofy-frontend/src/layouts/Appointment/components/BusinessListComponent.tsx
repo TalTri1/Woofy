@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-    Container, Typography, FormControl, RadioGroup, FormControlLabel, Radio, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Box
+    Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box
 } from '@mui/material';
 import { BUSINESS_TYPES } from '../../../models/Enums/Enums';
-import { Tab } from '@mui/base';
+import SelectServiceTypeComponent from '../../../Sections/User/selectButtons/SelectServiceTypeComponent';
+import { Link } from 'react-router-dom';
+import MapIcon from '@mui/icons-material/Map';
 
 interface Business {
     id: number;
@@ -71,8 +72,8 @@ const BusinessListComponent: React.FC = () => {
         fetchAvailableBusinesses();
     }, [selectedService]);
 
-    const handleServiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedService(event.target.value as BUSINESS_TYPES);
+    const handleServiceChange = (serviceType: BUSINESS_TYPES) => {
+        setSelectedService(serviceType);
     };
 
     const getServiceEntity = (business: Business) => {
@@ -97,33 +98,7 @@ const BusinessListComponent: React.FC = () => {
     return (
         <Container>
             <Box my={4}>
-                <Typography variant="h4" gutterBottom>
-                    Choose a Service to Book
-                </Typography>
-                <FormControl component="fieldset">
-                    <RadioGroup row value={selectedService} onChange={handleServiceChange}>
-                        <FormControlLabel
-                            value={BUSINESS_TYPES.BOARDING}
-                            control={<Radio />}
-                            label="Boarding"
-                        />
-                        <FormControlLabel
-                            value={BUSINESS_TYPES.DAY_CARE}
-                            control={<Radio />}
-                            label="Day Care"
-                        />
-                        <FormControlLabel
-                            value={BUSINESS_TYPES.DOG_SITTER}
-                            control={<Radio />}
-                            label="Dog Sitter"
-                        />
-                        <FormControlLabel
-                            value={BUSINESS_TYPES.DOG_WALK}
-                            control={<Radio />}
-                            label="Dog Walker"
-                        />
-                    </RadioGroup>
-                </FormControl>
+                <SelectServiceTypeComponent setSelectedServices={handleServiceChange} selectedServices={selectedService} labelText='Choose a service to book' />
             </Box>
             <TableContainer component={Paper}>
                 <Table>
@@ -168,6 +143,10 @@ const BusinessListComponent: React.FC = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Link to="/map" className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                <MapIcon className="mr-2" />
+                Map View
+            </Link>
         </Container>
     );
 };

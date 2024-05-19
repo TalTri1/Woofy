@@ -6,9 +6,10 @@ import './styles.css'; // Import the CSS file
 type SelectServiceInputProps = {
     setSelectedServices: (type: BUSINESS_TYPES) => void;
     selectedServices: BUSINESS_TYPES;
+    labelText: string; // This is the header for the buttons
 }
 
-const SelectServiceTypeComponent: React.FC<SelectServiceInputProps> = ({ setSelectedServices, selectedServices }) => {
+const SelectServiceTypeComponent: React.FC<SelectServiceInputProps> = ({ setSelectedServices, selectedServices, labelText }) => {
     const services = [
         { type: BUSINESS_TYPES.BOARDING, icon: "/icon--moon.svg", text: "Boarding" },
         { type: BUSINESS_TYPES.DAY_CARE, icon: "/icon--sun1.svg", text: "Day Care" },
@@ -31,14 +32,14 @@ const SelectServiceTypeComponent: React.FC<SelectServiceInputProps> = ({ setSele
                     display: 'inline-block',
                 }}
             >
-                Your Type of Services
+                {labelText}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, overflow: 'auto' }}>
                 {services.map(service => (
                     <Button
                         key={service.type}
                         variant={selectedServices === service.type ? "contained" : "outlined"}
-                        onClick={() => setSelectedServices(service.type)} 
+                        onClick={() => setSelectedServices(service.type)}
                         sx={{
                             width: '130px',
                             height: '45px',
@@ -48,15 +49,15 @@ const SelectServiceTypeComponent: React.FC<SelectServiceInputProps> = ({ setSele
                             padding: service.type === BUSINESS_TYPES.DOG_SITTER ? '0 8px 0 20px' : 0, // Reduce left padding for Sitter
                             textTransform: 'none',
                             borderRadius: '30px',
-                            fontFamily: 'Inter', 
+                            fontFamily: 'Inter',
                             fontSize: '16px',
                             fontWeight: 'regular',
                             color: selectedServices === service.type ? 'white' : 'black',
                             borderColor: selectedServices !== service.type ? 'grey.500' : 'primary.main',
                             backgroundColor: selectedServices === service.type ? '#006CBF' : 'transparent',
                             '&:hover': {
-                                borderColor: selectedServices !== service.type ? 'grey.700' : '#006CBF', 
-                                backgroundColor: selectedServices === service.type ? '#0056A4' : 'transparent', 
+                                borderColor: selectedServices !== service.type ? 'grey.700' : '#006CBF',
+                                backgroundColor: selectedServices === service.type ? '#0056A4' : 'transparent',
                             },
                         }}
                     >
