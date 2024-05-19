@@ -19,7 +19,6 @@ const Registration: FunctionComponent = () => {
         new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', '', '')
     );
 
-    // Function to update completeRegistrationUser
     const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
         setCompleteRegistrationUser(prevState => ({
             ...prevState,
@@ -63,7 +62,6 @@ const Registration: FunctionComponent = () => {
                 ...rest,
                 ...basicSignUpModel,
             });
-            console.log(`Response from the backend: ${res}`);
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
