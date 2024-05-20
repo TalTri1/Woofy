@@ -1,22 +1,22 @@
 import React, { useContext, useState } from 'react';
 import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
 import { UserContext } from '../../../../provider/UserProvider';
-import { DatePicker, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
-import { Button, Grid, Typography } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { Button, Grid, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {fDate, fDateTime} from "../../../../utils/format-time";
-import api from "../../../../api/api";
-
+import { fDate, fDateTime } from '../../../../utils/format-time';
+import api from '../../../../api/api';
 
 const BookAnAppointment = ({ business, selectedService }) => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [startTime, setStartTime] = useState(null);
-    const [endTime, setEndTime] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
 
     const validateFields = () => {
         let isValid = true;
@@ -26,6 +26,10 @@ const BookAnAppointment = ({ business, selectedService }) => {
         }
         if (!endDate && selectedService === BUSINESS_TYPES.BOARDING) {
             toast.error('End Date is required');
+            isValid = false;
+        }
+        if (!selectedDate && (selectedService === BUSINESS_TYPES.DOG_SITTER || selectedService === BUSINESS_TYPES.DOG_WALK)) {
+            toast.error('Selected Date is required');
             isValid = false;
         }
         if (!startTime && (selectedService === BUSINESS_TYPES.DOG_SITTER || selectedService === BUSINESS_TYPES.DOG_WALK)) {
@@ -46,10 +50,10 @@ const BookAnAppointment = ({ business, selectedService }) => {
 
         const appointmentData = {
             businessId: business.id,
-            date: fDate(startDate, 'yyyy-MM-dd'),
+            date: fDate(selectedDate, 'yyyy-MM-dd'),
             endDate: fDate(endDate, 'yyyy-MM-dd'),
-            startTime: fDateTime(startTime, 'HH:mm'),
-            endTime: fDateTime(endTime, 'HH:mm'),
+            startTime,
+            endTime,
         };
 
         try {
@@ -90,20 +94,39 @@ const BookAnAppointment = ({ business, selectedService }) => {
         return { startTime, endTime };
     };
 
-    const { startTime: minTime, endTime: maxTime } = (() => {
+    const generateTimeBlocks = (start, end, interval) => {
+        const blocks = [];
+        let current = new Date(start);
+        while (current < end) {
+            const blockStart = new Date(current);
+            current.setMinutes(current.getMinutes() + interval);
+            const blockEnd = new Date(current);
+            if (blockEnd <= end) {
+                blocks.push({
+                    start: blockStart.toTimeString().substring(0, 5),
+                    end: blockEnd.toTimeString().substring(0, 5),
+                });
+            }
+        }
+        return blocks;
+    };
+
+    const { startTime: minTime, endTime: maxTime, appointmentLengthInMinutes } = (() => {
         switch (selectedService) {
             case BUSINESS_TYPES.BOARDING:
-                return getWorkingHours(business.boardingEntity);
+                return { ...getWorkingHours(business.boardingEntity), appointmentLengthInMinutes: 0 };
             case BUSINESS_TYPES.DAY_CARE:
-                return getWorkingHours(business.dayCareEntity);
+                return { ...getWorkingHours(business.dayCareEntity), appointmentLengthInMinutes: 0 };
             case BUSINESS_TYPES.DOG_SITTER:
-                return getWorkingHours(business.dogSitterEntity);
+                return { ...getWorkingHours(business.dogSitterEntity), appointmentLengthInMinutes: business.dogSitterEntity.appointmentLengthInMinutes };
             case BUSINESS_TYPES.DOG_WALK:
-                return getWorkingHours(business.dogWalkerEntity);
+                return { ...getWorkingHours(business.dogWalkerEntity), appointmentLengthInMinutes: business.dogWalkerEntity.appointmentLengthInMinutes };
             default:
-                return { startTime: new Date(), endTime: new Date() };
+                return { startTime: new Date(), endTime: new Date(), appointmentLengthInMinutes: 0 };
         }
     })();
+
+    const timeBlocks = generateTimeBlocks(minTime, maxTime, appointmentLengthInMinutes);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -122,7 +145,7 @@ const BookAnAppointment = ({ business, selectedService }) => {
                                     label="Start Date"
                                     value={startDate}
                                     onChange={(date) => setStartDate(date)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.startDate} helperText={errors.startDate} />}
+                                    renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
                             <Grid item>
@@ -130,7 +153,7 @@ const BookAnAppointment = ({ business, selectedService }) => {
                                     label="End Date"
                                     value={endDate}
                                     onChange={(date) => setEndDate(date)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.endDate} helperText={errors.endDate} />}
+                                    renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
                         </Grid>
@@ -140,9 +163,9 @@ const BookAnAppointment = ({ business, selectedService }) => {
                             <Grid item>
                                 <DatePicker
                                     label="Select Date"
-                                    value={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.selectedDate} helperText={errors.selectedDate} />}
+                                    value={selectedDate}
+                                    onChange={(date) => setSelectedDate(date)}
+                                    renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
                         </Grid>
@@ -152,32 +175,29 @@ const BookAnAppointment = ({ business, selectedService }) => {
                             <Grid item>
                                 <DatePicker
                                     label="Select Date"
-                                    value={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.selectedDate} helperText={errors.selectedDate} />}
+                                    value={selectedDate}
+                                    onChange={(date) => setSelectedDate(date)}
+                                    renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
                             <Grid item>
-                                <TimePicker
-                                    label="Start Time"
-                                    value={startTime}
-                                    onChange={(time) => setStartTime(time)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.startTime} helperText={errors.startTime} />}
-                                    minTime={minTime}
-                                    maxTime={maxTime}
-                                    ampm={false}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TimePicker
-                                    label="End Time"
-                                    value={endTime}
-                                    onChange={(time) => setEndTime(time)}
-                                    renderInput={(params) => <TextField {...params} error={!!errors.endTime} helperText={errors.endTime} />}
-                                    minTime={minTime}
-                                    maxTime={maxTime}
-                                    ampm={false}
-                                />
+                                <FormControl fullWidth sx={{ minWidth: 150 }}>
+                                    <InputLabel>Time Block</InputLabel>
+                                    <Select
+                                        value={startTime}
+                                        onChange={(e) => {
+                                            const selectedBlock = timeBlocks.find(block => block.start === e.target.value);
+                                            setStartTime(selectedBlock.start);
+                                            setEndTime(selectedBlock.end);
+                                        }}
+                                    >
+                                        {timeBlocks.map((block, index) => (
+                                            <MenuItem key={index} value={block.start}>
+                                                {`${block.start} - ${block.end}`}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
                     )}

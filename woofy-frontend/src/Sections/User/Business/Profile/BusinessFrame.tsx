@@ -116,7 +116,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
             </div>
           </div>
           <div className="self-stretch h-[42px] relative inline-block mq450:text-base">
-            <b className="leading-[130%]">{`${serviceData ? serviceData.price : "N/A"} ₪ `}</b>
+            <b className="leading-[130%]">{`${serviceData ? serviceData.price : ""} ₪ `}</b>
             <span className="text-xl leading-[150%] font-semibold text-color-neutral-neutral">
                                     {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
                                 </span>

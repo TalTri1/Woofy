@@ -1,19 +1,20 @@
-import React, { FunctionComponent, useContext, useState } from "react";
-import { BoardingModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
-import { DogWalkerModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
-import { DayCareModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
-import { DogSitterModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
+import React, {FunctionComponent, useContext, useState} from "react";
+import {BoardingModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
+import {DogWalkerModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
+import {DayCareModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
+import {DogSitterModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
 import '../../../../css/button.css';
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "../../selectButtons/PetsInHomeComponent";
 import HomeConditionComponent from "../../selectButtons/HomeConditionComponent";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import api from "../../../../api/api";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {Box, Button, Container, TextField, Typography} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS } from "../../../../models/Enums/Enums";
-import { useRouter } from "../../../../routes/hooks";
+import {BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS} from "../../../../models/Enums/Enums";
+import {useRouter} from "../../../../routes/hooks";
+import DogSizeInput from "../../selectButtons/DogSizeInput";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -43,14 +44,14 @@ const ServiceRegisterView: FunctionComponent = () => {
     const [businessInput, setBusinessInput] = useState<Record<string, any>>({});
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = event.target;
-        setBusinessInput(prevState => ({ ...prevState, [name]: value }));
+        const {name, value} = event.target;
+        setBusinessInput(prevState => ({...prevState, [name]: value}));
     };
 
     const updateBusinessModel = (updatedData: Partial<BoardingModel | DogWalkerModel | DayCareModel | DogSitterModel>) => {
         setBusinessInput(prevState => {
             if (prevState) {
-                return { ...prevState, ...updatedData };
+                return {...prevState, ...updatedData};
             }
             return prevState;
         });
@@ -64,7 +65,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newSizes = [...prevSizes, size];
             }
-            updateBusinessModel({ acceptableDogSizes: newSizes });
+            updateBusinessModel({acceptableDogSizes: newSizes});
             return newSizes;
         });
     };
@@ -77,7 +78,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newHomeConditions = [...prevHomeConditions, homeCondition];
             }
-            updateBusinessModel({ homeConditions: newHomeConditions });
+            updateBusinessModel({homeConditions: newHomeConditions});
             return newHomeConditions;
         });
     }
@@ -90,7 +91,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newPetsInHome = [...prevPetsInHome, petsInHome];
             }
-            updateBusinessModel({ petsInHome: newPetsInHome });
+            updateBusinessModel({petsInHome: newPetsInHome});
             return newPetsInHome;
         });
     }
@@ -102,7 +103,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newDays = [...prevDays, workingDay as WEEKDAYS];
             }
-            updateBusinessModel({ workingDays: newDays });
+            updateBusinessModel({workingDays: newDays});
             return newDays;
         })
     }
@@ -142,8 +143,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             router.push("/");
             if (await isUpdateSuccess) {
                 toast.success("Service registered successfully")
-            }
-            else {
+            } else {
                 toast.error("Failed to register service");
             }
 
@@ -230,53 +230,193 @@ const ServiceRegisterView: FunctionComponent = () => {
     //     }
     // }
     return (
-        <Box sx={{ width: '100%', position: 'relative', backgroundColor: 'text.alternate', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
-            <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'start', px: { md: 5 } }}>
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', maxWidth: 'calc(100% - 312px)', textAlign: 'center', fontSize: '29xl', color: 'text.alternate', fontFamily: 'text-medium-normal', px: { md: 5 } }}>
-                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 8, px: 2.5, pb: 7.5, gap: 0 }}>
+        <Box sx={{
+            width: '100%',
+            position: 'relative',
+            backgroundColor: 'text.alternate',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start',
+            justifyContent: 'start',
+            lineHeight: 'normal',
+            tracking: 'normal'
+        }}>
+            <Container maxWidth="xl" sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'start',
+                justifyContent: 'start',
+                px: {md: 5}
+            }}>
+                <Box sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    justifyContent: 'start',
+                    maxWidth: 'calc(100% - 312px)',
+                    textAlign: 'center',
+                    fontSize: '29xl',
+                    color: 'text.alternate',
+                    fontFamily: 'text-medium-normal',
+                    px: {md: 5}
+                }}>
+                    <Box sx={{
+                        width: '100%',
+                        backgroundColor: '#006cbf',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'start',
+                        pt: 8,
+                        px: 2.5,
+                        pb: 7.5,
+                        gap: 0
+                    }}>
                         <Typography component="h1" sx={{
-                            fontSize: '36px', lineHeight: '120%', fontFamily: 'Inter', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '20px',
+                            fontSize: '36px',
+                            lineHeight: '120%',
+                            fontFamily: 'Inter',
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textAlign: 'center',
+                            marginBottom: '20px',
                         }}
                         >
                             Set Up Your Services Details
                         </Typography>
-                        <Typography sx={{ fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
+                        <Typography sx={{
+                            fontSize: '16px',
+                            lineHeight: '150%',
+                            fontFamily: 'Inter',
+                            color: 'white',
+                            textAlign: 'center'
+                        }}>
                             Complete the forms below to provide your business information.
                         </Typography>
                     </Box>
-                    <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
-                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
-                                    <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                    <Box sx={{
+                        width: '100%',
+                        backgroundColor: 'text.alternate',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        maxWidth: '100%',
+                        fontSize: '5xl',
+                        color: 'text.primary',
+                        gap: 2.5
+                    }}>
+                        <Box sx={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            maxWidth: '100%'
+                        }}>
+                            <Box sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'end',
+                                justifyContent: 'start',
+                                pt: 5,
+                                pb: 2.5
+                            }}>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    mt: 1
+                                }}>
+                                    <Typography variant="h4" sx={{
+                                        fontFamily: 'Inter',
+                                        fontWeight: 'bold',
+                                        color: 'text.primary',
+                                        textAlign: 'center'
+                                    }}>
                                         Services Details
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                    <Typography variant="body1"
+                                                sx={{fontFamily: 'Inter', color: 'text.primary', textAlign: 'center'}}>
                                         Please Complete your business account information.
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{ width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', py: 0, px: 2.5, gap: 3 }}>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
-                                    <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} labelText="Choose your service" />
+                            <Box sx={{
+                                width: '600px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'start',
+                                justifyContent: 'start',
+                                py: 0,
+                                px: 2.5,
+                                gap: 3
+                            }}>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'start',
+                                    justifyContent: 'start',
+                                    gap: 1
+                                }}>
+                                    <SelectServiceTypeComponent selectedServices={selectedServices}
+                                                                setSelectedServices={setSelectedServices}
+                                                                labelText="Choose your service"/>
                                 </Box>
                                 <Box>
 
-                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
-                                        <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                                    <Box sx={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        mt: 1
+                                    }}>
+                                        <Typography variant="h4" sx={{
+                                            fontFamily: 'Inter',
+                                            fontWeight: 'bold',
+                                            color: 'text.primary',
+                                            textAlign: 'center'
+                                        }}>
                                             {serviceFormTitles[selectedServices]}                                    </Typography>
-                                        <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                        <Typography variant="body1" sx={{
+                                            fontFamily: 'Inter',
+                                            color: 'text.primary',
+                                            textAlign: 'center'
+                                        }}>
                                             Please fill the necessary information found in the following questions.
                                         </Typography>
                                     </Box>
-
+                                    {(selectedServices === BUSINESS_TYPES.DOG_WALK || selectedServices === BUSINESS_TYPES.DOG_SITTER) && (
+                                        <Box component="form" sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 2}}>
+                                            <Typography sx={{width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px',}}>
+                                                Appointment Length
+                                            </Typography>
+                                            <TextField
+                                                fullWidth
+                                                placeholder="Enter appointment length in minutes*"
+                                                type="number"
+                                                name="appointmentLengthInMinutes"
+                                                required
+                                                onChange={handleInputChange}
+                                            />
+                                        </Box>
+                                    )}
                                     {(selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.DAY_CARE) && (
                                         <>
-                                            <Box sx={{ mb: 2 }}>
-                                                <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome} clickPetsInHomeHandler={clickPetsInHomeHandler} />
+                                            <Box sx={{mb: 2}}>
+                                                <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome}
+                                                                     clickPetsInHomeHandler={clickPetsInHomeHandler}/>
                                             </Box>
                                             <Box>
-                                                <HomeConditionComponent selectedHomeConditions={selectedHomeConditions} clickHomeConditionsHandler={clickHomeConditionsHandler} />
+                                                <HomeConditionComponent selectedHomeConditions={selectedHomeConditions}
+                                                                        clickHomeConditionsHandler={clickHomeConditionsHandler}/>
                                             </Box>
                                         </>
                                     )}
@@ -288,7 +428,14 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     selectedDays={selectedDays}
                                     clickWorkingDaysHandler={clickWorkingDaysHandler}
                                 />
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 3 }}>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'start',
+                                    justifyContent: 'start',
+                                    gap: 3
+                                }}>
                                     <Typography
                                         sx={{
                                             width: '100%',
@@ -306,14 +453,22 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         Add Pictures of Your Services
                                     </Typography>
                                 </Box>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start', gap: 3, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'start',
+                                    gap: 3,
+                                    flexWrap: {xs: 'wrap', sm: 'nowrap'}
+                                }}>
                                     {images.map((image, index) => (
                                         <label key={index} className="relative">
                                             <input
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(event) => handleImageChange(index, event)}
-                                                style={{ display: 'none' }}
+                                                style={{display: 'none'}}
                                             />
                                             <img
                                                 className="h-[100px] w-[100px] relative object-cover min-h-[100px] shrink-0 cursor-pointer"

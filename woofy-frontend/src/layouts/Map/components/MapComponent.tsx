@@ -52,7 +52,7 @@ const MapComponent: React.FC = () => {
                         <b>Owner:</b> ${business.firstName} ${business.lastName}<br />
                         <b>Phone number:</b> ${business.phoneNumber}<br />
                         <b>Address:</b> ${business.address}, ${business.city}<br />
-                        <b>About:</b> ${business.about ? business.about : 'N/A'}<br />
+                        <b>About:</b> ${business.about ? business.about : ''}<br />
                         <b>Service:</b> ${business.businessTypes}<br />
                         <div style="text-align: center;">
                         <button style="background-color: #007bff; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px;" 

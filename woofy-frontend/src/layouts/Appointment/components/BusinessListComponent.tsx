@@ -7,6 +7,7 @@ import { BUSINESS_TYPES } from '../../../models/Enums/Enums';
 import SelectServiceTypeComponent from '../../../Sections/User/selectButtons/SelectServiceTypeComponent';
 import { Link } from 'react-router-dom';
 import MapIcon from '@mui/icons-material/Map';
+import {formatEnumValue} from "../../../utils/format-enum-text";
 
 interface Business {
     id: number;
@@ -122,11 +123,11 @@ const BusinessListComponent: React.FC = () => {
                                 <TableRow key={business.id}>
                                     <TableCell>{business.businessName}</TableCell>
                                     <TableCell>{business.address}, {business.city}</TableCell>
-                                    <TableCell>{serviceEntity?.about || 'N/A'}</TableCell>
+                                    <TableCell>{serviceEntity?.about || ''}</TableCell>
                                     <TableCell>{serviceEntity?.price}</TableCell>
-                                    <TableCell>{serviceEntity?.workingDays?.join(', ') || 'N/A'}</TableCell>
+                                    <TableCell>{serviceEntity?.workingDays?.map(day => formatEnumValue(day)).join(', ') || ''}</TableCell>
                                     <TableCell>{serviceEntity?.dogCapacity}</TableCell>
-                                    <TableCell>{serviceEntity?.acceptableDogSizes?.join(', ') || 'N/A'}</TableCell>
+                                    <TableCell>{serviceEntity?.acceptableDogSizes?.map(size => formatEnumValue(size)).join(', ') || ''}</TableCell>
                                     <TableCell>{business.phoneNumber}</TableCell>
                                     <TableCell>
                                         <Button
