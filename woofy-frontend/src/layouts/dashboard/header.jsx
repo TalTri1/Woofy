@@ -1,27 +1,22 @@
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-
-import {useResponsive} from "../../hooks/use-responsive";
+import { useResponsive } from '../../hooks/use-responsive';
 import { bgBlur } from '../../theme/css';
-
-
 import Searchbar from './common/searchbar';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 import NotificationsPopover from './common/notifications-popover';
-import Iconify from "../../components/iconify";
+import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
-
   const lgUp = useResponsive('up', 'lg');
 
   const renderContent = (
@@ -35,7 +30,7 @@ export default function Header({ onOpenNav }) {
       <Searchbar />
 
       <Box sx={{ flexGrow: 1 }} />
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack direction="row" alignItems="center" spacing={3}> {/* Increased spacing */}
         <NotificationsPopover />
         <AccountPopover />
       </Stack>
