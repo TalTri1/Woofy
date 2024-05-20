@@ -143,9 +143,12 @@ const BusinessListComponent: React.FC = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Link to="/map" className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-                <MapIcon className="mr-2" />
-                Map View
+            <Link
+                to="/map"
+                className="relative w-full flex flex-row items-center justify-center gap-[8px] text-left text-[16px] text-app1 font-inter mt-12 no-underline"
+            >
+                <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
+                <b className="relative leading-[150%]">Show on map</b>
             </Link>
         </Container>
     );
