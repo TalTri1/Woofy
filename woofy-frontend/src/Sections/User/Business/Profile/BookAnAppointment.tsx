@@ -85,12 +85,28 @@ const BookAnAppointment = ({ business, selectedService }) => {
     const getWorkingHours = (entity) => {
         const startTime = new Date();
         const endTime = new Date();
-        if (entity) {
-            const [startHour, startMinute] = entity.startTime.split(':').map(Number);
-            const [endHour, endMinute] = entity.endTime.split(':').map(Number);
-            startTime.setHours(startHour, startMinute, 0);
-            endTime.setHours(endHour, endMinute, 0);
+
+        if (entity && entity.startTime && entity.endTime) {
+            const startTimes = entity.startTime.split(':');
+            const endTimes = entity.endTime.split(':');
+
+            if (startTimes.length === 2 && endTimes.length === 2) {
+                const [startHour, startMinute] = startTimes.map(Number);
+                const [endHour, endMinute] = endTimes.map(Number);
+
+                if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(endHour) && !isNaN(endMinute)) {
+                    startTime.setHours(startHour, startMinute, 0);
+                    endTime.setHours(endHour, endMinute, 0);
+                } else {
+                    console.error('Invalid time format');
+                }
+            } else {
+                console.error('Invalid time format');
+            }
+        } else {
+            console.error('Entity or time data is missing');
         }
+
         return { startTime, endTime };
     };
 

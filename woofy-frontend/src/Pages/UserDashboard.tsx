@@ -18,7 +18,7 @@ const UserDashboard: FunctionComponent = () => {
                 Welcome Back,
               </h1>
               <h1 className="relative text-[48px] leading-[120%] font-inter text-white text-center">
-                {userDetails?.firstName + " " + userDetails?.lastName}
+                {userDetails ? userDetails.firstName + " " + userDetails.lastName : "Guest User"}
               </h1>
             </div>
           </div>

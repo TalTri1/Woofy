@@ -9,7 +9,7 @@ import { getImage } from "../../../../components/image/imageComponent";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Modal from 'react-modal';
-import {formatEnumValue} from "../../../../utils/format-enum-text";
+import { formatEnumValue } from "../../../../utils/format-enum-text";
 
 interface BusinessFrameProps {
   business: Business;
@@ -77,13 +77,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <div className="flex flex-row items-center justify-start text-center">
             <div className="flex flex-row items-center justify-start gap-[4px]">
               <img
-                  className="h-8 w-8 relative overflow-hidden shrink-0 min-h-[32px]"
-                  loading="lazy"
-                  alt=""
-                  src="/icon--map.svg"
+                className="h-8 w-8 relative overflow-hidden shrink-0 min-h-[32px]"
+                loading="lazy"
+                alt=""
+                src="/icon--map.svg"
               />
               <div
-                  className="relative leading-[150%] font-medium inline-block min-w-[83px] mq450:text-base mq450:leading-[24px]">
+                className="relative leading-[150%] font-medium inline-block min-w-[83px] mq450:text-base mq450:leading-[24px]">
                 {business.address + `,` + business.city}
               </div>
             </div>
@@ -92,10 +92,10 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
             <div className="flex flex-row items-center justify-start gap-[8px]">
               <div className="overflow-hidden flex flex-row items-center justify-start">
                 <img
-                    className="h-[18.9px] w-5 relative"
-                    loading="lazy"
-                    alt=""
-                    src="/vector.svg"
+                  className="h-[18.9px] w-5 relative"
+                  loading="lazy"
+                  alt=""
+                  src="/vector.svg"
                 />
               </div>
               <div className="relative leading-[150%] mq450:text-base mq450:leading-[24px]">
@@ -105,11 +105,11 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           </div>
           <div className="flex flex-row items-center justify-start gap-[16px]">
             <img
-                // Here is the profile image
-                className="h-16 w-16 relative rounded-13xl object-cover"
-                loading="lazy"
-                alt=""
-                src={profileImage}
+              // Here is the profile image
+              className="h-16 w-16 relative rounded-13xl object-cover"
+              loading="lazy"
+              alt=""
+              src={profileImage}
             />
             <div className="relative leading-[150%] font-semibold mq450:text-base mq450:leading-[24px]">
               {`${business.firstName} ${business.lastName}`}
@@ -118,19 +118,19 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <div className="self-stretch h-[42px] relative inline-block mq450:text-base">
             <b className="leading-[130%]">{`${serviceData ? serviceData.price : ""} ₪ `}</b>
             <span className="text-xl leading-[150%] font-semibold text-color-neutral-neutral">
-                                    {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
-                                </span>
+              {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
+            </span>
           </div>
         </div>
         <div className="flex flex-col items-start justify-start max-w-full">
           <ImageList
-              sx={{width: 500, height: 200}}
-              variant="quilted"
-              cols={4}
-              rowHeight={121}
+            sx={{ width: 500, height: 200 }}
+            variant="quilted"
+            cols={4}
+            rowHeight={121}
           >
             {imageData.map((item) => (
-                <ImageListItem key={item.img} cols={1} rows={1}>
+              <ImageListItem key={item.img} cols={1} rows={1}>
                 <img
                   src={item.img}
                   alt={item.title}
@@ -177,13 +177,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
         </div>
         <div
 
-            className="self-stretch h-px relative bg-text-primary box-border border-[1px] border-solid border-color-neutral-neutral" />
+          className="self-stretch h-px relative bg-text-primary box-border border-[1px] border-solid border-color-neutral-neutral" />
         <div className="self-stretch flex items-start justify-start gap-[0.5px] max-w-full text-5xl">
           {selectedService === BUSINESS_TYPES.BOARDING || selectedService === BUSINESS_TYPES.DAY_CARE ? (
-              <>
-                {serviceData && (serviceData as BoardingModel | DayCareModel).homeConditions.length > 0 && renderDetailBox("Home Conditions", (serviceData as BoardingModel | DayCareModel).homeConditions.map(formatEnumValue))}
-                {serviceData && (serviceData as BoardingModel | DayCareModel).petsInHome.length > 0 && renderDetailBox("Pets in Home", (serviceData as BoardingModel | DayCareModel).petsInHome.map(formatEnumValue))}
-              </>
+            <>
+              {serviceData && (serviceData as BoardingModel | DayCareModel).homeConditions.length > 0 && renderDetailBox("Home Conditions", (serviceData as BoardingModel | DayCareModel).homeConditions.map(formatEnumValue))}
+              {serviceData && (serviceData as BoardingModel | DayCareModel).petsInHome.length > 0 && renderDetailBox("Pets in Home", (serviceData as BoardingModel | DayCareModel).petsInHome.map(formatEnumValue))}
+            </>
           ) : null}
           {renderDetailBox("Dog Capacity", [`${serviceData ? serviceData.dogCapacity : "error"}`])}
           {serviceData && renderDetailBox("Working Days", (serviceData.workingDays || []).map(day => day))}
