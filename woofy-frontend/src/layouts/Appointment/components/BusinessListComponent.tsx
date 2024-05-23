@@ -7,7 +7,8 @@ import { BUSINESS_TYPES } from '../../../models/Enums/Enums';
 import SelectServiceTypeComponent from '../../../Sections/User/selectButtons/SelectServiceTypeComponent';
 import { Link } from 'react-router-dom';
 import MapIcon from '@mui/icons-material/Map';
-import {formatEnumValue} from "../../../utils/format-enum-text";
+import { formatEnumValue } from "../../../utils/format-enum-text";
+import { useRouter } from '../../../routes/hooks';
 
 interface Business {
     id: number;
@@ -42,6 +43,7 @@ interface ServiceEntity {
 const BusinessListComponent: React.FC = () => {
     const [selectedService, setSelectedService] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
     const [availableBusinesses, setAvailableBusinesses] = useState<Business[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchAvailableBusinesses = async () => {

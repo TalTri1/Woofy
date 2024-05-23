@@ -56,7 +56,7 @@ const MapComponent: React.FC = () => {
                         <b>Service:</b> ${business.businessTypes}<br />
                         <div style="text-align: center;">
                         <button style="background-color: #007bff; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px;" 
-                        onclick="handleAppointment('${business.id}')">Book an Appointment</button>
+                        onclick="handleAppointment('${business.id}')">Business Page</button>
                     </div>
                     `;
                     L.marker([business.lat, business.lon], { icon: icons['business general'] })
