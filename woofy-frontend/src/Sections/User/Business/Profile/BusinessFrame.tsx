@@ -10,189 +10,175 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Modal from 'react-modal';
 import { formatEnumValue } from "../../../../utils/format-enum-text";
+import { Box, Typography, Grid, Avatar, Divider } from '@mui/material';
 
 interface BusinessFrameProps {
-    business: Business;
-    serviceData: DogSitterModel | DogWalkerModel | BoardingModel | DayCareModel | null;
-    selectedService: BUSINESS_TYPES;
+  business: Business;
+  serviceData: DogSitterModel | DogWalkerModel | BoardingModel | DayCareModel | null;
+  selectedService: BUSINESS_TYPES;
 }
-Modal.setAppElement('#root')
+Modal.setAppElement('#root');
 
 const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService }) => {
 
-    const [profileImage, setProfileImage] = useState("/user-avatar-image@2x.png");
-    const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState('');
+  const [profileImage, setProfileImage] = useState("/user-avatar-image@2x.png");
+  const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [averageReview, setAverageReview] = useState<number | null>(null);
+  const [reviewCount, setReviewCount] = useState<number | null>(null);
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (business?.profilePhotoID) {
+        const profileImageResponse = await getImage(business.profilePhotoID);
+        setProfileImage(profileImageResponse || "/user-avatar-image@2x.png");
+      }
+      if (business?.images) {
+        const fetchedImages = await Promise.all(business.images.map(async (id) => {
+          const imageSrc = await getImage(id);
+          return { img: imageSrc || '', title: business.businessName };
+        }));
+        setImageData(fetchedImages.filter(image => image.img)); // Filter out any empty image URLs
+      }
+    };
 
+    const fetchReviewsData = async () => {
+      if (business?.id) {
+        const averageReviewResponse = await fetch(`http://localhost:8080/api/v1/reviews/business/average/${business.id}`);
+        const averageReviewData = await averageReviewResponse.json();
+        setAverageReview(averageReviewData);
 
-    useEffect(() => {
-        const fetchImages = async () => {
-            if (business?.profilePhotoID) {
-                const profileImageResponse = await getImage(business.profilePhotoID);
-                setProfileImage(profileImageResponse || "/user-avatar-image@2x.png");
-            }
-            if (business?.images) {
-                const fetchedImages = await Promise.all(business.images.map(async (id) => {
-                    const imageSrc = await getImage(id);
-                    return { img: imageSrc || '', title: business.businessName };
-                }));
-                setImageData(fetchedImages.filter(image => image.img)); // Filter out any empty image URLs
-            }
-        };
+        const reviewCountResponse = await fetch(`http://localhost:8080/api/v1/reviews/business/count/${business.id}`);
+        const reviewCountData = await reviewCountResponse.json();
+        setReviewCount(reviewCountData);
+      }
+    };
 
-        fetchImages();
-    }, [business.id]);
+    fetchImages();
+    fetchReviewsData();
+  }, [business.id]);
 
-    const renderDetailBox = (title: string, values: string[]) => (
+  const renderDetailBox = (title: string, values: string[]) => (
+      <Box sx={{ border: 1, borderColor: 'grey.300', borderRadius: 1, p: 2, mb: 2, width: '100%', height: '100%' }}>
+        <Typography variant="h6" gutterBottom>{title}</Typography>
+        <Grid container spacing={1}>
+          {values.map((value, index) => (
+              <Grid item xs={12} key={index} display="flex" alignItems="center">
+                <img
+                    src="/check.svg"
+                    alt="check"
+                    style={{ height: 24, width: 24 }}
+                />
+                <Typography sx={{ ml: 1 }}>{value}</Typography>
+              </Grid>
+          ))}
+        </Grid>
+      </Box>
+  );
 
-        <div className="border rounded-md p-4 mb-4 w-full">
-            <h3 className="font-bold mb-2">{title}</h3>
-            <div className="flex flex-wrap">
-                {values.map((value, index) => (
-                    <div key={index} className="flex items-center w-full md:w-1/2 lg:w-1/3">
-                        <img
-                            className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
-                            loading="lazy"
-                            alt="check"
-                            src="/check.svg"
-                        />
-                        <div className="ml-2">{value}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-
-    return (
-        <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[400px] max-w-full text-left text-xl text-text-primary font-text-medium-normal mq750:gap-[16px] mq750:min-w-full">
-            <div className="self-stretch flex flex-row items-start justify-between gap-[24px] max-w-full">
-                <div className="flex flex-col items-start justify-start gap-[24px] max-w-full">
-                    <div className="flex flex-row items-center justify-start text-21xl">
-                        <h1 className="m-0 relative text-inherit leading-[120%] font-bold font-inherit mq450:text-5xl mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
-                            {business.businessName}
-                        </h1>
-                    </div>
-                    <div className="flex flex-row items-center justify-start text-center">
-                        <div className="flex flex-row items-center justify-start gap-[4px]">
-                            <img
-                                className="h-8 w-8 relative overflow-hidden shrink-0 min-h-[32px]"
-                                loading="lazy"
-                                alt=""
-                                src="/icon--map.svg"
-                            />
-                            <div
-                                className="relative leading-[150%] font-medium inline-block min-w-[83px] mq450:text-base mq450:leading-[24px]">
-                                {business.address + `,` + business.city}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-start text-center">
-                        <div className="flex flex-row items-center justify-start gap-[8px]">
-                            <div className="overflow-hidden flex flex-row items-center justify-start">
-                                <img
-                                    className="h-[18.9px] w-5 relative"
-                                    loading="lazy"
-                                    alt=""
-                                    src="/vector.svg"
-                                />
-                            </div>
-                            <div className="relative leading-[150%] mq450:text-base mq450:leading-[24px]">
-                                (4.5 stars) • 10 reviews
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-start gap-[16px]">
-                        <img
-                            // Here is the profile image
-                            className="h-16 w-16 relative rounded-13xl object-cover"
-                            loading="lazy"
-                            alt=""
-                            src={profileImage}
-                        />
-                        <div className="relative leading-[150%] font-semibold mq450:text-base mq450:leading-[24px]">
-                            {`${business.firstName} ${business.lastName}`}
-                        </div>
-                    </div>
-                    <div className="self-stretch h-[42px] relative inline-block mq450:text-base">
-                        <b className="leading-[130%]">{`${serviceData ? serviceData.price : ""} ₪ `}</b>
-                        <span className="text-xl leading-[150%] font-semibold text-color-neutral-neutral">
-              {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
-            </span>
-                    </div>
-                </div>
-                <div className="flex flex-col items-start justify-start max-w-full">
-                    <ImageList
-                        sx={{ width: 500, height: 200 }}
-                        variant="quilted"
-                        cols={4}
-                        rowHeight={121}
-                    >
-                        {imageData.map((item) => (
-                            <ImageListItem key={item.img} cols={1} rows={1}>
-                                <img
-                                    src={item.img}
-                                    alt={item.title}
-                                    loading="lazy"
-                                    className="cursor-pointer"
-                                    onClick={() => {
-                                        setSelectedImage(item.img);
-                                        setModalIsOpen(true);
-                                    }}
-                                />
-                            </ImageListItem>
-                        ))}
-                    </ImageList>
-                    <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={() => setModalIsOpen(false)}
-                        contentLabel="Image Modal"
-                    >
-                        <img src={selectedImage} alt="Selected" />
-                        <button
-                            onClick={() => setModalIsOpen(false)}
-                            style={{ position: 'absolute', top: '10px', right: '10px' }} // Add this line
-                        >
-                            X
-                        </button>
-
-                    </Modal>
-                </div>
-            </div>
-            <div className="self-stretch flex flex-col items-start justify-start gap-[24px] text-13xl">
-                <div
-                    className="self-stretch h-px relative bg-text-primary box-border border-[1px] border-solid border-color-neutral-neutral" />
-                <h1 className="m-0 self-stretch relative text-inherit leading-[42px] font-bold font-inherit mq450:text-lgi mq450:leading-[25px] mq1050:text-7xl mq1050:leading-[33px]">
-                    About {business.businessName}
-                </h1>
-            </div>
-
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px] max-w-full">
-                <div className="self-stretch flex flex-row items-start justify-start pt-0 px-0 pb-3 box-border max-w-full">
-                    <div
-                        className="flex-1 relative leading-[150%] inline-block max-w-full mq450:text-base mq450:leading-[24px]">
-                        {serviceData ? serviceData.about : "error"}
-                    </div>
-                </div>
-                <div
-
-                    className="self-stretch h-px relative bg-text-primary box-border border-[1px] border-solid border-color-neutral-neutral" />
-                <div className="self-stretch flex items-start justify-start gap-[0.5px] max-w-full text-5xl">
-                    {selectedService === BUSINESS_TYPES.BOARDING || selectedService === BUSINESS_TYPES.DAY_CARE ? (
-                        <>
-                            {serviceData && (serviceData as BoardingModel | DayCareModel).homeConditions.length > 0 && renderDetailBox("Home Conditions", (serviceData as BoardingModel | DayCareModel).homeConditions.map(formatEnumValue))}
-                            {serviceData && (serviceData as BoardingModel | DayCareModel).petsInHome.length > 0 && renderDetailBox("Pets in Home", (serviceData as BoardingModel | DayCareModel).petsInHome.map(formatEnumValue))}
-                        </>
-                    ) : null}
-                    {renderDetailBox("Dog Capacity", [`${serviceData ? serviceData.dogCapacity : "error"}`])}
-                    {serviceData && renderDetailBox("Working Days", (serviceData.workingDays || []).map(day => day))}
-                    {serviceData && renderDetailBox("Working Hours", [`${serviceData.startTime} - ${serviceData.endTime}`])}
-                    {serviceData && renderDetailBox("Acceptable Dog Sizes", (serviceData.acceptableDogSizes || []))}
-                </div>
-            </div>
-        </div>
-    );
+  return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, width: '100%' }}>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant="h4" fontWeight="bold">
+              {business.businessName}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <img src="/icon--map.svg" alt="" style={{ height: 32, width: 32 }} />
+              <Typography variant="body1">{business.address}, {business.city}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <img src="/vector.svg" alt="" style={{ height: 18.9, width: 20 }} />
+              <Typography variant="body1">
+                {reviewCount === 0 ? "No reviews yet" : `(${averageReview} stars) • ${reviewCount} reviews`}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar src={profileImage} alt={`${business.firstName} ${business.lastName}`} sx={{ width: 64, height: 64 }} />
+              <Typography variant="h6" fontWeight="bold">{`${business.firstName} ${business.lastName}`}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+              <Typography variant="h5" fontWeight="bold">{`${serviceData ? serviceData.price : ""} ₪ `}</Typography>
+              <Typography variant="body1">
+                {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
+              </Typography>
+            </Box>
+            {selectedService === BUSINESS_TYPES.BOARDING || selectedService === BUSINESS_TYPES.DAY_CARE ? (
+                <Box>
+                  <Typography variant="body1">Dog Capacity: {serviceData ? serviceData.dogCapacity : "N/A"}</Typography>
+                </Box>
+            ) : null}
+            <Box>
+              <Typography variant="body1">Working Hours: {serviceData ? `${serviceData.startTime} - ${serviceData.endTime}` : "N/A"}</Typography>
+            </Box>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <ImageList sx={{ width: '100%', height: 200 }} variant="quilted" cols={4} rowHeight={121}>
+              {imageData.map((item) => (
+                  <ImageListItem key={item.img} cols={1} rows={1}>
+                    <img
+                        src={item.img}
+                        alt={item.title}
+                        loading="lazy"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setSelectedImage(item.img);
+                          setModalIsOpen(true);
+                        }}
+                    />
+                  </ImageListItem>
+              ))}
+            </ImageList>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                contentLabel="Image Modal"
+            >
+              <img src={selectedImage} alt="Selected" />
+              <button
+                  onClick={() => setModalIsOpen(false)}
+                  style={{ position: 'absolute', top: '10px', right: '10px' }}
+              >
+                X
+              </button>
+            </Modal>
+          </Box>
+        </Box>
+        <Divider />
+        <Typography variant="h5" fontWeight="bold">About {business.businessName}</Typography>
+        <Typography variant="body1">{serviceData ? serviceData.about : "N/A"}</Typography>
+        <Divider />
+        <Box sx={{ width: '100%' }}>
+          <Grid container spacing={2}>
+            {selectedService === BUSINESS_TYPES.BOARDING || selectedService === BUSINESS_TYPES.DAY_CARE ? (
+                <>
+                  {serviceData && (serviceData as BoardingModel | DayCareModel).homeConditions.length > 0 && (
+                      <Grid item xs={12} sm={6} md={4}>
+                        {renderDetailBox("Home Conditions", (serviceData as BoardingModel | DayCareModel).homeConditions.map(formatEnumValue))}
+                      </Grid>
+                  )}
+                  {serviceData && (serviceData as BoardingModel | DayCareModel).petsInHome.length > 0 && (
+                      <Grid item xs={12} sm={6} md={4}>
+                        {renderDetailBox("Pets in Home", (serviceData as BoardingModel | DayCareModel).petsInHome.map(formatEnumValue))}
+                      </Grid>
+                  )}
+                </>
+            ) : null}
+            {serviceData && (
+                <Grid item xs={12} sm={6} md={4}>
+                  {renderDetailBox("Working Days", (serviceData.workingDays || []).map(day => day))}
+                </Grid>
+            )}
+            {serviceData && (
+                <Grid item xs={12} sm={6} md={4}>
+                  {renderDetailBox("Acceptable Dog Sizes", (serviceData.acceptableDogSizes || []).map(formatEnumValue))}
+                </Grid>
+            )}
+          </Grid>
+        </Box>
+      </Box>
+  );
 };
 
 export default BusinessFrame;
