@@ -48,5 +48,19 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    // get the user full name by id
+    @GetMapping("/name/{id}")
+    public ResponseEntity<String> getFullNameById(@PathVariable Integer id) {
+        String fullName = service.getFullNameById(id);
+        return ResponseEntity.ok(fullName);
+    }
+
+    // get the user by id
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
+        UserEntity user = service.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
 }
 

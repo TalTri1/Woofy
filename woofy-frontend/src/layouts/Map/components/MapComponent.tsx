@@ -4,8 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { icons } from './icons';
 import { Business } from "../../../models/BusinessModels/BusinessModel";
 import { useRouter } from "../../../routes/hooks";
-
-
+import { fetchAverageReviews } from '../../../utils/reviews/reviews';
 
 const MapComponent: React.FC = () => {
     const router = useRouter();
@@ -14,13 +13,11 @@ const MapComponent: React.FC = () => {
     const [businesses, setBusinesses] = useState<Business[]>([]);
 
     useEffect(() => {
-        // Fetch data from API
         const fetchData = async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/v1/business/all');
                 const data = await response.json();
                 setBusinesses(data);
-                console.log(`businesses: ${JSON.stringify(data)}`);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -28,7 +25,6 @@ const MapComponent: React.FC = () => {
 
         fetchData();
     }, []);
-
 
     useEffect(() => {
         if (mapRef.current && !mapInstance.current && businesses.length > 0) {
@@ -46,34 +42,42 @@ const MapComponent: React.FC = () => {
                 L.marker([latitude, longitude], { icon: icons['Home'] }).addTo(map).bindTooltip('Your location');
 
                 businesses.forEach((business) => {
-                    const popupContent = `
-                    <div>
-                        <h2 style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">${business.businessName}</h2>
-                        <b>Owner:</b> ${business.firstName} ${business.lastName}<br />
-                        <b>Phone number:</b> ${business.phoneNumber}<br />
-                        <b>Address:</b> ${business.address}, ${business.city}<br />
-                        <b>About:</b> ${business.about ? business.about : ''}<br />
-                        <b>Service:</b> ${business.businessTypes}<br />
-                        <div style="text-align: center;">
-                        <button style="background-color: #007bff; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px;" 
-                        onclick="handleAppointment('${business.id}')">Business Page</button>
-                    </div>
-                    `;
-                    L.marker([business.lat, business.lon], { icon: icons['business general'] })
+                    const marker = L.marker([business.lat, business.lon], { icon: icons['business general'] })
                         .addTo(map)
-                        .bindTooltip(business.businessName)
-                        .bindPopup(popupContent);
+                        .bindTooltip(business.businessName);
+
+                    marker.on('click', async () => {
+                        const averageReview = await fetchAverageReviews(business.id);
+                        const averageReviewText = averageReview === null || averageReview === undefined ? "No reviews yet" : (isNaN(averageReview!) ? "No reviews yet" : averageReview);
+
+                        const popupContent = `
+                            <div>
+                                <h2 style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">${business.businessName}</h2>
+                                <b>Owner:</b> ${business.firstName} ${business.lastName}<br />
+                                <b>Phone number:</b> ${business.phoneNumber}<br />
+                                <b>Address:</b> ${business.address}, ${business.city}<br />
+                                <b>Rate:</b> ${averageReviewText}<br />
+                                ${business.dogSitterEntity ? `<h3 style="text-align: center;">Dog Sitting</h3><p><b>About:</b> ${business.dogSitterEntity.about}</p><p><b>Price:</b> ${business.dogSitterEntity.price}</p>` : ''}
+                                ${business.dogWalkerEntity ? `<h3 style="text-align: center;">Dog Walking</h3><p><b>About:</b> ${business.dogWalkerEntity.about}</p><p><b>Price:</b> ${business.dogWalkerEntity.price}</p>` : ''}
+                                ${business.boardingEntity ? `<h3 style="text-align: center;">Boarding</h3><p><b>About:</b> ${business.boardingEntity.about}</p><p><b>Price:</b> ${business.boardingEntity.price}</p>` : ''}
+                                ${business.dayCareEntity ? `<h3 style="text-align: center;">Day Care</h3><p><b>About:</b> ${business.dayCareEntity.about}</p><p><b>Price:</b> ${business.dayCareEntity.price}</p>` : ''}
+                                <div style="text-align: center;">
+                                <button style="background-color: #007bff; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px;" 
+                                onclick="handleAppointment('${business.id}')">Business Page</button>
+                            </div>
+                            `;
+
+                        marker.bindPopup(popupContent).openPopup();
+                    });
                 });
             });
         }
     }, [businesses]);
 
-    // Wrapper function to handle appointment booking
     const handleAppointment = (businessId: string) => {
         router.push(`/business-profile/${businessId}`)
     };
 
-    // Add handleAppointment to the global scope
     (window as any).handleAppointment = handleAppointment;
 
     return <div ref={mapRef} style={{ height: 700 }} />;

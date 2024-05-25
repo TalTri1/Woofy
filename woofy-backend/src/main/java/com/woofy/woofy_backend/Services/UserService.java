@@ -84,4 +84,14 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public String getFullNameById(Integer id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("user not found"));
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public UserEntity getUserById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("user not found"));
+    }
 }
