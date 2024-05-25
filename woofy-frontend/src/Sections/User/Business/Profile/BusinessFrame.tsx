@@ -24,6 +24,8 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
   const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [averageReview, setAverageReview] = useState<number | null>(null);
+  const [reviewCount, setReviewCount] = useState<number | null>(null);
 
 
 
@@ -42,7 +44,20 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
       }
     };
 
+    const fetchReviewsData = async () => {
+      if (business?.id) {
+        const averageReviewResponse = await fetch(`http://localhost:8080/api/v1/reviews/business/average/${business.id}`);
+        const averageReviewData = await averageReviewResponse.json();
+        setAverageReview(averageReviewData);
+
+        const reviewCountResponse = await fetch(`http://localhost:8080/api/v1/reviews/business/count/${business.id}`);
+        const reviewCountData = await reviewCountResponse.json();
+        setReviewCount(reviewCountData);
+      }
+    };
+
     fetchImages();
+    fetchReviewsData();
   }, [business.id]);
 
   const renderDetailBox = (title: string, values: string[]) => (
@@ -98,8 +113,10 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                   src="/vector.svg"
                 />
               </div>
-              <div className="relative leading-[150%] mq450:text-base mq450:leading-[24px]">
-                (4.5 stars) • 10 reviews
+              <div className="flex flex-row items-center justify-start gap-[8px]">
+                <div className="relative leading-[150%] mq450:text-base mq450:leading-[24px]">
+                  {reviewCount === 0 ? "No reviews yet" : `(${averageReview} stars) • ${reviewCount} reviews`}
+                </div>
               </div>
             </div>
           </div>

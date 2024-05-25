@@ -1,10 +1,48 @@
-import { FunctionComponent } from "react";
+import axios from "axios";
+import { FunctionComponent, useEffect, useState } from "react";
+import { getImage } from "../../../../components/image/imageComponent";
 
 export type UserReviewType = {
   avatarImage?: string;
+  review: any;
 };
 
-const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage }) => {
+
+
+const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage, review }) => {
+
+  const [userName, setUserName] = useState('');
+  const [userImage, setUserImage] = useState(avatarImage);
+
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/user/name/${review.userId}`);
+        setUserName(response.data);
+      } catch (error) {
+        console.error(`Failed to fetch user name: ${error}`);
+      }
+    };
+
+    fetchUserName();
+  }, [review.userId]);
+
+  useEffect(() => {
+    const fetchUserImage = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/user/${review.userId}`);
+        const user = response.data;
+        const image = await getImage(user.profilePhotoID);
+        setUserImage(image);
+      } catch (error) {
+        console.error(`Failed to fetch user image: ${error}`);
+      }
+    };
+
+    fetchUserImage();
+  }, [review.userId]);
+
   return (
     <div className="flex-1 flex flex-col items-start justify-start py-4 px-8 box-border gap-[24px] min-w-[280px] max-w-full text-left text-base text-text-primary font-text-medium-normal">
       <div className="flex flex-row items-center justify-start gap-[20px] mq450:flex-wrap">
@@ -12,49 +50,31 @@ const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage }) => {
           className="h-14 w-14 relative rounded-[50%] object-cover"
           loading="lazy"
           alt=""
-          src={avatarImage}
+          src={userImage}
         />
         <div className="flex flex-col items-start justify-start">
           <div className="relative leading-[150%] font-semibold inline-block min-w-[119px]">
-            Name Surname
+            {userName} {/* Display the user's name */}
           </div>
           <div className="relative leading-[150%] inline-block min-w-[36px]">
-            Date
+            {review.createdAt}
           </div>
         </div>
       </div>
       <div className="overflow-hidden flex flex-row items-start justify-start gap-[4px]">
-        <img
-          className="h-[18.9px] w-5 relative min-h-[19px]"
-          alt=""
-          src="/vector.svg"
-        />
-        <img
-          className="h-[18.9px] w-5 relative min-h-[19px]"
-          alt=""
-          src="/vector.svg"
-        />
-        <img
-          className="h-[18.9px] w-5 relative min-h-[19px]"
-          alt=""
-          src="/vector.svg"
-        />
-        <img
-          className="h-[18.9px] w-5 relative min-h-[19px]"
-          alt=""
-          src="/vector.svg"
-        />
-        <img
-          className="h-[18.9px] w-5 relative min-h-[19px]"
-          alt=""
-          src="/vector.svg"
-        />
+        {/* Display the rating as stars */}
+        {[...Array(review.rating)].map((_, i) => (
+          <img
+            key={i}
+            className="h-[18.9px] w-5 relative min-h-[19px]"
+            alt=""
+            src="/vector.svg"
+          />
+        ))}
       </div>
       <div className="self-stretch flex flex-col items-start justify-start text-lg">
         <div className="self-stretch relative leading-[150%]">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          varius enim in eros elementum tristique. Duis cursus, mi quis viverra
-          ornare."
+          {review.review}
         </div>
       </div>
     </div>

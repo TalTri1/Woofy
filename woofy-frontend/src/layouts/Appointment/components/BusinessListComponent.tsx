@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import MapIcon from '@mui/icons-material/Map';
 import { formatEnumValue } from "../../../utils/format-enum-text";
 import { useRouter } from '../../../routes/hooks';
+import { fetchAverageReviews } from '../../../utils/reviews/reviews';
 
 interface Business {
     id: number;
@@ -20,6 +21,7 @@ interface Business {
     dayCareEntity: ServiceEntity | null;
     dogSitterEntity: ServiceEntity | null;
     dogWalkerEntity: ServiceEntity | null;
+    averageReview: number | null; // Add this line
 }
 
 interface ServiceEntity {
@@ -47,7 +49,6 @@ const BusinessListComponent: React.FC = () => {
 
     useEffect(() => {
         const fetchAvailableBusinesses = async () => {
-            console.log(`Fetching available businesses for service: ${selectedService}`);
             try {
                 const response = await axios.get('http://localhost:8080/api/v1/business/all');
                 const data = response.data;
@@ -66,6 +67,11 @@ const BusinessListComponent: React.FC = () => {
                             return false;
                     }
                 });
+
+                for (let business of filteredBusinesses) {
+                    business.averageReview = await fetchAverageReviews(business.id);
+                }
+
                 setAvailableBusinesses(filteredBusinesses);
             } catch (error) {
                 console.error(`Failed to fetch available businesses: ${error}`);
@@ -77,21 +83,6 @@ const BusinessListComponent: React.FC = () => {
 
     const handleServiceChange = (serviceType: BUSINESS_TYPES) => {
         setSelectedService(serviceType);
-    };
-
-    const getServiceEntity = (business: Business) => {
-        switch (selectedService) {
-            case BUSINESS_TYPES.BOARDING:
-                return business.boardingEntity;
-            case BUSINESS_TYPES.DAY_CARE:
-                return business.dayCareEntity;
-            case BUSINESS_TYPES.DOG_SITTER:
-                return business.dogSitterEntity;
-            case BUSINESS_TYPES.DOG_WALK:
-                return business.dogWalkerEntity;
-            default:
-                return null;
-        }
     };
 
     const navigateToBusinessProfile = (businessId: number) => {
@@ -115,12 +106,30 @@ const BusinessListComponent: React.FC = () => {
                             <TableCell>Dog Capacity</TableCell>
                             <TableCell>Acceptable Dog Sizes</TableCell>
                             <TableCell>Phone Number</TableCell>
+                            <TableCell>Average Review</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {availableBusinesses.map((business) => {
-                            const serviceEntity = getServiceEntity(business);
+                            let serviceEntity;
+                            switch (selectedService) {
+                                case BUSINESS_TYPES.BOARDING:
+                                    serviceEntity = business.boardingEntity;
+                                    break;
+                                case BUSINESS_TYPES.DAY_CARE:
+                                    serviceEntity = business.dayCareEntity;
+                                    break;
+                                case BUSINESS_TYPES.DOG_SITTER:
+                                    serviceEntity = business.dogSitterEntity;
+                                    break;
+                                case BUSINESS_TYPES.DOG_WALK:
+                                    serviceEntity = business.dogWalkerEntity;
+                                    break;
+                                default:
+                                    serviceEntity = null;
+                            }
+
                             return (
                                 <TableRow key={business.id}>
                                     <TableCell>{business.businessName}</TableCell>
@@ -131,6 +140,9 @@ const BusinessListComponent: React.FC = () => {
                                     <TableCell>{serviceEntity?.dogCapacity}</TableCell>
                                     <TableCell>{serviceEntity?.acceptableDogSizes?.map(size => formatEnumValue(size)).join(', ') || ''}</TableCell>
                                     <TableCell>{business.phoneNumber}</TableCell>
+                                    <TableCell>
+                                        {business.averageReview === null || business.averageReview === undefined ? "No reviews yet" : (isNaN(business.averageReview!) ? "No reviews yet" : business.averageReview)}
+                                    </TableCell>
                                     <TableCell>
                                         <Button
                                             variant="contained"
