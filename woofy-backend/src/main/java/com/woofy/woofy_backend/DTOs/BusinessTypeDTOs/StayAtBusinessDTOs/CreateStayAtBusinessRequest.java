@@ -14,4 +14,5 @@ import java.util.List;
 public class CreateStayAtBusinessRequest extends BusinessTypeBaseRequest {
     private List<HomeConditionsEnum> homeConditions;
     private List<PetsInHomeEnum> petsInHome;
+    private int dogCapacity;
 }

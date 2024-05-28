@@ -21,4 +21,6 @@ public class StayAtBusinessBaseEntity extends BusinessTypeBaseEntity {
     @Column(name = "pets_in_home")
     private List<PetsInHomeEnum> petsInHome;
 
+    @Column(name = "dog_capacity", nullable = false)
+    private int dogCapacity;
 }

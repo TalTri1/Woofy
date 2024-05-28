@@ -151,9 +151,6 @@ public class AppointmentController {
         DogWalkerScheduleEntity existingSchedule = dogWalkerScheduleRepository.findByDateAndStartTimeAndEndTime(appointmentDate, appointmentStartTime, appointmentEndTime).orElse(null);
 
         if (existingSchedule != null) {
-            if (dogWalker.getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs in this time slot");
-            }
             existingSchedule.setCurrentDogCapacity(existingSchedule.getCurrentDogCapacity() + 1);
             dogWalkerScheduleRepository.save(existingSchedule);
         } else {
@@ -247,9 +244,6 @@ public class AppointmentController {
         DogSitterScheduleEntity existingSchedule = dogSitterScheduleRepository.findByDateAndStartTimeAndEndTime(appointmentDate, appointmentStartTime, appointmentEndTime).orElse(null);
 
         if (existingSchedule != null) {
-            if (dogSitter.getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs in this time slot");
-            }
             existingSchedule.setCurrentDogCapacity(existingSchedule.getCurrentDogCapacity() + 1);
             dogSitterScheduleRepository.save(existingSchedule);
         } else {

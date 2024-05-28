@@ -26,9 +26,6 @@ public class BusinessTypeBaseEntity {
     @Column(name = "acceptable_dog_sizes", nullable = false)
     private List<DogSizeEnum> acceptableDogSizes;
 
-    @Column(name = "dog_capacity", nullable = false)
-    private int dogCapacity;
-
     @Column(name = "price", nullable = false)
     private int price;
 
