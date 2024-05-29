@@ -2,7 +2,6 @@ import {Size, WEEKDAYS} from "../../Enums/Enums";
 
 export abstract class BusinessTypeBaseModel {
     acceptableDogSizes: Size[] = [];
-    dogCapacity: number = 0;
     price: number | string = "";
     startDate: Date = new Date();
     endDate: Date = new Date();
