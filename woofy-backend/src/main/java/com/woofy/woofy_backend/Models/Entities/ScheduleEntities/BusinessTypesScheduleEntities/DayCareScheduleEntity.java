@@ -3,9 +3,7 @@ package com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesSc
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BaseScheduleEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class DayCareScheduleEntity extends BaseScheduleEntity {
 
     @JsonBackReference
-    @OneToOne(mappedBy = "dayCareScheduleEntity")
+    @ManyToOne
+    @JoinColumn(name = "day_care_id")
     private DayCareEntity dayCareEntity;
 }

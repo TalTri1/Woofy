@@ -35,6 +35,6 @@ public class DayCareEntity extends StayAtBusinessBaseEntity {
     private List<DayCareAppointmentEntity> dayCareAppointmentEntities;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DayCareScheduleEntity dayCareScheduleEntity;
+    @OneToMany(mappedBy = "dayCareEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DayCareScheduleEntity> dayCareScheduleEntities;
 }

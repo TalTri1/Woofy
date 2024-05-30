@@ -73,6 +73,14 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
             newSchedule.setDogWalkerEntity(dogWalker);
             newSchedule.setCurrentDogCapacity(1);
             dogWalkerScheduleRepository.save(newSchedule);
+
+            // Add the new schedule to the list of schedules in the DogWalkerEntity
+            List<DogWalkerScheduleEntity> dogWalkerSchedules = dogWalker.getDogWalkerScheduleEntities();
+            if (dogWalkerSchedules == null) {
+                dogWalkerSchedules = new ArrayList<>();
+            }
+            dogWalkerSchedules.add(newSchedule);
+            dogWalker.setDogWalkerScheduleEntities(dogWalkerSchedules);
         }
 
         DogWalkerAppointmentEntity dogWalkerAppointmentEntity = new DogWalkerAppointmentEntity();
