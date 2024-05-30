@@ -39,7 +39,7 @@ public class ReviewsService {
 
     public Double getAverageRatingByBusinessId(Integer businessId) {
         List<ReviewsEntity> reviews = reviewsRepository.findByBusinessId(businessId);
-        double averageRating = reviews.stream().mapToDouble(ReviewsEntity::getRating).average().orElse(Double.NaN);
+        double averageRating = reviews.stream().mapToDouble(ReviewsEntity::getRating).average().orElse(0);
         BigDecimal bd = new BigDecimal(Double.toString(averageRating));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
