@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent } from "react";
+import React, { ChangeEvent, FunctionComponent, useState } from "react";
 import RegistrationModel from "../../models/RegistrationModel";
 import ImageComponent from "../../components/image/imageComponent";
 import Avatar from '@mui/material/Avatar';
@@ -17,13 +17,26 @@ import SendIcon from '@mui/icons-material/Send';
 type RegistrationComponentProps = {
     updateCompleteRegistrationUser: (updatedData: Partial<RegistrationModel>) => void;
     onFileSelect: (file: File) => void;
-    DogOwnerOrCareGiveractiveButton: string | null
+    DogOwnerOrCareGiveractiveButton: string | null;
+    errors: { [key: string]: string };
+    setErrors: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 }
 
-const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOwnerOrCareGiveractiveButton, updateCompleteRegistrationUser, onFileSelect }) => {
+const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOwnerOrCareGiveractiveButton, updateCompleteRegistrationUser, onFileSelect, errors, setErrors }) => {
+
+
+    const validateField = (name: string, value: string) => {
+        let error = "";
+        if (value.trim() === "") {
+            error = `${name} is required`;
+        }
+        setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
+    };
+
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         updateCompleteRegistrationUser({ [name]: value });
+        validateField(name, value);
     };
 
     return (
@@ -69,6 +82,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                         name="businessName"
                                         autoComplete="business-name"
                                         onChange={changeHandler}
+                                        error={!!errors.businessName}
+                                        helperText={errors.businessName}
                                     />
                                 </Grid>
                             )}
@@ -98,6 +113,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="firstName"
                                     autoComplete="given-name"
                                     onChange={changeHandler}
+                                    error={!!errors.firstName}
+                                    helperText={errors.firstName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,6 +143,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="lastName"
                                     autoComplete="family-name"
                                     onChange={changeHandler}
+                                    error={!!errors.lastName}
+                                    helperText={errors.lastName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -154,6 +173,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="phoneNumber"
                                     autoComplete="tel"
                                     onChange={changeHandler}
+                                    error={!!errors.phoneNumber}
+                                    helperText={errors.phoneNumber}
                                     InputProps={{
                                         startAdornment: (
                                             <img
@@ -191,6 +212,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="address"
                                     autoComplete="address"
                                     onChange={changeHandler}
+                                    error={!!errors.address}
+                                    helperText={errors.address}
                                     InputProps={{
                                         startAdornment: (
                                             <img
@@ -228,6 +251,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="city"
                                     autoComplete="address-level2"
                                     onChange={changeHandler}
+                                    error={!!errors.city}
+                                    helperText={errors.city}
                                     InputProps={{
                                         startAdornment: (
                                             <img
@@ -265,6 +290,8 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                     name="zipCode"
                                     autoComplete="postal-code"
                                     onChange={changeHandler}
+                                    error={!!errors.zipCode}
+                                    helperText={errors.zipCode}
                                 />
                             </Grid>
                         </Grid>
