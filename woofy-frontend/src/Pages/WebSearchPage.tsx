@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import NavbarAfterLogin from "../Sections/User/Business/Profile/NavbarAfterLogin";
+import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
@@ -18,7 +18,7 @@ const WebSearchPage: FunctionComponent = () => {
         alignItems: 'start',
       }}
     >
-      <NavbarAfterLogin />
+      <Navbar />
       <HeroContainer />
       <Box
         component="main"

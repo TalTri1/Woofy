@@ -112,15 +112,15 @@ export function palette() {
     },
     background: {
       paper: '#FFFFFF',
-      default: grey[100],
+      default: '#FFFFFF', 
       neutral: grey[200],
-      app1: '#006cbf', // added from tailwind.config.js
-      'text-alternate': '#fff', // added from tailwind.config.js
-      'color-neutral-neutral': '#666', // added from tailwind.config.js
-      'color-neutral-neutral-light': '#aaa', // added from tailwind.config.js
-      'color-neutral-neutral-lighter': '#ccc', // added from tailwind.config.js
-      cornflowerblue: '#2691e6', // added from tailwind.config.js
-      darkgray: '#b3b3b3', // added from tailwind.config.js
+      app1: '#006cbf', 
+      'text-alternate': '#fff', 
+      'color-neutral-neutral': '#666', 
+      'color-neutral-neutral-light': '#aaa', 
+      'color-neutral-neutral-lighter': '#ccc', 
+      cornflowerblue: '#2691e6', 
+      darkgray: '#b3b3b3', 
       gray: {
         '100': '#808080',
         '200': '#787878',
