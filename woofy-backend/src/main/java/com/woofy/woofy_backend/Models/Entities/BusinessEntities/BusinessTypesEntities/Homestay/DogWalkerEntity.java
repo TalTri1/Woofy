@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogWalkerAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
-import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DayCareScheduleEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DogWalkerScheduleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +35,6 @@ public class DogWalkerEntity extends HomestayBaseEntity {
     private List<DogWalkerAppointmentEntity> dogWalkerAppointmentEntities;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DogWalkerScheduleEntity dogWalkerScheduleEntity;
+    @OneToMany(mappedBy = "dogWalkerEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DogWalkerScheduleEntity> dogWalkerScheduleEntities;
 }

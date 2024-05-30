@@ -8,7 +8,6 @@ import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesSch
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -37,6 +36,6 @@ public class BoardingEntity extends StayAtBusinessBaseEntity {
     private List<BoardingAppointmentEntity> boardingAppointmentEntities;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private BoardingScheduleEntity boardingScheduleEntity;
+    @OneToMany(mappedBy = "boardingEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BoardingScheduleEntity> boardingScheduleEntities;
 }

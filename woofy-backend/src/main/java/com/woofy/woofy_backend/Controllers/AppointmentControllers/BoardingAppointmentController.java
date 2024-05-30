@@ -71,6 +71,14 @@ public class BoardingAppointmentController extends BaseAppointmentController{
             newSchedule.setBoardingEntity(boarding);
             newSchedule.setCurrentDogCapacity(1);
             boardingScheduleRepository.save(newSchedule);
+
+            // Add the new schedule to the list of schedules in the BoardingEntity
+            List<BoardingScheduleEntity> boardingSchedules = boarding.getBoardingScheduleEntities();
+            if (boardingSchedules == null) {
+                boardingSchedules = new ArrayList<>();
+            }
+            boardingSchedules.add(newSchedule);
+            boarding.setBoardingScheduleEntities(boardingSchedules);
         }
 
         BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
