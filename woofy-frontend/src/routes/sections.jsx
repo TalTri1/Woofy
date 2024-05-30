@@ -19,7 +19,10 @@ import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookings
 import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
 import MapPage from "../layouts/Map/MapPage";
 import BusinessProfilePage from "../Pages/BusinessProfilePage";
+import WebSearchPage from "../Pages/WebSearchPage";
+import HomePage from "../Pages/HomePage";
 import CustomerUpComingBookings from "../Sections/User/Customer/UpComingBookings/CustomerUpcomingBookingsView";
+
 
 const Router = () => {
     const {token} = useAuth();
@@ -51,6 +54,15 @@ const Router = () => {
                     element: <BusinessProfilePage/>,
                 },
             ],
+        },
+        {
+
+            path: "/search-page",
+            element: <WebSearchPage/>,
+        },
+      {
+            path: "/Hero-page",
+            element: <HomePage/>,
         },
         {
             path: "*",
