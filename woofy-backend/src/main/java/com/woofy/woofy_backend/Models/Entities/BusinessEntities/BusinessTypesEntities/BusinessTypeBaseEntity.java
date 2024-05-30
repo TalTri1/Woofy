@@ -1,7 +1,9 @@
 package com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BaseAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
+import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BaseScheduleEntity;
 import com.woofy.woofy_backend.Models.Enums.DogEnums.DogSizeEnum;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import jakarta.persistence.*;
@@ -48,7 +50,7 @@ public class BusinessTypeBaseEntity {
     @Column(name = "about", length = 2000)
     private String about;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "service_images", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "image_id")
     private List<Integer> images = new ArrayList<>();

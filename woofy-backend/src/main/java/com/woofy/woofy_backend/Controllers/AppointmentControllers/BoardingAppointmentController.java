@@ -1,13 +1,13 @@
 package com.woofy.woofy_backend.Controllers.AppointmentControllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateBoardingAppointmentRequest;
-import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetBoardingAppointmentsRequest;
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetBoardingScheduleRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.BoardingScheduleEntity;
+import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.BoardingScheduleRepository;
@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/appointment/boarding")
 public class BoardingAppointmentController extends BaseAppointmentController{
 
     @Autowired
@@ -34,7 +36,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
     @Autowired
     private BoardingAppointmentsService boardingAppointmentsService;
 
-    @PostMapping("/create-boarding-appointment")
+    @PostMapping("/create-appointment")
     public ResponseEntity<String> createBoardingAppointment(@RequestBody CreateBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
 
         CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -73,24 +75,38 @@ public class BoardingAppointmentController extends BaseAppointmentController{
 
         BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
         boardingAppointmentEntity.setDate(newAppointmentRequest.getDate());
+        boardingAppointmentEntity.setEndDate(newAppointmentRequest.getEndDate());
         boardingAppointmentEntity.setBoardingEntity(boarding);
         boardingAppointmentEntity.setDogId(customer.getDog().getId());
+
+
+        // Add the new appointment to the list of appointments in the BoardingEntity
+        List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
+        if (boardingAppointments == null) {
+            boardingAppointments = new ArrayList<>();
+        }
+        boardingAppointments.add(boardingAppointmentEntity);
+        boarding.setBoardingAppointmentEntities(boardingAppointments);
+
         boardingAppointmentRepository.save(boardingAppointmentEntity);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get-boarding-appointments/by-business-id")
-    public ResponseEntity<List<BoardingAppointmentEntity>> getAppointmentsByBoardingEntityId(@RequestBody GetBoardingAppointmentsRequest getAppointmentsRequest) {
-        List<BoardingAppointmentEntity> appointments = boardingAppointmentsService.getAppointmentsByBusinessId(getAppointmentsRequest.getBusinessId());
-        return ResponseEntity.ok(appointments);
-    }
-
-    @GetMapping("/get-boarding-appointments/by-user-id")
-    public ResponseEntity<List<BoardingAppointmentEntity>> getAppointmentsByUserId(@RequestBody GetBoardingAppointmentsRequest getAppointmentsRequest, Principal principal) {
-        CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        Integer dogId = customer.getDog().getId();
-        List<BoardingAppointmentEntity> appointments = boardingAppointmentsService.getAppointmentsByDogId(dogId);
-        return ResponseEntity.ok(appointments);
+    @GetMapping("/get-appointments")
+    public ResponseEntity<List<BoardingAppointmentEntity>> getAllBoardingAppointments(Principal principal) {
+        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        if (user instanceof CustomerEntity) {
+            Integer dogId = ((CustomerEntity) user).getDog().getId();
+            List<BoardingAppointmentEntity> appointments = boardingAppointmentRepository.findByDogId(dogId);
+            return ResponseEntity.ok(appointments);
+        }
+        if (user instanceof BusinessEntity) {
+            Integer businessId = user.getId();
+            List<BoardingAppointmentEntity> appointments = boardingAppointmentRepository.findByBoardingEntity_Business_Id(businessId);
+            return ResponseEntity.ok(appointments);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/get-boarding-schedule")

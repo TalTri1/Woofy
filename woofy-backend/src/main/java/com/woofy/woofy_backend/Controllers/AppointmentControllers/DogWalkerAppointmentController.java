@@ -16,14 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/appointment/dog-walker")
 public class DogWalkerAppointmentController extends BaseAppointmentController{
 
     @Autowired
@@ -32,7 +35,7 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
     @Autowired
     private DogWalkerAppointmentRepository dogWalkerAppointmentRepository;
 
-    @PostMapping("/create-dog-walker-appointment")
+    @PostMapping("/create-appointment")
     public ResponseEntity<String> createDogWalkerAppointment(@RequestBody CreateDogWalkerAppointmentRequest newAppointmentRequest, Principal principal) {
 
         CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -77,6 +80,15 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
         dogWalkerAppointmentEntity.setStartTime(appointmentStartTime);
         dogWalkerAppointmentEntity.setEndTime(appointmentEndTime);
         dogWalkerAppointmentEntity.setDogId(customer.getDog().getId());
+
+        // Add the new appointment to the list of appointments in the DogWalkerEntity
+        List<DogWalkerAppointmentEntity> dogWalkerAppointments = dogWalker.getDogWalkerAppointmentEntities();
+        if (dogWalkerAppointments == null) {
+            dogWalkerAppointments = new ArrayList<>();
+        }
+        dogWalkerAppointments.add(dogWalkerAppointmentEntity);
+        dogWalker.setDogWalkerAppointmentEntities(dogWalkerAppointments);
+
         dogWalkerAppointmentRepository.save(dogWalkerAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

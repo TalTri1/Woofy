@@ -15,12 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/appointment/day-care")
 public class DayCareAppointmentController extends BaseAppointmentController{
 
     @Autowired
@@ -30,7 +34,7 @@ public class DayCareAppointmentController extends BaseAppointmentController{
     private DayCareAppointmentRepository dayCareAppointmentRepository;
 
 
-    @PostMapping("/create-day-care-appointment")
+    @PostMapping("/create-appointment")
     public ResponseEntity<String> createDayCareAppointment(@RequestBody CreateDayCareAppointmentRequest newAppointmentRequest, Principal principal) {
         CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
@@ -70,7 +74,17 @@ public class DayCareAppointmentController extends BaseAppointmentController{
         dayCareAppointmentEntity.setDate(newAppointmentRequest.getDate());
         dayCareAppointmentEntity.setDayCareEntity(dayCare);
         dayCareAppointmentEntity.setDogId(customer.getDog().getId());
+
+        // Add the new appointment to the list of appointments in the DayCareEntity
+        List<DayCareAppointmentEntity> dayCareAppointments = dayCare.getDayCareAppointmentEntities();
+        if (dayCareAppointments == null) {
+            dayCareAppointments = new ArrayList<>();
+        }
+        dayCareAppointments.add(dayCareAppointmentEntity);
+        dayCare.setDayCareAppointmentEntities(dayCareAppointments);
+
         dayCareAppointmentRepository.save(dayCareAppointmentEntity);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

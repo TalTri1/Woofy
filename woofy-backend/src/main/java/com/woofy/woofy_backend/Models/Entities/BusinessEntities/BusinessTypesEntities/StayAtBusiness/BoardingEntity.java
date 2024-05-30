@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -31,8 +33,8 @@ public class BoardingEntity extends StayAtBusinessBaseEntity {
     private BusinessEntity business;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private BoardingAppointmentEntity boardingAppointmentEntity;
+    @OneToMany(mappedBy = "boardingEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BoardingAppointmentEntity> boardingAppointmentEntities;
 
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

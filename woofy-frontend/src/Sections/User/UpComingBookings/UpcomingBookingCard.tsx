@@ -1,35 +1,52 @@
-import React, {FunctionComponent, useMemo, CSSProperties} from "react";
-import {Box, Button, Typography} from "@mui/material";
+import React, { FunctionComponent, useMemo, CSSProperties } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import {formatEnumValue} from "../../../utils/format-enum-text";
 
 export type UpcomingBookingCardType = {
-    dayCareIconSun?: string;
-    dayCare?: string;
-
+    icon?: string;
+    businessType?: string;
+    businessName?: string;
+    address?: string;
+    city?: string;
+    date?: string;
+    endDate?: string;
+    startTime?: string;
+    profileImage?: string;
     /** Style props */
     propMinWidth?: CSSProperties["minWidth"];
-    dayCareServiceTagWidth?: CSSProperties["width"];
-    dayCareWidth?: CSSProperties["width"];
+    serviceTagWidth?: CSSProperties["width"];
+    businessTypeWidth?: CSSProperties["width"];
 };
 
 const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
-                                                                             dayCareIconSun,
-                                                                             dayCare,
+                                                                             icon,
+                                                                             businessType,
+                                                                             businessName,
+                                                                             address,
+                                                                             city,
+                                                                             date,
+                                                                             endDate, // Destructure endDate
+                                                                             startTime,
+                                                                             profileImage,
                                                                              propMinWidth,
-                                                                             dayCareServiceTagWidth,
-                                                                             dayCareWidth,
+                                                                             serviceTagWidth,
+                                                                             businessTypeWidth,
                                                                          }) => {
-    const dayCareStyle: CSSProperties = useMemo(() => {
+    const businessTypeStyle: CSSProperties = useMemo(() => {
         return {
             minWidth: propMinWidth,
-            width: dayCareWidth,
+            width: businessTypeWidth,
         };
-    }, [propMinWidth, dayCareWidth]);
+    }, [propMinWidth, businessTypeWidth]);
 
-    const dayCareServiceTagStyle: CSSProperties = useMemo(() => {
+    const serviceTagStyle: CSSProperties = useMemo(() => {
         return {
-            width: dayCareServiceTagWidth,
+            width: serviceTagWidth,
         };
-    }, [dayCareServiceTagWidth]);
+    }, [serviceTagWidth]);
+
+    const isTimeVisible = businessType !== "BOARDING" && businessType !== "DAY_CARE";
+    const isEndDateVisible = businessType === "BOARDING";
 
     return (
         <Box
@@ -51,9 +68,9 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
         >
             <Box
                 component="img"
-                sx={{height: 144, width: 144, borderRadius: "50%", objectFit: "cover"}}
-                alt="placeholder"
-                src="/placeholder-image@2x.png"
+                sx={{ height: 144, width: 144, borderRadius: "50%", objectFit: "cover" }}
+                alt="profile"
+                src={profileImage}
             />
             <Box
                 sx={{
@@ -66,7 +83,7 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
                     maxWidth: "100%",
                 }}
             >
-                <Box sx={{width: "100%", display: "flex", flexDirection: "column", alignItems: "start"}}>
+                <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "start" }}>
                     <Box
                         sx={{
                             width: "100%",
@@ -75,12 +92,12 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
                             alignItems: "center",
                             gap: 2,
                             pb: 1,
-                            flexWrap: {xs: "wrap", md: "nowrap"},
-                            pr: {xs: 1, md: 2},
+                            flexWrap: { xs: "wrap", md: "nowrap" },
+                            pr: { xs: 1, md: 2 },
                         }}
                     >
-                        <Typography variant="body1" component="b" sx={{minWidth: 10}}>
-                            Business Name
+                        <Typography variant="body1" component="b" sx={{ minWidth: 10 }}>
+                            {businessName}
                         </Typography>
                         <Box
                             sx={{
@@ -94,17 +111,17 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
                                 bgcolor: "primary.main",
                                 borderRadius: "24px",
                                 color: "white",
-                                ...dayCareServiceTagStyle,
+                                ...serviceTagStyle,
                             }}
                         >
                             <Box
                                 component="img"
-                                sx={{height: 24, width: 24, objectFit: "cover"}}
+                                sx={{ height: 24, width: 24, objectFit: "cover" }}
                                 alt="icon"
-                                src={dayCareIconSun}
+                                src={icon}
                             />
-                            <Typography variant="body2" component="div" sx={{...dayCareStyle}}>
-                                {dayCare}
+                            <Typography variant="body2" component="div" sx={{ ...businessTypeStyle }}>
+                                {formatEnumValue(businessType)}
                             </Typography>
                         </Box>
                     </Box>
@@ -115,34 +132,43 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
                             flexDirection: "row",
                             alignItems: "center",
                             gap: 1,
-                            flexWrap: {xs: "wrap", md: "nowrap"},
-                            pr: {xs: 1, md: 2},
+                            flexWrap: { xs: "wrap", md: "nowrap" },
+                            pr: { xs: 1, md: 2 },
                         }}
                     >
-                        <Typography variant="body2" component="div" sx={{minWidth: 38}}>
-                            Date
-                        </Typography>
-                        <Typography variant="body2" component="div" sx={{mx: 0.5}}>
+                        {isEndDateVisible ? (
+                            <Typography variant="body2" component="div" sx={{ minWidth: 38 }}>
+                                {date} - {endDate}
+                            </Typography>
+                        ) : (
+                            <Typography variant="body2" component="div" sx={{ minWidth: 38 }}>
+                                {date}
+                            </Typography>
+                        )}
+                        {isTimeVisible && (
+                            <>
+                                <Typography variant="body2" component="div" sx={{ mx: 0.5 }}>
+                                    •
+                                </Typography>
+                                <Typography variant="body2" component="div" sx={{ minWidth: 38 }}>
+                                    {startTime ? startTime : "N/A"}
+                                </Typography>
+                            </>
+                        )}
+                        <Typography variant="body2" component="div" sx={{ mx: 0.5 }}>
                             •
                         </Typography>
-                        <Typography variant="body2" component="div" sx={{minWidth: 38}}>
-                            Time
-                        </Typography>
-                        <Typography variant="body2" component="div" sx={{mx: 0.5}}>
-                            •
-                        </Typography>
-                        <Typography variant="body2" component="div" sx={{minWidth: 38}}>
-                            Location
+                        <Typography variant="body2" component="div" sx={{ minWidth: 38 }}>
+                            {address}, {city}
                         </Typography>
                     </Box>
                 </Box>
 
-                <Box sx={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "end", pr: 2}}>
-                    <Button variant="outlined"
-                            sx={{borderRadius: "24px", display: "flex", alignItems: "center", gap: 1}}>
+                <Box sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "end", pr: 2 }}>
+                    <Button variant="outlined" sx={{ borderRadius: "24px", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box
                             component="img"
-                            sx={{height: 24, width: 24, objectFit: "cover"}}
+                            sx={{ height: 24, width: 24, objectFit: "cover" }}
                             alt="manage"
                             src="/manage-button-icon--editalt.svg"
                         />

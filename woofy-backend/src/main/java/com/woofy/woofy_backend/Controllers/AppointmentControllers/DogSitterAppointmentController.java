@@ -16,14 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/appointment/dog-sitter")
 public class DogSitterAppointmentController extends BaseAppointmentController{
 
     @Autowired
@@ -33,7 +36,7 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
     private DogSitterAppointmentRepository dogSitterAppointmentRepository;
 
 
-    @PostMapping("/create-dog-sitter-appointment")
+    @PostMapping("/create-appointment")
     public ResponseEntity<String> createDogSitterAppointment(@RequestBody CreateDogSitterAppointmentRequest newAppointmentRequest, Principal principal) {
         CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
@@ -77,6 +80,16 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
         dogSitterAppointmentEntity.setStartTime(appointmentStartTime);
         dogSitterAppointmentEntity.setEndTime(appointmentEndTime);
         dogSitterAppointmentEntity.setDogId(customer.getDog().getId());
+
+        // Add the new appointment to the list of appointments in the DogSitterEntity
+        List<DogSitterAppointmentEntity> dogSitterAppointments = dogSitter.getDogSitterAppointmentEntities();
+        if (dogSitterAppointments == null) {
+            dogSitterAppointments = new ArrayList<>();
+        }
+        dogSitterAppointments.add(dogSitterAppointmentEntity);
+        dogSitter.setDogSitterAppointmentEntities(dogSitterAppointments);
+
+
         dogSitterAppointmentRepository.save(dogSitterAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

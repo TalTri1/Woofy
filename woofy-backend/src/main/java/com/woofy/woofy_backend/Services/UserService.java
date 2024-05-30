@@ -78,10 +78,26 @@ public class UserService {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getPhoneNumber(),
+                        user.getEmail(),
                         user.getAddress(),
                         user.getCity(),
-                        user.getRole()))
+                        user.getZipCode(),
+                        user.getRole(),
+                        user.getProfilePhotoID()))
                 .collect(Collectors.toList());
+    }
+    public UserSummaryDTO mapToDTO(UserEntity userEntity) {
+        UserSummaryDTO dto = new UserSummaryDTO();
+        dto.setFirstName(userEntity.getFirstName());
+        dto.setLastName(userEntity.getLastName());
+        dto.setPhoneNumber(userEntity.getPhoneNumber());
+        dto.setEmail(userEntity.getEmail());
+        dto.setAddress(userEntity.getAddress());
+        dto.setCity(userEntity.getCity());
+        dto.setZipCode(userEntity.getZipCode());
+        dto.setRole(userEntity.getRole());
+        dto.setProfilePhotoID(userEntity.getProfilePhotoID());
+        return dto;
     }
 
     public String getFullNameById(Integer id) {
