@@ -76,7 +76,7 @@ const Registration: FunctionComponent = () => {
             } catch (error) {
                 console.error(`Error uploading image: ${error}`);
                 toast.error("Failed uploading profile photo")
-            }finally{
+            } finally {
                 setIsLoggedIn(true);
                 router.push("/");
                 toast.success(`Successfully registered!`);
@@ -127,30 +127,30 @@ const Registration: FunctionComponent = () => {
                 }}
             >
                 <Typography
-        component="h1"
-        sx={{
-            fontSize: '36px',
-            lineHeight: '120%',
-            fontFamily: 'Inter',
-            fontWeight: 'bold',
-            color: 'white',
-            textAlign: 'left', // Changed to left-aligned
-            marginBottom: '20px',
-        }}
-    >
-        Register and start using Woofy
-    </Typography>
-    <Typography
-        sx={{
-            fontSize: '16px',
-            lineHeight: '150%',
-            fontFamily: 'Inter',
-            color: 'white',
-            textAlign: 'left', // Changed to left-aligned
-        }}
-    >
-        Complete the forms below to provide your contact information and your business details.
-    </Typography>
+                    component="h1"
+                    sx={{
+                        fontSize: '36px',
+                        lineHeight: '120%',
+                        fontFamily: 'Inter',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textAlign: 'left', // Changed to left-aligned
+                        marginBottom: '20px',
+                    }}
+                >
+                    Register and start using Woofy
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: '16px',
+                        lineHeight: '150%',
+                        fontFamily: 'Inter',
+                        color: 'white',
+                        textAlign: 'left', // Changed to left-aligned
+                    }}
+                >
+                    Complete the forms below to provide your contact information and your business details.
+                </Typography>
             </Box>
             <form onSubmit={signupHandler}>
                 <Box mt={3} display="flex" flexDirection="column" alignItems="center">
