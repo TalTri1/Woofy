@@ -17,8 +17,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "dog_sitter_appointments")
 public class DogSitterAppointmentEntity extends BaseAppointmentEntity {
 
-
     @JsonBackReference
-    @OneToOne(mappedBy = "dogSitterAppointmentEntity")
+    @ManyToOne
+    @JoinColumn(name = "dog_sitter_id")
     private DogSitterEntity dogSitterEntity;
+
 }

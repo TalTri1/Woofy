@@ -25,9 +25,10 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<UserEntity> getUser(Principal principal) {
+    public ResponseEntity<UserSummaryDTO> getUser(Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return ResponseEntity.ok(user);
+        UserSummaryDTO userSummaryDTO = service.mapToDTO(user);
+        return ResponseEntity.ok(userSummaryDTO);
     }
     @PatchMapping("/update")
     public ResponseEntity<UserEntity> updateUser(@RequestBody UpdateUserRequest request, Principal connectedUser) {

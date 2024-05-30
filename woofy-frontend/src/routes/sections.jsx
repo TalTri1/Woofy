@@ -19,6 +19,7 @@ import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookings
 import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
 import MapPage from "../layouts/Map/MapPage";
 import BusinessProfilePage from "../Pages/BusinessProfilePage";
+import CustomerUpComingBookings from "../Sections/User/Customer/UpComingBookings/CustomerUpcomingBookingsView";
 
 const Router = () => {
     const {token} = useAuth();
@@ -42,10 +43,6 @@ const Router = () => {
                     element: <UserDashboard/>,
                 },
                 {
-                    path: "404",
-                    element: <NotFoundPage/>,
-                },
-                {
                     path: "/map",
                     element: <MapPage/>,
                 },
@@ -53,8 +50,11 @@ const Router = () => {
                     path: "/business-profile/:id",
                     element: <BusinessProfilePage/>,
                 },
-
             ],
+        },
+        {
+            path: "*",
+            element: <NotFoundPage/>,
         },
     ];
 
@@ -92,6 +92,7 @@ const Router = () => {
                 },
 
 
+
             ],
         },
     ]
@@ -112,7 +113,7 @@ const Router = () => {
                 },
                 {
                     path: "/bookings",
-                    element: <UpComingBookings/>,
+                    element: <CustomerUpComingBookings/>,
                 },
                 {
                     path: "/dog-register",

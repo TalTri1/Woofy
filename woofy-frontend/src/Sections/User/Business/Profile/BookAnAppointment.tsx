@@ -12,7 +12,6 @@ import { fDate, fDateTime } from '../../../../utils/format-time';
 import api from '../../../../api/api';
 
 const BookAnAppointment = ({ business, selectedService }) => {
-    const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [startTime, setStartTime] = useState('');
@@ -20,15 +19,12 @@ const BookAnAppointment = ({ business, selectedService }) => {
 
     const validateFields = () => {
         let isValid = true;
-        if (!startDate && selectedService === BUSINESS_TYPES.BOARDING) {
-            toast.error('Start Date is required');
-            isValid = false;
-        }
+
         if (!endDate && selectedService === BUSINESS_TYPES.BOARDING) {
             toast.error('End Date is required');
             isValid = false;
         }
-        if (!selectedDate && (selectedService === BUSINESS_TYPES.DOG_SITTER || selectedService === BUSINESS_TYPES.DOG_WALK)) {
+        if (!selectedDate) {
             toast.error('Selected Date is required');
             isValid = false;
         }
@@ -60,16 +56,16 @@ const BookAnAppointment = ({ business, selectedService }) => {
             let response;
             switch (selectedService) {
                 case BUSINESS_TYPES.BOARDING:
-                    response = await api.post('/appointment/create-boarding-appointment', appointmentData);
+                    response = await api.post('/appointment/boarding/create-appointment', appointmentData);
                     break;
                 case BUSINESS_TYPES.DAY_CARE:
-                    response = await api.post('/appointment/create-day-care-appointment', appointmentData);
+                    response = await api.post('/appointment/day-care/create-appointment', appointmentData);
                     break;
                 case BUSINESS_TYPES.DOG_SITTER:
-                    response = await api.post('/appointment/create-dog-sitter-appointment', appointmentData);
+                    response = await api.post('/appointment/dog-sitter/create-appointment', appointmentData);
                     break;
                 case BUSINESS_TYPES.DOG_WALK:
-                    response = await api.post('/appointment/create-dog-walker-appointment', appointmentData);
+                    response = await api.post('/appointment/dog-walker/create-appointment', appointmentData);
                     break;
                 default:
                     throw new Error('Invalid service type');
@@ -159,8 +155,8 @@ const BookAnAppointment = ({ business, selectedService }) => {
                             <Grid item>
                                 <DatePicker
                                     label="Start Date"
-                                    value={startDate}
-                                    onChange={(date) => setStartDate(date)}
+                                    value={selectedDate}
+                                    onChange={(date) => setSelectedDate(date)}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>

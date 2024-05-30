@@ -21,6 +21,7 @@ public class BoardingService {
         BoardingEntity boardingEntity = new BoardingEntity();
         boardingEntity.setHomeConditions(request.getHomeConditions());
         boardingEntity.setPetsInHome(request.getPetsInHome());
+        boardingEntity.setDogCapacity(request.getDogCapacity());
         businessTypeService.create(request, businessId, boardingEntity);
         return boardingRepository.save(boardingEntity);
     }

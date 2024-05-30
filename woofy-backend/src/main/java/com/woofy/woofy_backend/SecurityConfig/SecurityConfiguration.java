@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/v1/**").hasAnyRole(ADMIN.name())
                                 .requestMatchers("/api/v1/business/**").hasAnyRole(BUSINESS.name())
                                 .requestMatchers(GET, "/api/v1/business/**").hasAnyAuthority(BUSINESS_READ.name())
+                                .requestMatchers(GET, "/api/v1/appointment/**").hasAnyAuthority(BUSINESS_READ.name())
                                 .requestMatchers(POST, "/api/v1/business/**").hasAnyAuthority(BUSINESS_CREATE.name())
                                 .requestMatchers(PUT, "/api/v1/business/**").hasAnyAuthority(BUSINESS_UPDATE.name())
                                 .requestMatchers(DELETE, "/api/v1/business/**").hasAnyAuthority(BUSINESS_DELETE.name())

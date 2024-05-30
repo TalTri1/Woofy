@@ -31,7 +31,6 @@ public class BusinessTypeService {
 
         entity.setBusiness(business);
         entity.setAcceptableDogSizes(request.getAcceptableDogSizes());
-        entity.setDogCapacity(request.getDogCapacity());
         entity.setPrice(request.getPrice());
         entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());

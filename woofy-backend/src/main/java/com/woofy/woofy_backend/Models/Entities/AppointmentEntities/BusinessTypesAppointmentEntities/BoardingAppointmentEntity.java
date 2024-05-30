@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +20,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "boarding_appointments")
 public class BoardingAppointmentEntity extends BaseAppointmentEntity {
 
+    @Column(nullable = false)
+    private LocalDate endDate;
+
     @JsonBackReference
-    @OneToOne(mappedBy = "boardingAppointmentEntity")
+    @ManyToOne
+    @JoinColumn(name = "boarding_id")
     private BoardingEntity boardingEntity;
+
 }

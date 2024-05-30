@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,8 +32,8 @@ public class DogWalkerEntity extends HomestayBaseEntity {
     private BusinessEntity business;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DogWalkerAppointmentEntity dogWalkerAppointmentEntity;
+    @OneToMany(mappedBy = "dogWalkerEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DogWalkerAppointmentEntity> dogWalkerAppointmentEntities;
 
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
