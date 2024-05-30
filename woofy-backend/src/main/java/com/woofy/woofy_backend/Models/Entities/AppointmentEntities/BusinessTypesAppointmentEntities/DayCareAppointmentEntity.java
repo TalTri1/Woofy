@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 public class DayCareAppointmentEntity extends BaseAppointmentEntity {
 
     @JsonBackReference
-    @OneToOne(mappedBy = "dayCareAppointmentEntity")
+    @ManyToOne
+    @JoinColumn(name = "day_care_id")
     private DayCareEntity dayCareEntity;
+
 }

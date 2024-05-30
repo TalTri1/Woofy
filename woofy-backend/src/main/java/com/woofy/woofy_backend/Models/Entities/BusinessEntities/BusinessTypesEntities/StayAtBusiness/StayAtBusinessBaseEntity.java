@@ -13,12 +13,14 @@ import java.util.List;
 @Data
 @MappedSuperclass
 public class StayAtBusinessBaseEntity extends BusinessTypeBaseEntity {
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "home_conditions")
     private List<HomeConditionsEnum> homeConditions;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "pets_in_home")
     private List<PetsInHomeEnum> petsInHome;
 
+    @Column(name = "dog_capacity", nullable = false)
+    private int dogCapacity;
 }

@@ -39,14 +39,6 @@ const BusinessTypesBaseRegistration: React.FC<FormUpdate> = ({
             >
                 Dog Capacity Per Day
             </Typography>
-            <TextField
-                fullWidth
-                placeholder="Number of Dogs*"
-                type="number"
-                name="dogCapacity"
-                required
-                onChange={handleInputChange}
-            />
 
             <Typography
                 sx={{

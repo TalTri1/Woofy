@@ -219,16 +219,6 @@ const ServiceRegisterView: FunctionComponent = () => {
 
     };
 
-    // const updateImagesForDogEntity = async (imageIDs: number[]) => {
-    //     try {
-    //         const response = await api.put(`/dogs/update/images/`, imageIDs);
-    //         console.log(`Response from updating dog images: ${response}`);
-    //         return true
-    //     } catch (error) {
-    //         console.error(`Error updating dog images: ${error}`);
-    //         return false;
-    //     }
-    // }
     return (
         <Box sx={{
             width: '100%',
@@ -414,9 +404,19 @@ const ServiceRegisterView: FunctionComponent = () => {
                                                 <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome}
                                                                      clickPetsInHomeHandler={clickPetsInHomeHandler}/>
                                             </Box>
-                                            <Box>
+                                            <Box sx={{mb: 3}}>
                                                 <HomeConditionComponent selectedHomeConditions={selectedHomeConditions}
                                                                         clickHomeConditionsHandler={clickHomeConditionsHandler}/>
+                                            </Box>
+                                            <Box>
+                                            <TextField
+                                                fullWidth
+                                                placeholder="Number of Dogs*"
+                                                type="number"
+                                                name="dogCapacity"
+                                                required
+                                                onChange={handleInputChange}
+                                            />
                                             </Box>
                                         </>
                                     )}

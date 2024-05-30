@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 public class DogWalkerAppointmentEntity extends BaseAppointmentEntity {
 
     @JsonBackReference
-    @OneToOne(mappedBy = "dogWalkerAppointmentEntity")
+    @ManyToOne
+    @JoinColumn(name = "dog_walker_id")
     private DogWalkerEntity dogWalkerEntity;
+
 }

@@ -1,6 +1,7 @@
 package com.woofy.woofy_backend.Models.Entities.AppointmentEntities;
 
 import com.woofy.woofy_backend.Models.Entities.BaseEntity;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +30,5 @@ public class BaseAppointmentEntity extends BaseEntity {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
 }
