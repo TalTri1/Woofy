@@ -1,5 +1,5 @@
-import React, { FormEvent, FunctionComponent, useCallback, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { FormEvent, FunctionComponent, useCallback, useState } from "react";
+import { useLocation } from "react-router-dom";
 import RegistrationView from "../Sections/LoginAndRegister/RegistrationView";
 import api from "../api/api";
 import RegistrationModel, { USERTYPE } from "../models/RegistrationModel";
@@ -17,6 +17,8 @@ const Registration: FunctionComponent = () => {
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState(
         new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', '', '')
     );
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
     const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
         setCompleteRegistrationUser(prevState => ({
@@ -31,33 +33,102 @@ const Registration: FunctionComponent = () => {
 
     const onDogOwnerButtonClick = useCallback(() => {
         setDogOwnerOrCareGiverActiveButton('dogOwner');
-        setCompleteRegistrationUser(prevState => {
-            const updatedState = { ...prevState, userType: USERTYPE.CUSTOMER };
-            return updatedState;
-        });
+        setCompleteRegistrationUser(prevState => ({
+            ...prevState,
+            userType: USERTYPE.CUSTOMER
+        }));
     }, []);
 
     const onCaregiverButtonClick = useCallback(() => {
         setDogOwnerOrCareGiverActiveButton('caregiver');
-        setCompleteRegistrationUser(prevState => {
-            const updatedState = { ...prevState, userType: USERTYPE.BUSINESS };
-            return updatedState;
-        });
+        setCompleteRegistrationUser(prevState => ({
+            ...prevState,
+            userType: USERTYPE.BUSINESS
+        }));
     }, []);
-
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
     const handleFileSelect = (file: File) => {
         setSelectedImage(file);
     };
 
-    const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
+    const validateForm = () => {
+        return new Promise((resolve, reject) => {
+            let isValid = true;
+            let newErrors: { [key: string]: string } = {};
+
+
+            let fields: (keyof RegistrationModel)[] = [
+                "firstName",
+                "lastName",
+                "phoneNumber",
+                "address",
+                "city",
+                "zipCode"
+            ];
+
+            // If the user is a Caregiver, add "businessName" to the fields array
+            if (completeRegistrationUser.userType === USERTYPE.BUSINESS) {
+                fields = [...fields, "businessName"];
+            }
+
+            fields.forEach(field => {
+                if (!completeRegistrationUser[field]) {
+                    newErrors[field] = 'This field is required';
+                    isValid = false;
+                }
+            });
+
+            // Check if phoneNumber is exactly 10 digits and only contains numbers
+            if (!/^\d{10}$/.test(completeRegistrationUser.phoneNumber)) {
+                newErrors.phoneNumber = 'Invalid Phone number';
+                isValid = false;
+            }
+
+            // check if the zipCode is only digits:
+            if (!/^\d+$/.test(completeRegistrationUser.zipCode)) {
+                newErrors.zipCode = 'Invalid Zip code';
+                isValid = false;
+            }
+
+            // Check if the address can be converted to a geocode
+            const address = `${completeRegistrationUser.address} ${completeRegistrationUser.city}`;
+            fetch('http://localhost:8080/api/v1/map/geocode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(address),
+            })
+                .then(response => {
+                    console.log(`Geocode response: ${JSON.stringify(response)}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to geocode address');
+                    }
+                })
+                .catch(error => {
+                    newErrors.address = 'Invalid address';
+                    isValid = false;
+                })
+                .finally(() => {
+                    setErrors(newErrors);
+                    resolve(isValid);
+                });
+        });
+    };
+
+    const signupHandler = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const isValid = await validateForm();
+        if (!isValid) {
+            return;
+        }
+
         const { basicSignUpModel, ...rest } = completeRegistrationUser;
         const apiEndpoint = rest.userType === USERTYPE.BUSINESS ? '/auth/register-business' : '/auth/register-customer';
 
         try {
-            const res = await api.post(`${apiEndpoint}`, {
+            const res = await api.post(apiEndpoint, {
                 ...rest,
                 ...basicSignUpModel,
             });
@@ -66,29 +137,18 @@ const Registration: FunctionComponent = () => {
             localStorage.setItem("refreshToken", res.data.refresh_token);
 
             let profilePhotoId = 0;
-            try {
-                if (selectedImage) {
-                    profilePhotoId = await savePhotoToDB(selectedImage);
-                    await api.patch('/user/update', {
-                        profilePhotoId: profilePhotoId,
-                    });
-                }
-            } catch (error) {
-                console.error(`Error uploading image: ${error}`);
-                toast.error("Failed uploading profile photo")
-            } finally {
-                setIsLoggedIn(true);
-                router.push("/");
-                toast.success(`Successfully registered!`);
+            if (selectedImage) {
+                profilePhotoId = await savePhotoToDB(selectedImage);
+                await api.patch('/user/update', {
+                    profilePhotoId: profilePhotoId,
+                });
             }
+            setIsLoggedIn(true);
+            router.push("/");
+            toast.success("Successfully registered!");
         } catch (error) {
-            toast.error(`Error in registration. Please make sure you have filled all the fields correctly.`);
-            if (error instanceof Error) {
-                console.error(`Error from the backend: ${error.message}`);
-                console.error(`Stack trace: ${error.stack}`);
-            } else {
-                console.error(`Error from the backend: ${error}`);
-            }
+            toast.error("Error in registration. Please make sure you have filled all the fields correctly.");
+            console.error("Error from the backend:", error);
         }
     };
 
@@ -105,6 +165,7 @@ const Registration: FunctionComponent = () => {
             return response.data.imageID;
         } catch (error) {
             toast.error("Failed uploading profile photo");
+            throw error;
         }
     };
 
@@ -115,7 +176,6 @@ const Registration: FunctionComponent = () => {
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                justifyContent="center"
                 textAlign="left"
                 sx={{
                     backgroundImage: "url('/public/header--54@3x.png')",
@@ -134,7 +194,7 @@ const Registration: FunctionComponent = () => {
                         fontFamily: 'Inter',
                         fontWeight: 'bold',
                         color: 'white',
-                        textAlign: 'left', // Changed to left-aligned
+                        textAlign: 'left',
                         marginBottom: '20px',
                     }}
                 >
@@ -146,7 +206,7 @@ const Registration: FunctionComponent = () => {
                         lineHeight: '150%',
                         fontFamily: 'Inter',
                         color: 'white',
-                        textAlign: 'left', // Changed to left-aligned
+                        textAlign: 'left',
                     }}
                 >
                     Complete the forms below to provide your contact information and your business details.
@@ -155,7 +215,7 @@ const Registration: FunctionComponent = () => {
             <form onSubmit={signupHandler}>
                 <Box mt={3} display="flex" flexDirection="column" alignItems="center">
                     <Typography variant="h5">Welcome to Woofy!</Typography>
-                    <Typography variant="body1">Please Complete your account information and settings.</Typography>
+                    <Typography variant="body1">Please complete your account information and settings.</Typography>
                 </Box>
                 <Box mt={3} display="flex" flexDirection="column" alignItems="center">
                     <Typography variant="h6">I consider myself a...</Typography>
@@ -213,7 +273,13 @@ const Registration: FunctionComponent = () => {
                     </Box>
                 </Box>
                 <Grid container justifyContent="center">
-                    <RegistrationView DogOwnerOrCareGiveractiveButton={DogOwnerOrCareGiverActiveButton} updateCompleteRegistrationUser={updateCompleteRegistrationUser} onFileSelect={handleFileSelect} />
+                    <RegistrationView
+                        DogOwnerOrCareGiveractiveButton={DogOwnerOrCareGiverActiveButton}
+                        updateCompleteRegistrationUser={updateCompleteRegistrationUser}
+                        onFileSelect={handleFileSelect}
+                        errors={errors}
+                        setErrors={setErrors}
+                    />
                 </Grid>
                 <Box mt={3} display="flex" flexDirection="column" alignItems="center">
                     <Grid container spacing={3} justifyContent="center">
@@ -269,7 +335,6 @@ const Registration: FunctionComponent = () => {
                         </Grid>
                     </Grid>
                 </Box>
-
             </form>
         </Container>
     );

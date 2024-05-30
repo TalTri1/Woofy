@@ -141,7 +141,7 @@ const BusinessListComponent: React.FC = () => {
                                     <TableCell>{serviceEntity?.acceptableDogSizes?.map(size => formatEnumValue(size)).join(', ') || ''}</TableCell>
                                     <TableCell>{business.phoneNumber}</TableCell>
                                     <TableCell>
-                                        {business.averageReview === null || business.averageReview === undefined ? "No reviews yet" : (isNaN(business.averageReview!) ? "No reviews yet" : business.averageReview)}
+                                        {business.averageReview === 0 || business.averageReview === undefined ? "No reviews yet" : (isNaN(business.averageReview!) ? "No reviews yet" : business.averageReview)}
                                     </TableCell>
                                     <TableCell>
                                         <Button
