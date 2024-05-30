@@ -45,22 +45,22 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                             {DogOwnerOrCareGiveractiveButton == 'caregiver' && (
                                 <Grid item xs={12}>
                                     <Typography
-                                    sx={{
-                                        width: '100%',
-                                        position: 'relative',
-                                        fontSize: '16px',
-                                        lineHeight: '150%',
-                                        fontFamily: 'Inter',
-                                        fontWeight: '550',
-                                        color: 'text.primary',
-                                        textAlign: 'left',
-                                        display: 'inline-block',
-                                        marginTop: '8px',
-                                        marginBottom: '8px',
-                                    }}
-                                >
-                                    Business Name
-                                </Typography>
+                                        sx={{
+                                            width: '100%',
+                                            position: 'relative',
+                                            fontSize: '16px',
+                                            lineHeight: '150%',
+                                            fontFamily: 'Inter',
+                                            fontWeight: '550',
+                                            color: 'text.primary',
+                                            textAlign: 'left',
+                                            display: 'inline-block',
+                                            marginTop: '8px',
+                                            marginBottom: '8px',
+                                        }}
+                                    >
+                                        Business Name
+                                    </Typography>
                                     <TextField
                                         required
                                         fullWidth
@@ -268,7 +268,7 @@ const RegistrationView: FunctionComponent<RegistrationComponentProps> = ({ DogOw
                                 />
                             </Grid>
                         </Grid>
-                        
+
                     </Box>
                 </Box>
             </Container>

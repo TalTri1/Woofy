@@ -33,23 +33,77 @@ export default function SignUpModal() {
     const [basicSignUpUser, setUserDetails] = useState(
         new BasicSignUpModel('', '', ''));
 
+    const [errors, setErrors] = useState({
+        email: '',
+        password: '',
+        confirmPassword: '',
+    });
+
+    const confirmPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value !== basicSignUpUser.password) {
+            e.target.setCustomValidity("Passwords do not match");
+            setErrors(prevErrors => ({ ...prevErrors, confirmPassword: 'Passwords do not match' }));
+        } else {
+            e.target.setCustomValidity("");
+            setErrors(prevErrors => ({ ...prevErrors, confirmPassword: '' }));
+        }
+    };
+
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUserDetails(prevState => ({ ...prevState, [name]: value }));
+
+        switch (name) {
+            case 'email':
+                const emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                setErrors(prevErrors => ({ ...prevErrors, email: emailValid ? '' : 'Invalid email format' }));
+                break;
+            case 'password':
+                setErrors(prevErrors => ({ ...prevErrors, password: value.length >= 8 ? '' : 'Password should be at least 8 characters' }));
+                break;
+            default:
+                break;
+        }
     };
+
 
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Make the Axios request
-        try {
-            const res = await api.post("auth/check-valid-email", basicSignUpUser);
-            console.log(res.data);
-            navigate("/registration", { state: basicSignUpUser });
-        } catch (error) {
-            // pop up that the email is already taken or not valid
-            toast.error("Email is already taken or not valid");
-            console.error("Error occurred while registering user: ", error);
+        let formErrors = {
+            email: '',
+            password: '',
+            confirmPassword: ''
+        };
+
+        // Check if any of the fields are empty
+        if (!basicSignUpUser.email) {
+            formErrors.email = 'This field is required';
+        }
+        if (!basicSignUpUser.password) {
+            formErrors.password = 'This field is required';
+        }
+        if (!basicSignUpUser.confirmPassword) {
+            formErrors.confirmPassword = 'This field is required';
+        }
+        // Check if passwords match
+        if (basicSignUpUser.password !== basicSignUpUser.confirmPassword) {
+            formErrors.confirmPassword = 'Passwords do not match';
+        }
+        setErrors(formErrors);
+
+        // Only submit the form if there are no errors
+        if (!formErrors.email && !formErrors.password && !formErrors.confirmPassword) {
+            // Make the Axios request
+            try {
+                const res = await api.post("auth/check-valid-email", basicSignUpUser);
+                console.log(res.data);
+                navigate("/registration", { state: basicSignUpUser });
+            } catch (error) {
+                // pop up that the email is already taken or not valid
+                toast.error("Email is already taken");
+                console.error("Error occurred while registering user: ", error);
+            }
         }
     };
 
@@ -68,7 +122,7 @@ export default function SignUpModal() {
             }}
         >
             <ThemeProvider theme={createTheme()}>
-                <Container component="main" maxWidth="sm"> {/* Changed maxWidth to "sm" for wider modal */}
+                <Container component="main" maxWidth="sm">
                     <CssBaseline />
                     <Box
                         sx={{
@@ -80,7 +134,6 @@ export default function SignUpModal() {
                             padding: 2.5,
                             borderRadius: 2,
                             maxWidth: '450px',
-
                         }}
                     >
                         <Avatar src={woofyLogo} sx={{ width: 100, height: 100 }} />
@@ -110,7 +163,6 @@ export default function SignUpModal() {
                                 color: 'black',
                                 textAlign: 'center',
                                 marginBottom: '10px',
-
                             }}
                         >
                             Create an Account and Join Us.
@@ -127,6 +179,8 @@ export default function SignUpModal() {
                                         autoComplete="email"
                                         value={basicSignUpUser.email}
                                         onChange={changeHandler}
+                                        error={!!errors.email}
+                                        helperText={errors.email}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -140,6 +194,8 @@ export default function SignUpModal() {
                                         autoComplete="new-password"
                                         value={basicSignUpUser.password}
                                         onChange={changeHandler}
+                                        error={!!errors.password}
+                                        helperText={errors.password}
                                         InputProps={{
                                             endAdornment: (
                                                 <IconButton onClick={togglePasswordVisibility}>
@@ -160,13 +216,9 @@ export default function SignUpModal() {
                                         autoComplete="new-password"
                                         value={basicSignUpUser.confirmPassword}
                                         onChange={changeHandler}
-                                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            if (e.target.value !== basicSignUpUser.password) {
-                                                e.target.setCustomValidity("Passwords do not match");
-                                            } else {
-                                                e.target.setCustomValidity("");
-                                            }
-                                        }}
+                                        onInput={confirmPasswordHandler}
+                                        error={!!errors.confirmPassword}
+                                        helperText={errors.confirmPassword}
                                         InputProps={{
                                             endAdornment: (
                                                 <IconButton onClick={togglePasswordVisibility}>
@@ -224,7 +276,7 @@ export default function SignUpModal() {
                                             fontFamily: 'Inter',
                                             fontSize: '16px',
                                             fontWeight: 'bold',
-                                            color: 'app1', // Ensure this color is defined in your theme
+                                            color: 'app1',
                                             textDecoration: 'none',
                                         }}
                                     >
