@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 public class BoardingScheduleEntity extends BaseScheduleEntity {
 
     @JsonBackReference
-    @OneToOne(mappedBy = "boardingScheduleEntity")
+    @ManyToOne
+    @JoinColumn(name = "boarding_id")
     private BoardingEntity boardingEntity;
 
 }

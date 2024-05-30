@@ -68,6 +68,14 @@ public class DayCareAppointmentController extends BaseAppointmentController{
             newSchedule.setDayCareEntity(dayCare);
             newSchedule.setCurrentDogCapacity(1);
             dayCareScheduleRepository.save(newSchedule);
+
+            // Add the new schedule to the list of schedules in the DayCareEntity
+            List<DayCareScheduleEntity> dayCareSchedules = dayCare.getDayCareScheduleEntities();
+            if (dayCareSchedules == null) {
+                dayCareSchedules = new ArrayList<>();
+            }
+            dayCareSchedules.add(newSchedule);
+            dayCare.setDayCareScheduleEntities(dayCareSchedules);
         }
 
         DayCareAppointmentEntity dayCareAppointmentEntity = new DayCareAppointmentEntity();
