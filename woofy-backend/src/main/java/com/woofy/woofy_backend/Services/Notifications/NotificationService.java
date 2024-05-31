@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -20,7 +21,16 @@ public class NotificationService {
     public NotificationEntity addNotification(NotificationEntity notification) {
         return notificationRepository.save(notification);
     }
-
+    public NotificationEntity markAsRead(Integer id) {
+        Optional<NotificationEntity> notificationOpt = notificationRepository.findById(id);
+        if (notificationOpt.isPresent()) {
+            NotificationEntity notification = notificationOpt.get();
+            notification.setUnRead(false);
+            return notificationRepository.save(notification);
+        } else {
+            throw new RuntimeException("Notification not found");
+        }
+    }
     public void markAllAsRead(Integer userId) {
         List<NotificationEntity> notifications = notificationRepository.findByUserId(userId);
         notifications.forEach(notification -> notification.setUnRead(false));

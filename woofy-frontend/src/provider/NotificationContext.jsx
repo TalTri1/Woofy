@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../api/api';
-import {useAuth} from "./AuthProvider";
+import api from "../api/api";
 
 
 // Create the context
@@ -10,12 +9,11 @@ const NotificationContext = createContext();
 export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
-    const { token } = useAuth();
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
         if (token) {
-            // Fetch notifications from the backend when the component mounts
             const fetchNotifications = async () => {
                 try {
                     const response = await api.get('/notifications');
@@ -27,11 +25,11 @@ export const NotificationProvider = ({ children }) => {
 
             fetchNotifications();
         }
-    }, [token]);
+    }, []);
 
     const addNotification = async (notification) => {
         try {
-            const response = await api.post('notifications', notification);
+            const response = await api.post('/notifications', notification);
             setNotifications((prevNotifications) => [...prevNotifications, response.data]);
         } catch (error) {
             console.error('Error adding notification:', error);
@@ -44,7 +42,7 @@ export const NotificationProvider = ({ children }) => {
             setNotifications((prevNotifications) =>
                 prevNotifications.map((notification) => ({
                     ...notification,
-                    isUnRead: false,
+                    unRead: false,
                 }))
             );
         } catch (error) {
@@ -52,11 +50,22 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
+    const markAsRead = async (id) => {
+        try {
+            await api.put(`/notifications/${id}/mark-as-read`);
+            setNotifications((prevNotifications) =>
+                prevNotifications.map((notification) =>
+                    notification.id === id ? { ...notification, unRead: false } : notification
+                )
+            );
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    };
+
     return (
-        <NotificationContext.Provider value={{ notifications, addNotification, markAllAsRead }}>
+        <NotificationContext.Provider value={{ notifications, addNotification, markAllAsRead, markAsRead }}>
             {children}
         </NotificationContext.Provider>
     );
 };
-
-export default NotificationProvider;

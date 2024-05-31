@@ -3,10 +3,11 @@ import { Popover, Badge, IconButton, Box, Typography, Tooltip, List, ListSubhead
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { fToNow } from '../../../utils/format-time';
-import {useNotifications} from "../../../provider/NotificationContext";
+import { useNotifications } from '../../../provider/NotificationContext';
+import { CheckCircle, Star } from '@mui/icons-material';
 
 const NotificationsPopover = () => {
-    const { notifications: notificationsData, markAllAsRead } = useNotifications();
+    const { notifications: notificationsData, markAllAsRead, markAsRead } = useNotifications();
     const notifications = Array.isArray(notificationsData) ? notificationsData : [];
     const [open, setOpen] = useState(null);
 
@@ -22,7 +23,11 @@ const NotificationsPopover = () => {
         await markAllAsRead();
     };
 
-    const totalUnRead = notifications?.filter((item) => item.isUnRead).length || 0;
+    const handleNotificationClick = async (id) => {
+        await markAsRead(id);
+    };
+
+    const totalUnRead = notifications?.filter((item) => item.unRead).length || 0;
 
     return (
         <>
@@ -75,7 +80,7 @@ const NotificationsPopover = () => {
                         }
                     >
                         {notifications?.slice(0, 2).map((notification) => (
-                            <NotificationItem key={notification.id} notification={notification} />
+                            <NotificationItem key={notification.id} notification={notification} onClick={handleNotificationClick} />
                         ))}
                     </List>
 
@@ -88,7 +93,7 @@ const NotificationsPopover = () => {
                         }
                     >
                         {notifications?.slice(2).map((notification) => (
-                            <NotificationItem key={notification.id} notification={notification} />
+                            <NotificationItem key={notification.id} notification={notification} onClick={handleNotificationClick} />
                         ))}
                     </List>
                 </Scrollbar>
@@ -96,8 +101,8 @@ const NotificationsPopover = () => {
                 <Divider sx={{ borderStyle: 'dashed' }} />
 
                 <Box sx={{ p: 1 }}>
-                    <Button fullWidth disableRipple>
-                        View All
+                    <Button fullWidth disableRipple onClick={handleMarkAllAsRead}>
+                        Mark All as Read
                     </Button>
                 </Box>
             </Popover>
@@ -105,7 +110,7 @@ const NotificationsPopover = () => {
     );
 };
 
-const NotificationItem = ({ notification }) => {
+const NotificationItem = ({ notification, onClick }) => {
     const { avatar, title } = renderContent(notification);
 
     return (
@@ -114,10 +119,11 @@ const NotificationItem = ({ notification }) => {
                 py: 1.5,
                 px: 2.5,
                 mt: '1px',
-                ...(notification.isUnRead && {
+                ...(notification.unRead && {
                     bgcolor: 'action.selected',
                 }),
             }}
+            onClick={() => onClick(notification.id)}
         >
             <ListItemAvatar>
                 <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
@@ -153,27 +159,27 @@ const renderContent = (notification) => {
         </Typography>
     );
 
-    if (notification.type === 'order_placed') {
+    if (notification.type === 'dog_register_success') {
         return {
-            avatar: <img alt={notification.title} src="/assets/icons/ic_notification_package.svg" />,
+            avatar: <img alt={notification.title} src="/assets/icons/dog.svg" />,
             title,
         };
     }
-    if (notification.type === 'order_shipped') {
+    if (notification.type === 'register_success') {
         return {
-            avatar: <img alt={notification.title} src="/assets/icons/ic_notification_shipping.svg" />,
+            avatar: <CheckCircle />,
             title,
         };
     }
-    if (notification.type === 'mail') {
+    if (notification.type === 'review_added') {
         return {
-            avatar: <img alt={notification.title} src="/assets/icons/ic_notification_mail.svg" />,
+            avatar: <img alt={notification.title} src="/reviews-icon--star1.svg" />,
             title,
         };
     }
-    if (notification.type === 'chat_message') {
+    if (notification.type === 'appointment_added') {
         return {
-            avatar: <img alt={notification.title} src="/assets/icons/ic_notification_chat.svg" />,
+            avatar: <img alt={notification.title} src="/reviews-icon--star1.svg" />,
             title,
         };
     }

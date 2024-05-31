@@ -10,12 +10,17 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fDate, fDateTime } from '../../../../utils/format-time';
 import api from '../../../../api/api';
+import {formatEnumValue} from "../../../../utils/format-enum-text";
+import {useNotifications} from "../../../../provider/NotificationContext";
+import {useRouter} from "../../../../routes/hooks";
 
 const BookAnAppointment = ({ business, selectedService }) => {
     const [endDate, setEndDate] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const { addNotification } = useNotifications();
+    const router = useRouter();
 
     const validateFields = () => {
         let isValid = true;
@@ -71,7 +76,13 @@ const BookAnAppointment = ({ business, selectedService }) => {
                     throw new Error('Invalid service type');
             }
             console.log('Appointment created:', response.data);
-            toast.success('Appointment created successfully');
+            addNotification({
+                title: 'Appointment Added',
+                description: `Your appointment in ${business.businessName} for the ${formatEnumValue(selectedService)} service has been booked successfully.`,
+                type: 'appointment_added',
+                isUnRead: true,
+            });
+            router.push('/bookings');
         } catch (error) {
             console.error('Error creating appointment:', error);
             toast.error('Error creating appointment');

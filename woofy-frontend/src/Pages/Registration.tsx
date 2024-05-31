@@ -151,11 +151,9 @@ const Registration: FunctionComponent = () => {
             addNotification({
                 title: 'Welcome!',
                 description: 'Thank you for registering.',
-                type: 'welcome',
+                type: 'register_success',
                 isUnRead: true,
             });
-
-            toast.success("Successfully registered!");
         } catch (error) {
             toast.error("Error in registration. Please make sure you have filled all the fields correctly.");
             console.error("Error from the backend:", error);
