@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface DogSitterScheduleRepository extends JpaRepository<DogSitterScheduleEntity, Integer> {
     Optional<DogSitterScheduleEntity> findByDateAndStartTimeAndEndTime(LocalDate date, LocalTime startTime, LocalTime endTime);
     Optional<List<DogSitterScheduleEntity>> findAllByDate(LocalDate date);
+    Optional<List<DogSitterScheduleEntity>> findAllByDogSitterEntity_Business_IdAndDate(Integer businessId,LocalDate date);
 
 }
