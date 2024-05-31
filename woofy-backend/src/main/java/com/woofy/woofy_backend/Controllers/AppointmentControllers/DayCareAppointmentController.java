@@ -13,13 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,5 +93,15 @@ public class DayCareAppointmentController extends BaseAppointmentController{
         dayCareAppointmentRepository.save(dayCareAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    // In DayCareAppointmentController.java
+    @GetMapping("/available-capacity")
+    public ResponseEntity<Integer> getAvailableCapacity(@RequestParam LocalDate date) {
+        DayCareScheduleEntity schedule = dayCareScheduleRepository.findByDate(date)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date"));
+
+        int availableCapacity = schedule.getDayCareEntity().getDogCapacity() - schedule.getCurrentDogCapacity();
+
+        return ResponseEntity.ok(availableCapacity);
     }
 }

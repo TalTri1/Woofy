@@ -17,6 +17,4 @@ public class CreateAppointmentRequestBaseDTO {
 
     @Column(nullable = false)
     private Integer businessId;
-
-
 }

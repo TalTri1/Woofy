@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface DogWalkerScheduleRepository extends JpaRepository<DogWalkerScheduleEntity, Integer> {
     Optional<DogWalkerScheduleEntity> findByDateAndStartTimeAndEndTime(LocalDate date, LocalTime startTime, LocalTime endTime);
+    Optional<DogWalkerScheduleEntity> findByDate(LocalDate date);
 
 }
