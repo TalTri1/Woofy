@@ -24,7 +24,7 @@ const BusinessDashboard: FunctionComponent = () => {
             </Box>
           </Box>
           <RegisterYourBusinessCTA />
-          <UpComingBookings />
+          {/*<UpComingBookings />*/}
         </Box>
       </main>
     </Box>
