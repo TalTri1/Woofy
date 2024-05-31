@@ -4,7 +4,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { fToNow } from '../../../utils/format-time';
 import { useNotifications } from '../../../provider/NotificationContext';
-import { CheckCircle, Star } from '@mui/icons-material';
+import { CheckCircle, Schedule } from '@mui/icons-material';
 
 const NotificationsPopover = () => {
     const { notifications: notificationsData, markAllAsRead, markAsRead } = useNotifications();
@@ -179,7 +179,7 @@ const renderContent = (notification) => {
     }
     if (notification.type === 'appointment_added') {
         return {
-            avatar: <img alt={notification.title} src="/reviews-icon--star1.svg" />,
+            avatar: <Schedule />,
             title,
         };
     }
