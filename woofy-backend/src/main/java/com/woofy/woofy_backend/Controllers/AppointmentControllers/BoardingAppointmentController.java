@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Controllers.AppointmentControllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateBoardingAppointmentRequest;
-import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetBoardingScheduleRequest;
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetScheduleAndAppointmentDetailsRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
@@ -118,7 +118,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
     }
 
     @GetMapping("/get-boarding-schedule")
-    public ResponseEntity<BoardingScheduleEntity> getScheduleByBusinessIdAndDate(@RequestBody GetBoardingScheduleRequest getScheduleRequest) {
+    public ResponseEntity<BoardingScheduleEntity> getScheduleByBusinessIdAndDate(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
         BoardingScheduleEntity schedule = boardingAppointmentsService.getScheduleByBusinessIdAndDate(getScheduleRequest.getBusinessId(), getScheduleRequest.getDate()).orElse(null);
         return ResponseEntity.ok(schedule);
     }
