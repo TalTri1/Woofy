@@ -8,8 +8,10 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateBoardingAppointmentRequest extends CreateAppointmentRequestBaseDTO {
 
+    @Column(nullable = false)
     private LocalDate endDate;
 
 }

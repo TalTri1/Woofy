@@ -14,16 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/appointment/dog-sitter")
@@ -101,5 +100,21 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
         dogSitterAppointmentRepository.save(dogSitterAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/available-hours")
+    public ResponseEntity<List<TimeSlot>> getAvailableHours(@RequestParam LocalDate date) {
+        Optional<List<DogSitterScheduleEntity>> optionalSchedules = dogSitterScheduleRepository.findAllByDate(date);
+        List<TimeSlot> availableTimeSlots = new ArrayList<>();
+        if (optionalSchedules.isPresent()) {
+            List<DogSitterScheduleEntity> schedules = optionalSchedules.get();
+            for (DogSitterScheduleEntity schedule : schedules) {
+                TimeSlot timeSlot = new TimeSlot();
+                timeSlot.setStartTime(schedule.getStartTime());
+                timeSlot.setEndTime(schedule.getEndTime());
+                availableTimeSlots.add(timeSlot);
+            }
+        }
+        return ResponseEntity.ok(availableTimeSlots);
     }
 }
