@@ -1,40 +1,46 @@
-import {createContext, useContext, useEffect, useMemo, useState} from "react";
-import api from "../api/api";
-import {toast} from "react-toastify";
-import {useRouter} from "../routes/hooks";
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import api from '../api/api';
+import { toast } from 'react-toastify';
+import { useRouter } from '../routes/hooks';
 
 const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [token, setToken] = useState(localStorage.getItem('token'));
     const router = useRouter();
+
+    useEffect(() => {
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [token]);
 
     const login = async (basicSignInUser) => {
         try {
-            const res = await api.post("auth/login", basicSignInUser);
+            const res = await api.post('auth/login', basicSignInUser);
             setToken(res.data.access_token);
-            localStorage.setItem("token", res.data.access_token);
-            localStorage.setItem("refreshToken", res.data.refresh_token);
+            localStorage.setItem('token', res.data.access_token);
+            localStorage.setItem('refreshToken', res.data.refresh_token);
             setIsLoggedIn(true);
         } catch (error) {
-            console.error("Error occurred while registering user: ", error);
-            // @ts-ignore
-            toast.error(error.response.data || "An error occurred");
+            console.error('Error occurred while registering user: ', error);
+            toast.error(error.response.data || 'An error occurred');
         }
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userDetails");
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userDetails');
         setToken(null);
         setIsLoggedIn(false);
-        router.push("/");
+        router.push('/');
         router.reload();
-    }
+    };
 
-    // Memoized value of the authentication context
     const contextValue = useMemo(
         () => ({
             login,
@@ -44,12 +50,10 @@ const AuthProvider = ({children}) => {
             token,
             setToken,
         }),
-        [isLoggedIn,token,setToken]
+        [isLoggedIn, token]
     );
 
-    return (
-        <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
