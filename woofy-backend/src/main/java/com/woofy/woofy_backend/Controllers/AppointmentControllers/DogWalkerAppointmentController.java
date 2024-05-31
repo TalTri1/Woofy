@@ -105,7 +105,7 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/available-hours-by-business")
+    @PostMapping("/available-hours-by-business")
     public ResponseEntity<List<TimeSlot>> getAvailableHoursByBusinessDogWalker(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
         Optional<List<DogWalkerScheduleEntity>> optionalSchedules = dogWalkerScheduleRepository.findAllByDogWalkerEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
         List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogWalker(optionalSchedules);

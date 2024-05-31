@@ -10,4 +10,6 @@ import java.time.LocalDate;
 public class GetScheduleAndAppointmentDetailsRequest {
     private Integer BusinessId;
     private LocalDate date;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

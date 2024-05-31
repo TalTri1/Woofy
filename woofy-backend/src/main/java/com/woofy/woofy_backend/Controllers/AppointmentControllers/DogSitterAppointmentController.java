@@ -107,7 +107,7 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
     }
 
 
-    @GetMapping("/available-hours-by-business")
+    @PostMapping("/available-hours-by-business")
     public ResponseEntity<List<TimeSlot>> getAvailableHoursByBusiness(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
         Optional<List<DogSitterScheduleEntity>> optionalSchedules = dogSitterScheduleRepository.findAllByDogSitterEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
         List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogSitter(optionalSchedules);
