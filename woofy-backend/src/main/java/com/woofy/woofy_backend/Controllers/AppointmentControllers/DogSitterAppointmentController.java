@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -107,16 +106,11 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/available-hours")
-    public ResponseEntity<List<TimeSlot>> getAvailableHours(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
-        Optional<List<DogSitterScheduleEntity>> optionalSchedules = dogSitterScheduleRepository.findAllByDate(request.getDate());
-        return ResponseEntity.ok(TimeSlotUtil.createTimeSlotsFromSchedules(optionalSchedules));
-    }
 
     @GetMapping("/available-hours-by-business")
     public ResponseEntity<List<TimeSlot>> getAvailableHoursByBusiness(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
         Optional<List<DogSitterScheduleEntity>> optionalSchedules = dogSitterScheduleRepository.findAllByDogSitterEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
-        List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedules(optionalSchedules);
+        List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogSitter(optionalSchedules);
 
         // Get the total working hours of the dog sitter
         DogSitterEntity dogSitter = dogSitterEntityRepository.findByBusiness_Id(request.getBusinessId());
