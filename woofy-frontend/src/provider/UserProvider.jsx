@@ -1,20 +1,18 @@
-import React, {createContext, useState, useEffect, useMemo, useContext} from 'react';
+import React, { createContext, useState, useEffect, useMemo, useContext } from 'react';
 import api from '../api/api';
-import {useAuth} from "./AuthProvider";
+import { useAuth } from './AuthProvider';
 
 export const UserContext = createContext(); // Add export here
 
-const UserProvider = ({children}) => {
-    const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem('userDetails')));
-    const {isLoggedIn} = useAuth();
+const UserProvider = ({ children }) => {
+    const [userDetails, setUserDetails] = useState(null);
+    const { isLoggedIn, token } = useAuth();
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await api.get('/user');
+                const response = await api.get('/user')
                 setUserDetails(response.data);
-                // Store the response data in local storage
-                localStorage.setItem('userDetails', JSON.stringify(response.data));
             } catch (error) {
                 console.error("Failed to fetch user details: ", error);
             }
@@ -23,9 +21,9 @@ const UserProvider = ({children}) => {
         if (isLoggedIn) {
             fetchUserDetails();
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, token]);
 
-    const contextValue = useMemo(() => ({userDetails, setUserDetails,}), [userDetails,isLoggedIn]);
+    const contextValue = useMemo(() => ({ userDetails, setUserDetails }), [userDetails, isLoggedIn]);
 
     return (
         <UserContext.Provider value={contextValue}>
@@ -34,4 +32,4 @@ const UserProvider = ({children}) => {
     );
 };
 
-export {UserProvider};
+export { UserProvider };

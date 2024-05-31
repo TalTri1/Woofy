@@ -9,6 +9,7 @@ import { Typography, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import {useNotifications} from "../../../../provider/NotificationContext";
 
 interface ReviewFormProps {
     businessId: number;
@@ -26,7 +27,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
     const [reviewError, setReviewError] = useState('');
     const [ratingError, setRatingError] = useState('');
     const [serviceError, setServiceError] = useState('');
-
+    const { addNotification } = useNotifications();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -70,7 +71,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
 
         try {
             const response = await axios.post('http://localhost:8080/api/v1/reviews', createReviewRequest);
-            toast.success('Review created successfully!');
+            addNotification({
+                title: 'Review Added',
+                description: `Your review has been successfully added.`,
+                type: 'review_added',
+                isUnRead: true,
+            });
             onClose();
             window.location.reload();
         } catch (error) {

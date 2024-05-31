@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface DayCareScheduleRepository extends JpaRepository<DayCareScheduleEntity, Integer> {
     Optional<DayCareScheduleEntity> findByDate(LocalDate date);
+    Optional<DayCareScheduleEntity> findByDayCareEntity_Business_IdAndDate(Integer businessId, LocalDate date);
+
 }

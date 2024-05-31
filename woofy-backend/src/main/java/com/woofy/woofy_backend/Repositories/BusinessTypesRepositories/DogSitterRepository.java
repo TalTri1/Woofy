@@ -4,4 +4,6 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEnt
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DogSitterRepository extends JpaRepository<DogSitterEntity, Integer> {
+    DogSitterEntity findByBusiness_Id(Integer businessId);
+
 }

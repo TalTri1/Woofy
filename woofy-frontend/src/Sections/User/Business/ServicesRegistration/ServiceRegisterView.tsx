@@ -15,6 +15,8 @@ import SendIcon from "@mui/icons-material/Send";
 import {BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS} from "../../../../models/Enums/Enums";
 import {useRouter} from "../../../../routes/hooks";
 import DogSizeInput from "../../selectButtons/DogSizeInput";
+import {useNotifications} from "../../../../provider/NotificationContext";
+import {formatEnumValue} from "../../../../utils/format-enum-text";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -30,6 +32,7 @@ const ServiceRegisterView: FunctionComponent = () => {
     const [selectedPetsInHome, setPetsInHome] = useState<PETS_IN_HOME[]>([]);
     const [selectedDays, setSelectedDays] = useState<WEEKDAYS[]>([]);
     const [images, setImages] = useState<Array<File | null>>([null, null, null, null]);
+    const { addNotification } = useNotifications();
 
     // Boarding, Day Care, Sitter, Walker buttons
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
@@ -142,7 +145,12 @@ const ServiceRegisterView: FunctionComponent = () => {
             const isUpdateSuccess = updateImagesForServiceEntity(imageIDs as number[]);
             router.push("/");
             if (await isUpdateSuccess) {
-                toast.success("Service registered successfully")
+                addNotification({
+                    title: 'Service Added!',
+                    description: `The ${formatEnumValue(selectedServices)} service has been successfully added.`,
+                    type: 'register_success',
+                    isUnRead: true,
+                });
             } else {
                 toast.error("Failed to register service");
             }

@@ -8,10 +8,12 @@ import SendIcon from '@mui/icons-material/Send';
 import { Age, Size, TrainingLevel } from "../../../../models/Enums/Enums";
 import DogModel from "../../../../models/DogModels/DogModel";
 import { useRouter } from "../../../../routes/hooks";
+import {useNotifications} from "../../../../provider/NotificationContext";
 
 
 const DogRegisterView: FunctionComponent = () => {
     const router = useRouter();
+    const { addNotification } = useNotifications();
     const [selectedAge, setSelectedAge] = useState<Age>(Age.PUPPY);
     const [selectedSize, setSelectedSize] = useState<Size>(Size.SMALL);
     const [selectedTrainingLevel, setSelectedTrainingLevel] = useState<TrainingLevel>(TrainingLevel.BEGINNER);
@@ -64,7 +66,12 @@ const DogRegisterView: FunctionComponent = () => {
             router.push("/");
             window.scrollTo(0, 0);
             if (isUpdateSuccess) {
-                toast.success("Dog registered successfully");
+                addNotification({
+                    title: 'Dog Registered Successfully!',
+                    description: `Your dog ${dog.dogName}, has been successfully registered.`,
+                    type: 'dog_register_success',
+                    isUnRead: true,
+                });
             } else {
                 toast.error("Failed to register dog");
             }

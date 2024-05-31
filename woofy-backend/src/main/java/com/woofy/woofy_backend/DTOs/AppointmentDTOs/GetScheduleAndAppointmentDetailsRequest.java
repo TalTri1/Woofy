@@ -7,7 +7,9 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class GetBoardingScheduleRequest {
+public class GetScheduleAndAppointmentDetailsRequest {
     private Integer BusinessId;
     private LocalDate date;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

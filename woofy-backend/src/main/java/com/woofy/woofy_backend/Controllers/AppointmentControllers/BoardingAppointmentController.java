@@ -1,7 +1,7 @@
 package com.woofy.woofy_backend.Controllers.AppointmentControllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateBoardingAppointmentRequest;
-import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetBoardingScheduleRequest;
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetScheduleAndAppointmentDetailsRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.BoardingAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.BoardingEntity;
@@ -10,8 +10,8 @@ import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesSch
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
+import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.BoardingRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.BoardingScheduleRepository;
-import com.woofy.woofy_backend.Services.BusinessTypesAppointmentsServices.BoardingAppointmentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/appointment/boarding")
@@ -34,7 +37,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
     private BoardingAppointmentRepository boardingAppointmentRepository;
 
     @Autowired
-    private BoardingAppointmentsService boardingAppointmentsService;
+    BoardingRepository boardingRepository;
 
     @PostMapping("/create-appointment")
     public ResponseEntity<String> createBoardingAppointment(@RequestBody CreateBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
@@ -117,9 +120,39 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @GetMapping("/get-boarding-schedule")
-    public ResponseEntity<BoardingScheduleEntity> getScheduleByBusinessIdAndDate(@RequestBody GetBoardingScheduleRequest getScheduleRequest) {
-        BoardingScheduleEntity schedule = boardingAppointmentsService.getScheduleByBusinessIdAndDate(getScheduleRequest.getBusinessId(), getScheduleRequest.getDate()).orElse(null);
-        return ResponseEntity.ok(schedule);
+    @PostMapping("/available-capacity-by-date-range")
+    public ResponseEntity<Map<LocalDate, Integer>> getAvailableCapacityByDateRange(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
+
+        BoardingEntity boardingEntity = boardingRepository.findByBusiness_Id(getScheduleRequest.getBusinessId());
+        List<BoardingScheduleEntity> schedules = boardingScheduleRepository.findAllByBoardingEntity_Business_IdAndDateBetween(
+                getScheduleRequest.getBusinessId(),
+                getScheduleRequest.getStartDate(),
+                getScheduleRequest.getEndDate()
+        );
+
+        Map<LocalDate, Integer> availableCapacities = new HashMap<>();
+        LocalDate currentDate = getScheduleRequest.getStartDate();
+        while (!currentDate.isAfter(getScheduleRequest.getEndDate())) {
+            BoardingScheduleEntity scheduleForCurrentDate = null;
+            for (BoardingScheduleEntity schedule : schedules) {
+                if (schedule.getDate().equals(currentDate)) {
+                    scheduleForCurrentDate = schedule;
+                    break;
+                }
+            }
+
+            if (scheduleForCurrentDate != null) {
+                int availableCapacity = scheduleForCurrentDate.getBoardingEntity().getDogCapacity() - scheduleForCurrentDate.getCurrentDogCapacity();
+                availableCapacities.put(currentDate, availableCapacity);
+            } else {
+
+                availableCapacities.put(currentDate, boardingEntity.getDogCapacity());
+            }
+
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return ResponseEntity.ok(availableCapacities);
     }
+
 }

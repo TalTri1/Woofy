@@ -7,6 +7,7 @@ import { useAuth } from "../provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useRouter } from "../routes/hooks";
+import {useNotifications} from "../provider/NotificationContext";
 
 const Registration: FunctionComponent = () => {
     const router = useRouter();
@@ -19,6 +20,7 @@ const Registration: FunctionComponent = () => {
     );
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const { addNotification } = useNotifications();
 
     const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
         setCompleteRegistrationUser(prevState => ({
@@ -145,7 +147,13 @@ const Registration: FunctionComponent = () => {
             }
             setIsLoggedIn(true);
             router.push("/");
-            toast.success("Successfully registered!");
+
+            addNotification({
+                title: 'Welcome!',
+                description: 'Thank you for registering.',
+                type: 'register_success',
+                isUnRead: true,
+            });
         } catch (error) {
             toast.error("Error in registration. Please make sure you have filled all the fields correctly.");
             console.error("Error from the backend:", error);

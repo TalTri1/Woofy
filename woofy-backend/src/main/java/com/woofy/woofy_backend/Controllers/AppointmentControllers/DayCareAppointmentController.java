@@ -1,6 +1,7 @@
 package com.woofy.woofy_backend.Controllers.AppointmentControllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateDayCareAppointmentRequest;
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetScheduleAndAppointmentDetailsRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DayCareAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
@@ -21,6 +22,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/appointment/day-care")
@@ -94,14 +96,15 @@ public class DayCareAppointmentController extends BaseAppointmentController{
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    // In DayCareAppointmentController.java
-    @GetMapping("/available-capacity")
-    public ResponseEntity<Integer> getAvailableCapacity(@RequestParam LocalDate date) {
-        DayCareScheduleEntity schedule = dayCareScheduleRepository.findByDate(date)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date"));
 
+    @PostMapping("/available-capacity-by-date")
+    public ResponseEntity<Integer> getAvailableCapacity(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
+        Optional<DayCareScheduleEntity> optionalSchedule = dayCareScheduleRepository.findByDayCareEntity_Business_IdAndDate(getScheduleRequest.getBusinessId(), getScheduleRequest.getDate());
+        if (optionalSchedule.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date and business ID");
+        }
+        DayCareScheduleEntity schedule = optionalSchedule.get();
         int availableCapacity = schedule.getDayCareEntity().getDogCapacity() - schedule.getCurrentDogCapacity();
-
         return ResponseEntity.ok(availableCapacity);
     }
 }

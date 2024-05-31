@@ -4,4 +4,5 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEnt
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardingRepository extends JpaRepository<BoardingEntity, Integer> {
+    BoardingEntity findByBusiness_Id(Integer businessId);
 }

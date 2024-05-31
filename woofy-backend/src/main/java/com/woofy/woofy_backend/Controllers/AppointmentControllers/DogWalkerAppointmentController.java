@@ -1,12 +1,14 @@
 package com.woofy.woofy_backend.Controllers.AppointmentControllers;
 
 import com.woofy.woofy_backend.DTOs.AppointmentDTOs.CreateDogWalkerAppointmentRequest;
+import com.woofy.woofy_backend.DTOs.AppointmentDTOs.GetScheduleAndAppointmentDetailsRequest;
 import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypesAppointmentEntities.DogWalkerAppointmentEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DogWalkerScheduleEntity;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DogWalkerAppointmentRepository;
+import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.DogWalkerRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.DogWalkerScheduleRepository;
 import com.woofy.woofy_backend.Utils.TimeSlot;
 import com.woofy.woofy_backend.Utils.TimeSlotUtil;
@@ -14,16 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/appointment/dog-walker")
@@ -34,6 +34,9 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
 
     @Autowired
     private DogWalkerAppointmentRepository dogWalkerAppointmentRepository;
+
+    @Autowired
+    private DogWalkerRepository dogWalkerEntityRepository;
 
     @PostMapping("/create-appointment")
     public ResponseEntity<String> createDogWalkerAppointment(@RequestBody CreateDogWalkerAppointmentRequest newAppointmentRequest, Principal principal) {
@@ -100,5 +103,20 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
         dogWalkerAppointmentRepository.save(dogWalkerAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/available-hours-by-business")
+    public ResponseEntity<List<TimeSlot>> getAvailableHoursByBusinessDogWalker(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
+        Optional<List<DogWalkerScheduleEntity>> optionalSchedules = dogWalkerScheduleRepository.findAllByDogWalkerEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
+        List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogWalker(optionalSchedules);
+
+        // Get the total working hours of the dog walker
+        DogWalkerEntity dogWalker = dogWalkerEntityRepository.findByBusiness_Id(request.getBusinessId());
+        List<TimeSlot> totalWorkingHours = TimeSlotUtil.generateSlotsByMinutes(dogWalker.getStartTime(), dogWalker.getEndTime(), dogWalker.getAppointmentLengthInMinutes());
+
+        // Subtract the taken hours from the total working hours
+        totalWorkingHours.removeAll(takenTimeSlots);
+
+        return ResponseEntity.ok(totalWorkingHours);
     }
 }
