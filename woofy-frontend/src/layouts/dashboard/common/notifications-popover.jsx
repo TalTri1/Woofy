@@ -167,19 +167,19 @@ const renderContent = (notification) => {
     }
     if (notification.type === 'register_success') {
         return {
-            avatar: <CheckCircle />,
+            avatar: <img alt={notification.title} src="/assets/icons/check.svg" />,
             title,
         };
     }
     if (notification.type === 'review_added') {
         return {
-            avatar: <img alt={notification.title} src="/reviews-icon--star1.svg" />,
+            avatar: <img alt={notification.title} src="/assets/icons/star.svg" />,
             title,
         };
     }
     if (notification.type === 'appointment_added') {
         return {
-            avatar: <Schedule />,
+            avatar: <img alt={notification.title} src="/assets/icons/calendar.svg" />,
             title,
         };
     }
