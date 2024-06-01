@@ -1,34 +1,32 @@
-# Start with a base image containing Java runtime and Maven
-FROM maven:3.8.1-openjdk-11-slim as build
+# Stage 1: Build the application with Maven
+FROM maven:3.8.1-openjdk-11-slim AS build
 
-# Make source folder
-RUN mkdir -p /workspace
-
+# Set the working directory
 WORKDIR /workspace
 
-# Copy maven executable to the image
+# Copy Maven executable and set permissions
 COPY mvnw .
 COPY .mvn .mvn
+RUN chmod +x ./mvnw
 
-# Copy the pom.xml file
+# Copy the pom.xml file and download dependencies
 COPY pom.xml .
-
-# Build all the dependencies in preparation to go offline.
-# This is a separate step so the dependencies will be cached unless
-# the pom.xml file has changed.
 RUN ./mvnw dependency:go-offline -B
 
-# Copy the project source
-COPY src src
+# Copy the project source code
+COPY src ./src
 
 # Package the application
 RUN ./mvnw package -DskipTests
 
-# Start with a base image containing Java runtime
+# Stage 2: Create the final image with the JAR file
 FROM openjdk:11-jdk-slim
 
-# The application's .jar file
+# Set the working directory
+WORKDIR /app
+
+# Copy the JAR file from the build stage
 COPY --from=build /workspace/target/*.jar app.jar
 
-# Run the jar file
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Run the JAR file
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
