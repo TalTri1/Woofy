@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api/v1/'
+    baseURL: 'http://woofy.studio:8080/api/v1/'
 });
 
 // Add a request interceptor
