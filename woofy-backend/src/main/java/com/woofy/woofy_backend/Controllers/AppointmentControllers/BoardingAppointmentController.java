@@ -39,7 +39,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
     private BoardingAppointmentRepository boardingAppointmentRepository;
 
     @Autowired
-    BoardingRepository boardingRepository;
+    private BoardingRepository boardingRepository;
 
     @PostMapping("/create-appointment")
     public ResponseEntity<String> createBoardingAppointment(@RequestBody CreateBoardingAppointmentRequest newAppointmentRequest, Principal principal) {
@@ -62,7 +62,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
 
         if (existingSchedule != null) {
 
-            if (boarding.getDogCapacity() - existingSchedule.getCurrentDogCapacity() == 0) {
+            if (boarding.getDogCapacity() <= existingSchedule.getCurrentDogCapacity()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs");
             }
 
@@ -91,7 +91,6 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         boardingAppointmentEntity.setEndDate(newAppointmentRequest.getEndDate());
         boardingAppointmentEntity.setBoardingEntity(boarding);
         boardingAppointmentEntity.setDogId(customer.getDog().getId());
-
 
         // Add the new appointment to the list of appointments in the BoardingEntity
         List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
@@ -142,21 +141,24 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         Map<LocalDate, Integer> availableCapacities = new HashMap<>();
         LocalDate currentDate = getScheduleRequest.getStartDate();
         while (!currentDate.isAfter(getScheduleRequest.getEndDate())) {
-            BoardingScheduleEntity scheduleForCurrentDate = null;
-            for (BoardingScheduleEntity schedule : schedules) {
-                if (schedule.getDate().equals(currentDate)) {
-                    scheduleForCurrentDate = schedule;
-                    break;
+            if (!boardingEntity.getWorkingDays().contains(WorkingDaysEnum.valueOf(currentDate.getDayOfWeek().name()))) {
+                availableCapacities.put(currentDate, 0);
+            } else {
+                BoardingScheduleEntity scheduleForCurrentDate = null;
+                for (BoardingScheduleEntity schedule : schedules) {
+                    if (schedule.getDate().equals(currentDate)) {
+                        scheduleForCurrentDate = schedule;
+                        break;
+                    }
+                }
+
+                if (scheduleForCurrentDate != null) {
+                    int availableCapacity = Math.max(0, scheduleForCurrentDate.getBoardingEntity().getDogCapacity() - scheduleForCurrentDate.getCurrentDogCapacity());
+                    availableCapacities.put(currentDate, availableCapacity);
+                } else {
+                    availableCapacities.put(currentDate, boardingEntity.getDogCapacity());
                 }
             }
-
-            if (scheduleForCurrentDate != null) {
-                int availableCapacity = scheduleForCurrentDate.getBoardingEntity().getDogCapacity() - scheduleForCurrentDate.getCurrentDogCapacity();
-                availableCapacities.put(currentDate, availableCapacity);
-            } else {
-                availableCapacities.put(currentDate, boardingEntity.getDogCapacity());
-            }
-
             currentDate = currentDate.plusDays(1);
         }
         return availableCapacities;
