@@ -14,7 +14,7 @@
 	<name>woofy_backend</name>
 	<description>Backend services for the Woofy application</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>22</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
