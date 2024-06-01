@@ -106,9 +106,12 @@ public class DayCareAppointmentController extends BaseAppointmentController{
         if (getScheduleRequest.getBusinessId() == null || getScheduleRequest.getDate() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID and date must not be null");
         }
+        DayCareEntity dayCare = dayCareRepository.findByBusiness_Id(getScheduleRequest.getBusinessId());
+        if (getScheduleRequest.getDate().isBefore(dayCare.getStartDate()) || getScheduleRequest.getDate().isAfter(dayCare.getEndDate())) {
+            return ResponseEntity.ok(0);
+        }
         Optional<DayCareScheduleEntity> optionalSchedule = dayCareScheduleRepository.findByDayCareEntity_Business_IdAndDate(getScheduleRequest.getBusinessId(), getScheduleRequest.getDate());
         if (optionalSchedule.isEmpty()) {
-            DayCareEntity dayCare = dayCareRepository.findByBusiness_Id(getScheduleRequest.getBusinessId());
             return ResponseEntity.ok(dayCare.getDogCapacity());
         }
         DayCareScheduleEntity schedule = optionalSchedule.get();

@@ -141,7 +141,8 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         Map<LocalDate, Integer> availableCapacities = new HashMap<>();
         LocalDate currentDate = getScheduleRequest.getStartDate();
         while (!currentDate.isAfter(getScheduleRequest.getEndDate())) {
-            if (!boardingEntity.getWorkingDays().contains(WorkingDaysEnum.valueOf(currentDate.getDayOfWeek().name()))) {
+            if (!boardingEntity.getWorkingDays().contains(WorkingDaysEnum.valueOf(currentDate.getDayOfWeek().name())) ||
+                    currentDate.isBefore(boardingEntity.getStartDate()) || currentDate.isAfter(boardingEntity.getEndDate())) {
                 availableCapacities.put(currentDate, 0);
             } else {
                 BoardingScheduleEntity scheduleForCurrentDate = null;
