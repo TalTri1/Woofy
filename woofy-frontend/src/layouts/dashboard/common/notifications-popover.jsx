@@ -4,11 +4,10 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { fToNow } from '../../../utils/format-time';
 import { useNotifications } from '../../../provider/NotificationContext';
-import { CheckCircle, Schedule } from '@mui/icons-material';
 
 const NotificationsPopover = () => {
     const { notifications: notificationsData, markAllAsRead, markAsRead } = useNotifications();
-    const notifications = Array.isArray(notificationsData) ? notificationsData : [];
+    const notifications = Array.isArray(notificationsData) ? notificationsData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
     const [open, setOpen] = useState(null);
 
     const handleOpen = (event) => {

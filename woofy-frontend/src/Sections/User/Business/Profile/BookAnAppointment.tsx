@@ -12,7 +12,6 @@ import { formatEnumValue } from "../../../../utils/format-enum-text";
 import { useNotifications } from "../../../../provider/NotificationContext";
 import {useRouter} from "../../../../routes/hooks";
 
-
 interface Business {
     id: number;
     businessName: string;
@@ -160,51 +159,99 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
         return diffDays * servicePrices[selectedService];
     };
 
+    const groupFullyBookedDates = (dates: string[]): { start: string, end: string }[] => {
+        const ranges: { start: string, end: string }[] = [];
+        let start = dates[0];
+        let end = dates[0];
+
+        for (let i = 1; i < dates.length; i++) {
+            const current = new Date(dates[i]);
+            const previous = new Date(dates[i - 1]);
+            const diff = (current.getTime() - previous.getTime()) / (1000 * 3600 * 24);
+
+            if (diff > 1) {
+                ranges.push({ start, end });
+                start = dates[i];
+            }
+            end = dates[i];
+        }
+        ranges.push({ start, end });
+
+        return ranges;
+    };
+
     const renderAvailableSlots = () => {
         if (selectedService === BUSINESS_TYPES.BOARDING) {
             const dates = Object.keys(availableSlots as Record<string, number>);
-            let fullyBookedDate: string | null = null;
+            const fullyBookedDates = dates.filter(date => (availableSlots as Record<string, number>)[date] <= 0);
 
-            dates.forEach(date => {
-                if ((availableSlots as Record<string, number>)[date] === 0) {
-                    fullyBookedDate = date;
+            if (fullyBookedDates.length > 0) {
+                const ranges = groupFullyBookedDates(fullyBookedDates);
+                const suggestions = [];
+
+                // Suggest before first fully booked range
+                if (selectedDate && new Date(selectedDate) < new Date(ranges[0].start)) {
+                    const suggestionEndDate = new Date(new Date(ranges[0].start).getTime() - (1000 * 3600 * 24));
+                    if (new Date(selectedDate) <= suggestionEndDate) {
+                        suggestions.push({
+                            start: selectedDate,
+                            end: suggestionEndDate
+                        });
+                    }
                 }
-            });
 
-            if (fullyBookedDate) {
-                const fullyBookedIndex = dates.indexOf(fullyBookedDate);
-                const beforeDates = dates.slice(0, fullyBookedIndex);
-                const afterDates = dates.slice(fullyBookedIndex + 1);
+                // Suggest between fully booked ranges
+                for (let i = 0; i < ranges.length - 1; i++) {
+                    const endRange = new Date(ranges[i].end);
+                    const startNextRange = new Date(ranges[i + 1].start);
+
+                    if (startNextRange.getTime() - endRange.getTime() > (1000 * 3600 * 24)) {
+                        suggestions.push({
+                            start: new Date(endRange.getTime() + (1000 * 3600 * 24)),
+                            end: new Date(startNextRange.getTime() - (1000 * 3600 * 24))
+                        });
+                    }
+                }
+
+                // Suggest after last fully booked range
+                if (endDate && new Date(endDate) > new Date(ranges[ranges.length - 1].end)) {
+                    const suggestionStartDate = new Date(new Date(ranges[ranges.length - 1].end).getTime() + (1000 * 3600 * 24));
+                    if (suggestionStartDate <= new Date(endDate)) {
+                        suggestions.push({
+                            start: suggestionStartDate,
+                            end: endDate
+                        });
+                    }
+                }
+
+                // Filter out suggestions that are fully booked
+                const validSuggestions = suggestions.filter(suggestion => {
+                    const suggestionDates = [];
+                    for (let d = new Date(suggestion.start); d <= suggestion.end; d.setDate(d.getDate() + 1)) {
+                        suggestionDates.push(d.toISOString().split('T')[0]);
+                    }
+                    return !suggestionDates.some(date => fullyBookedDates.includes(date));
+                });
 
                 return (
                     <div>
                         <Typography variant="h6" color="error">
-                            Fully booked on {fullyBookedDate}
+                            Fully booked from {ranges.map(range => `${range.start} to ${range.end}`).join(', ')}
                         </Typography>
-                        {beforeDates.length > 0 && selectedDate && (
-                            <div>
+                        {validSuggestions.map((suggestion, index) => (
+                            <div key={index}>
                                 <Typography variant="body1">
-                                    Total Price: ${calculateTotalPrice(selectedDate, new Date(beforeDates[beforeDates.length - 1]))}
+                                    Total Price: ${calculateTotalPrice(suggestion.start, suggestion.end)}
                                 </Typography>
-                                <Button variant="contained" color="primary" onClick={() => handleSetAppointment(selectedDate, new Date(beforeDates[beforeDates.length - 1]))}>
-                                    Book from {selectedDate.toLocaleDateString()} to {new Date(beforeDates[beforeDates.length - 1]).toLocaleDateString()}
+                                <Button variant="contained" color="primary" onClick={() => handleSetAppointment(suggestion.start, suggestion.end)}>
+                                    Book from {suggestion.start.toLocaleDateString()} to {suggestion.end.toLocaleDateString()}
                                 </Button>
                             </div>
-                        )}
-                        {afterDates.length > 0 && endDate && (
-                            <div>
-                                <Typography variant="body1">
-                                    Total Price: ${calculateTotalPrice(new Date(afterDates[0]), endDate)}
-                                </Typography>
-                                <Button variant="contained" color="primary" onClick={() => handleSetAppointment(new Date(afterDates[0]), endDate)}>
-                                    Book from {new Date(afterDates[0]).toLocaleDateString()} to {endDate.toLocaleDateString()}
-                                </Button>
-                            </div>
-                        )}
+                        ))}
                     </div>
                 );
             } else if (selectedDate && endDate) {
-                const fullyBookedInRange = dates.some(date => (availableSlots as Record<string, number>)[date] === 0 && new Date(date) >= selectedDate && new Date(date) <= endDate);
+                const fullyBookedInRange = dates.some(date => (availableSlots as Record<string, number>)[date] <= 0 && new Date(date) >= selectedDate && new Date(date) <= endDate);
                 if (fullyBookedInRange) {
                     return (
                         <Typography variant="h6" color="error">
