@@ -12,11 +12,13 @@ import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.BoardingAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.BoardingRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.BoardingScheduleRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.DayOfWeek;
@@ -119,10 +121,11 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-
     @PostMapping("/available-capacity-by-date-range")
     public ResponseEntity<Map<LocalDate, Integer>> getAvailableCapacityByDateRange(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
-
+        if (getScheduleRequest.getBusinessId() == null || getScheduleRequest.getStartDate() == null || getScheduleRequest.getEndDate() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID, start date, and end date must not be null");
+        }
         BoardingEntity boardingEntity = boardingRepository.findByBusiness_Id(getScheduleRequest.getBusinessId());
         List<BoardingScheduleEntity> schedules = boardingScheduleRepository.findAllByBoardingEntity_Business_IdAndDateBetween(
                 getScheduleRequest.getBusinessId(),
@@ -130,6 +133,12 @@ public class BoardingAppointmentController extends BaseAppointmentController{
                 getScheduleRequest.getEndDate()
         );
 
+        Map<LocalDate, Integer> availableCapacities = getLocalDateIntegerMap(getScheduleRequest, schedules, boardingEntity);
+
+        return ResponseEntity.ok(availableCapacities);
+    }
+
+    private static @NotNull Map<LocalDate, Integer> getLocalDateIntegerMap(GetScheduleAndAppointmentDetailsRequest getScheduleRequest, List<BoardingScheduleEntity> schedules, BoardingEntity boardingEntity) {
         Map<LocalDate, Integer> availableCapacities = new HashMap<>();
         LocalDate currentDate = getScheduleRequest.getStartDate();
         while (!currentDate.isAfter(getScheduleRequest.getEndDate())) {
@@ -145,14 +154,11 @@ public class BoardingAppointmentController extends BaseAppointmentController{
                 int availableCapacity = scheduleForCurrentDate.getBoardingEntity().getDogCapacity() - scheduleForCurrentDate.getCurrentDogCapacity();
                 availableCapacities.put(currentDate, availableCapacity);
             } else {
-
                 availableCapacities.put(currentDate, boardingEntity.getDogCapacity());
             }
 
             currentDate = currentDate.plusDays(1);
         }
-
-        return ResponseEntity.ok(availableCapacities);
+        return availableCapacities;
     }
-
 }

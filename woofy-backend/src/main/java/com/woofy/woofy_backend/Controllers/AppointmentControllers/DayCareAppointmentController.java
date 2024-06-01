@@ -99,6 +99,9 @@ public class DayCareAppointmentController extends BaseAppointmentController{
 
     @PostMapping("/available-capacity-by-date")
     public ResponseEntity<Integer> getAvailableCapacity(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
+        if (getScheduleRequest.getBusinessId() == null || getScheduleRequest.getDate() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID and date must not be null");
+        }
         Optional<DayCareScheduleEntity> optionalSchedule = dayCareScheduleRepository.findByDayCareEntity_Business_IdAndDate(getScheduleRequest.getBusinessId(), getScheduleRequest.getDate());
         if (optionalSchedule.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date and business ID");
