@@ -90,6 +90,7 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
         dogSitterAppointmentEntity.setDate(appointmentDate);
         dogSitterAppointmentEntity.setStartTime(appointmentStartTime);
         dogSitterAppointmentEntity.setEndTime(appointmentEndTime);
+        dogSitterAppointmentEntity.setDogSitterEntity(dogSitter);
         dogSitterAppointmentEntity.setDogId(customer.getDog().getId());
 
         // Add the new appointment to the list of appointments in the DogSitterEntity

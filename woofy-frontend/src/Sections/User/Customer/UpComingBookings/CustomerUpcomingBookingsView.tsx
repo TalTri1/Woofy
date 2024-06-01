@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
+import React, {FunctionComponent, useState, useEffect} from "react";
+import {Box, Button, Typography} from "@mui/material";
+import {BUSINESS_TYPES} from "../../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import UpcomingBookingCard from "../../UpComingBookings/UpcomingBookingCard";
-import { getImage } from "../../../../components/image/imageComponent";
+import {getImage} from "../../../../components/image/imageComponent";
 import api from "../../../../api/api";
-
+import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 
 const CustomerUpComingBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
@@ -30,6 +30,10 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 const res = await api.get("appointment/get-all");
                 const bookingsWithImages = await Promise.all(
                     res.data.map(async (booking) => {
+                        if (!booking.profilePhotoID) return {
+                            ...booking,
+                            profileImage: defaultProfilePicture,
+                        };
                         const profileImage = await getImage(booking.profilePhotoID);
                         return {
                             ...booking,
@@ -47,7 +51,8 @@ const CustomerUpComingBookings: FunctionComponent = () => {
     }, []);
 
     return (
-        <Box className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
+        <Box
+            className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
             <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
                 <Box className="self-stretch flex flex-col items-center justify-start">
                     <Typography variant="h1" className="m-0 self-stretch text-4xl leading-12 font-bold">
@@ -56,8 +61,10 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 </Box>
             </Box>
 
-            <Box className="w-full max-w-[768px] flex flex-row items-center justify-center gap-5 mb-5" sx={{ alignItems: "center" }}>
-                <SelectServiceTypeComponent setSelectedServices={setSelectedServices} selectedServices={selectedServices} />
+            <Box className="w-full max-w-[768px] flex flex-row items-center justify-center gap-5 mb-5"
+                 sx={{alignItems: "center"}}>
+                <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
+                                            selectedServices={selectedServices}/>
                 <Button
                     onClick={handleViewAll}
                     variant={selectedServices === null ? "contained" : "outlined"}
@@ -85,7 +92,7 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 >
                     <Box
                         className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
-                        sx={{ marginLeft: 0, whiteSpace: 'nowrap' }}
+                        sx={{marginLeft: 0, whiteSpace: 'nowrap'}}
                     >
                         View All
                     </Box>
@@ -93,8 +100,10 @@ const CustomerUpComingBookings: FunctionComponent = () => {
             </Box>
 
             <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
-                <Box className="self-stretch flex flex-col items-start justify-start border-b border-solid border-text-primary pb-7">
-                    <Box className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-t border-solid border-gray-500 pt-7">
+                <Box
+                    className="self-stretch flex flex-col items-start justify-start border-b border-solid border-text-primary pb-7">
+                    <Box
+                        className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-t border-solid border-gray-500 pt-7">
                         {bookings
                             .filter(booking => selectedServices === null || booking.businessType === selectedServices)
                             .slice(0, displayedBookings)
@@ -117,12 +126,14 @@ const CustomerUpComingBookings: FunctionComponent = () => {
 
                 <Box className="flex flex-row gap-5">
                     {displayedBookings < bookings.length && (
-                        <Button onClick={handleShowMore} variant="outlined" className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                        <Button onClick={handleShowMore} variant="outlined"
+                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show More
                         </Button>
                     )}
                     {displayedBookings > 3 && (
-                        <Button onClick={handleShowLess} variant="outlined" className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                        <Button onClick={handleShowLess} variant="outlined"
+                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show Less
                         </Button>
                     )}
