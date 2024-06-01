@@ -7,6 +7,7 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.Homestay.DogWalkerEntity;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.ScheduleEntities.BusinessTypesScheduleEntities.DogWalkerScheduleEntity;
+import com.woofy.woofy_backend.Models.Enums.WorkingDaysEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.DogWalkerAppointmentRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.DogWalkerRepository;
 import com.woofy.woofy_backend.Repositories.BusinessTypesScheduleRepositories.DogWalkerScheduleRepository;
@@ -112,14 +113,15 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
         if (request.getBusinessId() == null || request.getDate() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID and date must not be null");
         }
-        Optional<List<DogWalkerScheduleEntity>> optionalSchedules = dogWalkerScheduleRepository.findAllByDogWalkerEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
-        if (optionalSchedules.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date and business ID");
+        DogWalkerEntity dogWalker = dogWalkerEntityRepository.findByBusiness_Id(request.getBusinessId());
+        if (request.getDate().isBefore(dogWalker.getStartDate()) || request.getDate().isAfter(dogWalker.getEndDate()) ||
+                !dogWalker.getWorkingDays().contains(WorkingDaysEnum.valueOf(request.getDate().getDayOfWeek().name()))) {
+            return ResponseEntity.ok(new ArrayList<>()); // Return an empty list if the date is not within the business's date range or if the day is not a working day
         }
-        List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogWalker(optionalSchedules);
+        Optional<List<DogWalkerScheduleEntity>> optionalSchedules = dogWalkerScheduleRepository.findAllByDogWalkerEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
+        List<TimeSlot> takenTimeSlots = optionalSchedules.isPresent() ? TimeSlotUtil.createTimeSlotsFromSchedulesDogWalker(optionalSchedules) : new ArrayList<>();
 
         // Get the total working hours of the dog walker
-        DogWalkerEntity dogWalker = dogWalkerEntityRepository.findByBusiness_Id(request.getBusinessId());
         List<TimeSlot> totalWorkingHours = TimeSlotUtil.generateSlotsByMinutes(dogWalker.getStartTime(), dogWalker.getEndTime(), dogWalker.getAppointmentLengthInMinutes());
 
         // Subtract the taken hours from the total working hours
