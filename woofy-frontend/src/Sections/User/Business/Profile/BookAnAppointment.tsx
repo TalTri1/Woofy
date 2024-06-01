@@ -10,7 +10,7 @@ import { fDate } from '../../../../utils/format-time';
 import api from '../../../../api/api';
 import { formatEnumValue } from "../../../../utils/format-enum-text";
 import { useNotifications } from "../../../../provider/NotificationContext";
-import {useRouter} from "../../../../routes/hooks";
+import { useRouter } from "../../../../routes/hooks";
 
 interface Business {
     id: number;
@@ -30,8 +30,8 @@ interface Props {
 const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [availableSlots, setAvailableSlots] = useState<Record<string, number> | Slot[]>([]);
-    const [totalCapacity, setTotalCapacity] = useState<number | null>(null);
+    const [availableSlots, setAvailableSlots] = useState<Record<string, number> | Slot[] | number>([]);
+    const [dayCareAvilability, setDayCareAvailability] = useState<number>(0);
     const [isFetching, setIsFetching] = useState(false);
     const [isAvailabilityFetched, setIsAvailabilityFetched] = useState(false);
     const { addNotification } = useNotifications();
@@ -47,8 +47,14 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     useEffect(() => {
         setAvailableSlots([]);
         setIsAvailabilityFetched(false);
-        setTotalCapacity(null);
     }, [selectedDate, endDate]);
+
+    useEffect(() => {
+        setEndDate(null);
+        setSelectedDate(null);
+        setAvailableSlots([]);
+        setIsAvailabilityFetched(false);
+    }, [selectedService]);
 
     const validateFields = () => {
         let isValid = true;
@@ -81,15 +87,13 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                         businessId: business.id,
                     });
                     setAvailableSlots(response.data);
-                    setTotalCapacity(5); // Replace with actual capacity from API if available
                     break;
                 case BUSINESS_TYPES.DAY_CARE:
                     response = await api.post('/appointment/day-care/available-capacity-by-date', {
                         date: fDate(selectedDate!, 'yyyy-MM-dd'),
                         businessId: business.id,
                     });
-                    setAvailableSlots(response.data);
-                    setTotalCapacity(5); // Replace with actual capacity from API if available
+                    setDayCareAvailability(response.data);
                     break;
                 case BUSINESS_TYPES.DOG_SITTER:
                 case BUSINESS_TYPES.DOG_WALK:
@@ -160,20 +164,21 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     };
 
     const groupFullyBookedDates = (dates: string[]): { start: string, end: string }[] => {
+        const sortedDates = dates.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
         const ranges: { start: string, end: string }[] = [];
-        let start = dates[0];
-        let end = dates[0];
+        let start = sortedDates[0];
+        let end = sortedDates[0];
 
-        for (let i = 1; i < dates.length; i++) {
-            const current = new Date(dates[i]);
-            const previous = new Date(dates[i - 1]);
+        for (let i = 1; i < sortedDates.length; i++) {
+            const current = new Date(sortedDates[i]);
+            const previous = new Date(sortedDates[i - 1]);
             const diff = (current.getTime() - previous.getTime()) / (1000 * 3600 * 24);
 
             if (diff > 1) {
                 ranges.push({ start, end });
-                start = dates[i];
+                start = sortedDates[i];
             }
-            end = dates[i];
+            end = sortedDates[i];
         }
         ranges.push({ start, end });
 
@@ -236,7 +241,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                 return (
                     <div>
                         <Typography variant="h6" color="error">
-                            Fully booked from {ranges.map(range => `${range.start} to ${range.end}`).join(', ')}
+                            Unavailable from {ranges.map(range => range.start === range.end ? range.start : `${range.start} to ${range.end}`).join(', ')}
                         </Typography>
                         {validSuggestions.map((suggestion, index) => (
                             <div key={index}>
@@ -272,11 +277,11 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
             }
         } else if (selectedService === BUSINESS_TYPES.DAY_CARE) {
             const date = selectedDate ? selectedDate.toLocaleDateString() : '';
-            const slots = (availableSlots as Record<string, number>)[date];
+            const slots = dayCareAvilability;
             return (
                 <div>
                     <Typography variant="h6">
-                        {date}: {slots}/{totalCapacity} slots available
+                        {date}: {slots} slots available
                     </Typography>
                     {slots > 0 ? (
                         <div>
@@ -288,7 +293,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                             </Button>
                         </div>
                     ) : (
-                        <Typography variant="body1" color="error">Fully booked</Typography>
+                        <Typography variant="body1" color="error">Unavailable</Typography>
                     )}
                 </div>
             );
@@ -331,6 +336,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                 <DatePicker
                                     label="Start Date"
                                     value={selectedDate}
+                                    minDate={new Date()} // Prevent selection of past dates
                                     onChange={(date) => setSelectedDate(date)}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
@@ -339,6 +345,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                 <DatePicker
                                     label="End Date"
                                     value={endDate}
+                                    minDate={new Date()} // Prevent selection of past dates
                                     onChange={(date) => setEndDate(date)}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
@@ -351,6 +358,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                 <DatePicker
                                     label="Select Date"
                                     value={selectedDate}
+                                    minDate={new Date()} // Prevent selection of past dates
                                     onChange={(date) => setSelectedDate(date)}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
