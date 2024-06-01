@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -101,7 +102,6 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
         dogSitterAppointments.add(dogSitterAppointmentEntity);
         dogSitter.setDogSitterAppointmentEntities(dogSitterAppointments);
 
-
         dogSitterAppointmentRepository.save(dogSitterAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -110,7 +110,13 @@ public class DogSitterAppointmentController extends BaseAppointmentController{
 
     @PostMapping("/available-hours-by-business")
     public ResponseEntity<List<TimeSlot>> getAvailableHoursByBusiness(@RequestBody GetScheduleAndAppointmentDetailsRequest request) {
+        if (request.getBusinessId() == null || request.getDate() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID and date must not be null");
+        }
         Optional<List<DogSitterScheduleEntity>> optionalSchedules = dogSitterScheduleRepository.findAllByDogSitterEntity_Business_IdAndDate(request.getBusinessId(), request.getDate());
+        if (optionalSchedules.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for the given date and business ID");
+        }
         List<TimeSlot> takenTimeSlots = TimeSlotUtil.createTimeSlotsFromSchedulesDogSitter(optionalSchedules);
 
         // Get the total working hours of the dog sitter
