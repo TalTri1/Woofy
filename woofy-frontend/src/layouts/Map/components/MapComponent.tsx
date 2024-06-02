@@ -12,6 +12,17 @@ const MapComponent: React.FC = () => {
     const mapInstance = useRef<L.Map | null>(null);
     const [businesses, setBusinesses] = useState<Business[]>([]);
 
+    const generateStars = (rating: number) => {
+        let stars = '';
+        for (let i = 0; i < Math.floor(rating); i++) {
+            stars += '<img class="h-[18.9px] w-5 relative min-h-[19px]" alt="" src="/vector.svg" />';
+        }
+        if (rating % 1 !== 0) {
+            stars += '<img class="h-[18.9px] w-5 relative min-h-[19px]" alt="" src="/half-star.svg" />';
+        }
+        return stars;
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -48,7 +59,7 @@ const MapComponent: React.FC = () => {
 
                     marker.on('click', async () => {
                         const averageReview = await fetchAverageReviews(business.id);
-                        const averageReviewText = averageReview === null || averageReview === undefined ? "No reviews yet" : (isNaN(averageReview!) ? "No reviews yet" : averageReview);
+                        const averageReviewText = averageReview === 0 || averageReview === undefined ? "No reviews yet" : (isNaN(averageReview!) ? "No reviews yet" : `${generateStars(averageReview)} ${averageReview}`);
 
                         const popupContent = `
                             <div>

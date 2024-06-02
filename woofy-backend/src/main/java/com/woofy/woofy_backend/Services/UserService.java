@@ -75,6 +75,7 @@ public class UserService {
     public List<UserSummaryDTO> getAllUsersSummary() {
         return userRepository.findAll().stream()
                 .map(user -> new UserSummaryDTO(
+                        user.getId(),
                         user.getFirstName(),
                         user.getLastName(),
                         user.getPhoneNumber(),
@@ -88,6 +89,7 @@ public class UserService {
     }
     public UserSummaryDTO mapToDTO(UserEntity userEntity) {
         UserSummaryDTO dto = new UserSummaryDTO();
+        dto.setId(userEntity.getId());
         dto.setFirstName(userEntity.getFirstName());
         dto.setLastName(userEntity.getLastName());
         dto.setPhoneNumber(userEntity.getPhoneNumber());

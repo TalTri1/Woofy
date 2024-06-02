@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { Age, Size, TrainingLevel } from "../../../../models/Enums/Enums";
 import DogModel from "../../../../models/DogModels/DogModel";
 import { useRouter } from "../../../../routes/hooks";
-import {useNotifications} from "../../../../provider/NotificationContext";
+import { useNotifications } from "../../../../provider/NotificationContext";
 
 
 const DogRegisterView: FunctionComponent = () => {
@@ -21,6 +21,10 @@ const DogRegisterView: FunctionComponent = () => {
     const [dog, setDog] = useState(
         new DogModel("", "", Age.PUPPY, Size.SMALL, TrainingLevel.BEGINNER, "", "")
     );
+
+    const [dogNameError, setDogNameError] = useState('');
+    const [dogBreedError, setDogBreedError] = useState('');
+    const [dogImagesError, setDogImagesError] = useState('');
 
     const changeHandlerDog = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -42,8 +46,39 @@ const DogRegisterView: FunctionComponent = () => {
         setSelectedTrainingLevel(trainingLevel);
     };
 
+    const validateForm = () => {
+        let isValid = true;
+
+        if (!dog.dogName) {
+            setDogNameError('Dog name is mandatory');
+            isValid = false;
+        } else {
+            setDogNameError('');
+        }
+
+        if (!dog.dogBreed) {
+            setDogBreedError('Dog breed is mandatory');
+            isValid = false;
+        } else {
+            setDogBreedError('');
+        }
+
+        if (images.every(image => image === null)) {
+            setDogImagesError('At least one dog image is mandatory');
+            isValid = false;
+        } else {
+            setDogImagesError('');
+        }
+
+        return isValid;
+    };
+
     const registerDogHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
 
         const dogData = {
             dogName: dog.dogName,
@@ -56,11 +91,8 @@ const DogRegisterView: FunctionComponent = () => {
             pictures: null,
         };
 
-        console.log(`Dog data to be registered: ${JSON.stringify(dogData)}`);
-
         try {
             const response = await api.post(`/dogs/create`, dogData);
-            console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
             const isUpdateSuccess = await updateImagesForDogEntity(imageIDs as number[]);
             router.push("/");
@@ -127,7 +159,6 @@ const DogRegisterView: FunctionComponent = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(`Response from the backend: ${response}`);
             return response.data.imageID; // return the ID of the saved image
         } catch (error) {
             toast.error("Failed uploading profile photo");
@@ -137,7 +168,6 @@ const DogRegisterView: FunctionComponent = () => {
     const updateImagesForDogEntity = async (imageIDs: number[]) => {
         try {
             const response = await api.put(`/dogs/update/images/`, imageIDs);
-            console.log(`Response from updating dog images: ${response}`);
             return true;
         } catch (error) {
             console.error(`Error updating dog images: ${error}`);
@@ -198,6 +228,8 @@ const DogRegisterView: FunctionComponent = () => {
                                         variant="outlined"
                                         fullWidth
                                         onChange={changeHandlerDog}
+                                        error={!!dogNameError}
+                                        helperText={dogNameError}
                                         required
 
                                     />
@@ -223,6 +255,8 @@ const DogRegisterView: FunctionComponent = () => {
                                         variant="outlined"
                                         fullWidth
                                         onChange={changeHandlerDog}
+                                        error={!!dogBreedError}
+                                        helperText={dogBreedError}
                                         required
                                     />
                                 </Box>
@@ -477,6 +511,7 @@ const DogRegisterView: FunctionComponent = () => {
                                         ))}
                                     </Box>
                                 </Box>
+                                {dogImagesError && <Typography color="error">{dogImagesError}</Typography>}
                                 <Button
                                     variant="contained"
                                     onClick={registerDogHandler}

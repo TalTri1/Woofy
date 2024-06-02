@@ -1,12 +1,28 @@
-import { FunctionComponent, useContext, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
 import { UserContext } from "../provider/UserProvider";
 import BusinessListComponent from "../layouts/Appointment/components/BusinessListComponent";
+import axios from "axios";
 
 
 const UserDashboard: FunctionComponent = () => {
 
   const { userDetails } = useContext(UserContext); // The user details
+  const [hasDog, setHasDog] = useState(false);
+
+  useEffect(() => {
+    if (userDetails && userDetails.id) {
+      axios.post(`http://localhost:8080/api/v1/dogs/getByUserId`, { id: userDetails.id })
+        .then(response => {
+          if (response.data) {
+            setHasDog(true);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching dog', error);
+        });
+    }
+  }, [userDetails]);
 
   return (
     <div className="w-full relative overflow-hidden flex flex-col items-start justify-start tracking-[normal] leading-[normal]">
@@ -23,7 +39,7 @@ const UserDashboard: FunctionComponent = () => {
             </div>
           </div>
 
-          <RegisterYourDogCTA />
+          {!hasDog && <RegisterYourDogCTA />}
           <BusinessListComponent />
 
 
