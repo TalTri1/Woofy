@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Services;
 
+import com.woofy.woofy_backend.DTOs.DogDTOs.DogGetDto;
 import com.woofy.woofy_backend.DTOs.DogDTOs.DogRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.DogEntity;
@@ -73,4 +74,24 @@ public class DogService {
         dogRepository.save(dog);
     }
 
+    public DogGetDto getDog(Integer id) {
+        DogEntity dogEntity = dogRepository.findByOwner_Id(id);
+        if(dogEntity == null) {
+            return null;
+        }
+        return mapToDTO(dogEntity);
+    }
+
+    private DogGetDto mapToDTO(DogEntity dogEntity) {
+        DogGetDto dogDTO = new DogGetDto();
+        dogDTO.setDogName(dogEntity.getDogName());
+        dogDTO.setDogBreed(dogEntity.getDog_breed());
+        dogDTO.setAge(dogEntity.getAge());
+        dogDTO.setSize(dogEntity.getSize());
+        dogDTO.setTrainingLevel(dogEntity.getTrainingLevel());
+        dogDTO.setAbout(dogEntity.getAbout());
+        dogDTO.setSpecialRequirements(dogEntity.getSpecialRequirements());
+        dogDTO.setPictures(dogEntity.getImages());
+        return dogDTO;
+    }
 }

@@ -1,22 +1,22 @@
-import React, {FunctionComponent, useContext, useState} from "react";
-import {BoardingModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
-import {DogWalkerModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
-import {DayCareModel} from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
-import {DogSitterModel} from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
+import React, { FunctionComponent, useContext, useState } from "react";
+import { BoardingModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/BoardingModel";
+import { DogWalkerModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
+import { DayCareModel } from "../../../../models/BusinessModels/BusinessTypesModels/StayAtBusiness/DayCareModel";
+import { DogSitterModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
 import '../../../../css/button.css';
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "../../selectButtons/PetsInHomeComponent";
 import HomeConditionComponent from "../../selectButtons/HomeConditionComponent";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import api from "../../../../api/api";
-import {Box, Button, Container, TextField, Typography} from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import {BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS} from "../../../../models/Enums/Enums";
-import {useRouter} from "../../../../routes/hooks";
+import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS } from "../../../../models/Enums/Enums";
+import { useRouter } from "../../../../routes/hooks";
 import DogSizeInput from "../../selectButtons/DogSizeInput";
-import {useNotifications} from "../../../../provider/NotificationContext";
-import {formatEnumValue} from "../../../../utils/format-enum-text";
+import { useNotifications } from "../../../../provider/NotificationContext";
+import { formatEnumValue } from "../../../../utils/format-enum-text";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -47,14 +47,14 @@ const ServiceRegisterView: FunctionComponent = () => {
     const [businessInput, setBusinessInput] = useState<Record<string, any>>({});
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = event.target;
-        setBusinessInput(prevState => ({...prevState, [name]: value}));
+        const { name, value } = event.target;
+        setBusinessInput(prevState => ({ ...prevState, [name]: value }));
     };
 
     const updateBusinessModel = (updatedData: Partial<BoardingModel | DogWalkerModel | DayCareModel | DogSitterModel>) => {
         setBusinessInput(prevState => {
             if (prevState) {
-                return {...prevState, ...updatedData};
+                return { ...prevState, ...updatedData };
             }
             return prevState;
         });
@@ -68,7 +68,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newSizes = [...prevSizes, size];
             }
-            updateBusinessModel({acceptableDogSizes: newSizes});
+            updateBusinessModel({ acceptableDogSizes: newSizes });
             return newSizes;
         });
     };
@@ -81,7 +81,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newHomeConditions = [...prevHomeConditions, homeCondition];
             }
-            updateBusinessModel({homeConditions: newHomeConditions});
+            updateBusinessModel({ homeConditions: newHomeConditions });
             return newHomeConditions;
         });
     }
@@ -94,7 +94,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newPetsInHome = [...prevPetsInHome, petsInHome];
             }
-            updateBusinessModel({petsInHome: newPetsInHome});
+            updateBusinessModel({ petsInHome: newPetsInHome });
             return newPetsInHome;
         });
     }
@@ -106,7 +106,7 @@ const ServiceRegisterView: FunctionComponent = () => {
             } else {
                 newDays = [...prevDays, workingDay as WEEKDAYS];
             }
-            updateBusinessModel({workingDays: newDays});
+            updateBusinessModel({ workingDays: newDays });
             return newDays;
         })
     }
@@ -140,7 +140,6 @@ const ServiceRegisterView: FunctionComponent = () => {
 
         try {
             const response = await api.post(`/business/business-type/${serviceTypeMapping[selectedServices]}/create`, business);
-            console.log(`Response from registering dog: ${response}`);
             const imageIDs = await uploadImages();
             const isUpdateSuccess = updateImagesForServiceEntity(imageIDs as number[]);
             router.push("/");
@@ -165,7 +164,6 @@ const ServiceRegisterView: FunctionComponent = () => {
     const updateImagesForServiceEntity = async (imageIDs: number[]) => {
         try {
             const response = await api.put(`/business/update/images/`, imageIDs);
-            console.log(`Response from updating dog images: ${response}`);
             return true;
         } catch (error) {
             console.error(`Error updating dog images: ${error}`);
@@ -219,7 +217,6 @@ const ServiceRegisterView: FunctionComponent = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(`Response from the backend: ${response}`);
             return response.data.imageID; // return the ID of the saved image
         } catch (error) {
             toast.error("Failed uploading profile photo")
@@ -245,7 +242,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                 flexDirection: 'row',
                 alignItems: 'start',
                 justifyContent: 'start',
-                px: {md: 5}
+                px: { md: 5 }
             }}>
                 <Box sx={{
                     flex: 1,
@@ -258,7 +255,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                     fontSize: '29xl',
                     color: 'text.alternate',
                     fontFamily: 'text-medium-normal',
-                    px: {md: 5}
+                    px: { md: 5 }
                 }}>
                     <Box sx={{
                         width: '100%',
@@ -340,7 +337,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         Services Details
                                     </Typography>
                                     <Typography variant="body1"
-                                                sx={{fontFamily: 'Inter', color: 'text.primary', textAlign: 'center'}}>
+                                        sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
                                         Please Complete your business account information.
                                     </Typography>
                                 </Box>
@@ -364,8 +361,8 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     gap: 1
                                 }}>
                                     <SelectServiceTypeComponent selectedServices={selectedServices}
-                                                                setSelectedServices={setSelectedServices}
-                                                                labelText="Choose your service"/>
+                                        setSelectedServices={setSelectedServices}
+                                        labelText="Choose your service" />
                                 </Box>
                                 <Box>
 
@@ -392,8 +389,8 @@ const ServiceRegisterView: FunctionComponent = () => {
                                         </Typography>
                                     </Box>
                                     {(selectedServices === BUSINESS_TYPES.DOG_WALK || selectedServices === BUSINESS_TYPES.DOG_SITTER) && (
-                                        <Box component="form" sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 2}}>
-                                            <Typography sx={{width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px',}}>
+                                        <Box component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                            <Typography sx={{ width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px', }}>
                                                 Appointment Length
                                             </Typography>
                                             <TextField
@@ -408,23 +405,23 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     )}
                                     {(selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.DAY_CARE) && (
                                         <>
-                                            <Box sx={{mb: 2}}>
+                                            <Box sx={{ mb: 2 }}>
                                                 <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome}
-                                                                     clickPetsInHomeHandler={clickPetsInHomeHandler}/>
+                                                    clickPetsInHomeHandler={clickPetsInHomeHandler} />
                                             </Box>
-                                            <Box sx={{mb: 3}}>
+                                            <Box sx={{ mb: 3 }}>
                                                 <HomeConditionComponent selectedHomeConditions={selectedHomeConditions}
-                                                                        clickHomeConditionsHandler={clickHomeConditionsHandler}/>
+                                                    clickHomeConditionsHandler={clickHomeConditionsHandler} />
                                             </Box>
                                             <Box>
-                                            <TextField
-                                                fullWidth
-                                                placeholder="Number of Dogs*"
-                                                type="number"
-                                                name="dogCapacity"
-                                                required
-                                                onChange={handleInputChange}
-                                            />
+                                                <TextField
+                                                    fullWidth
+                                                    placeholder="Number of Dogs*"
+                                                    type="number"
+                                                    name="dogCapacity"
+                                                    required
+                                                    onChange={handleInputChange}
+                                                />
                                             </Box>
                                         </>
                                     )}
@@ -468,7 +465,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                     alignItems: 'center',
                                     justifyContent: 'start',
                                     gap: 3,
-                                    flexWrap: {xs: 'wrap', sm: 'nowrap'}
+                                    flexWrap: { xs: 'wrap', sm: 'nowrap' }
                                 }}>
                                     {images.map((image, index) => (
                                         <label key={index} className="relative">
@@ -476,7 +473,7 @@ const ServiceRegisterView: FunctionComponent = () => {
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(event) => handleImageChange(index, event)}
-                                                style={{display: 'none'}}
+                                                style={{ display: 'none' }}
                                             />
                                             <img
                                                 className="h-[100px] w-[100px] relative object-cover min-h-[100px] shrink-0 cursor-pointer"

@@ -19,7 +19,7 @@ const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage, review }) 
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        if(review.userId === null) return;
+        if (review.userId === null) return;
         const response = await axios.get(`http://localhost:8080/api/v1/user/name/${review.userId}`);
         setUserName(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage, review }) 
   useEffect(() => {
     const fetchUserImage = async () => {
       try {
-        if(review.userId === null) return;
+        if (review.userId === null) return;
         const response = await axios.get(`http://localhost:8080/api/v1/user/${review.userId}`);
         const user = response.data;
         const image = await getImage(user.profilePhotoID);

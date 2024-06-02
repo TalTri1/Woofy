@@ -7,7 +7,7 @@ import { useAuth } from "../provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useRouter } from "../routes/hooks";
-import {useNotifications} from "../provider/NotificationContext";
+import { useNotifications } from "../provider/NotificationContext";
 
 const Registration: FunctionComponent = () => {
     const router = useRouter();
@@ -102,7 +102,6 @@ const Registration: FunctionComponent = () => {
                 body: JSON.stringify(address),
             })
                 .then(response => {
-                    console.log(`Geocode response: ${JSON.stringify(response)}`);
                     if (!response.ok) {
                         throw new Error('Failed to geocode address');
                     }

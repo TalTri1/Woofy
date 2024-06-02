@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.Controllers;
 
+import com.woofy.woofy_backend.DTOs.DogDTOs.DogGetDto;
 import com.woofy.woofy_backend.DTOs.DogDTOs.DogRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
 import com.woofy.woofy_backend.Models.Entities.DogEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 // DogController.java
 @RestController
@@ -23,6 +25,13 @@ public class DogController {
     @Autowired
     public DogController(DogService dogService) {
         this.dogService = dogService;
+    }
+
+    @PostMapping("/getByUserId")
+    public ResponseEntity<DogGetDto> getDog(@RequestBody Map<String, Integer> body) {
+        Integer id = body.get("id");
+        DogGetDto dog = dogService.getDog(id);
+        return ResponseEntity.ok(dog);
     }
 
     @PostMapping("/create")
