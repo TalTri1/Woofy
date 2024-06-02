@@ -12,6 +12,6 @@ import java.time.LocalDate;
 public class CreateBoardingAppointmentRequest extends CreateAppointmentRequestBaseDTO {
 
     @Column(nullable = false)
+    private LocalDate startDate;
     private LocalDate endDate;
-
 }
