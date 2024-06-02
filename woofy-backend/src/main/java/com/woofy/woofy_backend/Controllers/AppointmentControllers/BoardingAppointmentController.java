@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/appointment/boarding")
@@ -47,63 +48,71 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         CustomerEntity customer = (CustomerEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
         BoardingEntity boarding = business.getBoardingEntity();
-        DayOfWeek appointmentdayOfWeek = newAppointmentRequest.getDate().getDayOfWeek();
 
-        if (!boarding.getWorkingDays().contains(WorkingDaysEnum.valueOf(appointmentdayOfWeek.name()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Boarding is not available on this day");
+        LocalDate startDate = newAppointmentRequest.getStartDate();
+        LocalDate endDate = newAppointmentRequest.getEndDate();
+
+        // Check if start date is after end date
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Start date cannot be after end date");
         }
 
-        if (newAppointmentRequest.getDate().isBefore(boarding.getStartDate()) ||
-                newAppointmentRequest.getDate().isAfter(boarding.getEndDate())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date is not within the available dates of the boarding");
-        }
+        List<LocalDate> dates = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
 
-        BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findByDate(newAppointmentRequest.getDate()).orElse(null);
+        for (LocalDate date : dates) {
+            DayOfWeek appointmentDayOfWeek = date.getDayOfWeek();
 
-        if (existingSchedule != null) {
-
-            if (boarding.getDogCapacity() <= existingSchedule.getCurrentDogCapacity()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs");
+            if (!boarding.getWorkingDays().contains(WorkingDaysEnum.valueOf(appointmentDayOfWeek.name()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Boarding is not available on " + date);
             }
 
-            existingSchedule.setCurrentDogCapacity(existingSchedule.getCurrentDogCapacity() + 1);
-            boardingScheduleRepository.save(existingSchedule);
-        }
-
-        else {
-            BoardingScheduleEntity newSchedule = new BoardingScheduleEntity();
-            newSchedule.setDate(newAppointmentRequest.getDate());
-            newSchedule.setBoardingEntity(boarding);
-            newSchedule.setCurrentDogCapacity(1);
-            boardingScheduleRepository.save(newSchedule);
-
-            // Add the new schedule to the list of schedules in the BoardingEntity
-            List<BoardingScheduleEntity> boardingSchedules = boarding.getBoardingScheduleEntities();
-            if (boardingSchedules == null) {
-                boardingSchedules = new ArrayList<>();
+            if (date.isBefore(boarding.getStartDate()) || date.isAfter(boarding.getEndDate())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date " + date + " is not within the available dates of the boarding");
             }
-            boardingSchedules.add(newSchedule);
-            boarding.setBoardingScheduleEntities(boardingSchedules);
+
+            BoardingScheduleEntity existingSchedule = boardingScheduleRepository.findByDate(date).orElse(null);
+
+            if (existingSchedule != null) {
+                if (boarding.getDogCapacity() <= existingSchedule.getCurrentDogCapacity()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No more room for dogs on " + date);
+                }
+                existingSchedule.setCurrentDogCapacity(existingSchedule.getCurrentDogCapacity() + 1);
+            } else {
+                BoardingScheduleEntity newSchedule = new BoardingScheduleEntity();
+                newSchedule.setDate(date);
+                newSchedule.setBoardingEntity(boarding);
+                newSchedule.setCurrentDogCapacity(1);
+                boardingScheduleRepository.save(newSchedule);
+
+                List<BoardingScheduleEntity> boardingSchedules = boarding.getBoardingScheduleEntities();
+                if (boardingSchedules == null) {
+                    boardingSchedules = new ArrayList<>();
+                }
+                boardingSchedules.add(newSchedule);
+                boarding.setBoardingScheduleEntities(boardingSchedules);
+            }
         }
 
-        BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
-        boardingAppointmentEntity.setDate(newAppointmentRequest.getDate());
-        boardingAppointmentEntity.setEndDate(newAppointmentRequest.getEndDate());
-        boardingAppointmentEntity.setBoardingEntity(boarding);
-        boardingAppointmentEntity.setDogId(customer.getDog().getId());
+        for (LocalDate date : dates) {
+            BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
+            boardingAppointmentEntity.setDate(date);
+            boardingAppointmentEntity.setEndDate(date);
+            boardingAppointmentEntity.setBoardingEntity(boarding);
+            boardingAppointmentEntity.setDogId(customer.getDog().getId());
 
-        // Add the new appointment to the list of appointments in the BoardingEntity
-        List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
-        if (boardingAppointments == null) {
-            boardingAppointments = new ArrayList<>();
+            List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
+            if (boardingAppointments == null) {
+                boardingAppointments = new ArrayList<>();
+            }
+            boardingAppointments.add(boardingAppointmentEntity);
+            boarding.setBoardingAppointmentEntities(boardingAppointments);
+
+            boardingAppointmentRepository.save(boardingAppointmentEntity);
         }
-        boardingAppointments.add(boardingAppointmentEntity);
-        boarding.setBoardingAppointmentEntities(boardingAppointments);
-
-        boardingAppointmentRepository.save(boardingAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 
     @GetMapping("/get-appointments")
     public ResponseEntity<List<BoardingAppointmentEntity>> getAllBoardingAppointments(Principal principal) {
