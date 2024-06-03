@@ -51,95 +51,135 @@ const CustomerUpComingBookings: FunctionComponent = () => {
     }, []);
 
     return (
-        <Box
-            className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
-            <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
-                <Box className="self-stretch flex flex-col items-center justify-start">
-                    <Typography variant="h1" className="m-0 self-stretch text-4xl leading-12 font-bold">
-                        Upcoming Bookings
+        <>
+            <Box sx={{
+                width: '100%',
+                backgroundColor: '#006cbf',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'start',
+                pt: 12,
+                px: 2.5,
+                pb: 8.5,
+                gap: 0
+            }}>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    width: '100%',
+                    flexWrap: 'wrap',
+                    '@media (min-width: 750px)': { flexWrap: 'wrap' }
+                }}>
+                    <Typography variant="h1" sx={{
+                        fontSize: '48px!important',
+                        lineHeight: '120%',
+                        fontFamily: 'inter',
+                        color: 'white',
+                        textAlign: 'center',
+                        position: 'relative'
+                    }}>
+                        Manage Your Bookings
                     </Typography>
+                    
                 </Box>
             </Box>
+            <Box
+                className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
+                <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
+                    <Box className="self-stretch flex flex-col items-center justify-start">
+                        <Typography
+                            style={{fontFamily: 'Inter', fontSize: '40px', fontWeight: 'bold'}}
+                            className="m-0 self-stretch relative leading-[58px] mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
+                            Upcoming Bookings
+                        </Typography>
+                    </Box>
+                </Box>
 
-            <Box className="w-full max-w-[768px] flex flex-row items-center justify-center gap-5 mb-5"
-                 sx={{alignItems: "center"}}>
-                <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                                            selectedServices={selectedServices}/>
-                <Button
-                    onClick={handleViewAll}
-                    variant={selectedServices === null ? "contained" : "outlined"}
-                    sx={{
-                        marginRight: 10,
-                        marginTop: 2,
-                        width: '130px',
-                        height: '45px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        textTransform: 'none',
-                        borderRadius: '30px',
-                        fontFamily: 'Inter',
-                        fontSize: '16px',
-                        fontWeight: 'regular',
-                        color: selectedServices === null ? 'white' : 'black',
-                        borderColor: selectedServices !== null ? 'grey.500' : 'primary.main',
-                        backgroundColor: selectedServices === null ? '#006CBF' : 'transparent',
-                        '&:hover': {
-                            borderColor: selectedServices !== null ? 'grey.700' : '#006CBF',
-                            backgroundColor: selectedServices === null ? '#0056A4' : 'transparent',
-                        },
-                    }}
-                >
-                    <Box
-                        className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
-                        sx={{marginLeft: 0, whiteSpace: 'nowrap'}}
+                <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
+                    sx={{alignItems: "center"}}>
+                    <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
+                                                selectedServices={selectedServices}/>
+                    <Button
+                        onClick={handleViewAll}
+                        variant={selectedServices === null ? "contained" : "outlined"}
+                        sx={{
+                            marginRight: 10,
+                            marginTop: 2,
+                            width: '130px',
+                            height: '45px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            textTransform: 'none',
+                            borderRadius: '30px',
+                            fontFamily: 'Inter',
+                            fontSize: '16px',
+                            fontWeight: 'regular',
+                            color: selectedServices === null ? 'white' : 'black',
+                            borderColor: selectedServices !== null ? 'grey.500' : 'primary.main',
+                            backgroundColor: selectedServices === null ? '#006CBF' : 'transparent',
+                            '&:hover': {
+                                borderColor: selectedServices !== null ? 'grey.700' : '#006CBF',
+                                backgroundColor: selectedServices === null ? '#0056A4' : 'transparent',
+                            },
+                        }}
                     >
-                        View All
-                    </Box>
-                </Button>
-            </Box>
+                        <Box
+                            className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
+                            sx={{marginLeft: 0, whiteSpace: 'nowrap'}}
+                        >
+                            View All
+                        </Box>
+                    </Button>
+                </Box>
 
-            <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
-                <Box
-                    className="self-stretch flex flex-col items-start justify-start border-b border-solid border-text-primary pb-7">
+                <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
                     <Box
-                        className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-t border-solid border-gray-500 pt-7">
-                        {bookings
-                            .filter(booking => selectedServices === null || booking.businessType === selectedServices)
-                            .slice(0, displayedBookings)
-                            .map(booking => (
-                                <UpcomingBookingCard
-                                    key={booking.id}
-                                    icon={getIconForType(booking.businessType)}
-                                    businessType={booking.businessType}
-                                    businessName={booking.businessName}
-                                    address={booking.address}
-                                    city={booking.city}
-                                    date={booking.date}
-                                    endDate={booking.endDate}
-                                    startTime={booking.startTime}
-                                    profileImage={booking.profileImage}
-                                />
-                            ))}
+                        className="self-stretch flex flex-col items-start justify-start border-b border-solid border-text-primary pb-3">
+                        <Box
+                            className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-solid border-gray-500 pt-7">
+                            {bookings
+                                .filter(booking => selectedServices === null || booking.businessType === selectedServices)
+                                .slice(0, displayedBookings)
+                                .map(booking => (
+                                    <UpcomingBookingCard
+                                        key={booking.id}
+                                        icon={getIconForType(booking.businessType)}
+                                        businessType={booking.businessType}
+                                        businessName={booking.businessName}
+                                        address={booking.address}
+                                        city={booking.city}
+                                        date={booking.date}
+                                        endDate={booking.endDate}
+                                        startTime={booking.startTime}
+                                        profileImage={booking.profileImage}
+                                    />
+                                ))}
+                        </Box>
+                    </Box>
+
+                    <Box className="flex flex-row gap-5">
+                        {displayedBookings < bookings.length && (
+                            <Button onClick={handleShowMore} variant="outlined"
+                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                Show More
+                            </Button>
+                        )}
+                        {displayedBookings > 3 && (
+                            <Button onClick={handleShowLess} variant="outlined"
+                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                Show Less
+                            </Button>
+                        )}
                     </Box>
                 </Box>
-
-                <Box className="flex flex-row gap-5">
-                    {displayedBookings < bookings.length && (
-                        <Button onClick={handleShowMore} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
-                            Show More
-                        </Button>
-                    )}
-                    {displayedBookings > 3 && (
-                        <Button onClick={handleShowLess} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
-                            Show Less
-                        </Button>
-                    )}
-                </Box>
             </Box>
-        </Box>
+        </>
     );
 };
 
