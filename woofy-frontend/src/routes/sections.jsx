@@ -49,11 +49,12 @@ const Router = () => {
                     path: "/map",
                     element: <MapPage/>,
                 },
-                {
-                    path: "/business-profile/:id",
-                    element: <BusinessProfilePage/>,
-                },
+                
             ],
+        },
+        {
+            path: "/business-profile/:id",
+            element: <BusinessProfilePage/>,
         },
         {
 
