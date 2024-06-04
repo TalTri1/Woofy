@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { toast, ToastContainer } from 'react-toastify';
@@ -246,11 +246,28 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                         {validSuggestions.map((suggestion, index) => (
                             <div key={index}>
                                 <Typography variant="body1">
-                                    Total Price: ${calculateTotalPrice(suggestion.start, suggestion.end)}
+                                    Total Price: {calculateTotalPrice(suggestion.start, suggestion.end)} ₪
                                 </Typography>
-                                <Button variant="contained" color="primary" onClick={() => handleSetAppointment(suggestion.start, suggestion.end)}>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleSetAppointment(suggestion.start, suggestion.end)}
+                                    sx={{
+                                        borderRadius: '30px',
+                                        backgroundColor: '#006CBF',
+                                        '&:hover': {
+                                            backgroundColor: '#0056A4',
+                                        },
+                                        height: '40px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        whiteSpace: 'nowrap', // Prevent text from wrapping
+                                        padding: '0 16px', // Add padding for some spacing
+                                    }}
+                                >
                                     Book from {suggestion.start.toLocaleDateString()} to {suggestion.end.toLocaleDateString()}
                                 </Button>
+
                             </div>
                         ))}
                     </div>
@@ -265,14 +282,49 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                     );
                 }
                 return (
-                    <div>
-                        <Typography variant="body1">
-                            Total Price: ${calculateTotalPrice(selectedDate, endDate)}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start', // Align items to the left
+                        }}
+                    >
+                        <Typography
+                            variant="body1"
+                            style={{
+                                marginLeft: '150px',
+                                marginRight: '24px',
+                                fontSize: '16px',
+                                fontWeight: '600' // 600 corresponds to semibold
+                            }}
+                        >
+                            {`Price for ${Math.ceil((new Date(endDate) - new Date(selectedDate)) / (1000 * 60 * 60 * 24))} ${Math.ceil((new Date(endDate) - new Date(selectedDate)) / (1000 * 60 * 60 * 24)) === 1 ? 'Night' : 'Nights'
+                                }: ${calculateTotalPrice(selectedDate, endDate)} ₪`}
                         </Typography>
-                        <Button variant="contained" color="primary" onClick={() => handleSetAppointment(selectedDate, endDate)}>
-                            Book from {selectedDate.toLocaleDateString()} to {endDate.toLocaleDateString()}
+
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSetAppointment(selectedDate, endDate)}
+                            sx={{
+                                borderRadius: '30px',
+                                backgroundColor: '#006CBF',
+                                '&:hover': {
+                                    backgroundColor: '#0056A4',
+                                },
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                whiteSpace: 'nowrap', // Prevent text from wrapping
+                                padding: '0 16px', // Add padding for some spacing
+                            }}
+                        >
+                            Book now
                         </Button>
                     </div>
+
+
+
                 );
             }
         } else if (selectedService === BUSINESS_TYPES.DAY_CARE) {
@@ -280,41 +332,78 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
             const slots = dayCareAvilability;
             return (
                 <div>
-                    <Typography variant="h6">
-                        {date}: {slots} slots available
-                    </Typography>
                     {slots > 0 ? (
-                        <div>
-                            <Typography variant="body1">
-                                Total Price: ${servicePrices[selectedService]}
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="body1" style={{ fontWeight: '600', marginLeft: '272px', marginRight: '16px' }}>
+                                Total Price: {servicePrices[selectedService]} ₪
+                                {slots < 10 && (
+                                    <span style={{ fontSize: '16px', fontWeight: 'normal', marginLeft: '8px' }}>
+                                        ({slots} left on this day)
+                                    </span>
+                                )}
                             </Typography>
-                            <Button variant="contained" color="primary" onClick={() => handleSetAppointment(selectedDate!, selectedDate!)}>
-                                Book {date}
+
+                            <Button
+                                variant="contained"
+                                onClick={() => handleSetAppointment(selectedDate!, selectedDate!)}
+                                sx={{
+                                    borderRadius: '30px',
+                                    backgroundColor: '#006CBF',
+                                    '&:hover': {
+                                        backgroundColor: '#0056A4',
+                                    },
+                                    height: '40px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    whiteSpace: 'nowrap', // Prevent text from wrapping
+                                    padding: '0 16px', // Add padding for some spacing
+                                }}
+                            >
+                                Book now
                             </Button>
                         </div>
                     ) : (
                         <Typography variant="body1" color="error">Unavailable</Typography>
                     )}
                 </div>
+
             );
         } else if ((selectedService === BUSINESS_TYPES.DOG_SITTER || selectedService === BUSINESS_TYPES.DOG_WALK) && Array.isArray(availableSlots)) {
             if (availableSlots.length === 0) {
                 return <Typography variant="body1" color="error">No availability</Typography>;
             }
             return (availableSlots as Slot[]).map((slot, index) => (
-                <div key={index}>
-                    <Typography variant="h6">
-                        {slot.startTime} - {slot.endTime}
-                    </Typography>
-                    <div>
-                        <Typography variant="body1">
-                            Total Price: ${servicePrices[selectedService]}
-                        </Typography>
-                        <Button variant="contained" color="primary" onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}>
-                            Book this slot
-                        </Button>
-                    </div>
-                </div>
+                
+                    <Box key={index} mb={4}>
+                        <Box display="flex" alignItems="center">
+                            <Typography variant="body1" mr={4} style={{ fontWeight: '600', marginLeft: '170px'}}>
+                                Appointment: {slot.startTime} - {slot.endTime}
+                            </Typography>
+                            <Typography variant="body1" mr={4} style={{ fontWeight: '600'}}>
+                                Price: {servicePrices[selectedService]} ₪
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}
+                                sx={{
+                                    borderRadius: '30px',
+                                    backgroundColor: '#006CBF',
+                                    '&:hover': {
+                                        backgroundColor: '#0056A4',
+                                    },
+                                    height: '40px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    whiteSpace: 'nowrap',
+                                    padding: '0 16px',
+                                }}
+                            >
+                                Book now
+                            </Button>
+                        </Box>
+                    </Box>
             ));
         }
         return null;
@@ -323,37 +412,34 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <h1>Book an appointment</h1>
-                </div>
                 <Typography
                     variant="h3"
                     sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit', textAlign: 'center' }}
                 >
-                    {selectedService === BUSINESS_TYPES.BOARDING && (
-                        <Grid container spacing={2} justifyContent="center">
-                            <Grid item>
-                                <DatePicker
-                                    label="Start Date"
-                                    value={selectedDate}
-                                    minDate={new Date()} // Prevent selection of past dates
-                                    onChange={(date) => setSelectedDate(date)}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <DatePicker
-                                    label="End Date"
-                                    value={endDate}
-                                    minDate={new Date()} // Prevent selection of past dates
-                                    onChange={(date) => setEndDate(date)}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </Grid>
-                        </Grid>
-                    )}
-                    {selectedService !== BUSINESS_TYPES.BOARDING && (
-                        <Grid container spacing={2} justifyContent="center">
+                    <Grid container spacing={2} justifyContent="center" alignItems="center">
+                        {selectedService === BUSINESS_TYPES.BOARDING && (
+                            <>
+                                <Grid item>
+                                    <DatePicker
+                                        label="Start Date"
+                                        value={selectedDate}
+                                        minDate={new Date()} // Prevent selection of past dates
+                                        onChange={(date) => setSelectedDate(date)}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <DatePicker
+                                        label="End Date"
+                                        value={endDate}
+                                        minDate={new Date()} // Prevent selection of past dates
+                                        onChange={(date) => setEndDate(date)}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </Grid>
+                            </>
+                        )}
+                        {selectedService !== BUSINESS_TYPES.BOARDING && (
                             <Grid item>
                                 <DatePicker
                                     label="Select Date"
@@ -363,22 +449,42 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
+                        )}
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                onClick={handleFindAvailability}
+                                sx={{
+                                    borderRadius: '30px',
+                                    backgroundColor: '#006CBF',
+                                    '&:hover': {
+                                        backgroundColor: '#0056A4',
+                                    },
+                                    width: '150px',
+                                    height: '40px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    whiteSpace: 'nowrap', // Prevent text from wrapping
+                                    ml: 1
+                                }}
+                                disabled={isFetching}
+                            >
+                                {isFetching ? 'Fetching...' : 'Find Availability'}
+                            </Button>
                         </Grid>
-                    )}
+
+                        {isAvailabilityFetched && (
+                            <Grid item xs={40} style={{ marginTop: '30px' }}>
+                                {renderAvailableSlots()}
+                            </Grid>
+                        )}
+                    </Grid>
                 </Typography>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                    <Button variant="contained" color="primary" onClick={handleFindAvailability} disabled={isFetching}>
-                        {isFetching ? 'Fetching...' : 'Find Availability'}
-                    </Button>
-                </div>
-                {isAvailabilityFetched && (
-                    <div style={{ marginTop: '20px' }}>
-                        {renderAvailableSlots()}
-                    </div>
-                )}
                 <ToastContainer />
             </div>
         </LocalizationProvider>
+
     );
 };
 

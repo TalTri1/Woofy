@@ -4,6 +4,7 @@ import { Business } from "../models/BusinessModels/BusinessModel";
 import { BUSINESS_TYPES } from "../models/Enums/Enums";
 import { useRouter } from "../routes/hooks";
 import { Button, Dialog, Grid, Typography, Container, Box, CircularProgress } from "@mui/material";
+import Navbar from "../Sections/Home/NavbarPreLogin";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
 import BookAnAppointment from "../Sections/User/Business/Profile/BookAnAppointment";
 import ReviewForm from "../Sections/User/Business/Reviews/ReviewForm";
@@ -67,85 +68,79 @@ const BusinessProfilePage: FunctionComponent = () => {
     };
 
     return (
-        <Container>
-            <Box mt={4} mb={4}>
-                <Typography variant="h3" gutterBottom align="center">
-                    Business Profile
-                </Typography>
-                <Grid container spacing={4} justifyContent="center">
-                    <Grid item xs={12}>
-                        <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h5" gutterBottom align="center">
-                            Our Services
-                        </Typography>
-                        <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
-                            {availableServices.map(service => (
-                                <Button
-                                    key={service.type}
-                                    onClick={() => setSelectedService(service.type)}
-                                    variant={selectedService === service.type ? 'contained' : 'outlined'}
-                                    color={selectedService === service.type ? 'primary' : 'secondary'}
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: '8px',
-                                        textTransform: 'none',
-                                        borderRadius: '30px',
-                                        fontFamily: 'Inter',
-                                        fontSize: '16px',
-                                        fontWeight: 'regular',
-                                        color: selectedService === service.type ? 'white' : 'black',
-                                        borderColor: selectedService !== service.type ? 'grey.500' : 'primary.main',
-                                        backgroundColor: selectedService === service.type ? '#006CBF' : 'transparent',
-                                        '&:hover': {
-                                            borderColor: selectedService !== service.type ? 'grey.700' : '#006CBF',
-                                            backgroundColor: selectedService === service.type ? '#0056A4' : 'transparent',
-                                        },
-                                    }}
-                                >
-                                    <Box display="flex" alignItems="center" justifyContent="center" mr={1}>
-                                        <img
-                                            src={service.icon}
-                                            alt={service.text}
-                                            className={`icon-${selectedService === service.type ? "white" : "grey"}`}
-                                            style={{ width: 24, height: 24 }}
-                                        />
-                                    </Box>
-                                    {service.text}
+        <Box
+            sx={{
+                width: '100%',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+            }}
+        >
+            <Navbar />
+            <Box
+                component="main"
+                sx={{
+                    width: '100%',
+                    backgroundColor: 'background-color-primary',
+                    pt: 9,
+                    px: 5,
+                    pb: 7.5,
+                    gap: 10.5,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    boxSizing: 'border-box',
+                    '@media (max-width: 1275px)': {
+                        pt: 3,
+                        pb: 5,
+                    },
+                    '@media (max-width: 750px)': {
+                        gap: 5.25,
+                        px: 2.5,
+                    },
+                    '@media (max-width: 1100px)': {
+                        pt: 2.5,
+                        pb: 3.125,
+                    },
+                    '@media (max-width: 450px)': {
+                        gap: 2.625,
+                        pb: 1.25,
+                    },
+                }}
+            >
+               
+                <Box>
+                    <Grid container spacing={4} justifyContent="center">
+                        <Grid item xs={12}>
+                            <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} />
+                        </Grid>
+                        
+                        
+                        <Grid item xs={12}>
+                            <TestimonialsContainer businessId={Number(businessId)} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box display="flex" justifyContent="center" mb={2}>
+                                <Button variant="contained" color="primary" onClick={() => setReviewFormOpen(true)}>
+                                    Write a Review
                                 </Button>
-                            ))}
-                        </Box>
+                            </Box>
+                            <Dialog open={reviewFormOpen} onClose={() => setReviewFormOpen(false)}>
+                                <ReviewForm
+                                    open={reviewFormOpen}
+                                    onClose={() => setReviewFormOpen(false)}
+                                    onSubmit={handleReviewSubmit}
+                                    businessId={Number(businessId)}
+                                    availableServices={availableServices.map(service => service.type)}
+                                />
+                            </Dialog>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Box display="flex" justifyContent="center" mb={4}>
-                            <BookAnAppointment business={business} selectedService={selectedService} />
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TestimonialsContainer businessId={Number(businessId)} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Box display="flex" justifyContent="center" mb={2}>
-                            <Button variant="contained" color="primary" onClick={() => setReviewFormOpen(true)}>
-                                Write a Review
-                            </Button>
-                        </Box>
-                        <Dialog open={reviewFormOpen} onClose={() => setReviewFormOpen(false)}>
-                            <ReviewForm
-                                open={reviewFormOpen}
-                                onClose={() => setReviewFormOpen(false)}
-                                onSubmit={handleReviewSubmit}
-                                businessId={Number(businessId)}
-                                availableServices={availableServices.map(service => service.type)}
-                            />
-                        </Dialog>
-                    </Grid>
-                </Grid>
+                </Box>
             </Box>
-        </Container>
+        </Box>
     );
 }
 
