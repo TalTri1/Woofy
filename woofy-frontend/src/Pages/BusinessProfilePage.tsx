@@ -115,17 +115,8 @@ const BusinessProfilePage: FunctionComponent = () => {
                         <Grid item xs={12}>
                             <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} setSelectedService={setSelectedService} />
                         </Grid>
-                        
-                        
                         <Grid item xs={12}>
                             <TestimonialsContainer businessId={Number(businessId)} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" mb={2}>
-                                <Button variant="contained" color="primary" onClick={() => setReviewFormOpen(true)}>
-                                    Write a Review
-                                </Button>
-                            </Box>
                         </Grid>
                     </Grid>
                 </Box>

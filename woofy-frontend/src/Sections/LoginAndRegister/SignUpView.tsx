@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import woofyLogo from '/public/assets/logo.png'
+import woofyLogo from '/assets/logo.png'
 import backgroundImage from '/public/assets/sign-in--modal--2@3x.png';
 
 export default function SignUpModal() {
