@@ -49,7 +49,7 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         BusinessEntity business = businessRepository.getReferenceById(newAppointmentRequest.getBusinessId());
         BoardingEntity boarding = business.getBoardingEntity();
 
-        LocalDate startDate = newAppointmentRequest.getStartDate();
+        LocalDate startDate = newAppointmentRequest.getDate();
         LocalDate endDate = newAppointmentRequest.getEndDate();
 
         // Check if start date is after end date
