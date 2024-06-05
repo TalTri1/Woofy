@@ -10,25 +10,25 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Modal from 'react-modal';
 import { formatEnumValue } from "../../../../utils/format-enum-text";
-import { Box, Typography, Grid, Avatar, Divider, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Grid, Avatar, Divider, Button } from '@mui/material';
 import BookAnAppointment from "../Profile/BookAnAppointment"; // Import BookAnAppointment
 
 interface BusinessFrameProps {
   business: Business;
   serviceData: DogSitterModel | DogWalkerModel | BoardingModel | DayCareModel | null;
   selectedService: BUSINESS_TYPES;
+  setSelectedService: (service: BUSINESS_TYPES) => void;
 }
 
 Modal.setAppElement('#root');
 
-const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService }) => {
+const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService,setSelectedService }) => {
   const [profileImage, setProfileImage] = useState("/user-avatar-image@2x.png");
   const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [averageReview, setAverageReview] = useState<number | null>(null);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
-  const [selectedServiceState, setSelectedServiceState] = useState<BUSINESS_TYPES>(selectedService);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -63,13 +63,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
 
   const availableServices = [
     { type: BUSINESS_TYPES.BOARDING, data: business.boardingEntity, text: "Boarding", icon: "/icon--moon.svg" },
+    { type: BUSINESS_TYPES.DAY_CARE, data: business.dayCareEntity, text: "Day Care", icon: "/icon--sun1.svg" },
     { type: BUSINESS_TYPES.DOG_WALK, data: business.dogWalkerEntity, text: "Walker", icon: "/icon--walk.svg" },
     { type: BUSINESS_TYPES.DOG_SITTER, data: business.dogSitterEntity, text: "Sitter", icon: "/icon--bed.svg" },
-    { type: BUSINESS_TYPES.DAY_CARE, data: business.dayCareEntity, text: "Day Care", icon: "/icon--sun1.svg" }
   ].filter(service => service.data !== null);
 
   const getServiceData = () => {
-    const service = availableServices.find(service => service.type === selectedServiceState);
+    const service = availableServices.find(service => service.type === selectedService);
     return service ? service.data : null;
   };
 
@@ -183,7 +183,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
               </Box>
             </Box>
             <Grid container spacing={1} justifyContent="center">
-              {serviceData && selectedService === BUSINESS_TYPES.BOARDING && (
+              {business.boardingEntity  && (
                 <Grid item xs={12} md={6} sx={{ height: '80px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
@@ -191,13 +191,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                       <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Boarding</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{serviceData.price} ₪</Typography>
+                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.boardingEntity.price} ₪</Typography>
                       <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Night</Typography>
                     </Box>
                   </Box>
                 </Grid>
               )}
-              {serviceData && selectedService === BUSINESS_TYPES.DAY_CARE && (
+              {business.dayCareEntity && (
                 <Grid item xs={12} md={6} sx={{ height: '80px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
@@ -205,13 +205,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                       <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Day Care</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{serviceData.price} ₪</Typography>
+                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dayCareEntity.price} ₪</Typography>
                       <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Day</Typography>
                     </Box>
                   </Box>
                 </Grid>
               )}
-              {serviceData && selectedService === BUSINESS_TYPES.DOG_SITTER && (
+              {business.dogSitterEntity && (
                 <Grid item xs={12} md={6} sx={{ height: '80px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
@@ -219,13 +219,13 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                       <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Sitting</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{serviceData.price} ₪</Typography>
+                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogSitterEntity.price} ₪</Typography>
                       <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Visit</Typography>
                     </Box>
                   </Box>
                 </Grid>
               )}
-              {serviceData && selectedService === BUSINESS_TYPES.DOG_WALK && (
+              {business.dogWalkerEntity && (
                 <Grid item xs={12} md={6} sx={{ height: '80px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
@@ -233,7 +233,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                       <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Walking</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{serviceData.price} ₪</Typography>
+                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogWalkerEntity.price} ₪</Typography>
                       <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Walk</Typography>
                     </Box>
                   </Box>
@@ -241,7 +241,6 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
               )}
             </Grid>
           </Box>
-
 
 
           <Box sx={{ mt: 8 }}>
@@ -256,9 +255,9 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
               {availableServices.map(service => (
                 <Button
                   key={service.type}
-                  onClick={() => setSelectedServiceState(service.type)}
-                  variant={selectedServiceState === service.type ? 'contained' : 'outlined'}
-                  color={selectedServiceState === service.type ? 'primary' : 'secondary'}
+                  onClick={() => setSelectedService(service.type)}
+                  variant={selectedService === service.type ? 'contained' : 'outlined'}
+                  color={selectedService === service.type ? 'primary' : 'secondary'}
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -269,12 +268,12 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                     fontFamily: 'Inter',
                     fontSize: '16px',
                     fontWeight: 'regular',
-                    color: selectedServiceState === service.type ? 'white' : 'black',
-                    borderColor: selectedServiceState !== service.type ? 'grey.500' : 'primary.main',
-                    backgroundColor: selectedServiceState === service.type ? '#006CBF' : 'transparent',
+                    color: selectedService === service.type ? 'white' : 'black',
+                    borderColor: selectedService !== service.type ? 'grey.500' : 'primary.main',
+                    backgroundColor: selectedService === service.type ? '#006CBF' : 'transparent',
                     '&:hover': {
-                      borderColor: selectedServiceState !== service.type ? 'grey.700' : '#006CBF',
-                      backgroundColor: selectedServiceState === service.type ? '#0056A4' : 'transparent',
+                      borderColor: selectedService !== service.type ? 'grey.700' : '#006CBF',
+                      backgroundColor: selectedService === service.type ? '#0056A4' : 'transparent',
                     },
                   }}
                 >
@@ -282,7 +281,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                     <img
                       src={service.icon}
                       alt={service.text}
-                      className={`icon-${selectedServiceState === service.type ? "white" : "grey"}`}
+                      className={`icon-${selectedService === service.type ? "white" : "grey"}`}
                       style={{ width: 24, height: 24 }}
                     />
                   </Box>
@@ -304,7 +303,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                 py: 2,
               }}
             >
-              <BookAnAppointment business={business} selectedService={selectedServiceState} />
+              <BookAnAppointment business={business} selectedService={selectedService} />
             </Box>
 
           </Box>

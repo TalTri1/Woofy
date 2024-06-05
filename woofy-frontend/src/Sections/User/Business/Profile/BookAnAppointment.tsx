@@ -38,10 +38,10 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     const router = useRouter();
 
     const servicePrices = {
-        [BUSINESS_TYPES.BOARDING]: 50,
-        [BUSINESS_TYPES.DAY_CARE]: 30,
-        [BUSINESS_TYPES.DOG_SITTER]: 20,
-        [BUSINESS_TYPES.DOG_WALK]: 15,
+        [BUSINESS_TYPES.BOARDING]: business.boardingEntity?.price,
+        [BUSINESS_TYPES.DAY_CARE]: business.dayCareEntity?.price,
+        [BUSINESS_TYPES.DOG_SITTER]: business.dogSitterEntity?.price,
+        [BUSINESS_TYPES.DOG_WALK]: business.dogWalkerEntity?.price,
     };
 
     useEffect(() => {
@@ -241,7 +241,11 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                 return (
                     <div>
                         <Typography variant="h6" color="error">
-                            Unavailable from {ranges.map(range => range.start === range.end ? range.start : `${range.start} to ${range.end}`).join(', ')}
+                            Unavailable from {ranges.map(range => {
+                            const startDate = new Date(range.start).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                            const endDate = new Date(range.end).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                            return startDate === endDate ? startDate : `${startDate} to ${endDate}`;
+                        }).join(', ')}
                         </Typography>
                         {validSuggestions.map((suggestion, index) => (
                             <div key={index}>
@@ -265,7 +269,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         padding: '0 16px', // Add padding for some spacing
                                     }}
                                 >
-                                    Book from {suggestion.start.toLocaleDateString()} to {suggestion.end.toLocaleDateString()}
+                                    Book from {suggestion.start.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })} to {suggestion.end.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                                 </Button>
 
                             </div>
@@ -374,38 +378,36 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                 return <Typography variant="body1" color="error">No availability</Typography>;
             }
             return (availableSlots as Slot[]).map((slot, index) => (
-                
-                    <Box key={index} mb={4}>
-                        <Box display="flex" alignItems="center">
-                            <Typography variant="body1" mr={4} style={{ fontWeight: '600', marginLeft: '170px'}}>
-                                Appointment: {slot.startTime} - {slot.endTime}
-                            </Typography>
-                            <Typography variant="body1" mr={4} style={{ fontWeight: '600'}}>
-                                Price: {servicePrices[selectedService]} ₪
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}
-                                sx={{
-                                    borderRadius: '30px',
-                                    backgroundColor: '#006CBF',
-                                    '&:hover': {
-                                        backgroundColor: '#0056A4',
-                                    },
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    whiteSpace: 'nowrap',
-                                    padding: '0 16px',
-                                }}
-                            >
-                                Book now
-                            </Button>
-                        </Box>
+                <Box key={index} mb={4}>
+                    <Box display="flex" alignItems="center">
+                        <Typography variant="body1" mr={4} style={{ fontWeight: '600', marginLeft: '170px'}}>
+                            Appointment: {slot.startTime.split(':').slice(0, 2).join(':')} - {slot.endTime.split(':').slice(0, 2).join(':')}
+                        </Typography>
+                        <Typography variant="body1" mr={4} style={{ fontWeight: '600'}}>
+                            Price: {servicePrices[selectedService]} ₪
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}
+                            sx={{
+                                borderRadius: '30px',
+                                backgroundColor: '#006CBF',
+                                '&:hover': {
+                                    backgroundColor: '#0056A4',
+                                },
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                whiteSpace: 'nowrap',
+                                padding: '0 16px',
+                            }}
+                        >
+                            Book now
+                        </Button>
                     </Box>
-            ));
-        }
+                </Box>
+            ))}
         return null;
     };
 
@@ -426,6 +428,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         minDate={new Date()} // Prevent selection of past dates
                                         onChange={(date) => setSelectedDate(date)}
                                         renderInput={(params) => <TextField {...params} />}
+                                        format="dd.MM.yy"
                                     />
                                 </Grid>
                                 <Grid item>
@@ -435,6 +438,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         minDate={new Date()} // Prevent selection of past dates
                                         onChange={(date) => setEndDate(date)}
                                         renderInput={(params) => <TextField {...params} />}
+                                        format="dd.MM.yy"
                                     />
                                 </Grid>
                             </>
@@ -447,6 +451,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                     minDate={new Date()} // Prevent selection of past dates
                                     onChange={(date) => setSelectedDate(date)}
                                     renderInput={(params) => <TextField {...params} />}
+                                    format="dd.MM.yy"
                                 />
                             </Grid>
                         )}

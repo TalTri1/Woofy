@@ -6,7 +6,6 @@ import { useRouter } from "../routes/hooks";
 import { Button, Dialog, Grid, Typography, Container, Box, CircularProgress } from "@mui/material";
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
-import BookAnAppointment from "../Sections/User/Business/Profile/BookAnAppointment";
 import ReviewForm from "../Sections/User/Business/Reviews/ReviewForm";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
 
@@ -114,7 +113,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                 <Box>
                     <Grid container spacing={4} justifyContent="center">
                         <Grid item xs={12}>
-                            <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} />
+                            <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} setSelectedService={setSelectedService} />
                         </Grid>
                         
                         
