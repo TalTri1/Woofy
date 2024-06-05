@@ -22,7 +22,7 @@ interface BusinessFrameProps {
 
 Modal.setAppElement('#root');
 
-const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService,setSelectedService }) => {
+const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, serviceData, selectedService, setSelectedService }) => {
   const [profileImage, setProfileImage] = useState("/user-avatar-image@2x.png");
   const [imageData, setImageData] = useState<{ img: string; title: string }[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -145,35 +145,39 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           </Grid>
         </Box>
         <Box sx={{ flex: 1 }}>
-          <Box mb={2}>
-            {imageData.length > 0 && (
-              <img
-                src={imageData[0].img}
-                alt={imageData[0].title}
-                style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', borderRadius: '8px' }}
-                onClick={() => {
-                  setSelectedImage(imageData[0].img);
-                  setModalIsOpen(true);
-                }}
-              />
-            )}
-          </Box>
-          <ImageList sx={{ width: '100%', display: 'flex', gap: 2, mb: 6 }} cols={3} rowHeight={200}>
-            {imageData.slice(1, 4).map((item) => (
-              <ImageListItem key={item.img} cols={1} rows={1}>
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  loading="lazy"
-                  style={{ cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                  onClick={() => {
-                    setSelectedImage(item.img);
-                    setModalIsOpen(true);
-                  }}
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+        <Box mb={2}>
+  {imageData.length > 0 && (
+    <img
+      src={imageData[0].img}
+      alt={imageData[0].title}
+      style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', borderRadius: '8px' }}
+      onClick={() => {
+        setSelectedImage(imageData[0].img);
+        setModalIsOpen(true);
+      }}
+    />
+  )}
+</Box>
+<Box sx={{ display: 'flex', gap: 2, mb: 6 }}>
+  {imageData.slice(1, 4).map((item) => (
+    <Box
+      key={item.img}
+      sx={{ flex: 1 }}
+      onClick={() => {
+        setSelectedImage(item.img);
+        setModalIsOpen(true);
+      }}
+    >
+      <img
+        src={item.img}
+        alt={item.title}
+        loading="lazy"
+        style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer' }}
+      />
+    </Box>
+  ))}
+</Box>
+
           <Divider />
           <Box sx={{ mt: 6 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
@@ -182,65 +186,58 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                 <Typography variant="h5" fontWeight="bold" style={{ fontSize: '32px' }}>Services</Typography>
               </Box>
             </Box>
-            <Grid container spacing={1} justifyContent="center">
-              {business.boardingEntity  && (
-                <Grid item xs={12} md={6} sx={{ height: '80px' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
-                      <img src="/icon--moon.svg" alt="Boarding" style={{ height: 24, width: 24 }} />
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Boarding</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.boardingEntity.price} ₪</Typography>
-                      <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Night</Typography>
-                    </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              {business.boardingEntity && (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, width: '100%', maxWidth: '600px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
+                    <img src="/icon--moon.svg" alt="Boarding" style={{ height: 24, width: 24 }} />
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Boarding</Typography>
                   </Box>
-                </Grid>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.boardingEntity.price} ₪</Typography>
+                    <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Night</Typography>
+                  </Box>
+                </Box>
               )}
               {business.dayCareEntity && (
-                <Grid item xs={12} md={6} sx={{ height: '80px' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
-                      <img src="/icon--sun.svg" alt="Day Care" style={{ height: 24, width: 24 }} />
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Day Care</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dayCareEntity.price} ₪</Typography>
-                      <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Day</Typography>
-                    </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, width: '100%', maxWidth: '600px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
+                    <img src="/icon--sun1.svg" alt="Day Care" style={{ height: 24, width: 24 }} />
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Day Care</Typography>
                   </Box>
-                </Grid>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 4 }}>
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dayCareEntity.price} ₪</Typography>
+                    <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Day</Typography>
+                  </Box>
+                </Box>
               )}
               {business.dogSitterEntity && (
-                <Grid item xs={12} md={6} sx={{ height: '80px' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
-                      <img src="/icon--bed.svg" alt="Sitting" style={{ height: 24, width: 24 }} />
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Sitting</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogSitterEntity.price} ₪</Typography>
-                      <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Visit</Typography>
-                    </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, width: '100%', maxWidth: '600px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: 3 }}>
+                    <img src="/icon--bed.svg" alt="Sitting" style={{ height: 24, width: 24 }} />
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Sitting</Typography>
                   </Box>
-                </Grid>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3.5 }}>
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogSitterEntity.price} ₪</Typography>
+                    <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Visit</Typography>
+                  </Box>
+                </Box>
               )}
               {business.dogWalkerEntity && (
-                <Grid item xs={12} md={6} sx={{ height: '80px' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, height: '100%' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 3 }}>
-                      <img src="/icon--walk.svg" alt="Walking" style={{ height: 24, width: 24 }} />
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Walking</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
-                      <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogWalkerEntity.price} ₪</Typography>
-                      <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Walk</Typography>
-                    </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, width: '100%', maxWidth: '600px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: 3 }}>
+                    <img src="/icon--walk.svg" alt="Walking" style={{ height: 24, width: 24 }} />
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>Walking</Typography>
                   </Box>
-                </Grid>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mr: 3 }}>
+                    <Typography variant="body1" fontWeight="bold" style={{ fontSize: '20px' }}>{business.dogWalkerEntity.price} ₪</Typography>
+                    <Typography variant="body2" style={{ fontSize: '16px', fontWeight: 'regular', color: '#666666' }}>Per Walk</Typography>
+                  </Box>
+                </Box>
               )}
-            </Grid>
+            </Box>
           </Box>
+
 
 
           <Box sx={{ mt: 8 }}>
