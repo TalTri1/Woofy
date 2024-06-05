@@ -14,7 +14,6 @@ import { HEADER } from './config-layout';
 import Logo from "../../components/logo";
 import { RouterLink } from '../../routes/components';
 import Button from '@mui/material/Button';
-
 import { useNavigate } from 'react-router-dom';
 import {useAuth} from "../../provider/AuthProvider";
 
@@ -46,12 +45,14 @@ export default function Header({ onOpenNav }) {
                     </Typography>
                 </Stack>
             ) : (
-                <Stack direction="row" alignItems="center" spacing={3} sx={{ mt: 1.5 }}>
+                <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 1.5 }}>
                     <Button
                         onClick={() => navigate("/Hero-page")}
                         sx={{
                             textTransform: 'none',
                             color: theme.palette.text.primary,
+                            fontSize: '16px',
+                            fontWeight: 'normal',
                             '&:hover': {
                                 backgroundColor: theme.palette.action.hover,
                             },
@@ -64,6 +65,8 @@ export default function Header({ onOpenNav }) {
                         sx={{
                             textTransform: 'none',
                             color: theme.palette.text.primary,
+                            fontSize: '16px',
+                            fontWeight: 'normal',
                             '&:hover': {
                                 backgroundColor: theme.palette.action.hover,
                             },
@@ -76,6 +79,7 @@ export default function Header({ onOpenNav }) {
                         sx={{
                             textTransform: 'none',
                             color: theme.palette.text.primary,
+                            fontSize: '16px',
                             fontWeight: 'bold',
                             '&:hover': {
                                 backgroundColor: theme.palette.action.hover,
@@ -88,7 +92,12 @@ export default function Header({ onOpenNav }) {
                         variant="outlined"
                         onClick={() => navigate("/sign-up")}
                         sx={{
-                            borderColor: 'grey.500',
+                            borderColor: '#666666',
+                            borderRadius: '30px',
+                            fontSize: '16px',
+                            fontWeight: '600', 
+                            color: 'black',
+                            padding: '8px 24px',
                             '&:hover': {
                                 backgroundColor: 'grey.200',
                                 borderColor: 'grey.700',
@@ -101,7 +110,12 @@ export default function Header({ onOpenNav }) {
                         variant="contained"
                         onClick={() => navigate("/login")}
                         sx={{
-                            backgroundColor: theme.palette.primary.main,
+                            backgroundColor: '#006CBF', // Background color #006CBF
+                            borderRadius: '30px', // 30px border radius
+                            fontSize: '16px', // Font size 16px
+                            fontWeight: '600', // Font weight 600
+                            padding: '8px 24px',
+                            marginLeft: '8px', // Smaller margin to the left
                             '&:hover': {
                                 backgroundColor: theme.palette.primary.dark,
                             },
@@ -120,7 +134,6 @@ export default function Header({ onOpenNav }) {
                 boxShadow: 'none',
                 height: HEADER.H_MOBILE,
                 zIndex: theme.zIndex.appBar + 1,
-
                 ...bgBlur({
                     color: theme.palette.background.default,
                 }),

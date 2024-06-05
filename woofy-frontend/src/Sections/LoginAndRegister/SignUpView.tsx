@@ -18,7 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import woofyLogo from '/assets/logo.png'
-import backgroundImage from '/public/assets/sign-in--modal--2@3x.png';
+import backgroundImage from '/assets/Sign-up-backgroung.jpg';
 
 export default function SignUpModal() {
 
@@ -126,16 +126,17 @@ export default function SignUpModal() {
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: -25,
+                            marginTop: -53,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            backgroundColor: 'rgba(255, 255, 255)',
                             padding: 2.5,
                             borderRadius: 2,
                             maxWidth: '450px',
+                            transform: 'translateX(-500px)'
                         }}
                     >
+
                         <Avatar src={woofyLogo} sx={{ width: 100, height: 100 }} />
 
                         <Typography
