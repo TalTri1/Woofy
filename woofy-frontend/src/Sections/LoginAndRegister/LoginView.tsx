@@ -18,7 +18,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useAuth } from "../../provider/AuthProvider";
 import { useRouter } from "../../routes/hooks";
 import woofyLogo from '/assets/logo.png';
-import backgroundImage from '/assets/sign-in--modal--2@3x.png';
+import backgroundImage from '/assets/Sign-in-backgroung.jpg';
 
 export default function SignInComponent() {
     const theme = createTheme();
@@ -59,11 +59,10 @@ export default function SignInComponent() {
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: -25,
+                            marginTop: -53,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            backgroundColor: 'rgba(255, 255, 255)',
                             padding: 2.5,
                             borderRadius: 2,
                             maxWidth: '450px',
