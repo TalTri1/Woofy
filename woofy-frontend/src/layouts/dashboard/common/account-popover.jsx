@@ -119,8 +119,8 @@ export default function AccountPopover() {
             <IconButton
                 onClick={handleOpen}
                 sx={{
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
                     background: (theme) => alpha(theme.palette.grey[500], 0.08),
                     ...(open && {
                         background: (theme) =>
@@ -131,7 +131,7 @@ export default function AccountPopover() {
                 <Avatar
                     src={imageSrc}
                     alt={userDetails ? userDetails.firstName + " " + userDetails.lastName : "Guest User"}
-                    // ... existing code ...
+                    sx={{ width: 50, height: 50 }}
                 >
                     {userDetails ? userDetails.firstName.charAt(0).toUpperCase() : "G"}
                 </Avatar>
