@@ -12,11 +12,15 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetAppointmentsRequestDTO {
+    private Integer appointmentId;
+    private Integer businessId;
     private String BusinessName;
     private BusinessTypeEnum BusinessType;
     private String address;
     private String city;
     private LocalDate date;
+    private LocalDate EndDate;
     private LocalTime startTime;
+    private LocalTime endTime;
     private Integer profilePhotoID;
 }

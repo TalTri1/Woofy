@@ -1,13 +1,13 @@
-import React, {FunctionComponent, useState, useEffect} from "react";
-import {Box, Button, Typography} from "@mui/material";
-import {BUSINESS_TYPES} from "../../../../models/Enums/Enums";
-import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
-import UpcomingBookingCard from "../../UpComingBookings/UpcomingBookingCard";
-import {getImage} from "../../../../components/image/imageComponent";
-import api from "../../../../api/api";
-import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
+import React, { FunctionComponent, useState, useEffect } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import { BUSINESS_TYPES } from "../../../models/Enums/Enums";
+import SelectServiceTypeComponent from "../selectButtons/SelectServiceTypeComponent";
+import { getImage } from "../../../components/image/imageComponent";
+import api from "../../../api/api";
+import defaultProfilePicture from "../../../../public/avatar-image@2x.png";
+import PastBookingCard from "./PastBookingCard";
 
-const CustomerUpComingBookings: FunctionComponent = () => {
+const CustomerPreviousBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
     const [bookings, setBookings] = useState([]);
     const [displayedBookings, setDisplayedBookings] = useState(3);
@@ -30,10 +30,12 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 const res = await api.get("appointment/get-all");
                 const bookingsWithImages = await Promise.all(
                     res.data.map(async (booking) => {
-                        if (!booking.profilePhotoID) return {
-                            ...booking,
-                            profileImage: defaultProfilePicture,
-                        };
+                        if (!booking.profilePhotoID) {
+                            return {
+                                ...booking,
+                                profileImage: defaultProfilePicture,
+                            };
+                        }
                         const profileImage = await getImage(booking.profilePhotoID);
                         return {
                             ...booking,
@@ -41,7 +43,9 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                         };
                     })
                 );
-                setBookings(bookingsWithImages);
+                const currentDateTime = new Date();
+                const futureBookings = bookingsWithImages.filter(booking => new Date(booking.date) < currentDateTime);
+                setBookings(futureBookings);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             }
@@ -85,7 +89,6 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                     }}>
                         Manage Your Bookings
                     </Typography>
-                    
                 </Box>
             </Box>
             <Box
@@ -93,17 +96,17 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
                     <Box className="self-stretch flex flex-col items-center justify-start">
                         <Typography
-                            style={{fontFamily: 'Inter', fontSize: '40px', fontWeight: 'bold'}}
+                            style={{ fontFamily: 'Inter', fontSize: '40px', fontWeight: 'bold' }}
                             className="m-0 self-stretch relative leading-[58px] mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
-                            Upcoming Bookings
+                            Previous Bookings
                         </Typography>
                     </Box>
                 </Box>
 
                 <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
-                    sx={{alignItems: "center"}}>
+                     sx={{ alignItems: "center" }}>
                     <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                                                selectedServices={selectedServices}/>
+                                                selectedServices={selectedServices} />
                     <Button
                         onClick={handleViewAll}
                         variant={selectedServices === null ? "contained" : "outlined"}
@@ -131,7 +134,7 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                     >
                         <Box
                             className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
-                            sx={{marginLeft: 0, whiteSpace: 'nowrap'}}
+                            sx={{ marginLeft: 0, whiteSpace: 'nowrap' }}
                         >
                             View All
                         </Box>
@@ -147,8 +150,9 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                                 .filter(booking => selectedServices === null || booking.businessType === selectedServices)
                                 .slice(0, displayedBookings)
                                 .map(booking => (
-                                    <UpcomingBookingCard
-                                        key={booking.id}
+                                    <PastBookingCard
+                                        key={booking.appointmentId}
+                                        businessId={booking.businessId}
                                         icon={getIconForType(booking.businessType)}
                                         businessType={booking.businessType}
                                         businessName={booking.businessName}
@@ -198,4 +202,4 @@ const getIconForType = (type) => {
     }
 };
 
-export default CustomerUpComingBookings;
+export default CustomerPreviousBookings;

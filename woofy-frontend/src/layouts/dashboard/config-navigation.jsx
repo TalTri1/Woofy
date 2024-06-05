@@ -32,6 +32,11 @@ function Navigation() {
             path: '/services',
             icon: <FavoriteBorderIcon/>,
         },
+        {
+            title: 'Upcoming Bookings',
+            path: '/bookings',
+            icon: <UpComingIcon/>,
+        },
     ];
     const unsignedConfig = [
         {
@@ -60,11 +65,7 @@ function Navigation() {
     ];
 
     const publicNavConfig = [
-        {
-            title: 'Messages',
-            path: '/messages',
-            icon: <ChatIcon/>,
-        },
+
         {
             title: 'Reviews',
             path: '/reviews',

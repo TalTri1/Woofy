@@ -1,46 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Rating from '@mui/material/Rating';
 import { UserContext } from '../../../../provider/UserProvider';
-import SelectServiceTypeComponent from '../../selectButtons/SelectServiceTypeComponent';
 import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
-import Modal from 'react-modal';
 import Button from '@mui/material/Button';
 import { Typography, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {useNotifications} from "../../../../provider/NotificationContext";
+import { useNotifications } from "../../../../provider/NotificationContext";
+import {getImage} from "../../../../components/image/imageComponent";
 
 interface ReviewFormProps {
     businessId: number;
     open: boolean;
-    availableServices: BUSINESS_TYPES[]
+    selectedService: BUSINESS_TYPES;
     onClose: () => void;
     onSubmit: (review: string, rating: number, serviceType: BUSINESS_TYPES) => void;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, businessId, availableServices }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, businessId, selectedService }) => {
     const { userDetails } = useContext(UserContext);
     const [review, setReview] = useState('');
     const [rating, setRating] = useState(0);
-    const [selectedService, setSelectedService] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
     const [reviewError, setReviewError] = useState('');
     const [ratingError, setRatingError] = useState('');
-    const [serviceError, setServiceError] = useState('');
     const { addNotification } = useNotifications();
+    const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(`Selected service: ${selectedService}`);
-        console.log(`availableServices: ${JSON.stringify(availableServices)}`);
-        console.log(`availableServices.includes(selectedService): ${availableServices.includes(selectedService)}`);
-
-        if (!availableServices.includes(selectedService)) {
-            setServiceError('This service is not available for this business');
-            return;
-        } else {
-            setServiceError('');
-        }
 
         if (!review) {
             setReviewError('Review is required');
@@ -58,7 +46,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
             return;
         }
 
-
         const createReviewRequest = {
             userId: userDetails.id,
             businessId: businessId,
@@ -67,10 +54,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
             serviceType: selectedService,
         };
 
-        console.log(createReviewRequest);
-
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/reviews', createReviewRequest);
+            await axios.post('http://localhost:8080/api/v1/reviews', createReviewRequest);
             addNotification({
                 title: 'Review Added',
                 description: `Your review has been successfully added.`,
@@ -81,43 +66,66 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
             window.location.reload();
         } catch (error) {
             toast.error('Error creating review. Please try again.');
-            console.log(`Error creating review: ${error}`);
+            console.error('Error creating review:', error);
             onClose();
         }
     };
 
+    useEffect(() => {
+        const fetchImage = async () => {
+            if (userDetails?.profilePhotoID) {
+                const image = await getImage(userDetails.profilePhotoID);
+                setImageSrc(image);
+            }
+            else setImageSrc('/default-avatar-image@2x.png')
+        };
+
+        fetchImage();
+    }, [userDetails]);
+
     return (
         <form onSubmit={handleSubmit}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="h6" align="center">Write a review</Typography>
-                <SelectServiceTypeComponent setSelectedServices={setSelectedService} selectedServices={selectedService} labelText='Choose a service to review' />
-                {serviceError && <p style={{ color: 'red' }}>{serviceError}</p>}
-                <TextField
-                    label="Your Review"
-                    multiline
-                    rows={4}
-                    value={review}
-                    onChange={(e) => setReview(e.target.value)}
-                    variant="outlined"
-                />
-                {reviewError && <p style={{ color: 'red' }}>{reviewError}</p>}
-
-                <Box component="fieldset" borderColor="transparent">
-                    <Typography component="legend">Rate</Typography>
+            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, width: 450, padding: 2}}>
+                <Typography variant="h6">Write a review</Typography>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%'}}>
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                        <img
+                            src={imageSrc}
+                            alt="User Avatar"
+                            style={{width: 50, height: 50, borderRadius: '50%'}}
+                        />
+                        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                            <Typography variant="subtitle1">{userDetails.firstName} {userDetails.lastName}</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
                     <Rating
                         name="simple-controlled"
                         value={rating}
+                        size={'large'}
                         onChange={(event, newValue) => {
                             if (newValue !== null) {
                                 setRating(newValue);
                             }
                         }}
                     />
-                    {ratingError && <p style={{ color: 'red' }}>{ratingError}</p>}
+                    {ratingError && <Typography variant="body2" color="error">{ratingError}</Typography>}
+                    <TextField
+                        label="Share details of your own experience at this place"
+                        multiline
+                        rows={4}
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    {reviewError && <Typography variant="body2" color="error">{reviewError}</Typography>}
+                    <Box sx={{display: 'flex', justifyContent: 'flex-end', gap: 1, width: '100%', marginTop: 2}}>
+                        <Button onClick={onClose} color="secondary">Cancel</Button>
+                        <Button type="submit" color="primary" variant="contained">Post</Button>
+                    </Box>
                 </Box>
-                <Button type="submit" color="primary">
-                    Submit
-                </Button>
             </Box>
         </form>
     );

@@ -61,6 +61,7 @@ public class BaseAppointmentsService {
             else if (baseAppointmentEntity instanceof BoardingAppointmentEntity boardingAppointmentEntity) {
                 businessEntity = boardingAppointmentEntity.getBoardingEntity().getBusiness();
                 dto.setBusinessType(BusinessTypeEnum.BOARDING);
+                dto.setEndDate(boardingAppointmentEntity.getEndDate());
             }
             else if (baseAppointmentEntity instanceof DogSitterAppointmentEntity dogSitterAppointmentEntity) {
                 businessEntity = dogSitterAppointmentEntity.getDogSitterEntity().getBusiness();
@@ -72,11 +73,14 @@ public class BaseAppointmentsService {
             }
 
             if (businessEntity != null) {
+                dto.setAppointmentId(baseAppointmentEntity.getId());
+                dto.setBusinessId(businessEntity.getId());
                 dto.setBusinessName(businessEntity.getBusinessName());
                 dto.setAddress(businessEntity.getAddress());
                 dto.setCity(businessEntity.getCity());
                 dto.setDate(baseAppointmentEntity.getDate());
                 dto.setStartTime(baseAppointmentEntity.getStartTime());
+                dto.setEndTime(baseAppointmentEntity.getEndTime());
                 dto.setProfilePhotoID(businessEntity.getProfilePhotoID());
                 dtos.add(dto);
             }
