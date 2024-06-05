@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { RouterLink } from '../../routes/components';
-import woofyLogo from '/public/assets/logo.png';
+import woofyLogo from '/assets/logo.png';
 
 // ----------------------------------------------------------------------
 

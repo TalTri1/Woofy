@@ -162,7 +162,7 @@ const BusinessListComponent: React.FC = () => {
                 to="/map"
                 className="relative w-full flex flex-row items-center justify-center gap-[8px] text-left text-[16px] text-app1 font-inter mt-12 no-underline"
             >
-                <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
+                <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="Map Pin Icon" src="/assets/icons/map-pin.svg" />
                 <b className="relative leading-[150%]">Show on map</b>
             </Link>
         </Container>

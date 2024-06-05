@@ -14,32 +14,73 @@ import {useAuth} from "../../../provider/AuthProvider";
 import api from "../../../api/api";
 import {toast} from "react-toastify";
 import {RouterLink} from "../../../routes/components";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import UpComingIcon from "@mui/icons-material/Upcoming";
+import HistoryIcon from "@mui/icons-material/History";
+import HomeIcon from "@mui/icons-material/Home";
+import {USERTYPE} from "../../../models/RegistrationModel";
 
-// ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-    {
-        label: 'Home',
-        path: '/',
-        icon: 'eva:home-fill',
-    },
-    {
-        label: 'Profile',
-        path: '/profile',
-        icon: 'eva:person-fill',
-    },
-    {
-        label: 'Settings',
-        path: '/settings',
-        icon: 'eva:settings-2-fill',
-    },
-];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-    const [open, setOpen] = useState(null);
+    // ----------------------------------------------------------------------
     const {userDetails} = useContext(UserContext);
+    const userRole = userDetails?.role;
+
+    const dashboardNavConfig = [
+        {
+            label: 'Home',
+            path: '/',
+            icon: 'eva:home-fill',
+        },
+    ]
+    const publicNavConfig = [
+        {
+            label: 'Profile',
+            path: '/profile',
+            icon: 'eva:person-fill',
+        },
+        {
+            label: 'Settings',
+            path: '/settings',
+            icon: 'eva:settings-2-fill',
+        },
+    ];
+    const businessNavConfig = [
+        {
+            label: 'Services',
+            path: '/services',
+            icon: <FavoriteBorderIcon/>,
+        },
+        {
+            label: 'Upcoming Bookings',
+            path: '/bookings',
+            icon: <UpComingIcon/>,
+        },
+    ];
+    const customerNavConfig = [
+        {
+            label: 'My Bookings',
+            path: '/bookings',
+            icon: <UpComingIcon/>,
+        },
+        {
+            label: 'History',
+            path: '/past-bookings',
+            icon: <HistoryIcon/>,
+        },
+    ];
+
+    const MENU_OPTIONS = [
+        ...dashboardNavConfig,
+        ...(userRole === USERTYPE.BUSINESS ? businessNavConfig : []),
+        ...(userRole === USERTYPE.CUSTOMER ? customerNavConfig : []),
+        ...publicNavConfig
+
+    ];
+
+// ----------------------------------------------------------------------
+
+    const [open, setOpen] = useState(null);
     const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
     const {logout} = useAuth();
 

@@ -17,8 +17,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useAuth } from "../../provider/AuthProvider";
 import { useRouter } from "../../routes/hooks";
-import woofyLogo from '/public/assets/logo.png';
-import backgroundImage from '/public/assets/sign-in--modal--2@3x.png';
+import woofyLogo from '/assets/logo.png';
+import backgroundImage from '/assets/sign-in--modal--2@3x.png';
 
 export default function SignInComponent() {
     const theme = createTheme();
