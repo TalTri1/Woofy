@@ -7,7 +7,6 @@ import TestimonialSection from "../Sections/Home/TestimonialSection";
 const HomePage: FunctionComponent = () => {
   return (
     <div className="w-full relative overflow-hidden flex flex-col items-start justify-start leading-[normal] tracking-[normal]">
-      <Navbar />
       <HeroPage />
       <AboutServicePage />
       <TestimonialSection />

@@ -1,7 +1,7 @@
-import axios from "axios";
 import { FunctionComponent, useEffect, useState } from "react";
 import { getImage } from "../../../../components/image/imageComponent";
 import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
+import api from "../../../../api/api";
 
 export type UserReviewType = {
   avatarImage?: string;
@@ -20,7 +20,7 @@ const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage, review }) 
     const fetchUserName = async () => {
       try {
         if (review.userId === null) return;
-        const response = await axios.get(`http://localhost:8080/api/v1/user/name/${review.userId}`);
+        const response = await api.get(`user/name/${review.userId}`);
         setUserName(response.data);
       } catch (error) {
         console.error(`Failed to fetch user name: ${error}`);
@@ -34,7 +34,7 @@ const UserReview: FunctionComponent<UserReviewType> = ({ avatarImage, review }) 
     const fetchUserImage = async () => {
       try {
         if (review.userId === null) return;
-        const response = await axios.get(`http://localhost:8080/api/v1/user/${review.userId}`);
+        const response = await api.get(`user/${review.userId}`);
         const user = response.data;
         const image = await getImage(user.profilePhotoID);
         setUserImage(image);

@@ -2,8 +2,8 @@ import { FunctionComponent, useContext, useEffect, useState } from "react";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
 import { UserContext } from "../provider/UserProvider";
 import BusinessListComponent from "../layouts/Appointment/components/BusinessListComponent";
-import axios from "axios";
 import { Box, Typography } from "@mui/material";
+import api from "../api/api";
 
 const UserDashboard: FunctionComponent = () => {
   const { userDetails } = useContext(UserContext); // The user details
@@ -11,7 +11,7 @@ const UserDashboard: FunctionComponent = () => {
 
   useEffect(() => {
     if (userDetails && userDetails.id) {
-      axios.post(`http://localhost:8080/api/v1/dogs/getByUserId`, { id: userDetails.id })
+        api.post(`dogs/getByUserId`, { id: userDetails.id })
           .then(response => {
             if (response.data) {
               setHasDog(true);

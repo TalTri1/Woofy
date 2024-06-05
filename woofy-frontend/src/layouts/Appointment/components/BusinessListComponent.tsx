@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
-    Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box
+    Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box
 } from '@mui/material';
 import { BUSINESS_TYPES } from '../../../models/Enums/Enums';
 import SelectServiceTypeComponent from '../../../Sections/User/selectButtons/SelectServiceTypeComponent';
 import { Link } from 'react-router-dom';
-import MapIcon from '@mui/icons-material/Map';
 import { formatEnumValue } from "../../../utils/format-enum-text";
 import { useRouter } from '../../../routes/hooks';
 import { fetchAverageReviews } from '../../../utils/reviews/reviews';
+import api from "../../../api/api";
 
 interface Business {
     id: number;
@@ -50,7 +49,7 @@ const BusinessListComponent: React.FC = () => {
     useEffect(() => {
         const fetchAvailableBusinesses = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/v1/business/all');
+                const response = await api.get('business/all');
                 const data = response.data;
 
                 const filteredBusinesses = data.filter((business: Business) => {

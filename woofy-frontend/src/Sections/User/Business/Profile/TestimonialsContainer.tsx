@@ -1,6 +1,6 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserReview from "./UserReview";
-import axios from "axios";
+import api from "../../../../api/api";
 
 const TestimonialsContainer = ({ businessId }: { businessId: Number }) => {
   const [reviews, setReviews] = useState([]);
@@ -9,7 +9,7 @@ const TestimonialsContainer = ({ businessId }: { businessId: Number }) => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/reviews/business/${businessId}`);
+        const response = await api.get(`reviews/business/${businessId}`);
         setReviews(response.data);
       } catch (error) {
         console.error(`Failed to fetch reviews: ${error}`);

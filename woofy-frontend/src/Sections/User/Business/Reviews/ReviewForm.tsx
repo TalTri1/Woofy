@@ -5,10 +5,10 @@ import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
 import Button from '@mui/material/Button';
 import { Typography, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNotifications } from "../../../../provider/NotificationContext";
 import {getImage} from "../../../../components/image/imageComponent";
+import api from "../../../../api/api";
 
 interface ReviewFormProps {
     businessId: number;
@@ -55,7 +55,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ open, onClose, onSubmit, busine
         };
 
         try {
-            await axios.post('http://localhost:8080/api/v1/reviews', createReviewRequest);
+            await api.post('reviews', createReviewRequest);
             addNotification({
                 title: 'Review Added',
                 description: `Your review has been successfully added.`,

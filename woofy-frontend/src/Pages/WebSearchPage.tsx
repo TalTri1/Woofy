@@ -18,7 +18,6 @@ const WebSearchPage: FunctionComponent = () => {
         alignItems: 'start',
       }}
     >
-      <Navbar />
       <HeroContainer />
       <Box
         component="main"
