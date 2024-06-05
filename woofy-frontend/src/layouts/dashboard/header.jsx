@@ -20,11 +20,11 @@ export default function Header({ onOpenNav }) {
 
     const renderContent = (
         <>
-            <Box component={RouterLink} to="/" sx={{ mt: 1.5, ml: 4, display: 'inline-block' }}>
+            <Box component={RouterLink} to="/" sx={{ mt: 3.5, ml: 4, display: 'inline-block' }}>
                 <Logo />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
-            <Stack direction="row" alignItems="center" spacing={3}>
+            <Stack direction="row" alignItems="center" spacing={3} sx={{ mt: 1.5 }}>
                 <NotificationsPopover />
                 <AccountPopover />
                 <Typography
@@ -47,7 +47,7 @@ export default function Header({ onOpenNav }) {
                 boxShadow: 'none',
                 height: HEADER.H_MOBILE,
                 zIndex: theme.zIndex.appBar + 1,
-                mt: 2, 
+                
                 ...bgBlur({
                     color: theme.palette.background.default,
                 }),
