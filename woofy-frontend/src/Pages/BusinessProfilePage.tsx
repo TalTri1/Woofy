@@ -126,15 +126,6 @@ const BusinessProfilePage: FunctionComponent = () => {
                                     Write a Review
                                 </Button>
                             </Box>
-                            <Dialog open={reviewFormOpen} onClose={() => setReviewFormOpen(false)}>
-                                <ReviewForm
-                                    open={reviewFormOpen}
-                                    onClose={() => setReviewFormOpen(false)}
-                                    onSubmit={handleReviewSubmit}
-                                    businessId={Number(businessId)}
-                                    availableServices={availableServices.map(service => service.type)}
-                                />
-                            </Dialog>
                         </Grid>
                     </Grid>
                 </Box>

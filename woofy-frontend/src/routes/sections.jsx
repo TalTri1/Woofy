@@ -15,13 +15,15 @@ import NotFoundPage from "../Pages/PageNotFound";
 import CustomerReviewsView from "../Sections/User/Business/Reviews/CustomerReviewsView";
 import UserProfileView from "../Sections/User/UserProfile/UserProfileView";
 import ServicesDetails from "../Sections/User/Business/ServicesDetails";
-import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookingsView";
-import PastBookingsSectionCont from "../Sections/User/PastBookings/PastBookingsView";
+
 import MapPage from "../layouts/Map/MapPage";
 import BusinessProfilePage from "../Pages/BusinessProfilePage";
 import WebSearchPage from "../Pages/WebSearchPage";
 import HomePage from "../Pages/HomePage";
-import CustomerUpComingBookings from "../Sections/User/Customer/UpComingBookings/CustomerUpcomingBookingsView";
+import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookingsView";
+import CustomerPreviousBookings from "../Sections/User/PastBookings/CustomerPreviousBookingsView";
+import UpcomingBookingsSection
+    from "../Sections/User/UpComingBookings/UpcomingBookingsSection";
 
 
 const Router = () => {
@@ -103,6 +105,10 @@ const Router = () => {
                     path: "/profile",
                     element: <UserProfileView/>,
                 },
+                {
+                    path: "/bookings",
+                    element: <UpcomingBookingsSection/>,
+                },
 
 
 
@@ -126,7 +132,7 @@ const Router = () => {
                 },
                 {
                     path: "/bookings",
-                    element: <CustomerUpComingBookings/>,
+                    element: <UpcomingBookingsSection/>,
                 },
                 {
                     path: "/dog-register",
@@ -138,9 +144,10 @@ const Router = () => {
                 {
                     path: "/profile",
                     element: <UserProfileView/>,
-                }, {
+                },
+                {
                     path: "/past-bookings",
-                    element: <PastBookingsSectionCont/>,
+                    element: <CustomerPreviousBookings/>,
                 },
 
 

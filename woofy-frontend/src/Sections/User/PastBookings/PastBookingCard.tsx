@@ -1,100 +1,336 @@
-import { FunctionComponent, useMemo, type CSSProperties } from "react";
+import React, {FunctionComponent, useMemo, CSSProperties, useState} from "react";
+import {Box, Typography, Button, Dialog} from "@mui/material";
+import {formatEnumValue} from "../../../utils/format-enum-text";
+import ReviewForm from "../Business/Reviews/ReviewForm";
+import {BUSINESS_TYPES} from "../../../models/Enums/Enums";
+
 
 export type PastBookingCardType = {
-  dayCareIconSun?: string;
-  dayCare?: string;
+    businessId: number;
+    icon: string;
+    businessType: BUSINESS_TYPES;
+    businessName: string;
+    address: string;
+    city: string;
+    date?: string;
+    endDate?: string;
+    startTime?: string;
+    profileImage?: string;
+    /** Style props */
+    propMinWidth?: CSSProperties["minWidth"];
+    serviceTagWidth?: CSSProperties["width"];
+    serviceTagHeight?: CSSProperties["height"];
+    businessTypeWidth?: CSSProperties["width"];
+};
 
-  /** Style props */
-  propMinWidth?: CSSProperties["minWidth"];
-  dayCareServiceTagWidth?: CSSProperties["width"];
-  dayCareWidth?: CSSProperties["width"];
+const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
 };
 
 const PastBookingCard: FunctionComponent<PastBookingCardType> = ({
-  dayCareIconSun,
-  dayCare,
-  propMinWidth,
-  dayCareServiceTagWidth,
-  dayCareWidth,
-}) => {
-  const dayCareStyle: CSSProperties = useMemo(() => {
-    return {
-      minWidth: propMinWidth,
-      width: dayCareWidth,
-    };
-  }, [propMinWidth, dayCareWidth]);
+                                                                     businessId,
+                                                                     icon,
+                                                                     businessType,
+                                                                     businessName,
+                                                                     address,
+                                                                     city,
+                                                                     date,
+                                                                     endDate,
+                                                                     startTime,
+                                                                     profileImage,
+                                                                     propMinWidth,
+                                                                     serviceTagWidth,
+                                                                     serviceTagHeight,
+                                                                     businessTypeWidth,
+                                                                 }) => {
+    const [reviewFormOpen, setReviewFormOpen] = useState(false);
 
-  const dayCareServiceTagStyle: CSSProperties = useMemo(() => {
-    return {
-      width: dayCareServiceTagWidth,
-    };
-  }, [dayCareServiceTagWidth]);
+    const businessTypeStyle: CSSProperties = useMemo(() => {
+        return {
+            minWidth: propMinWidth,
+            width: businessTypeWidth,
+        };
+    }, [propMinWidth, businessTypeWidth]);
 
-  return (
-    <div className="self-stretch box-border flex flex-row flex-wrap items-center justify-center pt-[30px] px-0 pb-8 gap-[32px] max-w-full text-left text-xl text-text-primary font-text-medium-normal border-t-[1px] border-solid border-color-neutral-neutral-dark mq450:gap-[16px]">
-      <img
-        className="h-36 w-36 relative rounded-71xl object-cover"
-        alt=""
-        src="/placeholder-image@2x.png"
-      />
-      <div className="flex-1 flex flex-col items-start justify-start gap-[16px] min-w-[385px] max-w-full mq450:min-w-full">
-        <div className="self-stretch flex flex-col items-start justify-start">
-          <div className="self-stretch flex flex-row items-center justify-start py-0 pr-[209px] pl-0 gap-[10px] mq450:pr-5 mq450:box-border mq750:flex-wrap mq750:pr-[104px] mq750:box-border">
-            <b className="relative leading-[150%] inline-block min-w-[100x] mq450:text-base mq450:leading-[24px]">
-              Business Name
-            </b>
-            
-            <div
-              className="rounded-11xl bg-app1 flex flex-row items-center justify-start py-1 px-2 gap-[5px] whitespace-nowrap text-base text-white"
-              style={dayCareServiceTagStyle}
+    const serviceTagStyle: CSSProperties = useMemo(() => {
+        return {
+            width: serviceTagWidth,
+            height: 30,
+            lineHeight: "30px",
+        };
+    }, [serviceTagWidth]);
+
+    const handleReviewSubmit = (review: string, rating: number) => {
+        console.log('Review submitted:', review, rating);
+    };
+
+    return (
+        <Box
+            className="self-stretch box-border flex flex-row flex-wrap items-center justify-center pt-[30px] px-0 pb-2 gap-[32px] max-w-full text-left text-xl text-text-primary font-text-medium-normal border-t-[1px] border-solid border-color-neutral-neutral-dark mq450:gap-[16px]"
+            sx={{
+                "@media (max-width: 450px)": {
+                    gap: "16px",
+                },
+            }}
+        >
+            <Box
+                component="img"
+                sx={{
+                    height: "144px",
+                    width: "144px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                }}
+                alt="profile"
+                src={profileImage || "/placeholder-image@2x.png"}
+            />
+            <Box
+                sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    gap: "16px",
+                    minWidth: "385px",
+                    maxWidth: "100%",
+                    "@media (max-width: 450px)": {
+                        minWidth: "100%",
+                    },
+                }}
             >
-              <img
-                className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
-                alt=""
-                src={dayCareIconSun}
-              />
-              <div
-                className="relative leading-[150%] font-medium inline-block min-w-[70px]"
-                style={dayCareStyle}
-              >
-                {dayCare}
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-row items-center justify-start py-0 pr-[410px] pl-0 gap-[8px] text-base mq450:pr-5 mq450:box-border mq750:flex-wrap mq750:pr-[205px] mq750:box-border">
-            <div className="relative leading-[150%] inline-block min-w-[38px]">
-              Date
-            </div>
-            <div className="relative text-sm leading-[150%] font-text-small-normal inline-block min-w-[5px] mq750:w-full mq750:h-[5px]">
-              •
-            </div>
-            <div className="relative leading-[150%] inline-block min-w-[38px]">
-              Time
-            </div>
-            <div className="relative text-sm leading-[150%] font-text-small-normal inline-block min-w-[5px] mq750:w-full mq750:h-[5px]">
-              •
-            </div>
-            <div className="relative leading-[150%] inline-block min-w-[38px]">
-              Location
-            </div>
-          </div>
-        </div>
-        
-        <div className="self-stretch flex flex-row items-end justify-end py-0 px-[15px]">
-        <button className="cursor-pointer py-1.5 px-[19px] bg-[transparent] rounded-11xl flex flex-row items-center justify-center gap-[8px] whitespace-nowrap border-[1px] border-solid border-color-neutral-neutral-dark hover:bg-gray-500 hover:box-border hover:border-[1px] hover:border-solid hover:border-gray-100">
-                    <img
-                      className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
-                      alt=""
-                      src="/icon--edit.svg"
-                    />
-                    <div className="relative text-base leading-[150%] font-text-regular-normal1 text-text-primary text-left inline-block min-w-[83px]">
-                      Add Review
-                    </div>
-                  </button>
-        </div>
-      </div>
-    </div>
-  );
+                <Box
+                    sx={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        py: 0,
+                        pr: "209px",
+                        pl: 0,
+                        gap: "10px",
+                        "@media (max-width: 450px)": {
+                            pr: 5,
+                        },
+                        "@media (max-width: 750px)": {
+                            flexWrap: "wrap",
+                            pr: "104px",
+                        },
+                    }}
+                >
+                    <Typography
+                        component="b"
+                        sx={{
+                            fontWeight: "bold",
+                            lineHeight: "150%",
+                            minWidth: "50px",
+                            "@media (max-width: 450px)": {
+                                fontSize: "1rem",
+                                lineHeight: "24px",
+                            },
+                        }}
+                    >
+                        {businessName}
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: "5px",
+                            bgcolor: "#006CBF",
+                            borderRadius: "24px",
+                            color: "white",
+                            py: 1,
+                            px: 2,
+                            ...serviceTagStyle,
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            sx={{
+                                height: "24px",
+                                width: "24px",
+                                objectFit: "cover",
+                            }}
+                            alt="icon"
+                            src={icon}
+                        />
+                        <Typography
+                            variant="body2"
+                            component="div"
+                            sx={{
+                                lineHeight: "150%",
+                                fontWeight: "medium",
+                                minWidth: "70px",
+                                ...businessTypeStyle,
+                            }}
+                        >
+                            {formatEnumValue(businessType)}
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box
+                    sx={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: "8px",
+                        py: 0,
+                        pl: 0,
+                        pr: "15px",
+                        mb: 2,
+                        "@media (max-width: 450px)": {
+                            pr: 5,
+                        },
+                        "@media (max-width: 750px)": {
+                            flexWrap: "wrap",
+                            pr: "205px",
+                        },
+                    }}
+                >
+                    {businessType === BUSINESS_TYPES.BOARDING ? (
+                        <Typography
+                            variant="body2"
+                            component="div"
+                            sx={{
+                                minWidth: "38px",
+                                lineHeight: "150%",
+                            }}
+                        >
+                            {formatDate(date)} - {formatDate(endDate)}
+                        </Typography>
+                    ) : (
+                        <Typography
+                            variant="body2"
+                            component="div"
+                            sx={{
+                                minWidth: "38px",
+                                lineHeight: "150%",
+                            }}
+                        >
+                            {formatDate(date)}
+                        </Typography>
+                    )}
+                    <Typography
+                        variant="body2"
+                        component="div"
+                        sx={{
+                            fontSize: "0.875rem",
+                            lineHeight: "150%",
+                            minWidth: "5px",
+                            mx: 1,
+                        }}
+                    >
+                        •
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        component="div"
+                        sx={{
+                            minWidth: "38px",
+                            lineHeight: "150%",
+                        }}
+                    >
+                        {startTime}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        component="div"
+                        sx={{
+                            fontSize: "0.875rem",
+                            lineHeight: "150%",
+                            minWidth: "5px",
+                            mx: 1,
+                        }}
+                    >
+                        •
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        component="div"
+                        sx={{
+                            minWidth: "38px",
+                            lineHeight: "150%",
+                        }}
+                    >
+                        {address}, {city}
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "end",
+                        py: 0,
+                        px: "15px",
+                    }}
+                >
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            cursor: "pointer",
+                            py: "6px",
+                            px: "19px",
+                            bgcolor: "transparent",
+                            borderRadius: "24px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            border: "1px solid",
+                            borderColor: "grey.500",
+                            "&:hover": {
+                                bgcolor: "transparent",
+                                borderColor: "grey.700",
+                            },
+                        }}
+                        onClick={() => setReviewFormOpen(true)}
+                    >
+                        <Box
+                            component="img"
+                            sx={{
+                                height: "24px",
+                                width: "24px",
+                                objectFit: "cover",
+                            }}
+                            alt="add review"
+                            src="/icon--edit.svg"
+                        />
+                        <Typography
+                            variant="body2"
+                            component="div"
+                            sx={{
+                                fontSize: "1rem",
+                                lineHeight: "150%",
+                                fontFamily: "text.regular",
+                                color: "text.primary",
+                                textAlign: "left",
+                                minWidth: "83px",
+                            }}
+                        >
+                            Add Review
+                        </Typography>
+                    </Button>
+                    <Dialog open={reviewFormOpen} onClose={() => setReviewFormOpen(false)}>
+                        <ReviewForm
+                            open={reviewFormOpen}
+                            onClose={() => setReviewFormOpen(false)}
+                            onSubmit={handleReviewSubmit}
+                            businessId={businessId}
+                            selectedService={businessType}
+                        />
+                    </Dialog>
+                </Box>
+            </Box>
+        </Box>
+    );
 };
 
 export default PastBookingCard;

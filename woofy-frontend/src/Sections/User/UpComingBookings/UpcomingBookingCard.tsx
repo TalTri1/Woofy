@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useMemo, CSSProperties } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { formatEnumValue } from "../../../utils/format-enum-text";
+import {BUSINESS_TYPES} from "../../../models/Enums/Enums";
 
 export type UpcomingBookingCardType = {
   icon?: string;
-  businessType?: string;
+  businessType?: BUSINESS_TYPES;
   businessName?: string;
   address?: string;
   city?: string;
@@ -183,60 +184,73 @@ const UpcomingBookingCard: FunctionComponent<UpcomingBookingCardType> = ({
             },
           }}
         >
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{
-              minWidth: "38px",
-              lineHeight: "150%",
-            }}
-          >
-            {formatDate(date)}
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{
-              fontSize: "0.875rem",
-              lineHeight: "150%",
-              minWidth: "5px",
-              mx: 1,
-            }}
-          >
-            •
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{
-              minWidth: "38px",
-              lineHeight: "150%",
-            }}
-          >
-            {startTime}
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{
-              fontSize: "0.875rem",
-              lineHeight: "150%",
-              minWidth: "5px",
-              mx: 1,
-            }}
-          >
-            •
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{
-              minWidth: "38px",
-              lineHeight: "150%",
-            }}
-          >
-            {address}, {city}
-          </Typography>
+            {businessType === BUSINESS_TYPES.BOARDING ? (
+                <Typography
+                    variant="body2"
+                    component="div"
+                    sx={{
+                        minWidth: "38px",
+                        lineHeight: "150%",
+                    }}
+                >
+                    {formatDate(date)} - {formatDate(endDate)}
+                </Typography>
+            ) : (
+                <Typography
+                    variant="body2"
+                    component="div"
+                    sx={{
+                        minWidth: "38px",
+                        lineHeight: "150%",
+                    }}
+                >
+                    {formatDate(date)}
+                </Typography>
+            )}
+            <Typography
+                variant="body2"
+                component="div"
+                sx={{
+                    fontSize: "0.875rem",
+                    lineHeight: "150%",
+                    minWidth: "5px",
+                    mx: 1,
+                }}
+            >
+                •
+            </Typography>
+            <Typography
+                variant="body2"
+                component="div"
+                sx={{
+                    minWidth: "38px",
+                    lineHeight: "150%",
+                }}
+            >
+                {startTime}
+            </Typography>
+            <Typography
+                variant="body2"
+                component="div"
+                sx={{
+                    fontSize: "0.875rem",
+                    lineHeight: "150%",
+                    minWidth: "5px",
+                    mx: 1,
+                }}
+            >
+                •
+            </Typography>
+            <Typography
+                variant="body2"
+                component="div"
+                sx={{
+                    minWidth: "38px",
+                    lineHeight: "150%",
+                }}
+            >
+                {address}, {city}
+            </Typography>
         </Box>
         <Box
           sx={{
