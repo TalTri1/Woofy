@@ -45,32 +45,28 @@ const Router = () => {
             children: [
                 {
                     path: "/",
-                    element: <UserDashboard/>,
+                    element: <HomePage/>,
+                },
+                {
+
+                    path: "/search-page",
+                    element: <WebSearchPage/>,
                 },
                 {
                     path: "/map",
                     element: <MapPage/>,
+                },        {
+                    path: "/business-profile/:id",
+                    element: <BusinessProfilePage/>,
                 },
-                
+
+                {
+                    path: "*",
+                    element: <NotFoundPage/>,
+                },
             ],
         },
-        {
-            path: "/business-profile/:id",
-            element: <BusinessProfilePage/>,
-        },
-        {
 
-            path: "/search-page",
-            element: <WebSearchPage/>,
-        },
-      {
-            path: "/Hero-page",
-            element: <HomePage/>,
-        },
-        {
-            path: "*",
-            element: <NotFoundPage/>,
-        },
     ];
 
     // Define routes accessible only to authenticated users
@@ -111,7 +107,6 @@ const Router = () => {
                 },
 
 
-
             ],
         },
     ]
@@ -128,7 +123,7 @@ const Router = () => {
             children: [
                 {
                     path: "/",
-                    element: <UserDashboard/>,
+                    element: <WebSearchPage/>,
                 },
                 {
                     path: "/bookings",
