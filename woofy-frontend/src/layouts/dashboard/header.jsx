@@ -1,4 +1,3 @@
-// components/Header.js
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -13,6 +12,7 @@ import AccountPopover from './common/account-popover';
 import { bgBlur } from '../../theme/css';
 import { HEADER } from './config-layout';
 import Logo from "../../components/logo";
+import { RouterLink } from '../../routes/components';
 
 export default function Header({ onOpenNav }) {
     const { userDetails } = useContext(UserContext);
@@ -20,7 +20,9 @@ export default function Header({ onOpenNav }) {
 
     const renderContent = (
         <>
-            <Logo sx={{ mt: 1.5, ml: 4 }} />
+            <Box component={RouterLink} to="/" sx={{ mt: 1.5, ml: 4, display: 'inline-block' }}>
+                <Logo />
+            </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Stack direction="row" alignItems="center" spacing={3}>
                 <NotificationsPopover />
@@ -29,7 +31,7 @@ export default function Header({ onOpenNav }) {
                     variant="body1"
                     sx={{
                         color: '#222222',
-                        fontWeight: '600', // Semi-bold
+                        fontWeight: '600', 
                         whiteSpace: 'nowrap'
                     }}
                 >
@@ -45,7 +47,7 @@ export default function Header({ onOpenNav }) {
                 boxShadow: 'none',
                 height: HEADER.H_MOBILE,
                 zIndex: theme.zIndex.appBar + 1,
-                mt: 2, // Adding some margin at the top
+                mt: 2, 
                 ...bgBlur({
                     color: theme.palette.background.default,
                 }),
