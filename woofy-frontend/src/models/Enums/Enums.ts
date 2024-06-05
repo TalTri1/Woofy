@@ -48,3 +48,8 @@ export enum TrainingLevel {
     INTERMEDIATE = 'INTERMEDIATE',
     ADVANCED = 'ADVANCED'
 }
+
+export enum ROLE{
+    CUSTOMER = 'CUSTOMER',
+    BUSINESS = 'BUSINESS',
+}

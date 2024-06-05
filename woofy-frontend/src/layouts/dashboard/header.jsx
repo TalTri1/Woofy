@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import { useResponsive } from '../../hooks/use-responsive';
 import { bgBlur } from '../../theme/css';
-import Searchbar from './common/searchbar';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 import NotificationsPopover from './common/notifications-popover';
@@ -27,7 +26,6 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
 
-      <Searchbar />
 
       <Box sx={{ flexGrow: 1 }} />
       <Stack direction="row" alignItems="center" spacing={3}> {/* Increased spacing */}

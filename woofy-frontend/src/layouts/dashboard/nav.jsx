@@ -17,6 +17,7 @@ import Logo from "../../components/logo";
 import {NAV} from "./config-layout";
 import Scrollbar from "../../components/scrollbar";
 import Navigation from "./config-navigation";
+import {BUSINESS_TYPES, ROLE} from "../../models/Enums/Enums";
 
 
 // ----------------------------------------------------------------------
@@ -73,7 +74,7 @@ export default function Nav({openNav, onCloseNav}) {
                     <Box sx={{ml: 2}}>
                         <Typography variant="subtitle2">{userDetails.firstName + " " + userDetails.lastName}</Typography>
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            {userDetails.role}
+                            {userDetails.role == ROLE.BUSINESS ? "Business" : ""}
                         </Typography>
                     </Box>
                 </>
