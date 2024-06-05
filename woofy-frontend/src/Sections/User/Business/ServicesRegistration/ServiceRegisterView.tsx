@@ -225,285 +225,79 @@ const ServiceRegisterView: FunctionComponent = () => {
     };
 
     return (
-        <Box sx={{
-            width: '100%',
-            position: 'relative',
-            backgroundColor: 'text.alternate',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            justifyContent: 'start',
-            lineHeight: 'normal',
-            tracking: 'normal'
-        }}>
-            <Container maxWidth="xl" sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'start',
-                justifyContent: 'start',
-                px: { md: 5 }
-            }}>
-                <Box sx={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    justifyContent: 'start',
-                    maxWidth: 'calc(100% - 312px)',
-                    textAlign: 'center',
-                    fontSize: '29xl',
-                    color: 'text.alternate',
-                    fontFamily: 'text-medium-normal',
-                    px: { md: 5 }
-                }}>
-                    <Box sx={{
-                        width: '100%',
-                        backgroundColor: '#006cbf',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'start',
-                        pt: 8,
-                        px: 2.5,
-                        pb: 7.5,
-                        gap: 0
-                    }}>
-                        <Typography component="h1" sx={{
-                            fontSize: '36px',
-                            lineHeight: '120%',
-                            fontFamily: 'Inter',
-                            fontWeight: 'bold',
-                            color: 'white',
-                            textAlign: 'center',
-                            marginBottom: '20px',
-                        }}
-                        >
-                            Set Up Your Services Details
-                        </Typography>
-                        <Typography sx={{
-                            fontSize: '16px',
-                            lineHeight: '150%',
-                            fontFamily: 'Inter',
-                            color: 'white',
-                            textAlign: 'center'
-                        }}>
-                            Complete the forms below to provide your business information.
-                        </Typography>
-                    </Box>
-                    <Box sx={{
-                        width: '100%',
-                        backgroundColor: 'text.alternate',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        maxWidth: '100%',
-                        fontSize: '5xl',
-                        color: 'text.primary',
-                        gap: 2.5
-                    }}>
-                        <Box sx={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            maxWidth: '100%'
-                        }}>
-                            <Box sx={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'end',
-                                justifyContent: 'start',
-                                pt: 5,
-                                pb: 2.5
-                            }}>
-                                <Box sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    mt: 1
-                                }}>
-                                    <Typography variant="h4" sx={{
-                                        fontFamily: 'Inter',
-                                        fontWeight: 'bold',
-                                        color: 'text.primary',
-                                        textAlign: 'center'
-                                    }}>
+        <Box sx={{ width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
+            <Box sx={{ width: '100vw', position: 'relative', left: 0, backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 8, px: 2.5, pb: 7.5, gap: 0 }}>
+                <Typography component="h1" sx={{ fontSize: '36px', lineHeight: '120%', fontFamily: 'Inter', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '20px' }}>
+                    Set Up Your Services Details
+                </Typography>
+                <Typography sx={{ fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
+                    Complete the forms below to provide your business information.
+                </Typography>
+            </Box>
+            <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'start', px: { md: 5 } }}>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', width: '100%', textAlign: 'center', fontSize: '29xl', color: 'text.alternate', fontFamily: 'text-medium-normal', px: { md: 5 } }}>
+                    <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
+                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
+                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 5, pb: 2.5 }}>
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
+                                    <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
                                         Services Details
                                     </Typography>
-                                    <Typography variant="body1"
-                                        sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                    <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
                                         Please Complete your business account information.
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{
-                                width: '600px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'start',
-                                justifyContent: 'start',
-                                py: 0,
-                                px: 2.5,
-                                gap: 3
-                            }}>
-                                <Box sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'start',
-                                    justifyContent: 'start',
-                                    gap: 1
-                                }}>
-                                    <SelectServiceTypeComponent selectedServices={selectedServices}
-                                        setSelectedServices={setSelectedServices}
-                                        labelText="Choose your service" />
+                            <Box sx={{ width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', py: 0, px: 2.5, gap: 3 }}>
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
+                                    <SelectServiceTypeComponent selectedServices={selectedServices} setSelectedServices={setSelectedServices} labelText="Choose your service" />
                                 </Box>
                                 <Box>
-
-                                    <Box sx={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        mt: 1
-                                    }}>
-                                        <Typography variant="h4" sx={{
-                                            fontFamily: 'Inter',
-                                            fontWeight: 'bold',
-                                            color: 'text.primary',
-                                            textAlign: 'center'
-                                        }}>
-                                            {serviceFormTitles[selectedServices]}                                    </Typography>
-                                        <Typography variant="body1" sx={{
-                                            fontFamily: 'Inter',
-                                            color: 'text.primary',
-                                            textAlign: 'center'
-                                        }}>
+                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
+                                        <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                                            {serviceFormTitles[selectedServices]}
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
                                             Please fill the necessary information found in the following questions.
                                         </Typography>
                                     </Box>
                                     {(selectedServices === BUSINESS_TYPES.DOG_WALK || selectedServices === BUSINESS_TYPES.DOG_SITTER) && (
                                         <Box component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                            <Typography sx={{ width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px', }}>
+                                            <Typography sx={{ width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px' }}>
                                                 Appointment Length
                                             </Typography>
-                                            <TextField
-                                                fullWidth
-                                                placeholder="Enter appointment length in minutes*"
-                                                type="number"
-                                                name="appointmentLengthInMinutes"
-                                                required
-                                                onChange={handleInputChange}
-                                            />
+                                            <TextField fullWidth placeholder="Enter appointment length in minutes*" type="number" name="appointmentLengthInMinutes" required onChange={handleInputChange} />
                                         </Box>
                                     )}
                                     {(selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.DAY_CARE) && (
                                         <>
                                             <Box sx={{ mb: 2 }}>
-                                                <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome}
-                                                    clickPetsInHomeHandler={clickPetsInHomeHandler} />
+                                                <PetsInHomeComponent selectedPetsInHome={selectedPetsInHome} clickPetsInHomeHandler={clickPetsInHomeHandler} />
                                             </Box>
                                             <Box sx={{ mb: 3 }}>
-                                                <HomeConditionComponent selectedHomeConditions={selectedHomeConditions}
-                                                    clickHomeConditionsHandler={clickHomeConditionsHandler} />
+                                                <HomeConditionComponent selectedHomeConditions={selectedHomeConditions} clickHomeConditionsHandler={clickHomeConditionsHandler} />
                                             </Box>
                                             <Box>
-                                                <TextField
-                                                    fullWidth
-                                                    placeholder="Number of Dogs*"
-                                                    type="number"
-                                                    name="dogCapacity"
-                                                    required
-                                                    onChange={handleInputChange}
-                                                />
+                                                <TextField fullWidth placeholder="Number of Dogs*" type="number" name="dogCapacity" required onChange={handleInputChange} />
                                             </Box>
                                         </>
                                     )}
                                 </Box>
-                                <BusinessTypesBaseRegistration
-                                    handleInputChange={handleInputChange}
-                                    selectedSize={selectedSize}
-                                    clickSizeHandlerDog={clickSizeHandlerDog}
-                                    selectedDays={selectedDays}
-                                    clickWorkingDaysHandler={clickWorkingDaysHandler}
-                                />
-                                <Box sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'start',
-                                    justifyContent: 'start',
-                                    gap: 3
-                                }}>
-                                    <Typography
-                                        sx={{
-                                            width: '100%',
-                                            position: 'relative',
-                                            fontSize: '16px',
-                                            lineHeight: '150%',
-                                            fontFamily: 'Inter',
-                                            fontWeight: 550,
-                                            color: 'text.primary',
-                                            textAlign: 'left',
-                                            display: 'inline-block',
-                                            marginTop: '8px',
-                                        }}
-                                    >
+                                <BusinessTypesBaseRegistration handleInputChange={handleInputChange} selectedSize={selectedSize} clickSizeHandlerDog={clickSizeHandlerDog} selectedDays={selectedDays} clickWorkingDaysHandler={clickWorkingDaysHandler} />
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 3 }}>
+                                    <Typography sx={{ width: '100%', position: 'relative', fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', fontWeight: 550, color: 'text.primary', textAlign: 'left', display: 'inline-block', marginTop: '8px' }}>
                                         Add Pictures of Your Services
                                     </Typography>
                                 </Box>
-                                <Box sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'start',
-                                    gap: 3,
-                                    flexWrap: { xs: 'wrap', sm: 'nowrap' }
-                                }}>
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start', gap: 3, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
                                     {images.map((image, index) => (
                                         <label key={index} className="relative">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(event) => handleImageChange(index, event)}
-                                                style={{ display: 'none' }}
-                                            />
-                                            <img
-                                                className="h-[100px] w-[100px] relative object-cover min-h-[100px] shrink-0 cursor-pointer"
-                                                loading="lazy"
-                                                alt=""
-                                                src={image ? URL.createObjectURL(image) : "/service-avatar-image-1@2x.png"}
-                                                onClick={() => document.getElementById(`fileInput-${index}`)?.click()}
-                                            />
+                                            <input type="file" accept="image/*" onChange={(event) => handleImageChange(index, event)} style={{ display: 'none' }} />
+                                            <img className="h-[100px] w-[100px] relative object-cover min-h-[100px] shrink-0 cursor-pointer" loading="lazy" alt="" src={image ? URL.createObjectURL(image) : "/service-avatar-image-1@2x.png"} onClick={() => document.getElementById(`fileInput-${index}`)?.click()} />
                                         </label>
                                     ))}
                                 </Box>
-                                <Button
-                                    variant="contained"
-                                    onClick={registerBusinessHandler}
-                                    sx={{
-                                        mt: 4,
-                                        mb: 10,
-                                        borderRadius: '30px',
-                                        backgroundColor: '#006CBF',
-                                        '&:hover': {
-                                            backgroundColor: '#0056A4',
-                                        },
-                                        width: '120px',
-                                        height: '40px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        mx: 'auto',
-                                    }}
-                                >
+                                <Button variant="contained" onClick={registerBusinessHandler} sx={{ mt: 4, mb: 10, borderRadius: '30px', backgroundColor: '#006CBF', '&:hover': { backgroundColor: '#0056A4' }, width: '120px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
                                     Submit
                                 </Button>
                             </Box>
