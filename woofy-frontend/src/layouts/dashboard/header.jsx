@@ -13,10 +13,16 @@ import { bgBlur } from '../../theme/css';
 import { HEADER } from './config-layout';
 import Logo from "../../components/logo";
 import { RouterLink } from '../../routes/components';
+import Button from '@mui/material/Button';
+
+import { useNavigate } from 'react-router-dom';
+import {useAuth} from "../../provider/AuthProvider";
 
 export default function Header({ onOpenNav }) {
     const { userDetails } = useContext(UserContext);
     const theme = useTheme();
+    const { token } = useAuth();
+    const navigate = useNavigate();
 
     const renderContent = (
         <>
@@ -24,20 +30,87 @@ export default function Header({ onOpenNav }) {
                 <Logo />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
-            <Stack direction="row" alignItems="center" spacing={3} sx={{ mt: 1.5 }}>
-                <NotificationsPopover />
-                <AccountPopover />
-                <Typography
-                    variant="body1"
-                    sx={{
-                        color: '#222222',
-                        fontWeight: '600', 
-                        whiteSpace: 'nowrap'
-                    }}
-                >
-                    {userDetails ? `${userDetails.firstName} ${userDetails.lastName}` : 'Guest User'}
-                </Typography>
-            </Stack>
+            {token ? (
+                <Stack direction="row" alignItems="center" spacing={3} sx={{ mt: 1.5 }}>
+                    <NotificationsPopover />
+                    <AccountPopover />
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            color: '#222222',
+                            fontWeight: '600',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        {userDetails ? `${userDetails.firstName} ${userDetails.lastName}` : 'Guest User'}
+                    </Typography>
+                </Stack>
+            ) : (
+                <Stack direction="row" alignItems="center" spacing={3} sx={{ mt: 1.5 }}>
+                    <Button
+                        onClick={() => navigate("/Hero-page")}
+                        sx={{
+                            textTransform: 'none',
+                            color: theme.palette.text.primary,
+                            '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                            },
+                        }}
+                    >
+                        Home
+                    </Button>
+                    <Button
+                        onClick={() => navigate("/search-page")}
+                        sx={{
+                            textTransform: 'none',
+                            color: theme.palette.text.primary,
+                            '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                            },
+                        }}
+                    >
+                        Discover
+                    </Button>
+                    <Button
+                        onClick={() => navigate("/sign-up")}
+                        sx={{
+                            textTransform: 'none',
+                            color: theme.palette.text.primary,
+                            fontWeight: 'bold',
+                            '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                            },
+                        }}
+                    >
+                        Become a Caregiver
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={() => navigate("/sign-up")}
+                        sx={{
+                            borderColor: 'grey.500',
+                            '&:hover': {
+                                backgroundColor: 'grey.200',
+                                borderColor: 'grey.700',
+                            },
+                        }}
+                    >
+                        Join now
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate("/login")}
+                        sx={{
+                            backgroundColor: theme.palette.primary.main,
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark,
+                            },
+                        }}
+                    >
+                        Sign in
+                    </Button>
+                </Stack>
+            )}
         </>
     );
 
@@ -47,7 +120,7 @@ export default function Header({ onOpenNav }) {
                 boxShadow: 'none',
                 height: HEADER.H_MOBILE,
                 zIndex: theme.zIndex.appBar + 1,
-                
+
                 ...bgBlur({
                     color: theme.palette.background.default,
                 }),
