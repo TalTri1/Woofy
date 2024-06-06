@@ -1,16 +1,18 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import { BUSINESS_TYPES } from "../../../models/Enums/Enums";
-import SelectServiceTypeComponent from "../selectButtons/SelectServiceTypeComponent";
-import UpcomingBookingCard from "./UpcomingBookingCard";
-import { getImage } from "../../../components/image/imageComponent";
-import api from "../../../api/api";
-import defaultProfilePicture from "../../../../public/avatar-image@2x.png";
+import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
+import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
+import BusinessUpcomingBookingCard from "./BusinessUpcomingBookingCard";
+import { getImage } from "../../../../components/image/imageComponent";
+import api from "../../../../api/api";
+import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 
-const UpComingBookings: FunctionComponent = () => {
+const BusinessUpComingBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
     const [bookings, setBookings] = useState([]);
     const [displayedBookings, setDisplayedBookings] = useState(3);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
     const handleViewAll = () => {
         setSelectedServices(null);
@@ -24,25 +26,55 @@ const UpComingBookings: FunctionComponent = () => {
         setDisplayedBookings(prev => (prev - 3 < 3 ? 3 : prev - 3));
     };
 
+    const handleCancelBooking = (booking) => {
+        setSelectedBooking(booking);
+        setOpenDialog(true);
+    };
+
+    const handleConfirmCancel = () => {
+        cancelAppointment(selectedBooking.id);
+        setOpenDialog(false);
+        setSelectedBooking(null);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setSelectedBooking(null);
+    };
+
+    const cancelAppointment = (bookingId) => {
+        // Add your API call here to cancel the booking
+        console.log("Cancel booking with ID:", bookingId);
+    };
+
     useEffect(() => {
         const fetchBookings = async () => {
             try {
                 const res = await api.get("appointment/get-all");
-                const bookingsWithImages = await Promise.all(
+                const bookingsWithDogDetails = await Promise.all(
                     res.data.map(async (booking) => {
-                        if (!booking.profilePhotoID) return {
-                            ...booking,
-                            profileImage: defaultProfilePicture,
-                        };
-                        const profileImage = await getImage(booking.profilePhotoID);
+                        let dogProfileImage = defaultProfilePicture;
+                        let dogDetails = {};
+                        try {
+                            const dogResponse = await api.post('dogs/getByUserId', { id: booking.userId });
+                            if (dogResponse.data) {
+                                if (dogResponse.data.profilePhotoID) {
+                                    dogProfileImage = await getImage(dogResponse.data.profilePhotoID);
+                                }
+                                dogDetails = dogResponse.data;
+                            }
+                        } catch (error) {
+                            console.error('Error fetching dog details', error);
+                        }
                         return {
                             ...booking,
-                            profileImage,
+                            profileImage: dogProfileImage,
+                            dogDetails,
                         };
                     })
                 );
                 const currentDateTime = new Date();
-                const futureBookings = bookingsWithImages.filter(booking => new Date(booking.date) >= currentDateTime);
+                const futureBookings = bookingsWithDogDetails.filter(booking => new Date(booking.date) >= currentDateTime);
                 setBookings(futureBookings);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
@@ -112,17 +144,18 @@ const UpComingBookings: FunctionComponent = () => {
                             .filter(booking => selectedServices === null || booking.businessType === selectedServices)
                             .slice(0, displayedBookings)
                             .map(booking => (
-                                <UpcomingBookingCard
+                                <BusinessUpcomingBookingCard
                                     key={booking.id}
                                     icon={getIconForType(booking.businessType)}
                                     businessType={booking.businessType}
-                                    businessName={booking.businessName}
-                                    address={booking.address}
-                                    city={booking.city}
+                                    customerName={booking.customerName}
                                     date={booking.date}
                                     endDate={booking.endDate}
                                     startTime={booking.startTime}
                                     profileImage={booking.profileImage}
+                                    dogName={booking.dogName}
+                                    dogDetails={booking.dogDetails}
+                                    onCancel={() => handleCancelBooking(booking)}
                                 />
                             ))}
                     </Box>
@@ -143,6 +176,28 @@ const UpComingBookings: FunctionComponent = () => {
                     )}
                 </Box>
             </Box>
+
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Cancel Booking"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to cancel this booking?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        No
+                    </Button>
+                    <Button onClick={handleConfirmCancel} color="primary" autoFocus>
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };
@@ -162,4 +217,4 @@ const getIconForType = (type) => {
     }
 };
 
-export default UpComingBookings;
+export default BusinessUpComingBookings;

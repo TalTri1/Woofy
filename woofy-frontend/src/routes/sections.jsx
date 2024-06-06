@@ -20,10 +20,11 @@ import MapPage from "../layouts/Map/MapPage";
 import BusinessProfilePage from "../Pages/BusinessProfilePage";
 import WebSearchPage from "../Pages/WebSearchPage";
 import HomePage from "../Pages/HomePage";
-import UpComingBookings from "../Sections/User/UpComingBookings/UpcomingBookingsView";
+import CustomerUpComingBookings from "../Sections/User/Customer/UpComingBookings/CustomerUpcomingBookingsView";
 import CustomerPreviousBookings from "../Sections/User/PastBookings/CustomerPreviousBookingsView";
-import UpcomingBookingsSection
-    from "../Sections/User/UpComingBookings/UpcomingBookingsSection";
+import BusinessUpcomingBookingsSection
+    from "../Sections/User/Business/UpComingBookings/BusinessUpcomingBookingsSection";
+import ManageAccountPage from "../Sections/User/UserProfile/ManageAccountView";
 
 
 const Router = () => {
@@ -98,12 +99,16 @@ const Router = () => {
                     element: <CustomerReviewsView/>,
                 },
                 {
-                    path: "/profile",
-                    element: <UserProfileView/>,
+                    path: "/account",
+                    element: <ManageAccountPage/>,
+                },
+                {
+                    path: "/account/personal-details",
+                    element: <UserProfileView />,
                 },
                 {
                     path: "/bookings",
-                    element: <UpcomingBookingsSection/>,
+                    element: <BusinessUpcomingBookingsSection/>,
                 },
 
 
@@ -127,7 +132,7 @@ const Router = () => {
                 },
                 {
                     path: "/bookings",
-                    element: <UpcomingBookingsSection/>,
+                    element: <BusinessUpcomingBookingsSection/>,
                 },
                 {
                     path: "/dog-register",
@@ -137,8 +142,12 @@ const Router = () => {
                     element: <CustomerReviewsView/>,
                 },
                 {
-                    path: "/profile",
-                    element: <UserProfileView/>,
+                    path: "/account",
+                    element: <ManageAccountPage/>,
+                },
+                {
+                    path: "/account/personal-details",
+                    element: <UserProfileView />,
                 },
                 {
                     path: "/past-bookings",

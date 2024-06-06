@@ -6,7 +6,7 @@ import './styles.css'; // Import the CSS file
 type SelectServiceInputProps = {
     setSelectedServices: (type: BUSINESS_TYPES) => void;
     selectedServices: BUSINESS_TYPES;
-    labelText: string; // This is the header for the buttons
+    labelText?: string; // This is the header for the buttons
 }
 
 const SelectServiceTypeComponent: React.FC<SelectServiceInputProps> = ({ setSelectedServices, selectedServices, labelText }) => {

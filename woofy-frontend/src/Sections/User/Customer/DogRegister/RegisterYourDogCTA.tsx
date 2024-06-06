@@ -1,44 +1,88 @@
-import { FunctionComponent } from "react";
-
+import React, { FunctionComponent } from "react";
 import { Link } from 'react-router-dom';
-
+import { Box, Typography, Button } from "@mui/material";
 
 const RegisterYourDogCTA: FunctionComponent = () => {
-
-
-
-
   return (
-    <div className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-[50px] px-16 pb-0 box-border max-w-full text-left text-13xl text-text-primary font-text-medium-normal lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px]">
-      <div className="self-stretch rounded-31xl flex flex-col items-start justify-start max-w-full">
-        <div className="self-stretch box-border flex flex-col items-start justify-start py-0 px-[31px] max-w-full border-[1px] border-solid border-app1">
-          <div className="self-stretch flex flex-row items-center justify-start py-5 px-0 box-border max-w-full">
-            <div className="w-[1064px] flex flex-row items-start justify-start shrink-0 max-w-[114%]">
-              <div className="flex-1 flex flex-col items-start justify-start max-w-full">
-                <div className="self-stretch flex flex-col items-start justify-start gap-[16px]">
-                  <b className="self-stretch relative leading-[42px] mq450:text-lgi mq450:leading-[25px] mq1050:text-7xl mq1050:leading-[33px]">
-                    Final Steps to Start Enjoying Woofy!
-                  </b>
-                  <div className="self-stretch relative text-lg leading-[150%]">
-                    Please enter your user and services details in order to
-                    start serving costumers.
-                  </div>
-                  <button
-                    className="cursor-pointer [border:none] py-3 px-6 bg-app1 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-cornflowerblue"
-                  >
-                    <Link to="/dog-register" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <div className="relative text-lg leading-[150%] font-semibold font-text-medium-normal text-white text-left">
-                        Register your Dog
-                      </div>
-                    </Link>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Box
+          sx={{
+            width: "100%",
+            maxWidth: "800px",
+            mx: "auto",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "start",
+            pt: 4,
+            px: 2,
+            pb: 4,
+            boxSizing: "border-box",
+            textAlign: "left",
+            gap: 2,
+          }}
+      >
+        <Box
+            sx={{
+              width: "100%",
+              borderRadius: "16px",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "start",
+              justifyContent: "start",
+              border: "1px solid",
+              borderColor: "primary.main",
+              p: 4,
+            }}
+        >
+          <Typography
+              variant="h4"
+              sx={{
+                fontSize: "24px",
+                lineHeight: "32px",
+                fontWeight: "bold",
+                textAlign: "left",
+                color: "text.primary",
+                mb: 2,
+              }}
+          >
+            Final Steps to Start Enjoying Woofy!
+          </Typography>
+          <Typography
+              variant="body1"
+              sx={{
+                fontSize: "16px",
+                lineHeight: "24px",
+                textAlign: "left",
+                color: "text.primary",
+                mb: 2,
+              }}
+          >
+            Please enter your user and services details in order to start serving customers.
+          </Typography>
+          <Button
+              component={Link}
+              to="/dog-register"
+              sx={{
+                mt: 2,
+                px: 4,
+                py: 1,
+                borderRadius: "20px",
+                backgroundColor: "#006cbf",
+                color: "white",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "cornflowerblue",
+                },
+              }}
+          >
+            <Typography variant="button" sx={{ fontSize: "16px", fontWeight: "bold" }}>
+              Register your Dog
+            </Typography>
+          </Button>
+        </Box>
+      </Box>
   );
 };
 
