@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import UpComingBookings from "./UpcomingBookingsView";
+import CustomerUpComingBookings from "../../Customer/UpComingBookings/CustomerUpcomingBookingsView";
+import BusinessUpComingBookings from "./BusinessUpcomingBookingsView";
 
-const UpcomingBookingsSection: React.FC = () => {
+const BusinessUpcomingBookingsSection: React.FC = () => {
     return (
         <>
             <Box sx={{
@@ -40,9 +41,9 @@ const UpcomingBookingsSection: React.FC = () => {
                     </Typography>
                 </Box>
             </Box>
-            <UpComingBookings />
+            <BusinessUpComingBookings />
         </>
     );
 };
 
-export default UpcomingBookingsSection;
+export default BusinessUpcomingBookingsSection;

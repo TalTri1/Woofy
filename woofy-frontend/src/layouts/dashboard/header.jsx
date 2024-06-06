@@ -15,7 +15,7 @@ import Logo from "../../components/logo";
 import { RouterLink } from '../../routes/components';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import {useAuth} from "../../provider/AuthProvider";
+import { useAuth } from "../../provider/AuthProvider";
 
 export default function Header({ onOpenNav }) {
     const { userDetails } = useContext(UserContext);
@@ -47,7 +47,7 @@ export default function Header({ onOpenNav }) {
             ) : (
                 <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 1.5 }}>
                     <Button
-                        onClick={() => navigate("/Hero-page")}
+                        onClick={() => navigate("/")}
                         sx={{
                             textTransform: 'none',
                             color: theme.palette.text.primary,
@@ -95,7 +95,7 @@ export default function Header({ onOpenNav }) {
                             borderColor: '#666666',
                             borderRadius: '30px',
                             fontSize: '16px',
-                            fontWeight: '600', 
+                            fontWeight: '600',
                             color: 'black',
                             padding: '8px 24px',
                             '&:hover': {

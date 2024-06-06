@@ -9,6 +9,7 @@ import com.woofy.woofy_backend.Models.Entities.AppointmentEntities.BusinessTypes
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import com.woofy.woofy_backend.Repositories.BusinessTypesAppointmentRepositories.*;
+import com.woofy.woofy_backend.Repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,10 @@ public class BaseAppointmentsService {
 
     @Autowired
     private DogWalkerAppointmentRepository dogWalkerAppointmentRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+
+
 
     public List<GetAppointmentsRequestDTO> findAllAppointmentsByDogId(Integer dogId) {
         List<GetAppointmentsRequestDTO> appointments = new ArrayList<>();
@@ -76,6 +81,8 @@ public class BaseAppointmentsService {
                 dto.setAppointmentId(baseAppointmentEntity.getId());
                 dto.setBusinessId(businessEntity.getId());
                 dto.setBusinessName(businessEntity.getBusinessName());
+                dto.setUserId(customerRepository.findByDogId(baseAppointmentEntity.getDogId()).getId());
+                dto.setCustomerName(customerRepository.findByDogId(baseAppointmentEntity.getDogId()).getFullName());
                 dto.setAddress(businessEntity.getAddress());
                 dto.setCity(businessEntity.getCity());
                 dto.setDate(baseAppointmentEntity.getDate());

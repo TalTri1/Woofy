@@ -15,6 +15,8 @@ public class GetAppointmentsRequestDTO {
     private Integer appointmentId;
     private Integer businessId;
     private String BusinessName;
+    private Integer userId;
+    private String CustomerName;
     private BusinessTypeEnum BusinessType;
     private String address;
     private String city;

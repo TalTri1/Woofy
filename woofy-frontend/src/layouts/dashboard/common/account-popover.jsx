@@ -35,8 +35,8 @@ export default function AccountPopover() {
     ]
     const publicNavConfig = [
         {
-            label: 'Profile',
-            path: '/profile',
+            label: 'Manage Account',
+            path: '/account',
             icon: 'eva:person-fill',
         },
         {

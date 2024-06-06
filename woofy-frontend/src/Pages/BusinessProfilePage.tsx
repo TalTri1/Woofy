@@ -8,6 +8,7 @@ import Navbar from "../Sections/Home/NavbarPreLogin";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
 import ReviewForm from "../Sections/User/Business/Reviews/ReviewForm";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
+import api from "../api/api";
 
 type RouteParams = Record<string, string | undefined>;
 
@@ -16,13 +17,12 @@ const BusinessProfilePage: FunctionComponent = () => {
     const [business, setBusiness] = useState<Business | null>(null);
     const router = useRouter();
     const [selectedService, setSelectedService] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.BOARDING);
-    const [reviewFormOpen, setReviewFormOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/business/${businessId}`);
-                const data = await response.json();
+                const response = await api.get(`business/${businessId}`);
+                const data = response.data;
                 setBusiness(data);
                 setSelectedService(data.boardingEntity ? BUSINESS_TYPES.BOARDING : data.dogWalkerEntity ? BUSINESS_TYPES.DOG_WALK : data.dogSitterEntity ? BUSINESS_TYPES.DOG_SITTER : BUSINESS_TYPES.DAY_CARE);
             } catch (error) {
@@ -77,7 +77,6 @@ const BusinessProfilePage: FunctionComponent = () => {
                 alignItems: 'start',
             }}
         >
-            <Navbar />
             <Box
                 component="main"
                 sx={{
