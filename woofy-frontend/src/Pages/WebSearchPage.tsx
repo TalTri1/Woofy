@@ -1,14 +1,15 @@
 import React, { FunctionComponent, useContext, useEffect, useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Link as MuiLink, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Link } from "react-router-dom";
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
 import api from "../api/api";
-import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
+import { Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
 import { UserContext } from "../provider/UserProvider";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
+import MapComponent from "../layouts/Map/components/MapComponent";
 
 type Business = {
   id: number;
@@ -16,15 +17,15 @@ type Business = {
   businessName: string;
   address: string;
   city: string;
+  lat: number;
+  lon: number;
   dogSitterEntity?: any;
   dogWalkerEntity?: any;
   boardingEntity?: any;
   dayCareEntity?: any;
-  // include other services here
 };
 
 const WebSearchPage: FunctionComponent = () => {
-
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [numResultsToShow, setNumResultsToShow] = useState(10);
@@ -40,8 +41,9 @@ const WebSearchPage: FunctionComponent = () => {
   const [selectedReviewScore, setSelectedReviewScore] = useState<number[]>([]);
   const [sliderRateValue, setSliderRateValue] = useState<number[]>([0, 300]);
   const [selectedCity, setSelectedCity] = useState<string>('');
+  const [mapOpen, setMapOpen] = useState(false); // State to control map popup
 
-  const { userDetails } = useContext(UserContext); // The user details
+  const { userDetails } = useContext(UserContext);
   const [hasDog, setHasDog] = useState(false);
 
   const showMoreResults = () => {
@@ -74,7 +76,7 @@ const WebSearchPage: FunctionComponent = () => {
       const response = await api.get('/business/all');
       const data = await response.data;
       setBusinesses(data);
-      setFilteredBusinesses(data); // Initialize filteredBusinesses with all businesses
+      setFilteredBusinesses(data);
 
       const averageReviews: { [key: number]: number } = {};
       const reviewsCounts: { [key: number]: number } = {};
@@ -223,8 +225,6 @@ const WebSearchPage: FunctionComponent = () => {
     setFilteredBusinesses(filtered);
   };
 
-
-
   useEffect(() => {
     filterBusinesses();
   }, [selectedServices, selectedStartDate, selectedEndDate, selectedDogSize, businesses, sliderRateValue, selectedHomeConditions, selectedPetsInHome, selectedReviewScore, selectedCity]);
@@ -330,20 +330,22 @@ const WebSearchPage: FunctionComponent = () => {
                 justifyContent: 'flex-end',
                 gap: 2.5,
                 width: '100%',
-                paddingRight: '96px',
+                paddingRight: '555px',
                 '@media (max-width: 450px)': {
                   flexWrap: 'wrap',
                 },
               }}
             >
-              <Link
-                to="/map"
-                className="relative flex flex-row items-center justify-center gap-[8px] text-left text-[20px] text-app1 font-inter no-underline" // Increase text size
+              <MuiLink
+                component="button"
+                className="relative flex flex-row items-center justify-center gap-[8px] text-left text-app1 font-inter no-underline"
+                onClick={() => setMapOpen(true)} // Open the map popup
                 style={{ marginRight: 0 }}
               >
-                <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
-                <b className="relative leading-[150%]">Show on map</b>
-              </Link>
+                <img className="w-8 relative h-10 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
+                <b className="relative leading-[150%] text-[20px]">Show on map</b> {/* Increased text size here */}
+              </MuiLink>
+
             </Box>
 
             <Box sx={{ width: '100%', backgroundColor: 'background-color-primary', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -376,7 +378,7 @@ const WebSearchPage: FunctionComponent = () => {
                     businessReviewsCount={businessReviewsCounts[business.id]}
                     propFlex="unset"
                     propAlignSelf="stretch"
-                    selectedService={selectedServices}  // Pass the selected service here
+                    selectedService={selectedServices}
                   />
                 ))}
               </Box>
@@ -414,9 +416,20 @@ const WebSearchPage: FunctionComponent = () => {
               Show More Results
             </div>
           </Button>
-
         </Box>
       </Box>
+
+      <Dialog
+        open={mapOpen}
+        onClose={() => setMapOpen(false)}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogTitle>Business Map</DialogTitle>
+        <DialogContent>
+          <MapComponent businesses={filteredBusinesses} />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
