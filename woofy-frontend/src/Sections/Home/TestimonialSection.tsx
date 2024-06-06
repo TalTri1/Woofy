@@ -170,7 +170,7 @@ const TestimonialSection: FunctionComponent<TestimonialSectionType> = ({
               gap: 4,
               maxWidth: "100%",
               gap: { xs: 2, md: 4 },
-              ml:3,
+              ml: 3,
             }}
           >
             <WoofyReview

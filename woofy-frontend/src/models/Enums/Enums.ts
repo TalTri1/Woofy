@@ -15,10 +15,11 @@ export enum PETS_IN_HOME {
     ONLY_ONE_CLIENT_AT_A_TIME = 'ONLY_ONE_CLIENT_AT_A_TIME'
 }
 export enum BUSINESS_TYPES {
-    BOARDING= 'BOARDING',
+    BOARDING = 'BOARDING',
     DOG_WALK = 'DOG_WALK',
     DOG_SITTER = 'DOG_SITTER',
-    DAY_CARE = 'DAY_CARE'
+    DAY_CARE = 'DAY_CARE',
+    ALL = 'ALL'
 }
 
 export enum WEEKDAYS {
@@ -31,20 +32,20 @@ export enum WEEKDAYS {
     SATURDAY = 'SATURDAY',
 }
 export enum Age {
-    PUPPY= 'PUPPY',
+    PUPPY = 'PUPPY',
     ADULT = 'ADULT',
-    SENIOR= 'SENIOR',
+    SENIOR = 'SENIOR',
 }
 
 export enum Size {
-    SMALL= 'SMALL',
+    SMALL = 'SMALL',
     MEDIUM = 'MEDIUM',
     LARGE = 'LARGE',
     GIANT = 'GIANT'
 }
 
 export enum TrainingLevel {
-    BEGINNER= 'BEGINNER',
+    BEGINNER = 'BEGINNER',
     INTERMEDIATE = 'INTERMEDIATE',
     ADVANCED = 'ADVANCED'
 }

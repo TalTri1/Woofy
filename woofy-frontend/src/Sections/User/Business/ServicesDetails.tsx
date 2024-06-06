@@ -82,7 +82,7 @@ const ServicesDetails: FunctionComponent = () => {
                             />
                             <AvailibilityOfServicesRow
                                 availibilityLabel="Prices"
-                                boardingService="Boarding Price Per Night:"
+                                boardingService="Boarding Price Per Day:"
                                 datesTimes="Price ₪"
                                 dayCareService="Day Care Price Per Day:"
                                 datesTimes1="Price ₪"

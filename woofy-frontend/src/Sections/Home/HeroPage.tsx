@@ -21,7 +21,7 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                 justifyContent: 'start',
                 maxWidth: '100%',
                 textAlign: 'left',
-                fontSize: '2.3125rem', 
+                fontSize: '2.3125rem',
                 color: 'text-primary',
                 fontFamily: 'text-medium-normal',
                 gap: 2,
@@ -138,40 +138,40 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                     </Typography>
                                 </Button>
                                 <Button
-    sx={{
-        cursor: 'pointer',
-        py: 2,
-        px: 4,
-        backgroundColor: 'transparent',
-        borderRadius: '30px',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textTransform: 'none',
-        border: '1px solid',
-        borderColor: 'grey.500',
-        color: '#444444',
-        '&:hover': {
-            backgroundColor: 'grey.100', 
-            borderColor: 'grey.700',
-        },
-    }}
-    onClick={() => navigate('/sign-up')}
->
-    <Typography
-        sx={{
-            fontSize: '18px',
-            lineHeight: '120%',
-            fontWeight: 'bold',
-            color: 'black',
-            textAlign: 'left',
-            minWidth: '50px',
-        }}
-    >
-        Join Now
-    </Typography>
-</Button>
+                                    sx={{
+                                        cursor: 'pointer',
+                                        py: 2,
+                                        px: 4,
+                                        backgroundColor: 'transparent',
+                                        borderRadius: '30px',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textTransform: 'none',
+                                        border: '1px solid',
+                                        borderColor: 'grey.500',
+                                        color: '#444444',
+                                        '&:hover': {
+                                            backgroundColor: 'grey.100',
+                                            borderColor: 'grey.700',
+                                        },
+                                    }}
+                                    onClick={() => navigate('/sign-up')}
+                                >
+                                    <Typography
+                                        sx={{
+                                            fontSize: '18px',
+                                            lineHeight: '120%',
+                                            fontWeight: 'bold',
+                                            color: 'black',
+                                            textAlign: 'left',
+                                            minWidth: '50px',
+                                        }}
+                                    >
+                                        Join Now
+                                    </Typography>
+                                </Button>
 
                             </Box>
                         </Box>

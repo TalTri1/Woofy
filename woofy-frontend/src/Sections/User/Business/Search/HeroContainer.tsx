@@ -1,37 +1,87 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { Box, Typography, TextField, Icon, InputAdornment, Button } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
-import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
+import SelectServiceTypeComponentIncludeAll from "../../selectButtons/SelectServiceTypeComponentIncludeAll";
+import { Age, BUSINESS_TYPES, Size } from "../../../../models/Enums/Enums";
+import { toast } from "react-toastify";
 
-const HeroContainer: FunctionComponent = () => {
-  const [dateDateTimePickerValue, setDateDateTimePickerValue] = useState(null);
-  const [dateDateTimePicker1Value, setDateDateTimePicker1Value] = useState(null);
-  const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
-  const [selectedDogSize, setSelectedDogSize] = useState<string | null>(null);
-  const [selectedDogAge, setSelectedDogAge] = useState<string | null>(null);
+type HeroContainerProps = {
+  setSelectedServices: (type: BUSINESS_TYPES) => void;
+  selectedServices: BUSINESS_TYPES | null;
+  selectedDogSize: Size | null;
+  setSelectedDogSize: (size: Size) => void;
+  selectedDogAge: Age | null;
+  setSelectedDogAge: (age: Age) => void;
+  selectedCity: String;
+  setSelectedCity: (city: String) => void;
+  selectedStartDate: Date | null;
+  setSelectedStartDate: (date: Date) => void;
+  selectedEndDate: Date | null;
+  setSelectedEndDate: (date: Date) => void;
+};
+
+const HeroContainer: FunctionComponent<HeroContainerProps> = ({
+  setSelectedServices, selectedServices,
+  selectedDogSize, setSelectedDogSize,
+  selectedDogAge, setSelectedDogAge,
+  setSelectedCity, selectedCity,
+  setSelectedStartDate, selectedStartDate,
+  setSelectedEndDate, selectedEndDate
+}) => {
+
+  const [cityInput, setCityInput] = useState<String>('');
+  const [startDateInput, setStartDateInput] = useState<Date | null>(null);
+  const [endDateInput, setEndDateInput] = useState<Date | null>(null);
 
   const dogSizes = [
-    { size: 'Small', weight: '2-9 kg' },
-    { size: 'Medium', weight: '9-22 kg' },
-    { size: 'Large', weight: '22-45 kg' },
-    { size: 'Giant', weight: '45 kg +' },
+    { size: Size.SMALL, weight: '2-9 kg' },
+    { size: Size.MEDIUM, weight: '9-22 kg' },
+    { size: Size.LARGE, weight: '22-45 kg' },
+    { size: Size.GIANT, weight: '45 kg +' },
   ];
 
   const dogAges = [
-    { age: 'Puppy', years: '0-1 year' },
-    { age: 'Adult', years: '2-8 years' },
-    { age: 'Senior', years: '9 years +' },
+    { age: Age.PUPPY, years: '0-1 year' },
+    { age: Age.ADULT, years: '2-8 years' },
+    { age: Age.SENIOR, years: '9 years +' },
   ];
 
-  const handleDogSizeClick = (size: string) => {
-    setSelectedDogSize(size === selectedDogSize ? null : size);
+  const handleDogSizeClick = (size: Size) => {
+    setSelectedDogSize(size);
   };
 
-  const handleDogAgeClick = (age: string) => {
-    setSelectedDogAge(age === selectedDogAge ? null : age);
+  const handleDogAgeClick = (age: Age) => {
+    setSelectedDogAge(age);
   };
+
+  const handleSearchClick = () => {
+    return () => {
+      if (endDateInput && startDateInput && endDateInput < startDateInput) {
+        toast.error('End date should be greater than start date');
+        return;
+      }
+      setSelectedCity(cityInput);
+      setSelectedStartDate(startDateInput);
+      setSelectedEndDate(selectedServices === BUSINESS_TYPES.BOARDING ? endDateInput : null);
+    };
+  };
+
+  const handleClearAllClick = () => {
+    setSelectedCity('');
+    setCityInput('');
+    setSelectedStartDate(null);
+    setStartDateInput(null);
+    setSelectedEndDate(null);
+    setEndDateInput(null);
+  };
+
+  useEffect(() => {
+    if (selectedServices !== BUSINESS_TYPES.BOARDING) {
+      setSelectedEndDate(null);
+      setEndDateInput(null);
+    }
+  }, [selectedServices]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -55,15 +105,15 @@ const HeroContainer: FunctionComponent = () => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'start',
-            pt: 10, 
-            px: 3, 
-            pb: 1, 
+            pt: 10,
+            px: 3,
+            pb: 1,
             backgroundImage: 'url(/public/hero-frame@3x.png)',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: '50% 37%',
             width: '100%',
-            minHeight: '510px', 
+            minHeight: '510px',
             position: 'relative',
             '&::before': {
               content: '""',
@@ -73,11 +123,11 @@ const HeroContainer: FunctionComponent = () => {
               right: 0,
               bottom: 0,
               backgroundColor: '#FAFAFA',
-              opacity: 0.24, 
-              zIndex: 1, 
+              opacity: 0.24,
+              zIndex: 1,
             },
             '& > *': {
-              position: 'relative', 
+              position: 'relative',
               zIndex: 2,
             },
           }}
@@ -90,10 +140,10 @@ const HeroContainer: FunctionComponent = () => {
               alignItems: 'start',
               justifyContent: 'start',
               maxWidth: '1280px',
-              marginBottom: '24px', 
+              marginBottom: '24px',
             }}
           >
-            <SelectServiceTypeComponent
+            <SelectServiceTypeComponentIncludeAll
               setSelectedServices={setSelectedServices}
               selectedServices={selectedServices}
             />
@@ -124,16 +174,16 @@ const HeroContainer: FunctionComponent = () => {
                 sx={{
                   m: 0,
                   position: 'relative',
-                  fontSize: '40px', 
+                  fontSize: '40px',
                   lineHeight: '120%',
-                  fontWeight: 'bold', 
-                  fontFamily: 'Inter', 
+                  fontWeight: 'bold',
+                  fontFamily: 'Inter',
                   '@media (max-width: 750px)': {
-                    fontSize: '32px', 
+                    fontSize: '32px',
                     lineHeight: '38px',
                   },
                   '@media (max-width: 450px)': {
-                    fontSize: '24px', 
+                    fontSize: '24px',
                     lineHeight: '29px',
                   },
                 }}
@@ -145,12 +195,12 @@ const HeroContainer: FunctionComponent = () => {
 
               <Typography
                 sx={{
-                  fontSize: '20px', 
+                  fontSize: '20px',
                   lineHeight: '150%',
-                  fontWeight: 'bold', 
-                  fontFamily: 'Inter', 
+                  fontWeight: 'bold',
+                  fontFamily: 'Inter',
                   '@media (max-width: 450px)': {
-                    fontSize: '16px', 
+                    fontSize: '16px',
                     lineHeight: '24px',
                   },
                 }}
@@ -168,30 +218,32 @@ const HeroContainer: FunctionComponent = () => {
                 py: 1,
                 px: 1.5,
                 gap: 1.5,
-                pt: 2, 
-                mt: 1, 
+                pt: 2,
+                mt: 1,
                 width: '100%',
                 borderRadius: '10px 10px 0 0',
-                backgroundColor: '#fff', 
+                backgroundColor: '#fff',
                 boxShadow: '0 6px 12px rgba(0, 0, 0, 0.02)',
               }}
             >
               <TextField
                 sx={{
                   flex: 1,
-                  borderRadius: '3px', 
+                  borderRadius: '3px',
                   outline: 'none',
                   fontFamily: 'text-regular-normal',
                   fontSize: 'base',
-                  backgroundColor: '#fff', 
-                  height: 56, 
+                  backgroundColor: '#fff',
+                  height: 56,
                   color: 'colorNeutralNeutralDark',
                   textAlign: 'left',
                   minWidth: '300px',
                   p: 0,
                 }}
-                placeholder="Location"
+                placeholder="City"
                 type="text"
+                value={cityInput}
+                onChange={(e) => setCityInput(e.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -208,9 +260,10 @@ const HeroContainer: FunctionComponent = () => {
               />
 
               <DatePicker
-                value={dateDateTimePickerValue}
-                onChange={(newValue) => setDateDateTimePickerValue(newValue)}
-                inputFormat="dd/MM/yyyy" // Set the input format to day/month/year
+                value={startDateInput}
+                onChange={(newValue) => setStartDateInput(newValue)}
+                format="dd/MM/yyyy"
+                label="Start Date (DD/MM/YYYY)"
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -254,9 +307,11 @@ const HeroContainer: FunctionComponent = () => {
                 )}
               />
               <DatePicker
-                value={dateDateTimePicker1Value}
-                onChange={(newValue) => setDateDateTimePicker1Value(newValue)}
-                inputFormat="dd/MM/yyyy" // Set the input format to day/month/year
+                value={endDateInput}
+                onChange={(newValue) => setEndDateInput(newValue)}
+                label="Finish Date (DD/MM/YYYY)"
+                format="dd/MM/yyyy"
+                disabled={selectedServices !== BUSINESS_TYPES.BOARDING}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -311,10 +366,10 @@ const HeroContainer: FunctionComponent = () => {
                 px: 1.5,
                 gap: 1.5,
                 pb: 2,
-                pt:1.5,
+                pt: 1.5,
                 width: '100%',
                 borderRadius: '0 0 10px 10px',
-                backgroundColor: '#fff', 
+                backgroundColor: '#fff',
                 boxShadow: '0 6px 12px rgba(0, 0, 0, 0.02)',
               }}
             >
@@ -324,13 +379,13 @@ const HeroContainer: FunctionComponent = () => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'start',
-                  backgroundColor: '#fff', 
+                  backgroundColor: '#fff',
                   borderRadius: '3px',
                   px: 2,
                   border: '1px solid',
                   borderColor: 'gainsboro',
-                  height: 56, 
-                  flexWrap: 'nowrap', 
+                  height: 56,
+                  flexWrap: 'nowrap',
                 }}
               >
                 <Typography
@@ -353,7 +408,7 @@ const HeroContainer: FunctionComponent = () => {
                     display: 'flex',
                     flexDirection: 'row',
                     gap: 0.5,
-                    flexWrap: 'nowrap', 
+                    flexWrap: 'nowrap',
                   }}
                 >
                   {dogSizes.map((size) => (
@@ -370,13 +425,13 @@ const HeroContainer: FunctionComponent = () => {
                         justifyContent: 'center',
                         textTransform: 'none',
                         borderRadius: '10px',
-                        fontFamily: 'Inter', 
-                        fontSize: '16px', 
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
                         fontWeight: 'normal',
                         border: '1px solid transparent',
                         color: selectedDogSize === size.size ? 'white' : 'text.primary',
                         backgroundColor: selectedDogSize === size.size ? '#006CBF' : 'transparent',
-                        
+
                         '&:hover': {
                           borderColor: 'transparent',
                           backgroundColor: selectedDogSize === size.size ? '#0056A4' : 'transparent',
@@ -395,13 +450,13 @@ const HeroContainer: FunctionComponent = () => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'start',
-                  backgroundColor: '#fff', 
+                  backgroundColor: '#fff',
                   borderRadius: '3px',
                   px: 2,
                   border: '1px solid',
                   borderColor: 'gainsboro',
-                  height: 56, 
-                  flexWrap: 'nowrap', 
+                  height: 56,
+                  flexWrap: 'nowrap',
                 }}
               >
                 <Typography
@@ -424,7 +479,7 @@ const HeroContainer: FunctionComponent = () => {
                     display: 'flex',
                     flexDirection: 'row',
                     gap: 0.5,
-                    flexWrap: 'nowrap', 
+                    flexWrap: 'nowrap',
                   }}
                 >
                   {dogAges.map((age) => (
@@ -441,9 +496,9 @@ const HeroContainer: FunctionComponent = () => {
                         justifyContent: 'center',
                         textTransform: 'none',
                         borderRadius: '10px',
-                        fontFamily: 'Inter', 
-                        fontSize: '16px', 
-                        fontWeight: 'normal', 
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontWeight: 'normal',
                         border: '1px solid transparent',
                         color: selectedDogAge === age.age ? 'white' : 'text.primary',
                         backgroundColor: selectedDogAge === age.age ? '#006CBF' : 'transparent',
@@ -460,16 +515,17 @@ const HeroContainer: FunctionComponent = () => {
                 </Box>
               </Box>
               <Button
+                onClick={handleSearchClick()}
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: 56, 
-                  backgroundColor: '#006CBF', 
+                  height: 56,
+                  backgroundColor: '#006CBF',
                   borderRadius: '3px',
                   color: '#fff',
-                  flex: 1, 
+                  flex: 1,
                   '&:hover': {
                     backgroundColor: '#0056A4',
                   },
@@ -480,7 +536,7 @@ const HeroContainer: FunctionComponent = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: '100%', 
+                    height: '100%',
                   }}
                 >
                   <img
@@ -500,6 +556,36 @@ const HeroContainer: FunctionComponent = () => {
                 >
                   Search
                 </Typography>
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleClearAllClick}
+                sx={{
+                  backgroundColor: '#FFFFFF', // White background
+                  py: 1, // Reduced vertical padding
+                  px: 2, // Reduced horizontal padding
+                  borderRadius: '10px', // Smaller border radius
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  whiteSpace: 'nowrap',
+                  color: '#006CBF', // Blue text color
+                  '&:hover': {
+                    backgroundColor: '#E0E0E0', // Light grey on hover
+                  },
+                }}
+              >
+                <div style={{
+                  fontSize: '12px',
+                  fontWeight: 'bold', // Corrected capitalization
+                  fontFamily: 'Inter',
+                  textAlign: 'left',
+                  display: 'inline-block',
+                  minWidth: '10px',
+                }}>
+                  Clear
+                </div>
               </Button>
 
             </Box>

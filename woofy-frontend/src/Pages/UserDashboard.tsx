@@ -4,6 +4,8 @@ import { UserContext } from "../provider/UserProvider";
 import BusinessListComponent from "../layouts/Appointment/components/BusinessListComponent";
 import { Box, Typography } from "@mui/material";
 import api from "../api/api";
+import axios from "axios";
+
 
 const UserDashboard: FunctionComponent = () => {
   const { userDetails } = useContext(UserContext); // The user details

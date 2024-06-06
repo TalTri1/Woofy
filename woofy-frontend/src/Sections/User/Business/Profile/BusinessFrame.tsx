@@ -115,7 +115,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, paddingLeft: '10px' }}>
             <Typography variant="h5" fontWeight="bold" style={{ fontSize: '32px' }}>{`${serviceData ? serviceData.price : ""} ₪ `}</Typography>
             <Typography variant="body1" style={{ fontSize: '18px', fontWeight: '600', color: '#666666' }}>
-              {selectedService === BUSINESS_TYPES.BOARDING ? "Per Night*" : "Per Service*"}
+              {selectedService === BUSINESS_TYPES.BOARDING ? "Per Day*" : "Per Service*"}
             </Typography>
           </Box>
           <Divider />
@@ -145,38 +145,38 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           </Grid>
         </Box>
         <Box sx={{ flex: 1 }}>
-        <Box mb={2}>
-  {imageData.length > 0 && (
-    <img
-      src={imageData[0].img}
-      alt={imageData[0].title}
-      style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', borderRadius: '8px' }}
-      onClick={() => {
-        setSelectedImage(imageData[0].img);
-        setModalIsOpen(true);
-      }}
-    />
-  )}
-</Box>
-<Box sx={{ display: 'flex', gap: 2, mb: 6 }}>
-  {imageData.slice(1, 4).map((item) => (
-    <Box
-      key={item.img}
-      sx={{ flex: 1 }}
-      onClick={() => {
-        setSelectedImage(item.img);
-        setModalIsOpen(true);
-      }}
-    >
-      <img
-        src={item.img}
-        alt={item.title}
-        loading="lazy"
-        style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer' }}
-      />
-    </Box>
-  ))}
-</Box>
+          <Box mb={2}>
+            {imageData.length > 0 && (
+              <img
+                src={imageData[0].img}
+                alt={imageData[0].title}
+                style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', borderRadius: '8px' }}
+                onClick={() => {
+                  setSelectedImage(imageData[0].img);
+                  setModalIsOpen(true);
+                }}
+              />
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, mb: 6 }}>
+            {imageData.slice(1, 4).map((item) => (
+              <Box
+                key={item.img}
+                sx={{ flex: 1 }}
+                onClick={() => {
+                  setSelectedImage(item.img);
+                  setModalIsOpen(true);
+                }}
+              >
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  loading="lazy"
+                  style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer' }}
+                />
+              </Box>
+            ))}
+          </Box>
 
           <Divider />
           <Box sx={{ mt: 6 }}>
