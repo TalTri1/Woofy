@@ -1,12 +1,234 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
+import api from "../api/api";
+import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
+import { UserContext } from "../provider/UserProvider";
+import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
+
+type Business = {
+  id: number;
+  profilePhotoID: number;
+  businessName: string;
+  address: string;
+  city: string;
+  dogSitterEntity?: any;
+  dogWalkerEntity?: any;
+  boardingEntity?: any;
+  dayCareEntity?: any;
+  // include other services here
+};
 
 const WebSearchPage: FunctionComponent = () => {
+
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+  const [numResultsToShow, setNumResultsToShow] = useState(10);
+  const [businessAverageReviews, setBusinessAverageReviews] = useState<{ [key: number]: number }>({});
+  const [businessReviewsCounts, setBusinessReviewsCounts] = useState<{ [key: number]: number }>({});
+  const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const [selectedDogSize, setSelectedDogSize] = useState<Size | null>(null);
+  const [selectedDogAge, setSelectedDogAge] = useState<Age | null>(null);
+  const [selectedHomeConditions, setSelectedHomeConditions] = useState<HOME_CONDITIONS[]>([]);
+  const [selectedPetsInHome, setSelectedPetsInHome] = useState<PETS_IN_HOME[]>([]);
+  const [selectedReviewScore, setSelectedReviewScore] = useState<number[]>([]);
+  const [sliderRateValue, setSliderRateValue] = useState<number[]>([0, 300]);
+  const [selectedCity, setSelectedCity] = useState<string>('');
+
+  const { userDetails } = useContext(UserContext); // The user details
+  const [hasDog, setHasDog] = useState(false);
+
+  const showMoreResults = () => {
+    setNumResultsToShow(prevNum => prevNum + 5);
+  };
+
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    if (userDetails && userDetails.id) {
+      api.post(`dogs/getByUserId`, { id: userDetails.id })
+        .then(response => {
+          if (response.data) {
+            setHasDog(true);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching dog', error);
+        });
+    }
+  }, [userDetails]);
+
+  useEffect(() => {
+    const fetchBusinesses = async () => {
+      const response = await api.get('/business/all');
+      const data = await response.data;
+      setBusinesses(data);
+      setFilteredBusinesses(data); // Initialize filteredBusinesses with all businesses
+
+      const averageReviews: { [key: number]: number } = {};
+      const reviewsCounts: { [key: number]: number } = {};
+      for (const business of data) {
+        const averageReviewResponse = await api.get(`reviews/business/average/${business.id}`);
+        averageReviews[business.id] = averageReviewResponse.data;
+        const reviewCountResponse = await api.get(`reviews/business/count/${business.id}`);
+        reviewsCounts[business.id] = reviewCountResponse.data;
+      }
+      setBusinessAverageReviews(averageReviews);
+      setBusinessReviewsCounts(reviewsCounts);
+    };
+
+    fetchBusinesses();
+  }, []);
+
+  const filterBusinesses = async () => {
+    let filtered = businesses;
+
+    // Filter by selected service
+    if (selectedServices) {
+      const serviceCheck = {
+        [BUSINESS_TYPES.ALL]: business => business.dogSitterEntity || business.dogWalkerEntity || business.boardingEntity || business.dayCareEntity,
+        [BUSINESS_TYPES.DOG_SITTER]: business => business.dogSitterEntity,
+        [BUSINESS_TYPES.BOARDING]: business => business.boardingEntity,
+        [BUSINESS_TYPES.DAY_CARE]: business => business.dayCareEntity,
+        [BUSINESS_TYPES.DOG_WALK]: business => business.dogWalkerEntity,
+      };
+      const checkService = serviceCheck[selectedServices];
+      if (checkService) filtered = filtered.filter(checkService);
+    }
+
+    // Filter by dog size
+    if (selectedDogSize) {
+      filtered = filtered.filter(business =>
+        [business.dogSitterEntity, business.dogWalkerEntity, business.boardingEntity, business.dayCareEntity]
+          .some(entity => entity && entity.acceptableDogSizes.includes(selectedDogSize))
+      );
+    }
+
+    // Filter by rate
+    if (sliderRateValue[0] > 0 || sliderRateValue[1] < 300) {
+      filtered = filtered.filter(business =>
+        [business.dogSitterEntity, business.dogWalkerEntity, business.boardingEntity, business.dayCareEntity]
+          .some(entity => entity && entity.price >= sliderRateValue[0] && entity.price <= sliderRateValue[1])
+      );
+    }
+
+    // Filter by home conditions
+    if (selectedHomeConditions.length > 0) {
+      filtered = filtered.filter(business =>
+        [business.dogSitterEntity, business.dogWalkerEntity, business.boardingEntity, business.dayCareEntity]
+          .some(entity => entity && entity.homeConditions &&
+            selectedHomeConditions.every(condition => entity.homeConditions.includes(condition))
+          )
+      );
+    }
+
+    // Filter by pets in home
+    if (selectedPetsInHome.length > 0) {
+      filtered = filtered.filter(business =>
+        [business.dogSitterEntity, business.dogWalkerEntity, business.boardingEntity, business.dayCareEntity]
+          .some(entity => entity && entity.petsInHome &&
+            selectedPetsInHome.every(pet => entity.petsInHome.includes(pet))
+          )
+      );
+    }
+
+    // Filter by reviews
+    if (selectedReviewScore.length > 0) {
+      filtered = filtered.filter(business =>
+        selectedReviewScore.includes(Math.floor(businessAverageReviews[business.id]))
+      );
+    }
+
+    // Filter by city
+    if (selectedCity) {
+      const normalizeCityName = (city) => city.replace(/[^a-zA-Z\u0590-\u05FF]/g, '').toLowerCase();
+      const normalizedSelectedCity = normalizeCityName(selectedCity);
+      filtered = filtered.filter(business => normalizeCityName(business.city) === normalizedSelectedCity);
+    }
+
+    // Filter by date availability
+    if (selectedStartDate || selectedEndDate) {
+      const availabilityCheckPromises = filtered.map(async (business) => {
+        try {
+          const startDate = selectedStartDate ? formatDate(selectedStartDate) : '';
+          const endDate = selectedEndDate ? formatDate(selectedEndDate) : startDate;
+
+          if ((selectedServices === BUSINESS_TYPES.BOARDING || selectedServices === BUSINESS_TYPES.ALL) && business.boardingEntity) {
+            const response = await api.post('/appointment/boarding/available-capacity-by-date-range', {
+              startDate,
+              endDate,
+              businessId: business.id,
+            });
+
+            if (response.data && Object.values(response.data).some(capacity => capacity > 0)) {
+              return business;
+            }
+          }
+
+          if ((selectedServices === BUSINESS_TYPES.DAY_CARE || selectedServices === BUSINESS_TYPES.ALL) && business.dayCareEntity) {
+            const response = await api.post('/appointment/day-care/available-capacity-by-date', {
+              date: startDate,
+              businessId: business.id,
+            });
+
+            if (response.data && response.data > 0) {
+              return business;
+            }
+          }
+
+          if ((selectedServices === BUSINESS_TYPES.DOG_SITTER || selectedServices === BUSINESS_TYPES.ALL) && business.dogSitterEntity) {
+            const response = await api.post('/appointment/dog-sitter/available-hours-by-business', {
+              date: startDate,
+              businessId: business.id,
+            });
+
+            if (response.data && response.data.length > 0) {
+              return business;
+            }
+          }
+
+          if ((selectedServices === BUSINESS_TYPES.DOG_WALK || selectedServices === BUSINESS_TYPES.ALL) && business.dogWalkerEntity) {
+            const response = await api.post('/appointment/dog-walker/available-hours-by-business', {
+              date: startDate,
+              businessId: business.id,
+            });
+
+            if (response.data && response.data.length > 0) {
+              return business;
+            }
+          }
+        } catch (error) {
+          console.error(`Error checking availability for business ${business.id}`, error);
+        }
+
+        return null;
+      });
+
+      const availableBusinesses = await Promise.all(availabilityCheckPromises);
+      filtered = availableBusinesses.filter(business => business !== null);
+    }
+
+    // Set the state with the filtered businesses
+    setFilteredBusinesses(filtered);
+  };
+
+
+
+  useEffect(() => {
+    filterBusinesses();
+  }, [selectedServices, selectedStartDate, selectedEndDate, selectedDogSize, businesses, sliderRateValue, selectedHomeConditions, selectedPetsInHome, selectedReviewScore, selectedCity]);
+
   return (
     <Box
       sx={{
@@ -18,7 +240,14 @@ const WebSearchPage: FunctionComponent = () => {
         alignItems: 'start',
       }}
     >
-      <HeroContainer />
+      <HeroContainer setSelectedServices={setSelectedServices} selectedServices={selectedServices}
+        setSelectedDogSize={setSelectedDogSize} selectedDogSize={selectedDogSize}
+        setSelectedDogAge={setSelectedDogAge} selectedDogAge={selectedDogAge}
+        setSelectedCity={setSelectedCity} selectedCity={selectedCity}
+        setSelectedStartDate={setSelectedStartDate} selectedStartDate={selectedStartDate}
+        setSelectedEndDate={setSelectedEndDate} selectedEndDate={selectedEndDate}
+      />
+      {!hasDog && <RegisterYourDogCTA />}
       <Box
         component="main"
         sx={{
@@ -59,18 +288,27 @@ const WebSearchPage: FunctionComponent = () => {
             alignItems: 'start',
             justifyContent: 'start',
             gap: 8,
-            pl: 4, 
+            pl: 4,
             '@media (max-width: 750px)': {
               gap: 4,
-              pl: 2, 
+              pl: 2,
             },
             '@media (max-width: 450px)': {
               gap: 2,
-              pl: 1, 
+              pl: 1,
             },
           }}
         >
-          <FiltersHeader />
+          <FiltersHeader
+            selectedHomeConditions={selectedHomeConditions}
+            setSelectedHomeConditions={setSelectedHomeConditions}
+            selectedPetsInHome={selectedPetsInHome}
+            setSelectedPetsInHome={setSelectedPetsInHome}
+            selectedReviews={selectedReviewScore}
+            setSelectedReviews={setSelectedReviewScore}
+            sliderRateValue={sliderRateValue}
+            setSliderRateValue={setSliderRateValue}
+          />
           <Box
             sx={{
               flex: 1,
@@ -89,10 +327,10 @@ const WebSearchPage: FunctionComponent = () => {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'flex-end', 
+                justifyContent: 'flex-end',
                 gap: 2.5,
-                width: '100%', 
-                paddingRight: '96px', 
+                width: '100%',
+                paddingRight: '96px',
                 '@media (max-width: 450px)': {
                   flexWrap: 'wrap',
                 },
@@ -101,7 +339,7 @@ const WebSearchPage: FunctionComponent = () => {
               <Link
                 to="/map"
                 className="relative flex flex-row items-center justify-center gap-[8px] text-left text-[20px] text-app1 font-inter no-underline" // Increase text size
-                style={{ marginRight: 0 }} 
+                style={{ marginRight: 0 }}
               >
                 <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
                 <b className="relative leading-[150%]">Show on map</b>
@@ -112,7 +350,7 @@ const WebSearchPage: FunctionComponent = () => {
               <Box
                 sx={{
                   width: '100%',
-                  textAlign: 'left', 
+                  textAlign: 'left',
                 }}
               >
                 <Typography
@@ -130,8 +368,16 @@ const WebSearchPage: FunctionComponent = () => {
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, width: '100%' }}>
-                {[...Array(6)].map((_, index) => (
-                  <Card key={index} propFlex="unset" propAlignSelf="stretch" />
+                {filteredBusinesses.slice(0, numResultsToShow).map((business, index) => (
+                  <Card
+                    key={index}
+                    business={business}
+                    businessAverageReview={businessAverageReviews[business.id]}
+                    businessReviewsCount={businessReviewsCounts[business.id]}
+                    propFlex="unset"
+                    propAlignSelf="stretch"
+                    selectedService={selectedServices}  // Pass the selected service here
+                  />
                 ))}
               </Box>
             </Box>
@@ -140,26 +386,27 @@ const WebSearchPage: FunctionComponent = () => {
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <Button
             variant="contained"
+            onClick={showMoreResults}
             sx={{
-              backgroundColor: '#006CBF', 
-              py: 1.5, 
-              px: 3, 
-              borderRadius: '30px', 
+              backgroundColor: '#006CBF',
+              py: 1.5,
+              px: 3,
+              borderRadius: '30px',
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
               whiteSpace: 'nowrap',
-              color: '#FFFFFF', 
+              color: '#FFFFFF',
               '&:hover': {
-                backgroundColor: 'cornflowerblue', 
+                backgroundColor: 'cornflowerblue',
               },
             }}
           >
             <div style={{
-              fontSize: '16px', 
-              fontWeight: 'Bold', 
-              fontFamily: 'Inter', 
+              fontSize: '16px',
+              fontWeight: 'Bold',
+              fontFamily: 'Inter',
               textAlign: 'left',
               display: 'inline-block',
               minWidth: '78px',

@@ -28,7 +28,7 @@ const ServicesContainer: FunctionComponent = () => {
                                         <div className="flex flex-row items-center justify-center py-2 pr-0 pl-2">
                                             <b className="relative leading-[140%]">170</b>
                                             <img className="w-6 relative h-6 overflow-hidden shrink-0" alt="" src="Icon / shekel.svg" />
-                                            <div className="relative text-base leading-[150%] font-medium text-color-neutral-neutral text-right">Per Night</div>
+                                            <div className="relative text-base leading-[150%] font-medium text-color-neutral-neutral text-right">Per Day</div>
                                         </div>
                                     </div>
                                 </div>

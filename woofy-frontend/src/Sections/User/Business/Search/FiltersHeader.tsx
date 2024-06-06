@@ -1,46 +1,92 @@
-import React, { useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Box, Typography, Checkbox, Divider, Slider, Button } from "@mui/material";
+import { HOME_CONDITIONS, PETS_IN_HOME } from "../../../../models/Enums/Enums";
+import { OnlinePrediction } from "@mui/icons-material";
 
-const FiltersHeader: React.FC = () => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [sliderValue, setSliderValue] = useState<number[]>([0, 300]);
+type FiltersHeaderProps = {
+  selectedHomeConditions: HOME_CONDITIONS[];
+  setSelectedHomeConditions: (conditions: HOME_CONDITIONS[]) => void;
+  selectedPetsInHome: PETS_IN_HOME[];
+  setSelectedPetsInHome: (pets: PETS_IN_HOME[]) => void;
+  selectedReviews: number[];
+  setSelectedReviews: (reviews: number[]) => void;
+  sliderRateValue: number[];
+  setSliderRateValue: (value: number[]) => void;
+};
 
-  const handleOptionChange = (option: string) => {
-    setSelectedOptions((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option]
-    );
+
+
+const FiltersHeader: FunctionComponent<FiltersHeaderProps> = ({ selectedHomeConditions, setSelectedHomeConditions, selectedPetsInHome, setSelectedPetsInHome, selectedReviews, setSelectedReviews, sliderRateValue, setSliderRateValue }) => {
+
+  const handleHomeConditionsChange = (condition: HOME_CONDITIONS) => {
+    setSelectedHomeConditions(prevConditions => {
+      if (prevConditions.includes(condition)) {
+        return prevConditions.filter(c => c !== condition);
+      } else {
+        return [...prevConditions, condition];
+      }
+    });
   };
+
+  const handlePetsInHomeChange = (pet: PETS_IN_HOME) => {
+    setSelectedPetsInHome(prevPets => {
+      if (prevPets.includes(pet)) {
+        return prevPets.filter(p => p !== pet);
+      } else {
+        return [...prevPets, pet];
+      }
+    });
+  };
+
+  const handleReviesChange = (score: number) => {
+    setSelectedReviews(prevReviews => {
+      if (prevReviews.includes(score)) {
+        return prevReviews.filter(r => r !== score);
+      } else {
+        return [...prevReviews, score];
+      }
+    });
+  }
+
+  const handleSliderRateChange = (event: any, newValue: number | number[]) => {
+    setSliderRateValue(newValue as number[]);
+  }
+
 
   const clearAll = () => {
-    setSelectedOptions([]);
-    setSliderValue([0, 300]);
+    setSelectedHomeConditions([]);
+    setSelectedPetsInHome([]);
+    setSelectedReviews([]);
+    setSliderRateValue([0, 300]);
   };
 
+
   const options = [
-    "House",
-    "Apartment",
-    "Has Fenced Yard",
-    "Dogs Allowed on Furniture",
-    "Dogs Allowed on Bed",
-    "Non-Smoking",
+    { label: "Home", value: HOME_CONDITIONS.HOME },
+    { label: "Apartment", value: HOME_CONDITIONS.APARTMENT },
+    { label: "Has Fence Yard", value: HOME_CONDITIONS.HAS_FENCE_YARD },
+    { label: "Dog Allowed on Furniture", value: HOME_CONDITIONS.DOG_ALLOWED_ON_FURNITURE },
+    { label: "Dog Allowed on Bed", value: HOME_CONDITIONS.DOG_ALLOWED_ON_BED },
+    { label: "Non-Smoking", value: HOME_CONDITIONS.NON_SMOKING },
   ];
 
   const petsOptions = [
-    "Own a Dog",
-    "Own a Cat",
-    "Own Caged Pets",
-    "Has Children",
-    "Only One Client at a Time",
+    { label: "Own a Dog", value: PETS_IN_HOME.OWN_A_DOG },
+    { label: "Own a Cat", value: PETS_IN_HOME.OWN_A_CAT },
+    { label: "Own Caged Pet", value: PETS_IN_HOME.OWN_CAGED_PET },
+    { label: "Has Children", value: PETS_IN_HOME.HAS_CHILDREN },
+    { label: "Only One Client at a Time", value: PETS_IN_HOME.ONLY_ONE_CLIENT_AT_A_TIME },
   ];
 
-  const reviewOptions = ["5 Stars", "4 Stars", "3 Stars"];
-
+  const reviewOptions = [
+    { label: "5 Stars", value: 5 },
+    { label: "4 Stars", value: 4 },
+    { label: "3 Stars", value: 3 },
+  ];
   return (
     <Box
       sx={{
-        width: '18rem', 
+        width: '18rem',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
@@ -75,7 +121,7 @@ const FiltersHeader: React.FC = () => {
             alignItems: 'start',
             justifyContent: 'space-between',
             gap: '20px',
-            fontSize: '2.5rem', 
+            fontSize: '2.5rem',
             width: '100%',
           }}
         >
@@ -108,7 +154,6 @@ const FiltersHeader: React.FC = () => {
             Clear all
           </Button>
         </Box>
-        <Typography sx={{ lineHeight: '150%', fontSize: '0.875rem' }}>Showing 0 of 100</Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
           <Box
             sx={{
@@ -128,8 +173,8 @@ const FiltersHeader: React.FC = () => {
           </Box>
           <Box sx={{ width: '100%', px: 3 }}>
             <Slider
-              value={sliderValue}
-              onChange={(e, newValue) => setSliderValue(newValue as number[])}
+              value={sliderRateValue}
+              onChange={(e, newValue) => handleSliderRateChange(e, newValue as number[])}
               min={0}
               max={300}
               marks={[
@@ -175,13 +220,13 @@ const FiltersHeader: React.FC = () => {
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: '16px', fontSize: '1rem' }}>
           {options.map((condition) => (
-            <Box key={condition} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Box key={condition.value} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Checkbox
-                checked={selectedOptions.includes(condition)}
-                onChange={() => handleOptionChange(condition)}
+                checked={selectedHomeConditions.includes(condition.value)}
+                onChange={() => handleHomeConditionsChange(condition.value)}
                 sx={{ padding: 0, color: 'rgba(0, 0, 0, 0.54)' }}
               />
-              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{condition}</Typography>
+              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{condition.label}</Typography>
             </Box>
           ))}
         </Box>
@@ -207,13 +252,13 @@ const FiltersHeader: React.FC = () => {
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: '16px', fontSize: '1rem' }}>
           {petsOptions.map((pet) => (
-            <Box key={pet} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Box key={pet.value} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Checkbox
-                checked={selectedOptions.includes(pet)}
-                onChange={() => handleOptionChange(pet)}
+                checked={selectedPetsInHome.includes(pet.value)}
+                onChange={() => handlePetsInHomeChange(pet.value)}
                 sx={{ padding: 0, color: 'rgba(0, 0, 0, 0.54)' }}
               />
-              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{pet}</Typography>
+              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{pet.label}</Typography>
             </Box>
           ))}
         </Box>
@@ -238,14 +283,14 @@ const FiltersHeader: React.FC = () => {
           <Box sx={{ height: '4px', width: '4px', overflow: 'hidden', display: 'none' }} />
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: '16px', fontSize: '1rem' }}>
-          {reviewOptions.map((score) => (
-            <Box key={score} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          {reviewOptions.map((option) => (
+            <Box key={option.value} sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Checkbox
-                checked={selectedOptions.includes(score)}
-                onChange={() => handleOptionChange(score)}
+                checked={selectedReviews.includes(option.value)}
+                onChange={() => handleReviesChange(option.value)}
                 sx={{ padding: 0, color: 'rgba(0, 0, 0, 0.54)' }}
               />
-              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{score}</Typography>
+              <Typography sx={{ lineHeight: '150%', marginLeft: '4px' }}>{option.label}</Typography>
             </Box>
           ))}
         </Box>
