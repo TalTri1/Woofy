@@ -2,7 +2,7 @@ import { FunctionComponent, useContext } from "react";
 import RegisterYourBusinessCTA from "../Sections/User/Business/RegisterYourBusinessCTA";
 import { UserContext } from "../provider/UserProvider";
 import { Box, Typography } from "@mui/material";
-import CustomerUpComingBookings from "../Sections/User/Customer/UpComingBookings/CustomerUpcomingBookingsView";
+import BusinessUpComingBookings from "../Sections/User/Business/UpComingBookings/BusinessUpcomingBookingsView";
 
 const BusinessDashboard: FunctionComponent = () => {
     const { userDetails } = useContext(UserContext); // The user details
@@ -112,7 +112,7 @@ const BusinessDashboard: FunctionComponent = () => {
                     }}
                 >
                     <RegisterYourBusinessCTA />
-                    <CustomerUpComingBookings />
+                    <BusinessUpComingBookings />
                 </Box>
             </main>
         </Box>
