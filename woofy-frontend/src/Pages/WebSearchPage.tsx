@@ -31,7 +31,7 @@ const WebSearchPage: FunctionComponent = () => {
   const [numResultsToShow, setNumResultsToShow] = useState(10);
   const [businessAverageReviews, setBusinessAverageReviews] = useState<{ [key: number]: number }>({});
   const [businessReviewsCounts, setBusinessReviewsCounts] = useState<{ [key: number]: number }>({});
-  const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
+  const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES>(BUSINESS_TYPES.ALL);
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [selectedDogSize, setSelectedDogSize] = useState<Size | null>(null);
