@@ -26,25 +26,15 @@ const CustomerPreviousBookings: FunctionComponent = () => {
         setDisplayedBookings(prev => (prev - 3 < 3 ? 3 : prev - 3));
     };
 
-    const handleCancelBooking = (booking) => {
-        setSelectedBooking(booking);
-        setOpenDialog(true);
-    };
-
-    const handleConfirmCancel = () => {
-        cancelAppointment(selectedBooking.id);
-        setOpenDialog(false);
-        setSelectedBooking(null);
-    };
-
     const handleCloseDialog = () => {
         setOpenDialog(false);
         setSelectedBooking(null);
     };
 
-    const cancelAppointment = (bookingId) => {
-        // Add your API call here to cancel the booking
-        console.log("Cancel booking with ID:", bookingId);
+    const handleConfirmCancel = () => {
+        cancelAppointment(selectedBooking.appointmentId);
+        setOpenDialog(false);
+        setSelectedBooking(null);
     };
 
     useEffect(() => {
@@ -125,9 +115,9 @@ const CustomerPreviousBookings: FunctionComponent = () => {
                 </Box>
 
                 <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
-                     sx={{ alignItems: "center" }}>
+                    sx={{ alignItems: "center" }}>
                     <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                                                selectedServices={selectedServices} />
+                        selectedServices={selectedServices} />
                     <Button
                         onClick={handleViewAll}
                         variant={selectedServices === null ? "contained" : "outlined"}
@@ -173,6 +163,7 @@ const CustomerPreviousBookings: FunctionComponent = () => {
                                 .map(booking => (
                                     <CustomerPastBookingCard
                                         key={booking.id}
+                                        businessId={booking.businessId}
                                         icon={getIconForType(booking.businessType)}
                                         businessType={booking.businessType}
                                         businessName={booking.businessName}
@@ -181,8 +172,8 @@ const CustomerPreviousBookings: FunctionComponent = () => {
                                         date={booking.date}
                                         endDate={booking.endDate}
                                         startTime={booking.startTime}
-                                        profileImage={booking.profileImage}
-                                        onCancel={() => handleCancelBooking(booking)}
+                                        businessProfilePhotoID={booking.businessProfilePhotoID}
+                                        serviceImageIDs={booking.serviceImageIDs}
                                     />
                                 ))}
                         </Box>
@@ -191,13 +182,13 @@ const CustomerPreviousBookings: FunctionComponent = () => {
                     <Box className="flex flex-row gap-5">
                         {displayedBookings < bookings.length && (
                             <Button onClick={handleShowMore} variant="outlined"
-                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                                 Show More
                             </Button>
                         )}
                         {displayedBookings > 3 && (
                             <Button onClick={handleShowLess} variant="outlined"
-                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                                 Show Less
                             </Button>
                         )}
