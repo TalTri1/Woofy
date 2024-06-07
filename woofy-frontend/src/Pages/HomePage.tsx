@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroPage from "../Sections/Home/HeroPage";
 import AboutServicePage from "../Sections/Home/AboutServicePage";
 import TestimonialSection from "../Sections/Home/TestimonialSection";

@@ -342,7 +342,7 @@ const WebSearchPage: FunctionComponent = () => {
                 onClick={() => setMapOpen(true)} // Open the map popup
                 style={{ marginRight: 0 }}
               >
-                <img className="w-8 relative h-10 overflow-hidden shrink-0" alt="Map Pin Icon" src="/public/assets/icons/map-pin.svg" />
+                <img className="w-8 relative h-10 overflow-hidden shrink-0" alt="Map Pin Icon" src="/assets/icons/map-pin.svg" />
                 <b className="relative leading-[150%] text-[20px]">Show on map</b> {/* Increased text size here */}
               </MuiLink>
 

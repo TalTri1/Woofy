@@ -108,7 +108,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
             pt: 10,
             px: 3,
             pb: 1,
-            backgroundImage: 'url(/public/hero-frame@3x.png)',
+            backgroundImage: 'url(/hero-frame@3x.png)',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: '50% 37%',
