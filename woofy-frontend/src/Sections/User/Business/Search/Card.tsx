@@ -119,17 +119,29 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography
-            component="h3"
+          <Button
             sx={{
-              flex: 1,
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '24px',
-              fontWeight: 'bold'
+              textTransform: 'none',
+              padding: 0,
+              minWidth: 'auto',
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
             }}
+            onClick={() => window.open(`/business-profile/${business.id}`, '_blank')}
           >
-            {business.businessName}
-          </Typography>
+            <Typography
+              component="h3"
+              sx={{
+                flex: 1,
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '24px',
+                fontWeight: 'bold',
+              }}
+            >
+              {business.businessName}
+            </Typography>
+          </Button>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <MapIcon />
@@ -138,7 +150,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
               ml: 1,
               fontFamily: 'Inter, sans-serif',
               fontSize: '20px',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             {business.address}, {business.city}
@@ -150,7 +162,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
             sx={{
               fontFamily: 'Inter, sans-serif',
               fontSize: '20px',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             {businessReviewsCount === 0 ? "No reviews yet" : `(${businessAverageReview} stars) • ${businessReviewsCount} reviews`}
@@ -164,7 +176,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
                 mr: 1,
                 fontFamily: 'Inter, sans-serif',
                 fontSize: '24px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}
             >
               {getPrice()}
@@ -199,7 +211,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
                 display: 'inline-block',
                 minWidth: '78px',
               }}>
-                Business Page
+                See Availability
               </div>
             </Button>
           </a>
