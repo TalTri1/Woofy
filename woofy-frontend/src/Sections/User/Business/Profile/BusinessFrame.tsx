@@ -186,6 +186,44 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
                 <Typography variant="h5" fontWeight="bold" style={{ fontSize: '32px' }}>Services</Typography>
               </Box>
             </Box>
+            <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
+              {availableServices.map(service => (
+                <Button
+                  key={service.type}
+                  onClick={() => setSelectedService(service.type)}
+                  variant={selectedService === service.type ? 'contained' : 'outlined'}
+                  color={selectedService === service.type ? 'primary' : 'secondary'}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '8px 16px',
+                    textTransform: 'none',
+                    borderRadius: '30px',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontWeight: 'regular',
+                    color: selectedService === service.type ? 'white' : 'black',
+                    borderColor: selectedService !== service.type ? 'grey.500' : 'primary.main',
+                    backgroundColor: selectedService === service.type ? '#006CBF' : 'transparent',
+                    '&:hover': {
+                      borderColor: selectedService !== service.type ? 'grey.700' : '#006CBF',
+                      backgroundColor: selectedService === service.type ? '#0056A4' : 'transparent',
+                    },
+                  }}
+                >
+                  <Box display="flex" alignItems="center" justifyContent="center" mr={1}>
+                    <img
+                      src={service.icon}
+                      alt={service.text}
+                      className={`icon-${selectedService === service.type ? "white" : "grey"}`}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </Box>
+                  {service.text}
+                </Button>
+              ))}
+            </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
               {business.boardingEntity && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ccc', borderRadius: '16px', p: 2, width: '100%', maxWidth: '600px' }}>
@@ -248,44 +286,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
               </Box>
             </Box>
 
-            <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
-              {availableServices.map(service => (
-                <Button
-                  key={service.type}
-                  onClick={() => setSelectedService(service.type)}
-                  variant={selectedService === service.type ? 'contained' : 'outlined'}
-                  color={selectedService === service.type ? 'primary' : 'secondary'}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '8px 16px',
-                    textTransform: 'none',
-                    borderRadius: '30px',
-                    fontFamily: 'Inter',
-                    fontSize: '16px',
-                    fontWeight: 'regular',
-                    color: selectedService === service.type ? 'white' : 'black',
-                    borderColor: selectedService !== service.type ? 'grey.500' : 'primary.main',
-                    backgroundColor: selectedService === service.type ? '#006CBF' : 'transparent',
-                    '&:hover': {
-                      borderColor: selectedService !== service.type ? 'grey.700' : '#006CBF',
-                      backgroundColor: selectedService === service.type ? '#0056A4' : 'transparent',
-                    },
-                  }}
-                >
-                  <Box display="flex" alignItems="center" justifyContent="center" mr={1}>
-                    <img
-                      src={service.icon}
-                      alt={service.text}
-                      className={`icon-${selectedService === service.type ? "white" : "grey"}`}
-                      style={{ width: 24, height: 24 }}
-                    />
-                  </Box>
-                  {service.text}
-                </Button>
-              ))}
-            </Box>
+
 
             <Box
               display="flex"

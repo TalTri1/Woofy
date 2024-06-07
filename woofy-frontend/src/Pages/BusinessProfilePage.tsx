@@ -108,7 +108,7 @@ const BusinessProfilePage: FunctionComponent = () => {
                     },
                 }}
             >
-               
+
                 <Box>
                     <Grid container spacing={4} justifyContent="center">
                         <Grid item xs={12}>
