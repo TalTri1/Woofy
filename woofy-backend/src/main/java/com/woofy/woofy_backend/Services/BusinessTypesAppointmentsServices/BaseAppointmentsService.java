@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,10 +31,9 @@ public class BaseAppointmentsService {
 
     @Autowired
     private DogWalkerAppointmentRepository dogWalkerAppointmentRepository;
+
     @Autowired
     private CustomerRepository customerRepository;
-
-
 
     public List<GetAppointmentsRequestDTO> findAllAppointmentsByDogId(Integer dogId) {
         List<GetAppointmentsRequestDTO> appointments = new ArrayList<>();
@@ -53,28 +53,33 @@ public class BaseAppointmentsService {
         return appointments;
     }
 
-    private List<GetAppointmentsRequestDTO> mapToDTO(List< ? extends BaseAppointmentEntity> baseAppointmentEntities) {
+    private List<GetAppointmentsRequestDTO> mapToDTO(List<? extends BaseAppointmentEntity> baseAppointmentEntities) {
         List<GetAppointmentsRequestDTO> dtos = new ArrayList<>();
         for (BaseAppointmentEntity baseAppointmentEntity : baseAppointmentEntities) {
             GetAppointmentsRequestDTO dto = new GetAppointmentsRequestDTO();
             BusinessEntity businessEntity = null;
 
             if (baseAppointmentEntity instanceof DayCareAppointmentEntity dayCareAppointmentEntity) {
-                businessEntity = dayCareAppointmentEntity.getDayCareEntity().getBusiness();
-                dto.setBusinessType(BusinessTypeEnum.DAY_CARE);
-            }
-            else if (baseAppointmentEntity instanceof BoardingAppointmentEntity boardingAppointmentEntity) {
-                businessEntity = boardingAppointmentEntity.getBoardingEntity().getBusiness();
-                dto.setBusinessType(BusinessTypeEnum.BOARDING);
-                dto.setEndDate(boardingAppointmentEntity.getEndDate());
-            }
-            else if (baseAppointmentEntity instanceof DogSitterAppointmentEntity dogSitterAppointmentEntity) {
-                businessEntity = dogSitterAppointmentEntity.getDogSitterEntity().getBusiness();
-                dto.setBusinessType(BusinessTypeEnum.DOG_SITTER);
-            }
-            else if (baseAppointmentEntity instanceof DogWalkerAppointmentEntity dogWalkerAppointmentEntity) {
-                businessEntity = dogWalkerAppointmentEntity.getDogWalkerEntity().getBusiness();
-                dto.setBusinessType(BusinessTypeEnum.DOG_WALK);
+                if (dayCareAppointmentEntity.getDayCareEntity() != null) {
+                    businessEntity = dayCareAppointmentEntity.getDayCareEntity().getBusiness();
+                    dto.setBusinessType(BusinessTypeEnum.DAY_CARE);
+                }
+            } else if (baseAppointmentEntity instanceof BoardingAppointmentEntity boardingAppointmentEntity) {
+                if (boardingAppointmentEntity.getBoardingEntity() != null) {
+                    businessEntity = boardingAppointmentEntity.getBoardingEntity().getBusiness();
+                    dto.setBusinessType(BusinessTypeEnum.BOARDING);
+                    dto.setEndDate(boardingAppointmentEntity.getEndDate());
+                }
+            } else if (baseAppointmentEntity instanceof DogSitterAppointmentEntity dogSitterAppointmentEntity) {
+                if (dogSitterAppointmentEntity.getDogSitterEntity() != null) {
+                    businessEntity = dogSitterAppointmentEntity.getDogSitterEntity().getBusiness();
+                    dto.setBusinessType(BusinessTypeEnum.DOG_SITTER);
+                }
+            } else if (baseAppointmentEntity instanceof DogWalkerAppointmentEntity dogWalkerAppointmentEntity) {
+                if (dogWalkerAppointmentEntity.getDogWalkerEntity() != null) {
+                    businessEntity = dogWalkerAppointmentEntity.getDogWalkerEntity().getBusiness();
+                    dto.setBusinessType(BusinessTypeEnum.DOG_WALK);
+                }
             }
 
             if (businessEntity != null) {
@@ -88,7 +93,9 @@ public class BaseAppointmentsService {
                 dto.setDate(baseAppointmentEntity.getDate());
                 dto.setStartTime(baseAppointmentEntity.getStartTime());
                 dto.setEndTime(baseAppointmentEntity.getEndTime());
-                dto.setProfilePhotoID(businessEntity.getProfilePhotoID());
+                dto.setBusinessProfilePhotoID(businessEntity.getProfilePhotoID());
+                dto.setCustomerProfilePhotoID(customerRepository.findByDogId(baseAppointmentEntity.getDogId()).getProfilePhotoID());
+                dto.setServiceImageIDs(businessEntity.getImages().toArray(new Integer[0]));
                 dtos.add(dto);
             }
         }

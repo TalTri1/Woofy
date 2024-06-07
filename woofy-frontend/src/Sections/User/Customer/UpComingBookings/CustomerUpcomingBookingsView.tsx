@@ -32,7 +32,7 @@ const CustomerUpComingBookings: FunctionComponent = () => {
     };
 
     const handleConfirmCancel = () => {
-        cancelAppointment(selectedBooking.id);
+        cancelAppointment(selectedBooking.appointmentId);
         setOpenDialog(false);
         setSelectedBooking(null);
     };
@@ -53,19 +53,25 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 const res = await api.get("appointment/get-all");
                 const bookingsWithImages = await Promise.all(
                     res.data.map(async (booking) => {
-                        if (!booking.profilePhotoID) return {
-                            ...booking,
-                            profileImage: defaultProfilePicture,
-                        };
-                        const profileImage = await getImage(booking.profilePhotoID);
+                        let profileImage = defaultProfilePicture;
+                        try {
+                            if (booking.profilePhotoID) {
+                                profileImage = await getImage(booking.profilePhotoID);
+                            }
+
+                        } catch (error) {
+                            console.error('Error fetching images', error);
+                        }
                         return {
                             ...booking,
                             profileImage,
                         };
                     })
                 );
+
                 const currentDateTime = new Date();
                 const futureBookings = bookingsWithImages.filter(booking => new Date(booking.date) >= currentDateTime);
+                console.log(`Future booking: ${JSON.stringify(futureBookings)}`);
                 setBookings(futureBookings);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
@@ -89,9 +95,9 @@ const CustomerUpComingBookings: FunctionComponent = () => {
             </Box>
 
             <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
-                 sx={{ alignItems: "center" }}>
+                sx={{ alignItems: "center" }}>
                 <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                                            selectedServices={selectedServices} />
+                    selectedServices={selectedServices} />
                 <Button
                     onClick={handleViewAll}
                     variant={selectedServices === null ? "contained" : "outlined"}
@@ -136,16 +142,18 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                             .slice(0, displayedBookings)
                             .map(booking => (
                                 <CustomerUpcomingBookingCard
-                                    key={booking.id}
+                                    key={booking.appointmentId}
                                     icon={getIconForType(booking.businessType)}
                                     businessType={booking.businessType}
                                     businessName={booking.businessName}
+                                    businessId={booking.businessId}
                                     address={booking.address}
                                     city={booking.city}
                                     date={booking.date}
                                     endDate={booking.endDate}
                                     startTime={booking.startTime}
-                                    profileImage={booking.profileImage}
+                                    businessProfilePhotoID={booking.businessProfilePhotoID}
+                                    serviceImageIDs={booking.serviceImageIDs}
                                     onCancel={() => handleCancelBooking(booking)}
                                 />
                             ))}
@@ -155,13 +163,13 @@ const CustomerUpComingBookings: FunctionComponent = () => {
                 <Box className="flex flex-row gap-5">
                     {displayedBookings < bookings.length && (
                         <Button onClick={handleShowMore} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show More
                         </Button>
                     )}
                     {displayedBookings > 3 && (
                         <Button onClick={handleShowLess} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show Less
                         </Button>
                     )}

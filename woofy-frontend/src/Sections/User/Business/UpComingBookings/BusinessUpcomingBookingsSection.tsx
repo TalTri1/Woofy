@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import CustomerUpComingBookings from "../../Customer/UpComingBookings/CustomerUpcomingBookingsView";
 import BusinessUpComingBookings from "./BusinessUpcomingBookingsView";
 
 const BusinessUpcomingBookingsSection: React.FC = () => {
@@ -27,7 +26,7 @@ const BusinessUpcomingBookingsSection: React.FC = () => {
                     gap: '5px',
                     width: '100%',
                     flexWrap: 'wrap',
-                    '@media (min-width: 750px)': {flexWrap: 'wrap'}
+                    '@media (min-width: 750px)': { flexWrap: 'wrap' }
                 }}>
                     <Typography variant="h1" sx={{
                         fontSize: '48px!important',

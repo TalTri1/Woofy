@@ -1,14 +1,14 @@
-import {useAuth} from "../provider/AuthProvider";
+import { useAuth } from "../provider/AuthProvider";
 import Signup from "../Pages/Signup";
 import Registration from "../Pages/Registration";
 import BusinessDashboard from "../Pages/BusinessDashboard";
 import ServiceRegisterView from "../Sections/User/Business/ServicesRegistration/ServiceRegisterView";
 import UserDashboard from "../Pages/UserDashboard";
 import DogRegisterView from "../Sections/User/Customer/DogRegister/DogRegisterView";
-import {USERTYPE} from "../models/RegistrationModel";
-import {UserContext} from "../provider/UserProvider";
-import {Suspense, useContext} from "react";
-import {Outlet, useRoutes} from "react-router-dom";
+import { USERTYPE } from "../models/RegistrationModel";
+import { UserContext } from "../provider/UserProvider";
+import { Suspense, useContext } from "react";
+import { Outlet, useRoutes } from "react-router-dom";
 import LoginPage from "../Pages/Login";
 import DashboardLayout from "../layouts/dashboard";
 import NotFoundPage from "../Pages/PageNotFound";
@@ -28,8 +28,8 @@ import ManageAccountPage from "../Sections/User/UserProfile/ManageAccountView";
 
 
 const Router = () => {
-    const {token} = useAuth();
-    const {userDetails} = useContext(UserContext);
+    const { token } = useAuth();
+    const { userDetails } = useContext(UserContext);
 
 
     // Define public routes accessible to all users
@@ -39,31 +39,31 @@ const Router = () => {
             element: (
                 <DashboardLayout>
                     <Suspense>
-                        <Outlet/>
+                        <Outlet />
                     </Suspense>
                 </DashboardLayout>
             ), // Wrap the component in ProtectedRoute
             children: [
                 {
                     path: "/",
-                    element: <HomePage/>,
+                    element: <HomePage />,
                 },
                 {
 
                     path: "/search-page",
-                    element: <WebSearchPage/>,
+                    element: <WebSearchPage />,
                 },
                 {
                     path: "/map",
-                    element: <MapPage/>,
-                },        {
+                    element: <MapPage />,
+                }, {
                     path: "/business-profile/:id",
-                    element: <BusinessProfilePage/>,
+                    element: <BusinessProfilePage />,
                 },
 
                 {
                     path: "*",
-                    element: <NotFoundPage/>,
+                    element: <NotFoundPage />,
                 },
             ],
         },
@@ -77,30 +77,30 @@ const Router = () => {
             element: (
                 <DashboardLayout>
                     <Suspense>
-                        <Outlet/>
+                        <Outlet />
                     </Suspense>
                 </DashboardLayout>
             ), // Wrap the component in ProtectedRoute
             children: [
                 {
                     path: "/",
-                    element: <BusinessDashboard/>,
+                    element: <BusinessDashboard />,
                 },
                 {
                     path: "/service-register",
-                    element: <ServiceRegisterView/>,
+                    element: <ServiceRegisterView />,
                 },
                 {
                     path: "/services",
-                    element: <ServicesDetails/>,
+                    element: <ServicesDetails />,
                 },
                 {
                     path: "/reviews",
-                    element: <CustomerReviewsView/>,
+                    element: <CustomerReviewsView />,
                 },
                 {
                     path: "/account",
-                    element: <ManageAccountPage/>,
+                    element: <ManageAccountPage />,
                 },
                 {
                     path: "/account/personal-details",
@@ -108,7 +108,7 @@ const Router = () => {
                 },
                 {
                     path: "/bookings",
-                    element: <BusinessUpcomingBookingsSection/>,
+                    element: <BusinessUpcomingBookingsSection />,
                 },
 
 
@@ -122,28 +122,28 @@ const Router = () => {
             element: (
                 <DashboardLayout>
                     <Suspense>
-                        <Outlet/>
+                        <Outlet />
                     </Suspense>
                 </DashboardLayout>),
             children: [
                 {
                     path: "/",
-                    element: <WebSearchPage/>,
+                    element: <WebSearchPage />,
                 },
                 {
                     path: "/bookings",
-                    element: <BusinessUpcomingBookingsSection/>,
+                    element: <CustomerUpComingBookings />,
                 },
                 {
                     path: "/dog-register",
-                    element: <DogRegisterView/>,
+                    element: <DogRegisterView />,
                 }, {
                     path: "/reviews",
-                    element: <CustomerReviewsView/>,
+                    element: <CustomerReviewsView />,
                 },
                 {
                     path: "/account",
-                    element: <ManageAccountPage/>,
+                    element: <ManageAccountPage />,
                 },
                 {
                     path: "/account/personal-details",
@@ -151,7 +151,7 @@ const Router = () => {
                 },
                 {
                     path: "/past-bookings",
-                    element: <CustomerPreviousBookings/>,
+                    element: <CustomerPreviousBookings />,
                 },
 
 
@@ -163,15 +163,15 @@ const Router = () => {
     const routesForNotAuthenticatedOnly = [
         {
             path: "/sign-up",
-            element: <Signup/>,
+            element: <Signup />,
         },
         {
             path: "/registration",
-            element: <Registration/>,
+            element: <Registration />,
         },
         {
             path: "*",
-            element: <LoginPage/>,
+            element: <LoginPage />,
         },
     ];
 
