@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -52,6 +51,8 @@ export default function SignInComponent() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 padding: 3,
+                maxWidth: '100%',
+                overflow: 'hidden',
             }}
         >
             <ThemeProvider theme={theme}>
@@ -59,13 +60,15 @@ export default function SignInComponent() {
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: -53,
+                            marginTop: 4,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             padding: 2.5,
                             borderRadius: 2,
-                            maxWidth: '450px',
+                            maxWidth: '100%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)', // Increased transparency
+                            boxShadow: 3,
                         }}
                     >
                         <Avatar src={woofyLogo} sx={{ width: 100, height: 100 }} />
@@ -78,14 +81,14 @@ export default function SignInComponent() {
                                 fontWeight: 'bold',
                                 color: 'black',
                                 textAlign: 'center',
-                                marginTop: '12px',
-                                marginBottom: '12px',
+                                mt: 2,
+                                mb: 2,
                             }}
                         >
                             Sign in
                         </Typography>
                         <Typography
-                            component="h1"
+                            component="h2"
                             sx={{
                                 fontSize: '16px',
                                 lineHeight: '120%',
@@ -93,12 +96,12 @@ export default function SignInComponent() {
                                 fontWeight: 'regular',
                                 color: 'black',
                                 textAlign: 'center',
-                                marginBottom: '10px',
+                                mb: 2,
                             }}
                         >
                             Welcome back! Sign in here.
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
@@ -145,7 +148,7 @@ export default function SignInComponent() {
                                     mt: 2.5,
                                     mb: 3,
                                     borderRadius: '30px',
-                                    backgroundColor: 'app1',
+                                    backgroundColor: '#006CBF',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -154,14 +157,16 @@ export default function SignInComponent() {
                                     fontSize: '16px',
                                     fontFamily: 'Inter',
                                     fontWeight: '600',
-                                    color: 'text-alternate',
+                                    color: 'white',
                                     textTransform: 'none',
-                                    border: 'none',
+                                    '&:hover': {
+                                        backgroundColor: 'cornflowerblue',
+                                    },
                                 }}
                             >
                                 Sign In
                             </Button>
-                            <Grid container justifyContent="center" sx={{ mt: 4 }}>
+                            <Grid container justifyContent="center" sx={{ mt: 2 }}>
                                 <Grid item>
                                     <Typography
                                         component="span"
@@ -171,6 +176,7 @@ export default function SignInComponent() {
                                             fontWeight: '500',
                                             color: 'black',
                                             textDecoration: 'none',
+                                            display: 'inline',
                                         }}
                                     >
                                         Don't have an account?
@@ -183,8 +189,10 @@ export default function SignInComponent() {
                                             fontFamily: 'Inter',
                                             fontSize: '16px',
                                             fontWeight: 'bold',
-                                            color: 'app1',
+                                            color: '#006CBF',
                                             textDecoration: 'none',
+                                            display: 'inline',
+                                            ml: 1,
                                         }}
                                     >
                                         Sign Up

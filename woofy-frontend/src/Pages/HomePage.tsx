@@ -1,16 +1,37 @@
-import { FunctionComponent } from "react";
+import React, {FunctionComponent} from "react";
+import {Box} from "@mui/material";
 import HeroPage from "../Sections/Home/HeroPage";
 import AboutServicePage from "../Sections/Home/AboutServicePage";
 import TestimonialSection from "../Sections/Home/TestimonialSection";
+import {Helmet} from "react-helmet-async";
 
 const HomePage: FunctionComponent = () => {
-  return (
-    <div className="w-full relative overflow-hidden flex flex-col items-start justify-start leading-[normal] tracking-[normal]">
-      <HeroPage />
-      <AboutServicePage />
-      <TestimonialSection />
-    </div>
-  );
+    return (
+        <>
+            <Helmet>
+                <title> Home </title>
+            </Helmet>
+            <Box
+                sx={{
+                    width: "100%",
+                    position: "relative",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    justifyContent: "start",
+                    lineHeight: "normal",
+                    tracking: "normal",
+                    gap: {xs: 4, md: 8},
+                    p: {xs: 2, md: 4},
+                }}
+            >
+                <HeroPage/>
+                <AboutServicePage/>
+                <TestimonialSection/>
+            </Box>
+        </>
+    );
 };
 
 export default HomePage;

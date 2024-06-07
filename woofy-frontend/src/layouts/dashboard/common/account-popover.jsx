@@ -39,18 +39,8 @@ export default function AccountPopover() {
             path: '/account',
             icon: 'eva:person-fill',
         },
-        {
-            label: 'Settings',
-            path: '/settings',
-            icon: 'eva:settings-2-fill',
-        },
     ];
     const businessNavConfig = [
-        {
-            label: 'Services',
-            path: '/services',
-            icon: <FavoriteBorderIcon/>,
-        },
         {
             label: 'Upcoming Bookings',
             path: '/bookings',
