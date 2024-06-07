@@ -54,7 +54,7 @@ public class DogController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        ;
+
         try {
             dogService.updateDogImages(dogId, imageIds);
         } catch (Exception e) {
@@ -62,5 +62,16 @@ public class DogController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Void> updateDogDetails(@RequestBody DogRegisterRequest dogDTO, Principal principal) {
+        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        try {
+            dogService.updateDogDetails(dogDTO, user.getId());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
