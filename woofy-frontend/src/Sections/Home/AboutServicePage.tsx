@@ -179,7 +179,6 @@ const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
           gap: "32px",
           minWidth: "400px",
           maxWidth: "100%",
-          gap: 2,
         }}
       >
         <Box

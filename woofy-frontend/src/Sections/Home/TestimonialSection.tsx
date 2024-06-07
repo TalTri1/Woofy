@@ -169,7 +169,6 @@ const TestimonialSection: FunctionComponent<TestimonialSectionType> = ({
               justifyContent: "start",
               gap: 4,
               maxWidth: "100%",
-              gap: { xs: 2, md: 4 },
               ml: 3,
             }}
           >
