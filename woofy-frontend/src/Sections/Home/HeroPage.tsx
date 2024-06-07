@@ -1,5 +1,5 @@
-import { FunctionComponent } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import React, { FunctionComponent } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export type HeroPageType = {
@@ -25,6 +25,8 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                 color: 'text-primary',
                 fontFamily: 'text-medium-normal',
                 gap: 2,
+                padding: { xs: 2, md: 4 },
+                overflow: 'hidden',
             }}
             className={className}
         >
@@ -32,10 +34,9 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                 sx={{
                     width: '100%',
                     display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'start',
-                    flexWrap: { lg: 'wrap' },
+                    flexDirection: { xs: 'column', lg: 'row' },
+                    alignItems: { xs: 'center', lg: 'start' },
+                    justifyContent: 'space-between',
                     gap: 2,
                 }}
             >
@@ -44,11 +45,10 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                         flex: 1,
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
+                        alignItems: { xs: 'center', lg: 'start' },
                         justifyContent: 'center',
-                        py: { xs: 8, lg: 16, mq450: 12 },
-                        pr: { lg: 10 },
-                        pl: { lg: 8, mq750: 4, mq1050: 6 },
+                        py: { xs: 8, lg: 16, sm: 12 },
+                        px: { lg: 8, sm: 4, md: 6 },
                         gap: 2,
                         minWidth: { lg: '300px' },
                         maxWidth: '100%',
@@ -63,9 +63,9 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                     textAlign: 'left',
                                     lineHeight: '120%',
                                     fontWeight: 'bold',
-                                    fontSize: '80px',
+                                    fontSize: { xs: '48px', md: '80px' },
                                     fontFamily: 'Inter, sans-serif',
-                                    marginLeft: '100px',
+                                    marginLeft: { xs: '0', lg: '100px' },
                                     marginRight: 'auto',
                                     mb: 1.5,
                                 }}
@@ -82,13 +82,13 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                 sx={{
                                     width: '100%',
                                     textAlign: 'left',
-                                    fontSize: '24px', // text-lg in tailwind
+                                    fontSize: { xs: '18px', md: '24px' },
                                     lineHeight: '150%',
-                                    marginLeft: '100px',
+                                    marginLeft: { xs: '0', lg: '100px' },
                                     marginRight: 'auto',
                                 }}
                             >
-                                <span>Discover trusted dog day cares, overnight </span>
+                                <span>Discover trusted dog day cares, overnight</span>
                                 <br />
                                 <span>boardings, sitters, dog walkers near you.</span>
                                 <br />
@@ -100,7 +100,7 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                     alignItems: 'start',
                                     justifyContent: 'start',
                                     gap: 2.5,
-                                    marginLeft: '100px',
+                                    marginLeft: { xs: '0', lg: '100px' },
                                     marginRight: 'auto',
                                     mt: 4,
                                 }}
@@ -111,7 +111,7 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                         border: 'none',
                                         py: 2,
                                         px: 4,
-                                        backgroundColor: '#006CBF', // app1 color
+                                        backgroundColor: '#006CBF',
                                         borderRadius: '30px',
                                         display: 'flex',
                                         flexDirection: 'row',
@@ -119,7 +119,7 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                         justifyContent: 'center',
                                         textTransform: 'none',
                                         '&:hover': {
-                                            backgroundColor: '#6495ED', // cornflowerblue
+                                            backgroundColor: '#6495ED',
                                         },
                                     }}
                                     onClick={() => navigate('/search-page')}
@@ -172,7 +172,6 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                                         Join Now
                                     </Typography>
                                 </Button>
-
                             </Box>
                         </Box>
                     </Box>
@@ -180,12 +179,11 @@ const HeroPage: FunctionComponent<HeroPageType> = ({ className = "" }) => {
                 <Box
                     component="img"
                     sx={{
-                        height: '995px',
-                        width: '1300px',
+                        height: { xs: 'auto', lg: '995px' },
+                        width: { xs: '100%', lg: '50%' },
                         objectFit: 'cover',
                         flexShrink: 0,
-                        maxWidth: '100%',
-                        display: { lg: 'block' },
+                        display: { xs: 'block', lg: 'block' },
                     }}
                     loading="lazy"
                     alt="Hero"
