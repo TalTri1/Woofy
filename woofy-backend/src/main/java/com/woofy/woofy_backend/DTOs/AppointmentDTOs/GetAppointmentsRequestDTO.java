@@ -1,5 +1,6 @@
 package com.woofy.woofy_backend.DTOs.AppointmentDTOs;
 
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,15 +15,17 @@ import java.time.LocalTime;
 public class GetAppointmentsRequestDTO {
     private Integer appointmentId;
     private Integer businessId;
-    private String BusinessName;
+    private String businessName;
     private Integer userId;
-    private String CustomerName;
-    private BusinessTypeEnum BusinessType;
+    private String customerName;
+    private BusinessTypeEnum businessType;
     private String address;
     private String city;
     private LocalDate date;
-    private LocalDate EndDate;
+    private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
-    private Integer profilePhotoID;
+    private Integer businessProfilePhotoID;
+    private Integer customerProfilePhotoID;
+    private Integer[] serviceImageIDs;
 }

@@ -3,7 +3,6 @@ import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogCo
 import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import BusinessUpcomingBookingCard from "./BusinessUpcomingBookingCard";
-import { getImage } from "../../../../components/image/imageComponent";
 import api from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 
@@ -32,7 +31,7 @@ const BusinessUpComingBookings: FunctionComponent = () => {
     };
 
     const handleConfirmCancel = () => {
-        cancelAppointment(selectedBooking.id);
+        cancelAppointment(selectedBooking.appointmentId);
         setOpenDialog(false);
         setSelectedBooking(null);
     };
@@ -75,6 +74,7 @@ const BusinessUpComingBookings: FunctionComponent = () => {
                 );
                 const currentDateTime = new Date();
                 const futureBookings = bookingsWithDogDetails.filter(booking => new Date(booking.date) >= currentDateTime);
+                console.log(`futureBooking: ${JSON.stringify(futureBookings)}`);
                 setBookings(futureBookings);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
@@ -98,9 +98,9 @@ const BusinessUpComingBookings: FunctionComponent = () => {
             </Box>
 
             <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
-                 sx={{ alignItems: "center" }}>
+                sx={{ alignItems: "center" }}>
                 <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                                            selectedServices={selectedServices} />
+                    selectedServices={selectedServices} />
                 <Button
                     onClick={handleViewAll}
                     variant={selectedServices === null ? "contained" : "outlined"}
@@ -145,15 +145,16 @@ const BusinessUpComingBookings: FunctionComponent = () => {
                             .slice(0, displayedBookings)
                             .map(booking => (
                                 <BusinessUpcomingBookingCard
-                                    key={booking.id}
+                                    key={booking.appointmentId}
                                     icon={getIconForType(booking.businessType)}
                                     businessType={booking.businessType}
                                     customerName={booking.customerName}
                                     date={booking.date}
                                     endDate={booking.endDate}
                                     startTime={booking.startTime}
+                                    customerProfilePhotoID={booking.customerProfilePhotoID}
                                     profileImage={booking.profileImage}
-                                    dogName={booking.dogName}
+                                    dogName={booking.dogDetails.dogName}
                                     dogDetails={booking.dogDetails}
                                     onCancel={() => handleCancelBooking(booking)}
                                 />
@@ -164,13 +165,13 @@ const BusinessUpComingBookings: FunctionComponent = () => {
                 <Box className="flex flex-row gap-5">
                     {displayedBookings < bookings.length && (
                         <Button onClick={handleShowMore} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show More
                         </Button>
                     )}
                     {displayedBookings > 3 && (
                         <Button onClick={handleShowLess} variant="outlined"
-                                className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
                             Show Less
                         </Button>
                     )}
