@@ -31,24 +31,35 @@ public class BusinessController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessRequest request, Principal principal) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        userService.updateUser(user.getId(), request);
-        businessService.updateBusiness(user.getId(), request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            userService.updateUser(user.getId(), request);
+            businessService.updateBusiness(user.getId(), request);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // get all business
     @GetMapping("/all")
     public ResponseEntity<List<BusinessUserSummaryDTO>> getAllUsers() {
-        List<BusinessUserSummaryDTO> users = businessService.getAllBusinessUsersSummary();
-        return ResponseEntity.ok(users);
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<BusinessUserSummaryDTO> getBusiness(@PathVariable Integer id) {
-        BusinessUserSummaryDTO business = businessService.mapToBusinessUserSummaryDTO(businessService.getBusiness(id));
-        return ResponseEntity.ok(business);
+        try {
+            List<BusinessUserSummaryDTO> users = businessService.getAllBusinessUsersSummary();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BusinessUserSummaryDTO> getBusiness(@PathVariable Integer id) {
+        try {
+            BusinessUserSummaryDTO business = businessService.mapToBusinessUserSummaryDTO(businessService.getBusiness(id));
+            return ResponseEntity.ok(business);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @PutMapping("/update/images/")
     public ResponseEntity<Void> updateDogImages(@RequestBody List<Integer> imageIds, Principal principal) {
@@ -59,7 +70,7 @@ public class BusinessController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        ;
+
         try {
             businessService.updateBusinessImages(businessId, imageIds);
         } catch (Exception e) {
@@ -72,7 +83,11 @@ public class BusinessController {
     @DeleteMapping("/delete/")
     public ResponseEntity<Void> deleteBusiness(Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        businessService.deleteBusiness(user.getId());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            businessService.deleteBusiness(user.getId());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
