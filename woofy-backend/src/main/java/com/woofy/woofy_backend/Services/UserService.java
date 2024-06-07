@@ -49,6 +49,14 @@ public class UserService {
             userEntity.setProfilePhotoID(request.getProfilePhotoId());
         }
 
+        if (request.getFirstName() != null) {
+            userEntity.setFirstName(request.getFirstName());
+        }
+
+        if (request.getLastName() != null) {
+            userEntity.setLastName(request.getLastName());
+        }
+
         return userRepository.save(userEntity);
     }
 

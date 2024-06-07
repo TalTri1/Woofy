@@ -31,9 +31,6 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class UserEntity extends BaseEntity implements UserDetails {
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private PictureEntity profilePhoto;
-
     @Email(message = "Email should be valid")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
