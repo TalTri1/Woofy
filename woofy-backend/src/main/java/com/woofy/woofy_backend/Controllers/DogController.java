@@ -3,7 +3,6 @@ package com.woofy.woofy_backend.Controllers;
 import com.woofy.woofy_backend.DTOs.DogDTOs.DogGetDto;
 import com.woofy.woofy_backend.DTOs.DogDTOs.DogRegisterRequest;
 import com.woofy.woofy_backend.Models.Entities.CustomerEntity;
-import com.woofy.woofy_backend.Models.Entities.DogEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Services.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
-// DogController.java
 @RestController
 @RequestMapping("/api/v1/dogs")
 public class DogController {
@@ -38,7 +36,6 @@ public class DogController {
     public Integer createDog(@RequestBody DogRegisterRequest dogDTO, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         return dogService.createDog(dogDTO, user.getId()).getId();
-//        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/delete/")

@@ -20,4 +20,7 @@ public class UpdateUserRequest {
     private String city;
     private String zipCode;
     private Integer profilePhotoId;
+    private String password;
+    private String firstName;
+    private String lastName;
 }

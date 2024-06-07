@@ -35,11 +35,12 @@ public class BusinessService {
         BusinessEntity business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new RuntimeException("Business not found"));
 
-        business.setBusinessName(request.getBusinessName());
-        business.setAbout(request.getAbout());
-        business.setBusinessTypes(request.getBusinessTypes());
-        business.setWebsite(request.getWebsite());
-        business.setSocialMedia(request.getSocialMedia());
+        if (request.getBusinessName() != null) {
+            business.setBusinessName(request.getBusinessName());
+        }
+        if (request.getAbout() != null) {
+            business.setAbout(request.getAbout());
+        }
 
         businessRepository.save(business);
 

@@ -5,6 +5,7 @@ import com.woofy.woofy_backend.DTOs.BusinessDTOs.UpdateBusinessRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Services.BusinessService;
+import com.woofy.woofy_backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,22 @@ import java.util.List;
 @RequestMapping("/api/v1/business")
 public class BusinessController {
 
+    private final UserService userService;
     private final BusinessService businessService;
 
     @Autowired
-    public BusinessController(BusinessService businessService) {
+    public BusinessController(BusinessService businessService, UserService userService ) {
         this.businessService = businessService;
+        this.userService = userService;
     }
+
 
     @PutMapping("/update")
     public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessRequest request, Principal principal) {
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return businessService.updateBusiness(user.getId(), request);
+        userService.updateUser(user.getId(), request);
+        businessService.updateBusiness(user.getId(), request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // get all business
