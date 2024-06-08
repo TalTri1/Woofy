@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, Typography, TextField, Grid, Button, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import { Age, Size, TrainingLevel } from "../../../models/Enums/Enums";
 import { formatEnumValue } from "../../../utils/format-enum-text";
 

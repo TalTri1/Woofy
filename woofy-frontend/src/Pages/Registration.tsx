@@ -1,7 +1,7 @@
 import React, { FormEvent, FunctionComponent, useCallback, useState } from "react";
 import { useLocation } from "react-router-dom";
 import RegistrationView from "../Sections/LoginAndRegister/RegistrationView";
-import api from "../api/api";
+import {api} from "../api/api";
 import RegistrationModel, { USERTYPE } from "../models/RegistrationModel";
 import { useAuth } from "../provider/AuthProvider";
 import { toast } from "react-toastify";

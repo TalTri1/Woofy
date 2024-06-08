@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useMemo, CSSProperties, useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { getImage } from "../../../../components/image/imageComponent";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 
 const MapIcon = (props: any) => (

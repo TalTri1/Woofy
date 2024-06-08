@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserSummaryDTO {
     private Integer id;
+    private String businessName;
     private String firstName;
     private String lastName;
     private String phoneNumber;

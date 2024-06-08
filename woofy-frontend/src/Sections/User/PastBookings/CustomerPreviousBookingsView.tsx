@@ -3,7 +3,7 @@ import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogCo
 import { BUSINESS_TYPES } from "../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../selectButtons/SelectServiceTypeComponent";
 import { getImage } from "../../../components/image/imageComponent";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import defaultProfilePicture from "../../../../public/avatar-image@2x.png";
 import CustomerPastBookingCard from "./CustomerPastBookingCard";
 

@@ -4,7 +4,7 @@ import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import CustomerUpcomingBookingCard from "./CustomerUpcomingBookingCard";
 import { getImage } from "../../../../components/image/imageComponent";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 
 const CustomerUpComingBookings: FunctionComponent = () => {

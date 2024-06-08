@@ -4,7 +4,9 @@ package com.woofy.woofy_backend.Services;
 import com.woofy.woofy_backend.DTOs.AuthenticationDTOs.ChangePasswordRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.UpdateUserRequest;
 import com.woofy.woofy_backend.DTOs.UserDTOs.UserSummaryDTO;
+import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
+import com.woofy.woofy_backend.Models.Enums.RoleEnum;
 import com.woofy.woofy_backend.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,19 +84,10 @@ public class UserService {
 
     public List<UserSummaryDTO> getAllUsersSummary() {
         return userRepository.findAll().stream()
-                .map(user -> new UserSummaryDTO(
-                        user.getId(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getPhoneNumber(),
-                        user.getEmail(),
-                        user.getAddress(),
-                        user.getCity(),
-                        user.getZipCode(),
-                        user.getRole(),
-                        user.getProfilePhotoID()))
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+
     public UserSummaryDTO mapToDTO(UserEntity userEntity) {
         UserSummaryDTO dto = new UserSummaryDTO();
         dto.setId(userEntity.getId());
@@ -107,6 +100,9 @@ public class UserService {
         dto.setZipCode(userEntity.getZipCode());
         dto.setRole(userEntity.getRole());
         dto.setProfilePhotoID(userEntity.getProfilePhotoID());
+        if (userEntity instanceof BusinessEntity businessEntity) {
+            dto.setBusinessName(businessEntity.getBusinessName());
+        }
         return dto;
     }
 

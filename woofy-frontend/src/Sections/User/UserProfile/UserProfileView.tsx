@@ -1,14 +1,46 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Typography, Button, TextField } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
+import {api} from "../../../api/api";
 import UserProfileRow from "./UserProfileRow";
-import { getImage } from "../../../components/image/imageComponent";
+import {getImage} from "../../../components/image/imageComponent";
+import iconify from "../../../components/iconify";
+import {toast} from "react-toastify";
 
-const UserProfileView: FunctionComponent = () => {
+const UserProfileView = () => {
     const { userDetails } = useContext(UserContext);
     const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
+    const [profile, setProfile] = useState({
+        businessName: userDetails?.role === "BUSINESS" ? "" : undefined,
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        address: "",
+        city: "",
+        zipCode: "",
+        email: "",
+        password: "*****",
+        newPassword: "",
+        confirmPassword: "",
+    });
+    const [errors, setErrors] = useState({});
+    const [editingField, setEditingField] = useState("");
 
     useEffect(() => {
+        if (userDetails) {
+            setProfile({
+                businessName: userDetails.businessName || "",
+                firstName: userDetails.firstName,
+                lastName: userDetails.lastName,
+                phoneNumber: userDetails.phoneNumber,
+                address: userDetails.address,
+                city: userDetails.city,
+                zipCode: userDetails.zipCode,
+                email: userDetails.email,
+                password: "*******",
+            });
+        }
+
         const fetchImage = async () => {
             if (userDetails?.profilePhotoID) {
                 const image = await getImage(userDetails.profilePhotoID);
@@ -20,6 +52,93 @@ const UserProfileView: FunctionComponent = () => {
 
         fetchImage();
     }, [userDetails]);
+
+    const validateField = (name, value, profile) => {
+        let error = "";
+        if (!value.trim()) {
+            error = `${name} is required`;
+        } else {
+            switch (name) {
+                case "phoneNumber":
+                    if (!/^\d{10}$/.test(value)) {
+                        error = "Phone number must be 10 digits";
+                    }
+                    break;
+                case "email":
+                    if (!/\S+@\S+\.\S+/.test(value)) {
+                        error = "Email is invalid";
+                    }
+                    break;
+                case "confirmPassword":
+                    if (profile.newPassword !== profile.confirmPassword) {
+                        error = "Passwords do not match";
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setProfile((prevProfile) => {
+            const updatedProfile = { ...prevProfile, [name]: value };
+            validateField(name, value, updatedProfile);
+            return updatedProfile;
+        });
+    };
+
+    const handleSave = async (field) => {
+        try {
+            const dataToUpdate = {};
+            if (field === "name") {
+                dataToUpdate.firstName = profile.firstName;
+                dataToUpdate.lastName = profile.lastName;
+            } else if (field === "password") {
+                await api.patch(`/user/change-password`, {
+                    currentPassword: profile.password,
+                    newPassword: profile.newPassword,
+                    confirmationPassword: profile.confirmPassword,
+                });
+            } else {
+                dataToUpdate[field] = profile[field];
+            }
+
+            if (userDetails.role === "BUSINESS" && field === "businessName") {
+                await api.patch(`/business/update`, { businessName: profile.businessName });
+            } else {
+                await api.patch(`/user/update`, dataToUpdate);
+            }
+
+            setEditingField("");
+            toast.success('Profile updated successfully');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
+
+    const handleEdit = (field) => {
+        if (field === "password") {
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                password: "",
+            }));
+        }
+        setEditingField(field);
+    };
+
+    const handleCancel = (field) => {
+        setEditingField("");
+        if (userDetails) {
+            setProfile({
+                ...profile,
+                [field]: userDetails[field] || "",
+                password: "*******",
+            });
+        }
+    };
 
     return (
         <Box
@@ -57,13 +176,113 @@ const UserProfileView: FunctionComponent = () => {
                 </Box>
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    <UserProfileRow fullNameLabel="Full name" nameSurname={userDetails?.firstName + " " + userDetails?.lastName} />
-                    <UserProfileRow fullNameLabel="Phone Number" nameSurname={userDetails?.phoneNumber} />
-                    <UserProfileRow fullNameLabel="Permanent Address" nameSurname={userDetails?.address} />
-                    <UserProfileRow fullNameLabel="City" nameSurname={userDetails?.city} />
-                    <UserProfileRow fullNameLabel="Zip Code" nameSurname={userDetails?.zipCode} />
-                    <UserProfileRow fullNameLabel="Email Address" nameSurname={userDetails?.email} />
-                    <UserProfileRow fullNameLabel="Password" nameSurname="*******" />
+                    {userDetails?.role === "BUSINESS" && (
+                        <UserProfileRow
+                            fullNameLabel="Business Name"
+                            nameSurname={profile.businessName}
+                            editable={editingField === "businessName"}
+                            name="businessName"
+                            value={profile.businessName}
+                            onChange={handleChange}
+                            onSave={() => handleSave("businessName")}
+                            onCancel={() => handleCancel("businessName")}
+                            error={errors.businessName}
+                            onEdit={() => handleEdit("businessName")}
+                        />
+                    )}
+                    <UserProfileRow
+                        fullNameLabel="Full Name"
+                        nameSurname={`${profile.firstName} ${profile.lastName}`}
+                        editable={editingField === "name"}
+                        firstName={profile.firstName}
+                        lastName={profile.lastName}
+                        onChange={handleChange}
+                        onSave={() => handleSave("name")}
+                        onCancel={() => handleCancel("name")}
+                        firstNameError={errors.firstName}
+                        lastNameError={errors.lastName}
+                        onEdit={() => handleEdit("name")}
+                        isNameField={true}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="Phone Number"
+                        nameSurname={profile.phoneNumber}
+                        editable={editingField === "phoneNumber"}
+                        name="phoneNumber"
+                        value={profile.phoneNumber}
+                        onChange={handleChange}
+                        onSave={() => handleSave("phoneNumber")}
+                        onCancel={() => handleCancel("phoneNumber")}
+                        error={errors.phoneNumber}
+                        onEdit={() => handleEdit("phoneNumber")}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="Permanent Address"
+                        nameSurname={profile.address}
+                        editable={editingField === "address"}
+                        name="address"
+                        value={profile.address}
+                        onChange={handleChange}
+                        onSave={() => handleSave("address")}
+                        onCancel={() => handleCancel("address")}
+                        error={errors.address}
+                        onEdit={() => handleEdit("address")}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="City"
+                        nameSurname={profile.city}
+                        editable={editingField === "city"}
+                        name="city"
+                        value={profile.city}
+                        onChange={handleChange}
+                        onSave={() => handleSave("city")}
+                        onCancel={() => handleCancel("city")}
+                        error={errors.city}
+                        onEdit={() => handleEdit("city")}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="Zip Code"
+                        nameSurname={profile.zipCode}
+                        editable={editingField === "zipCode"}
+                        name="zipCode"
+                        value={profile.zipCode}
+                        onChange={handleChange}
+                        onSave={() => handleSave("zipCode")}
+                        onCancel={() => handleCancel("zipCode")}
+                        error={errors.zipCode}
+                        onEdit={() => handleEdit("zipCode")}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="Email Address"
+                        nameSurname={profile.email}
+                        editable={editingField === "email"}
+                        name="email"
+                        value={profile.email}
+                        onChange={handleChange}
+                        onSave={() => handleSave("email")}
+                        onCancel={() => handleCancel("email")}
+                        error={errors.email}
+                        onEdit={() => handleEdit("email")}
+                    />
+                    <UserProfileRow
+                        fullNameLabel="Password"
+                        nameSurname="********"
+                        editable={editingField === "password"}
+                        name="password"
+                        value={profile.password}
+                        onChange={handleChange}
+                        onSave={() => handleSave("password")}
+                        onCancel={() => handleCancel("password")}
+                        error={errors.password}
+                        newPassword={profile.newPassword}
+                        confirmPassword={profile.confirmPassword}
+                        onNewPasswordChange={handleChange}
+                        onConfirmPasswordChange={handleChange}
+                        newPasswordError={errors.newPassword}
+                        confirmPasswordError={errors.confirmPassword}
+                        onEdit={() => handleEdit("password")}
+                        isPasswordField={true}
+                    />
                 </Box>
             </Box>
         </Box>
