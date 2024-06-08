@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CreateHomestayRequest extends BusinessTypeBaseRequest {
-    private int appointmentLengthInMinutes;
+    private String appointmentLengthInMinutes;
 }
