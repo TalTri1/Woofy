@@ -289,6 +289,44 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <img src="/icon--calendarcheck.svg" alt="calendercheck" style={{ height: 32, width: 32 }} />
           <Typography variant="h5" fontWeight="bold">Availability</Typography>
         </Box>
+        <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
+          {availableServices.map(service => (
+            <Button
+              key={service.type}
+              onClick={() => setSelectedService(service.type)}
+              variant={selectedService === service.type ? 'contained' : 'outlined'}
+              color={selectedService === service.type ? 'primary' : 'secondary'}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '5px 10px',
+                textTransform: 'none',
+                borderRadius: '30px',
+                fontFamily: 'Inter',
+                fontSize: '16px',
+                fontWeight: 'regular',
+                color: selectedService === service.type ? 'white' : 'black',
+                borderColor: selectedService !== service.type ? 'grey.500' : 'primary.main',
+                backgroundColor: selectedService === service.type ? '#006CBF' : 'transparent',
+                '&:hover': {
+                  borderColor: selectedService !== service.type ? 'grey.700' : '#006CBF',
+                  backgroundColor: selectedService === service.type ? '#0056A4' : 'transparent',
+                },
+              }}
+            >
+              <Box display="flex" alignItems="center" justifyContent="center" mr={1}>
+                <img
+                  src={service.icon}
+                  alt={service.text}
+                  className={`icon-${selectedService === service.type ? "white" : "grey"}`}
+                  style={{ width: 24, height: 24 }}
+                />
+              </Box>
+              {service.text}
+            </Button>
+          ))}
+        </Box>
         <Box display="flex" justifyContent="center" mb={4} sx={{ border: 1, borderColor: 'grey.300', borderRadius: '16px', py: 2 }}>
           <BookAnAppointment business={business} selectedService={selectedService} />
         </Box>
