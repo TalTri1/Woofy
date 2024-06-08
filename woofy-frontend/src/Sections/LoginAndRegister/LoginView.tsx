@@ -46,7 +46,6 @@ export default function SignInComponent() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -56,26 +55,26 @@ export default function SignInComponent() {
             }}
         >
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="sm">
+                <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: 4,
+                            position: 'relative',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            padding: 2.5,
+                            padding: { xs: 2, sm: 3, md: 4 },
                             borderRadius: 2,
                             maxWidth: '100%',
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)', // Increased transparency
-                            boxShadow: 3,
+                            backgroundColor: 'rgba(255, 255, 255, 0.6)', // Added background for better readability
+                            boxShadow: 3, // Added shadow for better readability
                         }}
                     >
-                        <Avatar src={woofyLogo} sx={{ width: 100, height: 100 }} />
+                        <Avatar src={woofyLogo} sx={{ width: 80, height: 80, mt: 2 }} />
                         <Typography
                             component="h1"
                             sx={{
-                                fontSize: '36px',
+                                fontSize: { xs: '28px', sm: '32px', md: '36px' },
                                 lineHeight: '120%',
                                 fontFamily: 'Inter',
                                 fontWeight: 'bold',
@@ -90,7 +89,7 @@ export default function SignInComponent() {
                         <Typography
                             component="h2"
                             sx={{
-                                fontSize: '16px',
+                                fontSize: { xs: '14px', sm: '16px' },
                                 lineHeight: '120%',
                                 fontFamily: 'Inter',
                                 fontWeight: 'regular',
@@ -101,7 +100,7 @@ export default function SignInComponent() {
                         >
                             Welcome back! Sign in here.
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
@@ -152,9 +151,9 @@ export default function SignInComponent() {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    py: 1,
-                                    px: 2,
-                                    fontSize: '16px',
+                                    py: { xs: 1, sm: 1.5, md: 2 },
+                                    px: { xs: 2, sm: 3, md: 4 },
+                                    fontSize: { xs: '14px', sm: '16px', md: '18px' },
                                     fontFamily: 'Inter',
                                     fontWeight: '600',
                                     color: 'white',
@@ -172,7 +171,7 @@ export default function SignInComponent() {
                                         component="span"
                                         sx={{
                                             fontFamily: 'Inter',
-                                            fontSize: '16px',
+                                            fontSize: { xs: '14px', sm: '16px' },
                                             fontWeight: '500',
                                             color: 'black',
                                             textDecoration: 'none',
@@ -187,7 +186,7 @@ export default function SignInComponent() {
                                         variant="body2"
                                         sx={{
                                             fontFamily: 'Inter',
-                                            fontSize: '16px',
+                                            fontSize: { xs: '14px', sm: '16px' },
                                             fontWeight: 'bold',
                                             color: '#006CBF',
                                             textDecoration: 'none',

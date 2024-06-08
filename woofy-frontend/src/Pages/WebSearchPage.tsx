@@ -1,15 +1,15 @@
-import React, {FunctionComponent, useContext, useEffect, useState} from "react";
-import {Box, Typography, Button, Link as MuiLink, Dialog, DialogContent, DialogTitle} from "@mui/material";
+import React, { FunctionComponent, useContext, useEffect, useState } from "react";
+import { Box, Typography, Button, Link as MuiLink, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
 import api from "../api/api";
-import {Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size} from "../models/Enums/Enums";
-import {UserContext} from "../provider/UserProvider";
+import { Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
+import { UserContext } from "../provider/UserProvider";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
 import MapComponent from "../layouts/Map/components/MapComponent";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 type Business = {
     id: number;
@@ -43,7 +43,7 @@ const WebSearchPage: FunctionComponent = () => {
     const [selectedCity, setSelectedCity] = useState<string>('');
     const [mapOpen, setMapOpen] = useState(false); // State to control map popup
 
-    const {userDetails} = useContext(UserContext);
+    const { userDetails } = useContext(UserContext);
     const [hasDog, setHasDog] = useState(false);
 
     const showMoreResults = () => {
@@ -59,7 +59,7 @@ const WebSearchPage: FunctionComponent = () => {
 
     useEffect(() => {
         if (userDetails && userDetails.id) {
-            api.post(`dogs/getByUserId`, {id: userDetails.id})
+            api.post(`dogs/getByUserId`, { id: userDetails.id })
                 .then(response => {
                     if (response.data) {
                         setHasDog(true);
@@ -245,19 +245,19 @@ const WebSearchPage: FunctionComponent = () => {
                 }}
             >
                 <HeroContainer setSelectedServices={setSelectedServices} selectedServices={selectedServices}
-                               setSelectedDogSize={setSelectedDogSize} selectedDogSize={selectedDogSize}
-                               setSelectedDogAge={setSelectedDogAge} selectedDogAge={selectedDogAge}
-                               setSelectedCity={setSelectedCity} selectedCity={selectedCity}
-                               setSelectedStartDate={setSelectedStartDate} selectedStartDate={selectedStartDate}
-                               setSelectedEndDate={setSelectedEndDate} selectedEndDate={selectedEndDate}
+                    setSelectedDogSize={setSelectedDogSize} selectedDogSize={selectedDogSize}
+                    setSelectedDogAge={setSelectedDogAge} selectedDogAge={selectedDogAge}
+                    setSelectedCity={setSelectedCity} selectedCity={selectedCity}
+                    setSelectedStartDate={setSelectedStartDate} selectedStartDate={selectedStartDate}
+                    setSelectedEndDate={setSelectedEndDate} selectedEndDate={selectedEndDate}
                 />
-                {!hasDog && <RegisterYourDogCTA/>}
+                {!hasDog && <RegisterYourDogCTA />}
                 <Box
                     component="main"
                     sx={{
                         width: '100%',
                         backgroundColor: 'background-color-primary',
-                        pt: 9,
+                        pt: 5,
                         px: 5,
                         pb: 7.5,
                         gap: 10.5,
@@ -288,7 +288,7 @@ const WebSearchPage: FunctionComponent = () => {
                         sx={{
                             width: '100%',
                             display: 'flex',
-                            flexDirection: {xs: 'column', md: 'row'},
+                            flexDirection: { xs: 'column', md: 'row' },
                             alignItems: 'start',
                             justifyContent: 'start',
                             gap: 8,
@@ -334,7 +334,7 @@ const WebSearchPage: FunctionComponent = () => {
                                     justifyContent: 'flex-end',
                                     gap: 2.5,
                                     width: '100%',
-                                    paddingRight: '555px',
+                                    paddingRight: '45px',
                                     '@media (max-width: 450px)': {
                                         flexWrap: 'wrap',
                                         paddingRight: 0,
@@ -343,14 +343,17 @@ const WebSearchPage: FunctionComponent = () => {
                             >
                                 <MuiLink
                                     component="button"
-                                    className="relative flex flex-row items-center justify-center gap-[8px] text-left text-app1 font-inter no-underline"
+                                    className="relative flex flex-row items-center justify-center gap-[8px] text-left font-inter"
                                     onClick={() => setMapOpen(true)} // Open the map popup
-                                    style={{marginRight: 0}}
+                                    style={{
+                                        marginRight: 0,
+                                        textDecoration: 'none',
+                                        color: '#006CBF',
+                                    }}
                                 >
                                     <img className="w-8 relative h-10 overflow-hidden shrink-0" alt="Map Pin Icon"
-                                         src="/assets/icons/map-pin.svg"/>
-                                    <b className="relative leading-[150%] text-[20px]">Show on
-                                        map</b> {/* Increased text size here */}
+                                        src="/assets/icons/map-pin.svg" />
+                                    <b className="relative leading-[150%] text-[20px]">Show on map</b> {/* Increased text size here */}
                                 </MuiLink>
                             </Box>
 
@@ -381,7 +384,7 @@ const WebSearchPage: FunctionComponent = () => {
                                         Popular Caregivers Nearby
                                     </Typography>
                                 </Box>
-                                <Box sx={{display: 'flex', flexDirection: 'column', gap: 3, width: '100%'}}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, width: '100%' }}>
                                     {filteredBusinesses.slice(0, numResultsToShow).map((business, index) => (
                                         <Card
                                             key={index}
@@ -397,7 +400,7 @@ const WebSearchPage: FunctionComponent = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                         <Button
                             variant="contained"
                             onClick={showMoreResults}
@@ -439,7 +442,7 @@ const WebSearchPage: FunctionComponent = () => {
                 >
                     <DialogTitle>Business Map</DialogTitle>
                     <DialogContent>
-                        <MapComponent businesses={filteredBusinesses}/>
+                        <MapComponent businesses={filteredBusinesses} />
                     </DialogContent>
                 </Dialog>
             </Box>

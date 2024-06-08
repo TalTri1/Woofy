@@ -35,16 +35,16 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
   const [endDateInput, setEndDateInput] = useState<Date | null>(null);
 
   const dogSizes = [
-    { size: Size.SMALL, weight: '2-9 kg' },
-    { size: Size.MEDIUM, weight: '9-22 kg' },
-    { size: Size.LARGE, weight: '22-45 kg' },
-    { size: Size.GIANT, weight: '45 kg +' },
+    { size: 'Small', weight: '2-9 kg' },
+    { size: 'Medium', weight: '9-22 kg' },
+    { size: 'Large', weight: '22-45 kg' },
+    { size: 'Giant', weight: '45 kg +' },
   ];
 
   const dogAges = [
-    { age: Age.PUPPY, years: '0-1 year' },
-    { age: Age.ADULT, years: '2-8 years' },
-    { age: Age.SENIOR, years: '9 years +' },
+    { age: 'Puppy', years: '0-1 year' },
+    { age: 'Adult', years: '2-8 years' },
+    { age: 'Senior', years: '9 years +' },
   ];
 
   const handleDogSizeClick = (size: Size) => {
@@ -105,15 +105,15 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'start',
-            pt: 10,
             px: 3,
             pb: 1,
+            pt: 'calc(20% - 300px)', // Adjust this value to position content between center and bottom
             backgroundImage: 'url(/hero-frame@3x.png)',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: '50% 37%',
             width: '100%',
-            minHeight: '510px',
+            minHeight: '400px',
             position: 'relative',
             '&::before': {
               content: '""',
@@ -132,22 +132,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
             },
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              justifyContent: 'start',
-              maxWidth: '1280px',
-              marginBottom: '24px',
-            }}
-          >
-            <SelectServiceTypeComponentIncludeAll
-              setSelectedServices={setSelectedServices}
-              selectedServices={selectedServices}
-            />
-          </Box>
+          
           <Box
             sx={{
               width: '100%',
@@ -210,6 +195,22 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
 
             </Box>
             <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              justifyContent: 'start',
+              maxWidth: '1280px',
+              marginBottom: '24px',
+            }}
+          >
+            <SelectServiceTypeComponentIncludeAll
+              setSelectedServices={setSelectedServices}
+              selectedServices={selectedServices}
+            />
+          </Box>
+            <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -263,7 +264,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                 value={startDateInput}
                 onChange={(newValue) => setStartDateInput(newValue)}
                 format="dd/MM/yyyy"
-                label="Start Date (DD/MM/YYYY)"
+                label="Start Date"
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -309,13 +310,13 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
               <DatePicker
                 value={endDateInput}
                 onChange={(newValue) => setEndDateInput(newValue)}
-                label="Finish Date (DD/MM/YYYY)"
+                label="End Date"
                 format="dd/MM/yyyy"
                 disabled={selectedServices !== BUSINESS_TYPES.BOARDING}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    placeholder="Finish Date"
+                    placeholder="End Date"
                     fullWidth
                     sx={{
                       '& .MuiOutlinedInput-root': {
@@ -371,6 +372,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                 borderRadius: '0 0 10px 10px',
                 backgroundColor: '#fff',
                 boxShadow: '0 6px 12px rgba(0, 0, 0, 0.02)',
+                mb: 4, // Add space between the end of the box with search button and other content
               }}
             >
               <Box
@@ -562,6 +564,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                 onClick={handleClearAllClick}
                 sx={{
                   backgroundColor: '#FFFFFF', // White background
+                  height: 56, // Match height of Search button
                   py: 1, // Reduced vertical padding
                   px: 2, // Reduced horizontal padding
                   borderRadius: '10px', // Smaller border radius
@@ -577,8 +580,8 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                 }}
               >
                 <div style={{
-                  fontSize: '12px',
-                  fontWeight: 'bold', // Corrected capitalization
+                  fontSize: '16px', // Match font size of Search button text
+                  fontWeight: '550', // Corrected capitalization
                   fontFamily: 'Inter',
                   textAlign: 'left',
                   display: 'inline-block',
@@ -587,7 +590,6 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                   Clear
                 </div>
               </Button>
-
             </Box>
           </Box>
         </Box>
