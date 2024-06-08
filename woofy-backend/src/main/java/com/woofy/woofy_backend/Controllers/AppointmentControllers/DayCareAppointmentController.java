@@ -118,4 +118,30 @@ public class DayCareAppointmentController extends BaseAppointmentController{
         int availableCapacity = schedule.getDayCareEntity().getDogCapacity() - schedule.getCurrentDogCapacity();
         return ResponseEntity.ok(availableCapacity);
     }
+
+    @DeleteMapping("/delete-appointment/{appointmentId}")
+    public ResponseEntity<String> deleteDayCareAppointment(@PathVariable Integer appointmentId) {
+        Optional<DayCareAppointmentEntity> optionalAppointment = dayCareAppointmentRepository.findById(appointmentId);
+
+        if (optionalAppointment.isPresent()) {
+            DayCareAppointmentEntity appointment = optionalAppointment.get();
+            DayCareScheduleEntity schedule = dayCareScheduleRepository.findByDate(appointment.getDate()).orElse(null);
+
+            if (schedule != null) {
+                schedule.setCurrentDogCapacity(schedule.getCurrentDogCapacity() - 1);
+
+                if (schedule.getCurrentDogCapacity() <= 0) {
+                    dayCareScheduleRepository.delete(schedule);
+                } else {
+                    dayCareScheduleRepository.save(schedule);
+                }
+            }
+
+            dayCareAppointmentRepository.delete(appointment);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Appointment deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
+        }
+    }
 }
