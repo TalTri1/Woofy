@@ -134,7 +134,7 @@ const CustomerUpComingBookings: FunctionComponent = () => {
 
             <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
                 <Box
-                    className="self-stretch flex flex-col items-start justify-start border-b border-solid border-text-primary pb-3">
+                    className="self-stretch flex flex-col items-start justify-start border-solid border-text-primary pb-3">
                     <Box
                         className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-solid border-gray-500 pt-7">
                         {bookings
