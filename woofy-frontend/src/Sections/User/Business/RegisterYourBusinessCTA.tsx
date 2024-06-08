@@ -32,7 +32,7 @@ const RegisterYourBusinessCTA: FunctionComponent = () => {
                     alignItems: "start",
                     justifyContent: "start",
                     border: "1px solid",
-                    borderColor: "primary.main",
+                    borderColor: '#006CBF',
                     p: 4,
                 }}
             >

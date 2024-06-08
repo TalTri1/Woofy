@@ -1,9 +1,9 @@
-import React, {FunctionComponent} from "react";
-import {Box} from "@mui/material";
+import React, { FunctionComponent } from "react";
+import { Box } from "@mui/material";
 import HeroPage from "../Sections/Home/HeroPage";
 import AboutServicePage from "../Sections/Home/AboutServicePage";
 import TestimonialSection from "../Sections/Home/TestimonialSection";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 const HomePage: FunctionComponent = () => {
     return (
@@ -22,13 +22,13 @@ const HomePage: FunctionComponent = () => {
                     justifyContent: "start",
                     lineHeight: "normal",
                     tracking: "normal",
-                    gap: {xs: 4, md: 8},
-                    p: {xs: 2, md: 4},
+                    gap: { xs: 2, md: 4 }, // Reduced gap
+                    p: { xs: 2, md: 4 },
                 }}
             >
-                <HeroPage/>
-                <AboutServicePage/>
-                <TestimonialSection/>
+                <HeroPage />
+                <AboutServicePage />
+                <TestimonialSection />
             </Box>
         </>
     );

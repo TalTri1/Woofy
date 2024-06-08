@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { BUSINESS_TYPES } from "../../../models/Enums/Enums";
 import './styles.css'; // Import the CSS file
-import { any } from "prop-types";
 
 type SelectServiceInputProps = {
     setSelectedServices: (type: BUSINESS_TYPES) => void;
@@ -12,7 +11,7 @@ type SelectServiceInputProps = {
 
 const SelectServiceTypeComponentIncludeAll: React.FC<SelectServiceInputProps> = ({ setSelectedServices, selectedServices, labelText }) => {
     const services = [
-        { type: BUSINESS_TYPES.ALL, icon: "/icon--dog.svg", text: "All" },
+        { type: BUSINESS_TYPES.ALL, icon: "/tablerpaw.svg", text: "All Services" },
         { type: BUSINESS_TYPES.BOARDING, icon: "/icon--moon.svg", text: "Boarding" },
         { type: BUSINESS_TYPES.DAY_CARE, icon: "/icon--sun1.svg", text: "Day Care" },
         { type: BUSINESS_TYPES.DOG_SITTER, icon: "/icon--bed.svg", text: "Sitter" },
@@ -48,7 +47,11 @@ const SelectServiceTypeComponentIncludeAll: React.FC<SelectServiceInputProps> = 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            padding: service.type === BUSINESS_TYPES.DOG_SITTER ? '0 8px 0 20px' : 0, // Reduce left padding for Sitter
+                            padding: service.type === BUSINESS_TYPES.DOG_SITTER 
+                                ? '0 8px 0 20px' 
+                                : service.type === BUSINESS_TYPES.ALL 
+                                ? '0 8px 0 1px' 
+                                : 0, // Adjust padding conditionally
                             textTransform: 'none',
                             borderRadius: '30px',
                             fontFamily: 'Inter',
