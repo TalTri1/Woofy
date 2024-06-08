@@ -129,4 +129,31 @@ public class DogWalkerAppointmentController extends BaseAppointmentController{
 
         return ResponseEntity.ok(totalWorkingHours);
     }
+
+    @DeleteMapping("/delete-appointment/{appointmentId}")
+    public ResponseEntity<String> deleteDogWalkerAppointment(@PathVariable int appointmentId) {
+        Optional<DogWalkerAppointmentEntity> optionalAppointment = dogWalkerAppointmentRepository.findById(appointmentId);
+
+        if (optionalAppointment.isPresent()) {
+            DogWalkerAppointmentEntity appointment = optionalAppointment.get();
+            DogWalkerScheduleEntity schedule = dogWalkerScheduleRepository.findByDateAndStartTimeAndEndTime(
+                    appointment.getDate(), appointment.getStartTime(), appointment.getEndTime()).orElse(null);
+
+            if (schedule != null) {
+                schedule.setCurrentDogCapacity(schedule.getCurrentDogCapacity() - 1);
+
+                if (schedule.getCurrentDogCapacity() <= 0) {
+                    dogWalkerScheduleRepository.delete(schedule);
+                } else {
+                    dogWalkerScheduleRepository.save(schedule);
+                }
+            }
+
+            dogWalkerAppointmentRepository.delete(appointment);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Appointment deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
+        }
+    }
 }
