@@ -29,7 +29,7 @@ public class BusinessController {
     }
 
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessRequest request, Principal principal) {
         try {
             UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

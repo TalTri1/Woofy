@@ -25,7 +25,7 @@ export default function Header({ onOpenNav }) {
 
     const renderContent = (
         <>
-            <Box component={RouterLink} to="/" sx={{ mt: 3.5, ml: 4, display: 'inline-block' }}>
+            <Box component={RouterLink} to="/" sx={{ mt: 3.5, ml: { xs: 2, sm: 3, md: 4 }, display: 'inline-block' }}>
                 <Logo />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
@@ -45,59 +45,75 @@ export default function Header({ onOpenNav }) {
                     </Typography>
                 </Stack>
             ) : (
-                <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 1.5 }}>
-                    <Button
-                        onClick={() => navigate("/")}
-                        sx={{
-                            textTransform: 'none',
-                            color: theme.palette.text.primary,
-                            fontSize: '16px',
-                            fontWeight: 'normal',
-                            '&:hover': {
-                                backgroundColor: theme.palette.action.hover,
-                            },
-                        }}
-                    >
-                        Home
-                    </Button>
-                    <Button
-                        onClick={() => navigate("/search-page")}
-                        sx={{
-                            textTransform: 'none',
-                            color: theme.palette.text.primary,
-                            fontSize: '16px',
-                            fontWeight: 'normal',
-                            '&:hover': {
-                                backgroundColor: theme.palette.action.hover,
-                            },
-                        }}
-                    >
-                        Discover
-                    </Button>
-                    <Button
-                        onClick={() => navigate("/sign-up")}
-                        sx={{
-                            textTransform: 'none',
-                            color: theme.palette.text.primary,
-                            fontSize: '16px',
-                            fontWeight: 'bold',
-                            '&:hover': {
-                                backgroundColor: theme.palette.action.hover,
-                            },
-                        }}
-                    >
-                        Become a Caregiver
-                    </Button>
+                <Stack 
+                    direction={{ xs: 'row', sm: 'row', md: 'row' }} 
+                    alignItems={{ xs: 'center', sm: 'center', md: 'center' }} 
+                    spacing={2} 
+                    sx={{ 
+                        mt: 1.5, 
+                        flexWrap: 'nowrap',
+                        ml: { sm: '-30px', md: 0 },  // Shift left on tablets
+                        justifyContent: { xs: 'flex-end', sm: 'flex-end', md: 'flex-end' }  // Right align for mobile
+                    }}
+                >
+                    <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                        <Button
+                            onClick={() => navigate("/Hero-page")}
+                            sx={{
+                                textTransform: 'none',
+                                color: theme.palette.text.primary,
+                                fontSize: { xs: '14px', md: '16px' },
+                                fontWeight: 'normal',
+                                whiteSpace: 'nowrap',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.action.hover,
+                                },
+                            }}
+                        >
+                            Home
+                        </Button>
+                        <Button
+                            onClick={() => navigate("/search-page")}
+                            sx={{
+                                textTransform: 'none',
+                                color: theme.palette.text.primary,
+                                fontSize: { xs: '14px', md: '16px' },
+                                fontWeight: 'normal',
+                                whiteSpace: 'nowrap',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.action.hover,
+                                },
+                            }}
+                        >
+                            Discover
+                        </Button>
+                        <Button
+                            onClick={() => navigate("/sign-up")}
+                            sx={{
+                                textTransform: 'none',
+                                color: theme.palette.text.primary,
+                                fontSize: { xs: '14px', md: '16px' },
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.action.hover,
+                                },
+                            }}
+                        >
+                            Become a Caregiver
+                        </Button>
+                    </Box>
                     <Button
                         variant="outlined"
                         onClick={() => navigate("/sign-up")}
                         sx={{
                             borderColor: '#666666',
                             borderRadius: '30px',
-                            fontSize: '16px',
-                            fontWeight: '600',
+                            fontSize: { xs: '14px', md: '16px' },
+                            fontWeight: '600', 
                             color: 'black',
-                            padding: '8px 24px',
+                            padding: { xs: '6px 20px', md: '8px 24px' },
+                            whiteSpace: 'nowrap',
                             '&:hover': {
                                 backgroundColor: 'grey.200',
                                 borderColor: 'grey.700',
@@ -112,12 +128,13 @@ export default function Header({ onOpenNav }) {
                         sx={{
                             backgroundColor: '#006CBF', // Background color #006CBF
                             borderRadius: '30px', // 30px border radius
-                            fontSize: '16px', // Font size 16px
+                            fontSize: { xs: '14px', md: '16px' }, // Font size 16px
                             fontWeight: '600', // Font weight 600
-                            padding: '8px 24px',
-                            marginLeft: '8px', // Smaller margin to the left
+                            padding: { xs: '6px 20px', md: '8px 24px' },
+                            marginLeft: { xs: 0, sm: '8px' }, // Adjust margin
+                            whiteSpace: 'nowrap',
                             '&:hover': {
-                                backgroundColor: theme.palette.primary.dark,
+                                backgroundColor: '#6495ED', // Same hover color as Discover button
                             },
                         }}
                     >

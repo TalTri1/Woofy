@@ -7,7 +7,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fDate } from '../../../../utils/format-time';
-import api from '../../../../api/api';
+import {api} from '../../../../api/api';
 import { formatEnumValue } from "../../../../utils/format-enum-text";
 import { useNotifications } from "../../../../provider/NotificationContext";
 import { useRouter } from "../../../../routes/hooks";

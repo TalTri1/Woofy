@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useMemo, CSSProperties, useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { getImage } from "../../../../components/image/imageComponent";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 
 const MapIcon = (props: any) => (
@@ -137,6 +137,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
                 fontFamily: 'Inter, sans-serif',
                 fontSize: '24px',
                 fontWeight: 'bold',
+                color: '#006CBF',
               }}
             >
               {business.businessName}
@@ -183,7 +184,8 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
             </Typography>
             <ShekelIcon />
           </Box>
-          <a href={`/business-profile/${business.id}`} target="_blank" rel="noopener noreferrer">
+
+          <a href={`/business-profile/${business.id}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <Button
               variant="contained"
               sx={{
@@ -215,6 +217,7 @@ const Card: FunctionComponent<CardType> = ({ propFlex, propAlignSelf, business, 
               </div>
             </Button>
           </a>
+
         </Box>
       </Box>
     </Box>

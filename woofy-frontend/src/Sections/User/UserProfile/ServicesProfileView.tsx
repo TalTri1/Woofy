@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, Typography, TextField, Grid, Button, Card, CardContent } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import DogSizeInput from "../selectButtons/DogSizeInput";
 import HomeConditionComponent from "../selectButtons/HomeConditionComponent";
 import PetsInHomeComponent from "../selectButtons/PetsInHomeComponent";

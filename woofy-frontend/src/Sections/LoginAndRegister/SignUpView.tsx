@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicSignUpModel from "../../models/UserModels/BasicSignUpModel";
-import api from "../../api/api";
+import {api} from "../../api/api";
 import { toast } from "react-toastify";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -10,34 +10,25 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import woofyLogo from '/assets/logo.png'
+import woofyLogo from '/assets/logo.png';
 import backgroundImage from '/assets/Sign-up-backgroung.jpg';
 
 export default function SignUpModal() {
-
     const navigate = useNavigate();
-
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
-    const [basicSignUpUser, setUserDetails] = useState(
-        new BasicSignUpModel('', '', ''));
-
-    const [errors, setErrors] = useState({
-        email: '',
-        password: '',
-        confirmPassword: '',
-    });
+    const [basicSignUpUser, setUserDetails] = useState(new BasicSignUpModel('', '', ''));
+    const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
 
     const confirmPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value !== basicSignUpUser.password) {
@@ -66,41 +57,23 @@ export default function SignUpModal() {
         }
     };
 
-
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let formErrors = {
-            email: '',
-            password: '',
-            confirmPassword: ''
-        };
+        let formErrors = { email: '', password: '', confirmPassword: '' };
 
-        // Check if any of the fields are empty
-        if (!basicSignUpUser.email) {
-            formErrors.email = 'This field is required';
-        }
-        if (!basicSignUpUser.password) {
-            formErrors.password = 'This field is required';
-        }
-        if (!basicSignUpUser.confirmPassword) {
-            formErrors.confirmPassword = 'This field is required';
-        }
-        // Check if passwords match
-        if (basicSignUpUser.password !== basicSignUpUser.confirmPassword) {
-            formErrors.confirmPassword = 'Passwords do not match';
-        }
+        if (!basicSignUpUser.email) formErrors.email = 'This field is required';
+        if (!basicSignUpUser.password) formErrors.password = 'This field is required';
+        if (!basicSignUpUser.confirmPassword) formErrors.confirmPassword = 'This field is required';
+        if (basicSignUpUser.password !== basicSignUpUser.confirmPassword) formErrors.confirmPassword = 'Passwords do not match';
+
         setErrors(formErrors);
 
-        // Only submit the form if there are no errors
         if (!formErrors.email && !formErrors.password && !formErrors.confirmPassword) {
-            // Make the Axios request
             try {
                 const res = await api.post("auth/check-valid-email", basicSignUpUser);
-                console.log(res.data);
                 navigate("/registration", { state: basicSignUpUser });
             } catch (error) {
-                // pop up that the email is already taken or not valid
                 toast.error("Email is already taken");
                 console.error("Error occurred while registering user: ", error);
             }
@@ -126,30 +99,37 @@ export default function SignUpModal() {
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: -53,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            padding: 2.5,
+                            padding: { xs: 2, sm: 3, md: 4 },
                             borderRadius: 2,
-                            maxWidth: '450px',
-                            transform: 'translateX(-500px)'
+                            maxWidth: { xs: '100%', md: '450px' },
+                            backgroundColor: {
+                                xs: 'rgba(255, 255, 255, 0.7)',
+                                lg: 'rgba(255, 255, 255, 0.3)',
+                            },
+                            boxShadow: 3,
+                            mt: { xs: 4, md: 0 },
+                            mb: { xs: 4, md: 0 },
+                            position: { xs: 'relative', lg: 'fixed' },
+                            left: { lg: '7%' },
+                            top: { lg: 0 }
                         }}
                     >
-
                         <Avatar src={woofyLogo} sx={{ width: 100, height: 100 }} />
 
                         <Typography
                             component="h1"
                             sx={{
-                                fontSize: '36px',
+                                fontSize: { xs: '28px', sm: '32px', md: '36px' },
                                 lineHeight: '120%',
                                 fontFamily: 'Inter',
                                 fontWeight: 'bold',
                                 color: 'black',
                                 textAlign: 'center',
-                                marginTop: '12px',
-                                marginBottom: '12px',
+                                mt: { xs: 2, md: 3 },
+                                mb: { xs: 2, md: 3 },
                             }}
                         >
                             Get Started
@@ -157,13 +137,13 @@ export default function SignUpModal() {
                         <Typography
                             component="h1"
                             sx={{
-                                fontSize: '16px',
+                                fontSize: { xs: '14px', sm: '16px' },
                                 lineHeight: '120%',
                                 fontFamily: 'Inter',
                                 fontWeight: 'regular',
                                 color: 'black',
                                 textAlign: 'center',
-                                marginBottom: '10px',
+                                mb: { xs: 2, md: 3 },
                             }}
                         >
                             Create an Account and Join Us.
@@ -238,7 +218,7 @@ export default function SignUpModal() {
                                     mt: 4,
                                     mb: 3,
                                     borderRadius: '30px',
-                                    backgroundColor: 'app1',
+                                    backgroundColor: '#006CBF',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -247,9 +227,11 @@ export default function SignUpModal() {
                                     fontSize: '16px',
                                     fontFamily: 'Inter',
                                     fontWeight: '600',
-                                    color: 'text-alternate',
+                                    color: 'white',
                                     textTransform: 'none',
-                                    border: 'none',
+                                    '&:hover': {
+                                        backgroundColor: 'cornflowerblue',
+                                    },
                                 }}
                             >
                                 Sign Up
@@ -277,7 +259,7 @@ export default function SignUpModal() {
                                             fontFamily: 'Inter',
                                             fontSize: '16px',
                                             fontWeight: 'bold',
-                                            color: 'app1',
+                                            color: '#006CBF',
                                             textDecoration: 'none',
                                         }}
                                     >

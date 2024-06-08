@@ -7,18 +7,18 @@ export type AboutServicePageType = {
 };
 
 const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
-                                                                       className = "",
-                                                                   }) => {
+    className = "",
+}) => {
     const navigate = useNavigate();
 
     const FrameComponent = ({
-                                className = "",
-                                iconSearch,
-                                heading,
-                                text,
-                                propMinWidth,
-                                propMinWidth1,
-                            }: {
+        className = "",
+        iconSearch,
+        heading,
+        text,
+        propMinWidth,
+        propMinWidth1,
+    }: {
         className?: string;
         iconSearch?: string;
         heading?: string;
@@ -158,7 +158,7 @@ const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
                 flexWrap: "wrap",
                 alignItems: "start",
                 justifyContent: "start",
-                py: { xs: 4, md: 20 },
+                py: { xs: 4, md: 16 },  
                 px: { xs: 2, md: 16 },
                 boxSizing: "border-box",
                 gap: { xs: 4, md: 8 },
@@ -176,7 +176,7 @@ const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
                     flexDirection: "column",
                     alignItems: "start",
                     justifyContent: "start",
-                    gap: { xs: 4, md: 8 },
+                    gap: { xs: 4, md: 4 },  
                     minWidth: { xs: "100%", md: "400px" },
                     maxWidth: "100%",
                 }}
@@ -225,15 +225,15 @@ const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "start",
-                        pt: 4,
+                        pt: 1,  
                         pb: 0,
                     }}
                 >
                     <Button
                         sx={{
                             cursor: 'pointer',
-                            py: 2,
-                            px: 4,
+                            py: { xs: 1.5, md: 2 },
+                            px: { xs: 3, md: 4 },
                             backgroundColor: 'transparent',
                             borderRadius: '30px',
                             display: 'flex',
@@ -245,15 +245,18 @@ const AboutServicePage: FunctionComponent<AboutServicePageType> = ({
                             borderColor: 'grey.500',
                             color: '#444444',
                             '&:hover': {
-                                backgroundColor: 'transparent',
+                                backgroundColor: 'grey.200',
                                 borderColor: 'grey.700',
                             },
+                            minWidth: 'fit-content', // Ensure button maintains its width
+                            whiteSpace: 'nowrap', // Prevent button text from wrapping
+                            fontSize: { xs: '14px', md: '18px' }, // Responsive font size
                         }}
                         onClick={() => navigate('/sign-up')}
                     >
                         <Typography
                             sx={{
-                                fontSize: '18px',
+                                fontSize: { xs: '14px', md: '18px' }, // Responsive font size
                                 lineHeight: '120%',
                                 fontWeight: 'bold',
                                 color: 'black',

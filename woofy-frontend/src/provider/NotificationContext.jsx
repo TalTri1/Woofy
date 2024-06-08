@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from "../api/api";
-
+import { api } from "../api/api";
+import { useAuth } from "./AuthProvider";
 
 // Create the context
 const NotificationContext = createContext();
@@ -10,22 +10,22 @@ export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
+    const { token } = useAuth();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const fetchNotifications = async () => {
+        const fetchNotifications = async () => {
+            if (token) {
                 try {
                     const response = await api.get('/notifications');
                     setNotifications(response.data);
                 } catch (error) {
                     console.error('Error fetching notifications:', error);
                 }
-            };
+            }
+        };
 
-            fetchNotifications();
-        }
-    }, []);
+        fetchNotifications();
+    }, [token]); // Add token as a dependency
 
     const addNotification = async (notification) => {
         try {
