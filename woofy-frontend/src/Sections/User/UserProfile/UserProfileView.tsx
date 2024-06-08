@@ -194,10 +194,17 @@ const UserProfileView = () => {
                     mb: 4,
                     backgroundColor: "#0071c2",
                     color: "white",
-                    py: 4,
+                    py: 8,
                 }}
             >
-                <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: "bold" }}>
+                <Typography variant="h1" sx={{
+                        fontSize: '48px!important',
+                        lineHeight: '120%',
+                        fontFamily: 'inter',
+                        color: 'white',
+                        textAlign: 'center',
+                        position: 'relative'
+                    }}>
                     Personal Details
                 </Typography>
             </Box>
@@ -212,9 +219,42 @@ const UserProfileView = () => {
                     <Button
                         variant="outlined"
                         component="label"
-                        sx={{ ml: 2 }}
+                        sx={{
+                            py: 1,
+                            px: 2,
+                            borderRadius: "30px",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 1,
+                            color: 'black', // Change text color to black
+                            border: '1px solid',
+                            borderColor: 'grey.500',
+                            textTransform: "none",
+                            '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                borderColor: 'grey.700',
+                            },
+                            ml: 2
+                        }}
                     >
-                        Edit photo
+                        <img
+                            src="/manage-button-icon--editalt.svg"
+                            alt=""
+                            style={{ height: "24px", width: "24px" }}
+                        />
+                        <Typography
+                            sx={{
+                                fontSize: "base",
+                                fontFamily: "text.medium.normal",
+                                color: "color.neutral.darker",
+                                textAlign: "left",
+                                minWidth: "30px",
+                            }}
+                        >
+                            Edit photo
+                        </Typography>
                         <input
                             type="file"
                             accept="image/*"
@@ -222,6 +262,7 @@ const UserProfileView = () => {
                             onChange={handleImageChange}
                         />
                     </Button>
+
                     {selectedImage && (
                         <>
                             <Button

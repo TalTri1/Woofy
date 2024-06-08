@@ -176,12 +176,35 @@ const UserProfileRow: FunctionComponent<FullNameRowType> = ({
                             />
                         )}
                         <Box sx={{ display: "flex", gap: 2 }}>
-                            <Button variant="contained" color="primary" onClick={onSave}>
+                        <Button
+                                variant="contained"
+                                onClick={onSave}
+                                sx={{
+                                    backgroundColor: '#006cbf',
+                                    borderRadius: '30px',
+                                    '&:hover': {
+                                        backgroundColor: '#0056a4',
+                                    },
+                                }}
+                            >
                                 Save
                             </Button>
-                            <Button variant="outlined" onClick={onCancel}>
+                            <Button
+                                variant="outlined"
+                                onClick={onCancel}
+                                sx={{
+                                    borderRadius: '30px',
+                                    borderColor: 'grey.500',
+                                    color: 'black', // Optional: make the text color black
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                        borderColor: 'grey.700',
+                                    },
+                                }}
+                            >
                                 Cancel
                             </Button>
+
                         </Box>
                     </>
                 ) : (
@@ -204,15 +227,20 @@ const UserProfileRow: FunctionComponent<FullNameRowType> = ({
                             sx={{
                                 py: 1,
                                 px: 2,
-                                borderRadius: "20px",
+                                borderRadius: "30px",
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 gap: 1,
+                                color: 'black', // Change text color to black
+                                border: '1px solid ',
+                                borderColor: 'grey.500',
+
                                 textTransform: "none",
                                 '&:hover': {
                                     backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                    borderColor: 'grey.700',
                                 },
                             }}
                         >
@@ -233,6 +261,7 @@ const UserProfileRow: FunctionComponent<FullNameRowType> = ({
                                 Edit
                             </Typography>
                         </Button>
+
                     </>
                 )}
             </Box>

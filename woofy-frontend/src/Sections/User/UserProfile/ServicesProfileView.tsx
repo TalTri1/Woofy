@@ -285,22 +285,71 @@ const ServicesProfileView = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    py: 4,
+                    py: 8,
                 }}
             >
-                <Typography
-                    variant="h1"
-                    sx={{ fontSize: "32px", fontWeight: "bold", color: "white" }}
-                >
+                 <Typography variant="h1" sx={{
+                        fontSize: '48px!important',
+                        lineHeight: '120%',
+                        fontFamily: 'inter',
+                        color: 'white',
+                        textAlign: 'center',
+                        position: 'relative'
+                    }}>
                     Services Profile
                 </Typography>
             </Box>
             <Box sx={{ padding: 4, flexGrow: 1, overflowY: 'auto' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? "Cancel" : "Edit"}
-                    </Button>
-                </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Button
+        variant="outlined"
+        onClick={() => setIsEditing(!isEditing)}
+        sx={{
+            py: 1,
+            px: 2,
+            borderRadius: "30px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 1,
+            color: isEditing ? 'black' : '#444444', // Change text color to black when editing
+            border: '1px solid',
+            borderColor: isEditing ? 'grey.500' : 'grey.500',
+            backgroundColor: 'transparent',
+            textTransform: "none",
+            '&:hover': {
+                backgroundColor: isEditing ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+                borderColor: 'grey.700',
+            },
+        }}
+    >
+        {isEditing ? (
+            <>
+                <img
+                    src="/manage-button-icon--editalt.svg"
+                    alt=""
+                    style={{ height: "24px", width: "24px" }}
+                />
+                <Typography
+                    sx={{
+                        fontSize: "base",
+                        fontFamily: "text.medium.normal",
+                        color: "color.neutral.darker",
+                        textAlign: "left",
+                        minWidth: "30px",
+                    }}
+                >
+                    Edit
+                </Typography>
+            </>
+        ) : (
+            "Cancel"
+        )}
+    </Button>
+</Box>
+
+
                 <Box sx={{ marginTop: 4 }}>
                     {business.dogSitterEntity && renderService(business.dogSitterEntity, 'dogSitterEntity')}
                     {business.dogWalkerEntity && renderService(business.dogWalkerEntity, 'dogWalkerEntity')}
@@ -309,9 +358,26 @@ const ServicesProfileView = () => {
                 </Box>
                 {isEditing && (
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-                        <Button variant="contained" color="primary" onClick={handleSave}>
-                            Save Changes
-                        </Button>
+                        <Button
+    variant="contained"
+    color="primary"
+    onClick={handleSave}
+    sx={{
+        borderRadius: '30px',
+        backgroundColor: '#006CBF',
+        '&:hover': {
+            backgroundColor: '#0056A4',
+        },
+        padding: '10px 20px', // Add padding to ensure text stays in one line
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}
+>
+    Save Changes
+</Button>
+
+
                     </Box>
                 )}
             </Box>

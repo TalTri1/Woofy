@@ -69,13 +69,17 @@ const DogProfileView = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    py: 4,
+                    py: 8,
                 }}
             >
-                <Typography
-                    variant="h1"
-                    sx={{ fontSize: "32px", fontWeight: "bold", color: "white" }}
-                >
+                <Typography variant="h1" sx={{
+                        fontSize: '48px!important',
+                        lineHeight: '120%',
+                        fontFamily: 'inter',
+                        color: 'white',
+                        textAlign: 'center',
+                        position: 'relative'
+                    }}>
                     Dog Profile
                 </Typography>
             </Box>

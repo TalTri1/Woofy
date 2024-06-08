@@ -237,7 +237,6 @@ const WebSearchPage: FunctionComponent = () => {
             <Box
                 sx={{
                     width: '100%',
-                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
@@ -259,7 +258,6 @@ const WebSearchPage: FunctionComponent = () => {
                         backgroundColor: 'background-color-primary',
                         pt: 5,
                         px: 5,
-                        pb: 7.5,
                         gap: 10.5,
                         display: 'flex',
                         flexDirection: 'column',
