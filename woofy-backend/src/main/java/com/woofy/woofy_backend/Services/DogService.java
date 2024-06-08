@@ -45,7 +45,6 @@ public class DogService {
 
         DogEntity savedDog = dogRepository.save(dog);
 
-        // Set the saved dog to the customer and save the customer
         customer.setDog(savedDog);
         customerRepository.save(customer);
 
@@ -53,13 +52,11 @@ public class DogService {
     }
 
     public void updateDogDetails(DogRegisterRequest dogDTO, Integer userId) {
-        // Retrieve the dog associated with the user
         DogEntity dog = dogRepository.findByOwner_Id(userId);
         if (dog == null) {
             throw new RuntimeException("Dog not found");
         }
 
-        // Update the dog's details if the corresponding field in the DogRegisterRequest is not null
         if (dogDTO.getDogName() != null) {
             dog.setDogName(dogDTO.getDogName());
         }
@@ -82,7 +79,6 @@ public class DogService {
             dog.setSpecialRequirements(dogDTO.getSpecialRequirements());
         }
 
-        // Save the updated dog back to the database
         dogRepository.save(dog);
     }
 

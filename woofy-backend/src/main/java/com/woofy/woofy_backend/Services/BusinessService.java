@@ -38,9 +38,6 @@ public class BusinessService {
         if (request.getBusinessName() != null) {
             business.setBusinessName(request.getBusinessName());
         }
-        if (request.getAbout() != null) {
-            business.setAbout(request.getAbout());
-        }
 
         businessRepository.save(business);
 

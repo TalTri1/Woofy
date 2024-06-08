@@ -1,10 +1,10 @@
 package com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.DayCareDTOs;
 
-import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.CreateStayAtBusinessRequest;
+import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.CreateOrEditStayAtBusinessRequest;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class CreateDayCareRequest extends CreateStayAtBusinessRequest {
+public class CreateDayCareRequest extends CreateOrEditStayAtBusinessRequest {
 }
 
