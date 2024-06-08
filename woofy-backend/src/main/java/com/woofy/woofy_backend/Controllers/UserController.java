@@ -8,12 +8,14 @@ import com.woofy.woofy_backend.Repositories.UserRepository;
 import com.woofy.woofy_backend.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -21,47 +23,88 @@ import java.util.List;
 public class UserController {
 
     private final UserService service;
+
     @Autowired
     private final UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<UserSummaryDTO> getUser(Principal principal) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        UserSummaryDTO userSummaryDTO = service.mapToDTO(user);
-        return ResponseEntity.ok(userSummaryDTO);
+    public ResponseEntity<?> getUser(Principal principal) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            UserSummaryDTO userSummaryDTO = service.mapToDTO(user);
+            return ResponseEntity.ok(userSummaryDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving user details");
+        }
     }
+
     @PatchMapping("/update")
-    public ResponseEntity<UserEntity> updateUser(@RequestBody UpdateUserRequest request, Principal connectedUser) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        UserEntity updatedUser = service.updateUser(user.getId(), request);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest request, Principal connectedUser) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            UserEntity updatedUser = service.updateUser(user.getId(), request);
+            return ResponseEntity.ok(updatedUser);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user");
+        }
     }
+
     @PatchMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request, Principal connectedUser) {
-        service.changePassword(request, connectedUser);
-        return ResponseEntity.ok().build();
+        try {
+            service.changePassword(request, connectedUser);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error changing password");
+        }
     }
 
-    // get all
     @GetMapping("/all")
-    public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
-        List<UserSummaryDTO> users = service.getAllUsersSummary();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            List<UserSummaryDTO> users = service.getAllUsersSummary();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving users");
+        }
     }
 
-    // get the user full name by id
     @GetMapping("/name/{id}")
-    public ResponseEntity<String> getFullNameById(@PathVariable Integer id) {
-        String fullName = service.getFullNameById(id);
-        return ResponseEntity.ok(fullName);
+    public ResponseEntity<?> getFullNameById(@PathVariable Integer id) {
+        try {
+            String fullName = service.getFullNameById(id);
+            return ResponseEntity.ok(fullName);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving user name");
+        }
     }
 
-    // get the user by id
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
-        UserEntity user = service.getUserById(id);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+        try {
+            UserEntity user = service.getUserById(id);
+            return ResponseEntity.ok(user);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving user details");
+        }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUserByPrincipal(Principal principal) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            service.deleteUserById(user.getId());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user");
+        }
+    }
 }
-
