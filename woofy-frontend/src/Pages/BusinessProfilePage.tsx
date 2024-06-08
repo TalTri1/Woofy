@@ -7,7 +7,7 @@ import { Button, Dialog, Grid, Typography, Container, Box, CircularProgress } fr
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
-import api from "../api/api";
+import {api} from "../api/api";
 
 type RouteParams = Record<string, string | undefined>;
 

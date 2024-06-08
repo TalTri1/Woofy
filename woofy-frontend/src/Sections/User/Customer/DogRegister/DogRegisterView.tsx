@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useContext } from "react";
 import { Box, Button, Container, TextField, Typography, TextareaAutosize } from "@mui/material";
 import { toast } from "react-toastify";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import { UserContext } from "../../../../provider/UserProvider";
 import DogSizeInput from "../../selectButtons/DogSizeInput";
 import SendIcon from '@mui/icons-material/Send';

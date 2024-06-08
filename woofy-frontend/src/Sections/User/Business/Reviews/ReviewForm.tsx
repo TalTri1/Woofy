@@ -8,7 +8,7 @@ import { Box } from '@mui/system';
 import { toast } from 'react-toastify';
 import { useNotifications } from "../../../../provider/NotificationContext";
 import { getImage } from "../../../../components/image/imageComponent";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 
 interface ReviewFormProps {
     businessId: number;

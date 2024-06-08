@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import {UserContext} from "../../../provider/UserProvider";
 import {getImage} from "../../../components/image/imageComponent";
 import {useAuth} from "../../../provider/AuthProvider";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import {toast} from "react-toastify";
 import {RouterLink} from "../../../routes/components";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

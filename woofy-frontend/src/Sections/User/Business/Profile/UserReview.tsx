@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { getImage } from "../../../../components/image/imageComponent";
 import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 
 export type UserReviewType = {
   avatarImage?: string;

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { formatEnumValue } from "../../../utils/format-enum-text";
 import { useRouter } from '../../../routes/hooks';
 import { fetchAverageReviews } from '../../../utils/reviews/reviews';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 
 interface Business {
     id: number;

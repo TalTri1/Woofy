@@ -4,7 +4,7 @@ import Navbar from "../Sections/Home/NavbarPreLogin";
 import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
-import api from "../api/api";
+import {api} from "../api/api";
 import { Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
 import { UserContext } from "../provider/UserProvider";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";

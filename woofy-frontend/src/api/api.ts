@@ -1,20 +1,18 @@
 import axios from 'axios';
 
+
 const api = axios.create({
     baseURL: `${import.meta.env.VITE_BACKEND_IP}/api/v1/`,
 });
 
 // Add a request interceptor
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
+let setAuthToken = token => {
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        delete api.defaults.headers.common['Authorization'];
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+};
 
 // Add a response interceptor
 api.interceptors.response.use(
@@ -46,4 +44,4 @@ api.interceptors.response.use(
     }
 );
 
-export default api;
+export { api, setAuthToken };

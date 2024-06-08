@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState, CSSProperties, useMemo } from "react";
 import { Box, Typography, Grid, Avatar, Divider, Button, Dialog, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import PhoneIcon from '@mui/icons-material/Phone';
+
 import { Business } from "../../../../models/BusinessModels/BusinessModel";
 import { DogSitterModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogSitterModel";
 import { DogWalkerModel } from "../../../../models/BusinessModels/BusinessTypesModels/HomeStay/DogWalkerModel";
@@ -13,7 +13,7 @@ import { useTheme } from '@mui/material/styles';
 import Modal from 'react-modal';
 import { formatEnumValue } from "../../../../utils/format-enum-text";
 import BookAnAppointment from "../Profile/BookAnAppointment";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import { PhoneIphone } from "@mui/icons-material";
 
 interface BusinessFrameProps {

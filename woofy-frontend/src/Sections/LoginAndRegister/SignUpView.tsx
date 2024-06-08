@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicSignUpModel from "../../models/UserModels/BasicSignUpModel";
-import api from "../../api/api";
+import {api} from "../../api/api";
 import { toast } from "react-toastify";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -28,12 +28,7 @@ export default function SignUpModal() {
     };
 
     const [basicSignUpUser, setUserDetails] = useState(new BasicSignUpModel('', '', ''));
-
-    const [errors, setErrors] = useState({
-        email: '',
-        password: '',
-        confirmPassword: '',
-    });
+    const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
 
     const confirmPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value !== basicSignUpUser.password) {
@@ -65,37 +60,20 @@ export default function SignUpModal() {
     const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let formErrors = {
-            email: '',
-            password: '',
-            confirmPassword: ''
-        };
+        let formErrors = { email: '', password: '', confirmPassword: '' };
 
-        // Check if any of the fields are empty
-        if (!basicSignUpUser.email) {
-            formErrors.email = 'This field is required';
-        }
-        if (!basicSignUpUser.password) {
-            formErrors.password = 'This field is required';
-        }
-        if (!basicSignUpUser.confirmPassword) {
-            formErrors.confirmPassword = 'This field is required';
-        }
-        // Check if passwords match
-        if (basicSignUpUser.password !== basicSignUpUser.confirmPassword) {
-            formErrors.confirmPassword = 'Passwords do not match';
-        }
+        if (!basicSignUpUser.email) formErrors.email = 'This field is required';
+        if (!basicSignUpUser.password) formErrors.password = 'This field is required';
+        if (!basicSignUpUser.confirmPassword) formErrors.confirmPassword = 'This field is required';
+        if (basicSignUpUser.password !== basicSignUpUser.confirmPassword) formErrors.confirmPassword = 'Passwords do not match';
+
         setErrors(formErrors);
 
-        // Only submit the form if there are no errors
         if (!formErrors.email && !formErrors.password && !formErrors.confirmPassword) {
-            // Make the Axios request
             try {
                 const res = await api.post("auth/check-valid-email", basicSignUpUser);
-                console.log(res.data);
                 navigate("/registration", { state: basicSignUpUser });
             } catch (error) {
-                // pop up that the email is already taken or not valid
                 toast.error("Email is already taken");
                 console.error("Error occurred while registering user: ", error);
             }
@@ -128,10 +106,10 @@ export default function SignUpModal() {
                             borderRadius: 2,
                             maxWidth: { xs: '100%', md: '450px' },
                             backgroundColor: {
-                                xs: 'rgba(255, 255, 255, 0.7)', 
-                                lg: 'rgba(255, 255, 255, 0.3)', 
+                                xs: 'rgba(255, 255, 255, 0.7)',
+                                lg: 'rgba(255, 255, 255, 0.3)',
                             },
-                            boxShadow: 3, 
+                            boxShadow: 3,
                             mt: { xs: 4, md: 0 },
                             mb: { xs: 4, md: 0 },
                             position: { xs: 'relative', lg: 'fixed' },
