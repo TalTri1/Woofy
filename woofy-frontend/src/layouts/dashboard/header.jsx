@@ -45,7 +45,17 @@ export default function Header({ onOpenNav }) {
                     </Typography>
                 </Stack>
             ) : (
-                <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 1.5 }}>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        mt: 1.5,
+                        flexWrap: { xs: 'wrap', md: 'nowrap' }, // Allow wrapping on smaller screens
+                        justifyContent: { xs: 'center', md: 'flex-end' },
+                        gap: { xs: 1, sm: 2 },
+                    }}
+                >
                     <Button
                         onClick={() => navigate("/")}
                         sx={{
