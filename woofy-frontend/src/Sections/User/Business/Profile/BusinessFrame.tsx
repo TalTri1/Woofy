@@ -129,6 +129,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <Divider />
           <Box sx={{ mt: 0 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+              <img src="/tablerpaw.svg" alt="tablerpaw" style={{ height: 32, width: 32 }} />
               <Typography variant="h5" fontWeight="bold">Services</Typography>
             </Box>
             <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
@@ -285,6 +286,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
       </Box>
       <Box sx={{ mt: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+          <img src="/icon--calendarcheck.svg" alt="calendercheck" style={{ height: 32, width: 32 }} />
           <Typography variant="h5" fontWeight="bold">Availability</Typography>
         </Box>
         <Box display="flex" justifyContent="center" mb={4} sx={{ border: 1, borderColor: 'grey.300', borderRadius: '16px', py: 2 }}>
