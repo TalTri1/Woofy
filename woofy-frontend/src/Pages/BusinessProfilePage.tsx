@@ -6,7 +6,6 @@ import { useRouter } from "../routes/hooks";
 import { Button, Dialog, Grid, Typography, Container, Box, CircularProgress } from "@mui/material";
 import Navbar from "../Sections/Home/NavbarPreLogin";
 import BusinessFrame from "../Sections/User/Business/Profile/BusinessFrame";
-import ReviewForm from "../Sections/User/Business/Reviews/ReviewForm";
 import TestimonialsContainer from "../Sections/User/Business/Profile/TestimonialsContainer";
 import api from "../api/api";
 
@@ -62,66 +61,32 @@ const BusinessProfilePage: FunctionComponent = () => {
         return service ? service.data : null;
     };
 
-    const handleReviewSubmit = (review: string, rating: number) => {
-        console.log('Review submitted:', review, rating);
-    };
-
     return (
         <Box
             sx={{
                 width: '100%',
-                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                overflow: 'hidden',
+                backgroundColor: '#f8f9fa',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'start',
+                alignItems: 'center',
+                pt: 4,
             }}
         >
-            <Box
-                component="main"
-                sx={{
-                    width: '100%',
-                    backgroundColor: 'background-color-primary',
-                    pt: 9,
-                    px: 5,
-                    pb: 7.5,
-                    gap: 10.5,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    boxSizing: 'border-box',
-                    '@media (max-width: 1275px)': {
-                        pt: 3,
-                        pb: 5,
-                    },
-                    '@media (max-width: 750px)': {
-                        gap: 5.25,
-                        px: 2.5,
-                    },
-                    '@media (max-width: 1100px)': {
-                        pt: 2.5,
-                        pb: 3.125,
-                    },
-                    '@media (max-width: 450px)': {
-                        gap: 2.625,
-                        pb: 1.25,
-                    },
-                }}
-            >
-
-                <Box>
-                    <Grid container spacing={4} justifyContent="center">
-                        <Grid item xs={12}>
-                            <BusinessFrame business={business} serviceData={getServiceData()} selectedService={selectedService} setSelectedService={setSelectedService} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TestimonialsContainer businessId={Number(businessId)} />
-                        </Grid>
-                    </Grid>
+            <Container maxWidth="lg">
+                <Box sx={{ mb: 4 }}>
+                    <BusinessFrame
+                        business={business}
+                        serviceData={getServiceData()}
+                        selectedService={selectedService}
+                        setSelectedService={setSelectedService}
+                    />
                 </Box>
-            </Box>
+                <Box sx={{ mb: 4 }}>
+                    <TestimonialsContainer businessId={Number(businessId)} />
+                </Box>
+            </Container>
         </Box>
     );
-}
+};
 
 export default BusinessProfilePage;
