@@ -22,7 +22,7 @@ public class BusinessTypeBaseRequest {
     private List<DogSizeEnum> acceptableDogSizes;
     private BusinessTypeEnum businessTypes;
     private String dogCapacity;
-    private int price;
+    private String price;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;

@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -40,8 +42,10 @@ public class BoardingService {
         }
     }
 
+
     private static @NotNull BoardingEntity editBoardingEntity(CreateOrEditBoardingRequest request, Optional<BoardingEntity> optionalBoardingEntity) {
         BoardingEntity boardingEntity = optionalBoardingEntity.get();
+        //TODO EXTRACT COMMON FIELDS TO BUSINESS TYPE SERVICE
 
         if (request.getHomeConditions() != null) {
             boardingEntity.setHomeConditions(request.getHomeConditions());
@@ -49,12 +53,37 @@ public class BoardingService {
         if (request.getPetsInHome() != null) {
             boardingEntity.setPetsInHome(request.getPetsInHome());
         }
-
         if (request.getDogCapacity() != null) {
             boardingEntity.setDogCapacity(Integer.parseInt(request.getDogCapacity()));
         }
+        if (request.getAcceptableDogSizes() != null) {
+            boardingEntity.setAcceptableDogSizes(request.getAcceptableDogSizes());
+        }
+        if (request.getPrice() != null) {
+            boardingEntity.setPrice(Integer.parseInt(request.getPrice()));
+        }
+        if (request.getStartDate() != null) {
+            boardingEntity.setStartDate(request.getStartDate());
+        }
+        if (request.getEndDate() != null) {
+            boardingEntity.setEndDate(request.getEndDate());
+        }
+        if (request.getStartTime() != null) {
+            boardingEntity.setStartTime(request.getStartTime());
+        }
+        if (request.getEndTime() != null) {
+            boardingEntity.setEndTime(request.getEndTime());
+        }
+        if (request.getWorkingDays() != null) {
+            boardingEntity.setWorkingDays(request.getWorkingDays());
+        }
+        if (request.getAbout() != null) {
+            boardingEntity.setAbout(request.getAbout());
+        }
+
         return boardingEntity;
     }
+
 
     public void deleteBoarding(Integer id) {
         boardingRepository.deleteById(id);

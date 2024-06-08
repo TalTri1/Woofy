@@ -31,6 +31,7 @@ public class DayCareService {
         Optional<DayCareEntity> optionalDayCare = dayCareRepository.findById(id);
         if (optionalDayCare.isPresent()) {
             DayCareEntity dayCareEntity = optionalDayCare.get();
+            //TODO EXTRACT COMMON FIELDS TO BUSINESS TYPE SERVICE
 
             if (request.getHomeConditions() != null) {
                 dayCareEntity.setHomeConditions(request.getHomeConditions());
@@ -40,6 +41,30 @@ public class DayCareService {
             }
             if (request.getDogCapacity() != null) {
                 dayCareEntity.setDogCapacity(Integer.parseInt(request.getDogCapacity()));
+            }
+            if (request.getAcceptableDogSizes() != null) {
+                dayCareEntity.setAcceptableDogSizes(request.getAcceptableDogSizes());
+            }
+            if (request.getPrice() != null) {
+                dayCareEntity.setPrice(Integer.parseInt(request.getPrice()));
+            }
+            if (request.getStartDate() != null) {
+                dayCareEntity.setStartDate(request.getStartDate());
+            }
+            if (request.getEndDate() != null) {
+                dayCareEntity.setEndDate(request.getEndDate());
+            }
+            if (request.getStartTime() != null) {
+                dayCareEntity.setStartTime(request.getStartTime());
+            }
+            if (request.getEndTime() != null) {
+                dayCareEntity.setEndTime(request.getEndTime());
+            }
+            if (request.getWorkingDays() != null) {
+                dayCareEntity.setWorkingDays(request.getWorkingDays());
+            }
+            if (request.getAbout() != null) {
+                dayCareEntity.setAbout(request.getAbout());
             }
             return dayCareRepository.save(dayCareEntity);
         } else {

@@ -5,6 +5,6 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class CreateDogWalkerRequest extends CreateHomestayRequest {
+public class CreateOrUpdateDogWalkerRequest extends CreateHomestayRequest {
 
 }

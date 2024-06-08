@@ -43,7 +43,7 @@ public class BoardingController {
         }
     }
 
-    @PostMapping("/edit")
+    @PutMapping("/edit")
     public ResponseEntity<Void> editBoarding(@RequestBody CreateOrEditBoardingRequest request, Principal principal) {
         try {
             UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

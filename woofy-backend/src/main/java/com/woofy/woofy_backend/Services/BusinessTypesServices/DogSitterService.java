@@ -33,8 +33,57 @@ public class DogSitterService {
         Optional<DogSitterEntity> optionalDogSitter = dogSitterRepository.findById(id);
         if (optionalDogSitter.isPresent()) {
             DogSitterEntity dogSitterEntity = optionalDogSitter.get();
+
+            //TODO EXTRACT COMMON FIELDS TO BUSINESS TYPE SERVICE
             if (request.getAppointmentLengthInMinutes() != null) {
                 dogSitterEntity.setAppointmentLengthInMinutes(Integer.parseInt(request.getAppointmentLengthInMinutes()));
+            }
+            if (request.getAcceptableDogSizes() != null) {
+                dogSitterEntity.setAcceptableDogSizes(request.getAcceptableDogSizes());
+            }
+            if (request.getPrice() != null) {
+                dogSitterEntity.setPrice(Integer.parseInt(request.getPrice()));
+            }
+            if (request.getStartDate() != null) {
+                dogSitterEntity.setStartDate(request.getStartDate());
+            }
+            if (request.getEndDate() != null) {
+                dogSitterEntity.setEndDate(request.getEndDate());
+            }
+            if (request.getStartTime() != null) {
+                dogSitterEntity.setStartTime(request.getStartTime());
+            }
+            if (request.getEndTime() != null) {
+                dogSitterEntity.setEndTime(request.getEndTime());
+            }
+            if (request.getWorkingDays() != null) {
+                dogSitterEntity.setWorkingDays(request.getWorkingDays());
+            }
+            if (request.getAbout() != null) {
+                dogSitterEntity.setAbout(request.getAbout());
+            }if (request.getAcceptableDogSizes() != null) {
+                dogSitterEntity.setAcceptableDogSizes(request.getAcceptableDogSizes());
+            }
+            if (request.getPrice() != null) {
+                dogSitterEntity.setPrice(Integer.parseInt(request.getPrice()));
+            }
+            if (request.getStartDate() != null) {
+                dogSitterEntity.setStartDate(request.getStartDate());
+            }
+            if (request.getEndDate() != null) {
+                dogSitterEntity.setEndDate(request.getEndDate());
+            }
+            if (request.getStartTime() != null) {
+                dogSitterEntity.setStartTime(request.getStartTime());
+            }
+            if (request.getEndTime() != null) {
+                dogSitterEntity.setEndTime(request.getEndTime());
+            }
+            if (request.getWorkingDays() != null) {
+                dogSitterEntity.setWorkingDays(request.getWorkingDays());
+            }
+            if (request.getAbout() != null) {
+                dogSitterEntity.setAbout(request.getAbout());
             }
             return dogSitterRepository.save(dogSitterEntity);
         } else {
