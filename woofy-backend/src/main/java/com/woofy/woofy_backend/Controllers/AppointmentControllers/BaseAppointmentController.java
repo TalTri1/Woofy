@@ -40,5 +40,4 @@ public class BaseAppointmentController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-
 }
