@@ -32,11 +32,11 @@ export default function SignInComponent() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        const rememberMe = (document.getElementById('remember') as HTMLInputElement).checked; // Get the value of the "Remember me" checkbox
         login({
             email: data.get('email') as string,
             password: data.get('password') as string,
-        });
-        router.push("/");
+        }, rememberMe);
     };
 
     return (
@@ -135,7 +135,7 @@ export default function SignInComponent() {
                                 </Grid>
                             </Grid>
                             <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
+                                control={<Checkbox id="remember" value="remember" color="primary" />}
                                 label="Remember me"
                                 sx={{ mt: 2 }}
                             />
