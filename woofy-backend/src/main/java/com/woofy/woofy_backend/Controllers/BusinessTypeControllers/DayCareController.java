@@ -1,6 +1,6 @@
 package com.woofy.woofy_backend.Controllers.BusinessTypeControllers;
 
-import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.DayCareDTOs.CreateDayCareRequest;
+import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.StayAtBusinessDTOs.DayCareDTOs.CreateOrEditDayCareRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.StayAtBusiness.DayCareEntity;
 import com.woofy.woofy_backend.Models.Entities.UserEntity;
 import com.woofy.woofy_backend.Repositories.BusinessTypesRepositories.DayCareRepository;
@@ -20,26 +20,50 @@ public class DayCareController {
 
     @Autowired
     private DayCareService dayCareService;
+
     @Autowired
     private DayCareRepository dayCareRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createDayCare(@RequestBody CreateDayCareRequest request, Principal principal) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        dayCareService.createDayCare(request, user.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> createDayCare(@RequestBody CreateOrEditDayCareRequest request, Principal principal) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            dayCareService.createDayCare(request, user.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteDayCare(Principal principal) {
-        UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        dayCareService.deleteDayCare(user.getId());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            dayCareService.deleteDayCare(user.getId());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<DayCareEntity>> getAllBoardings() {
-        List<DayCareEntity> boardings = dayCareRepository.findAll();
-        return ResponseEntity.ok(boardings);
+        try {
+            List<DayCareEntity> boardings = dayCareRepository.findAll();
+            return ResponseEntity.ok(boardings);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<Void> editDayCare(@RequestBody CreateOrEditDayCareRequest request, Principal principal) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+            dayCareService.editDayCare(request, user.getId());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

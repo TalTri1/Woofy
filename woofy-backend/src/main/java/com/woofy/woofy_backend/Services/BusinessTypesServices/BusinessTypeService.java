@@ -1,11 +1,11 @@
 package com.woofy.woofy_backend.Services.BusinessTypesServices;
 
 import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.BusinessTypeBaseRequest;
+import com.woofy.woofy_backend.DTOs.BusinessTypeDTOs.HomestayDTOs.CreateHomestayRequest;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class BusinessTypeService {
 
         entity.setBusiness(business);
         entity.setAcceptableDogSizes(request.getAcceptableDogSizes());
-        entity.setPrice(request.getPrice());
+        entity.setPrice(Integer.parseInt(request.getPrice()));
         entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
         entity.setStartTime(request.getStartTime());

@@ -8,11 +8,4 @@ import lombok.EqualsAndHashCode;
 @Data
 public class UpdateBusinessRequest extends UpdateUserRequest {
     private String businessName;
-    private String firstName;
-    private String lastName;
-    private String about;
-    private String password;
-    private String address;
-    private String city;
-    private String zipCode;
 }

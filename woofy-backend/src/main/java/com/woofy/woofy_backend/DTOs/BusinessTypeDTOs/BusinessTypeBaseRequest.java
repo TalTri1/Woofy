@@ -21,8 +21,8 @@ public class BusinessTypeBaseRequest {
     @Enumerated(EnumType.STRING)
     private List<DogSizeEnum> acceptableDogSizes;
     private BusinessTypeEnum businessTypes;
-    private int dogCapacity;
-    private int price;
+    private String dogCapacity;
+    private String price;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;

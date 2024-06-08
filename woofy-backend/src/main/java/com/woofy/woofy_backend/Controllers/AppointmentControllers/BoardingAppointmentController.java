@@ -52,7 +52,6 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         LocalDate startDate = newAppointmentRequest.getDate();
         LocalDate endDate = newAppointmentRequest.getEndDate();
 
-        // Check if start date is after end date
         if (startDate.isAfter(endDate)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Start date cannot be after end date");
         }

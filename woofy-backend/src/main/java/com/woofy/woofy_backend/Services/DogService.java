@@ -45,11 +45,41 @@ public class DogService {
 
         DogEntity savedDog = dogRepository.save(dog);
 
-        // Set the saved dog to the customer and save the customer
         customer.setDog(savedDog);
         customerRepository.save(customer);
 
         return savedDog;
+    }
+
+    public void updateDogDetails(DogRegisterRequest dogDTO, Integer userId) {
+        DogEntity dog = dogRepository.findByOwner_Id(userId);
+        if (dog == null) {
+            throw new RuntimeException("Dog not found");
+        }
+
+        if (dogDTO.getDogName() != null) {
+            dog.setDogName(dogDTO.getDogName());
+        }
+        if (dogDTO.getDogBreed() != null) {
+            dog.setDog_breed(dogDTO.getDogBreed());
+        }
+        if (dogDTO.getAge() != null) {
+            dog.setAge(dogDTO.getAge());
+        }
+        if (dogDTO.getSize() != null) {
+            dog.setSize(dogDTO.getSize());
+        }
+        if (dogDTO.getTrainingLevel() != null) {
+            dog.setTrainingLevel(dogDTO.getTrainingLevel());
+        }
+        if (dogDTO.getAbout() != null) {
+            dog.setAbout(dogDTO.getAbout());
+        }
+        if (dogDTO.getSpecialRequirements() != null) {
+            dog.setSpecialRequirements(dogDTO.getSpecialRequirements());
+        }
+
+        dogRepository.save(dog);
     }
 
     public void deleteDog(Integer id) {
