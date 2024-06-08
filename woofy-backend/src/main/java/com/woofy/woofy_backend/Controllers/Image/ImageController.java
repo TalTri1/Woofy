@@ -54,7 +54,21 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @PatchMapping("/image/update/{id}")
+    public ResponseEntity<ImageEntity> updateImage(@PathVariable("id") Integer id, @RequestParam("image") MultipartFile file)
+            throws IOException {
+        Optional<ImageEntity> dbImage = imageRepository.findById(id);
+        if (dbImage.isPresent()) {
+            ImageEntity imageEntity = dbImage.get();
+            imageEntity.setImageName(file.getOriginalFilename());
+            imageEntity.setType(file.getContentType());
+            imageEntity.setPicByte(ImageUtility.compressImage(file.getBytes()));
+            ImageEntity updatedImage = imageRepository.save(imageEntity);
+            return ResponseEntity.ok(updatedImage);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     // Delete image by id if exists
     @DeleteMapping("/image/delete/{id}")
     public ResponseEntity<?> deleteImage(@PathVariable("id") Integer id) {

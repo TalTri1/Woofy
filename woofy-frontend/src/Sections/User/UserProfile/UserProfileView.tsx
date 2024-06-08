@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
-import {api} from "../../../api/api";
+import { api } from "../../../api/api";
 import UserProfileRow from "./UserProfileRow";
-import {getImage} from "../../../components/image/imageComponent";
-import iconify from "../../../components/iconify";
-import {toast} from "react-toastify";
+import { getImage } from "../../../components/image/imageComponent";
+import { toast } from "react-toastify";
 
 const UserProfileView = () => {
     const { userDetails } = useContext(UserContext);
@@ -25,6 +24,8 @@ const UserProfileView = () => {
     });
     const [errors, setErrors] = useState({});
     const [editingField, setEditingField] = useState("");
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [originalImageSrc, setOriginalImageSrc] = useState("");
 
     useEffect(() => {
         if (userDetails) {
@@ -45,8 +46,10 @@ const UserProfileView = () => {
             if (userDetails?.profilePhotoID) {
                 const image = await getImage(userDetails.profilePhotoID);
                 setImageSrc(image);
+                setOriginalImageSrc(image);
             } else {
                 setImageSrc('/default-avatar-image@2x.png');
+                setOriginalImageSrc('/default-avatar-image@2x.png');
             }
         };
 
@@ -116,6 +119,8 @@ const UserProfileView = () => {
             toast.success('Profile updated successfully');
         } catch (error) {
             console.error('Error updating profile:', error);
+            toast.error(error.response.data.message|| 'Failed to update profile');
+
         }
     };
 
@@ -138,6 +143,40 @@ const UserProfileView = () => {
                 password: "*******",
             });
         }
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageURL = URL.createObjectURL(file);
+            setImageSrc(imageURL);
+            setSelectedImage(file);
+        }
+    };
+
+    const handleImageSave = async () => {
+        if (selectedImage && userDetails.profilePhotoID) {
+            const formData = new FormData();
+            formData.append('image', selectedImage);
+            try {
+                await api.patch(`/image/update/${userDetails.profilePhotoID}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                setOriginalImageSrc(imageSrc); // Update original image src to the new one
+                setSelectedImage(null);
+                toast.success('Profile photo updated successfully');
+            } catch (error) {
+                console.error('Error updating profile photo:', error);
+                toast.error('Failed to update profile photo');
+            }
+        }
+    };
+
+    const handleImageCancel = () => {
+        setImageSrc(originalImageSrc);
+        setSelectedImage(null);
     };
 
     return (
@@ -170,9 +209,37 @@ const UserProfileView = () => {
                         alt="User Avatar"
                         style={{ height: "100px", width: "100px", borderRadius: "50%" }}
                     />
-                    <Button variant="outlined" sx={{ ml: 2 }}>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{ ml: 2 }}
+                    >
                         Edit photo
+                        <input
+                            type="file"
+                            accept="image/*"
+                            hidden
+                            onChange={handleImageChange}
+                        />
                     </Button>
+                    {selectedImage && (
+                        <>
+                            <Button
+                                variant="contained"
+                                sx={{ ml: 2 }}
+                                onClick={handleImageSave}
+                            >
+                                Save photo
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{ ml: 2 }}
+                                onClick={handleImageCancel}
+                            >
+                                Cancel
+                            </Button>
+                        </>
+                    )}
                 </Box>
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
