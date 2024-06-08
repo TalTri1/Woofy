@@ -5,6 +5,6 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class CreateDayCareRequest extends CreateOrEditStayAtBusinessRequest {
+public class CreateOrEditDayCareRequest extends CreateOrEditStayAtBusinessRequest {
 }
 

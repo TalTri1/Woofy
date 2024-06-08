@@ -5,7 +5,6 @@ import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessEntity;
 import com.woofy.woofy_backend.Models.Entities.BusinessEntities.BusinessTypesEntities.BusinessTypeBaseEntity;
 import com.woofy.woofy_backend.Models.Enums.BusinessTypeEnum;
 import com.woofy.woofy_backend.Repositories.BusinessRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
