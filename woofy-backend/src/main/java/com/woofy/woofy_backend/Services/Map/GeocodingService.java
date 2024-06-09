@@ -23,6 +23,7 @@ public class GeocodingService extends LoggingService {
 
     public GeoLocation geocodeAddress(String address) {
         String url = String.format(NOMINATIM_URL, address);
+        url = url.replace("\"", "");
         ResponseEntity<List<GeoLocation>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
