@@ -10,7 +10,7 @@ export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
-    const { token } = useAuth();
+    const { isLoggedIn, token } = useAuth();
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -23,9 +23,10 @@ export const NotificationProvider = ({ children }) => {
                 }
             }
         };
-
-        fetchNotifications();
-    }, [token]); // Add token as a dependency
+        if (isLoggedIn && token) {
+            fetchNotifications();
+        }
+    }, [token]);
 
     const addNotification = async (notification) => {
         try {
