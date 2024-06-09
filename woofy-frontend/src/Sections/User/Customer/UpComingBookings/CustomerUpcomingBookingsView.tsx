@@ -4,7 +4,7 @@ import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import CustomerUpcomingBookingCard from "./CustomerUpcomingBookingCard";
 import { getImage } from "../../../../components/image/imageComponent";
-import {api} from "../../../../api/api";
+import { api } from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 
 const CustomerUpComingBookings: FunctionComponent = () => {
@@ -71,7 +71,6 @@ const CustomerUpComingBookings: FunctionComponent = () => {
 
                 const currentDateTime = new Date();
                 const futureBookings = bookingsWithImages.filter(booking => new Date(booking.date) >= currentDateTime);
-                console.log(`Future booking: ${JSON.stringify(futureBookings)}`);
                 setBookings(futureBookings);
             } catch (error) {
                 console.error("Error fetching bookings:", error);

@@ -9,7 +9,7 @@ import BusinessTypesBaseRegistration from "./BusinessTypesBaseRegistration";
 import PetsInHomeComponent from "../../selectButtons/PetsInHomeComponent";
 import HomeConditionComponent from "../../selectButtons/HomeConditionComponent";
 import { toast } from "react-toastify";
-import {api} from "../../../../api/api";
+import { api } from "../../../../api/api";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size, WEEKDAYS } from "../../../../models/Enums/Enums";
@@ -113,7 +113,6 @@ const ServiceRegisterView: FunctionComponent = () => {
 
     const registerBusinessHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log(`Business service data to be registered: ${JSON.stringify(businessInput)}`);
         let business;
         switch (selectedServices) {
             case BUSINESS_TYPES.BOARDING:
@@ -136,7 +135,6 @@ const ServiceRegisterView: FunctionComponent = () => {
             }
         }
 
-        console.log(`Business service data to be registered: ${JSON.stringify(business)}`);
 
         try {
             const response = await api.post(`/business/business-type/${serviceTypeMapping[selectedServices]}/create`, business);
