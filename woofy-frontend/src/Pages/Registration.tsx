@@ -1,7 +1,7 @@
 import React, { FormEvent, FunctionComponent, useCallback, useState } from "react";
 import { useLocation } from "react-router-dom";
 import RegistrationView from "../Sections/LoginAndRegister/RegistrationView";
-import {api} from "../api/api";
+import {api, setAuthToken} from "../api/api";
 import RegistrationModel, { USERTYPE } from "../models/RegistrationModel";
 import { useAuth } from "../provider/AuthProvider";
 import { toast } from "react-toastify";
@@ -93,17 +93,14 @@ const Registration: FunctionComponent = () => {
                 isValid = false;
             }
 
-            // Check if the address can be converted to a geocode
             const address = `${completeRegistrationUser.address} ${completeRegistrationUser.city}`;
-            fetch('http://localhost:8080/api/v1/map/geocode', {
-                method: 'POST',
+            api.post('/map/geocode', address, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(address),
             })
                 .then(response => {
-                    if (!response.ok) {
+                    if (response.status !== 200) {
                         throw new Error('Failed to geocode address');
                     }
                 })
@@ -134,6 +131,7 @@ const Registration: FunctionComponent = () => {
                 ...rest,
                 ...basicSignUpModel,
             });
+            setAuthToken(res.data.access_token)
             setToken(res.data.access_token);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("refreshToken", res.data.refresh_token);
