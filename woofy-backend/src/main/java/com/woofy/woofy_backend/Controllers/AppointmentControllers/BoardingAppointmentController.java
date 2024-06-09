@@ -92,22 +92,21 @@ public class BoardingAppointmentController extends BaseAppointmentController{
             }
         }
 
-        for (LocalDate date : dates) {
-            BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
-            boardingAppointmentEntity.setDate(date);
-            boardingAppointmentEntity.setEndDate(date);
-            boardingAppointmentEntity.setBoardingEntity(boarding);
-            boardingAppointmentEntity.setDogId(customer.getDog().getId());
+        // Create a single BoardingAppointmentEntity for the whole period
+        BoardingAppointmentEntity boardingAppointmentEntity = new BoardingAppointmentEntity();
+        boardingAppointmentEntity.setDate(startDate);
+        boardingAppointmentEntity.setEndDate(endDate);
+        boardingAppointmentEntity.setBoardingEntity(boarding);
+        boardingAppointmentEntity.setDogId(customer.getDog().getId());
 
-            List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
-            if (boardingAppointments == null) {
-                boardingAppointments = new ArrayList<>();
-            }
-            boardingAppointments.add(boardingAppointmentEntity);
-            boarding.setBoardingAppointmentEntities(boardingAppointments);
-
-            boardingAppointmentRepository.save(boardingAppointmentEntity);
+        List<BoardingAppointmentEntity> boardingAppointments = boarding.getBoardingAppointmentEntities();
+        if (boardingAppointments == null) {
+            boardingAppointments = new ArrayList<>();
         }
+        boardingAppointments.add(boardingAppointmentEntity);
+        boarding.setBoardingAppointmentEntities(boardingAppointments);
+
+        boardingAppointmentRepository.save(boardingAppointmentEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -128,24 +127,35 @@ public class BoardingAppointmentController extends BaseAppointmentController{
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
     @PostMapping("/available-capacity-by-date-range")
     public ResponseEntity<Map<LocalDate, Integer>> getAvailableCapacityByDateRange(@RequestBody GetScheduleAndAppointmentDetailsRequest getScheduleRequest) {
         if (getScheduleRequest.getBusinessId() == null || getScheduleRequest.getStartDate() == null || getScheduleRequest.getEndDate() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business ID, start date, and end date must not be null");
         }
         BoardingEntity boardingEntity = boardingRepository.findByBusiness_Id(getScheduleRequest.getBusinessId());
-        List<BoardingScheduleEntity> schedules = boardingScheduleRepository.findAllByBoardingEntity_Business_IdAndDateBetween(
+        List<BoardingAppointmentEntity> appointments = boardingAppointmentRepository.findAllByBoardingEntity_Business_IdAndDateBetween(
                 getScheduleRequest.getBusinessId(),
                 getScheduleRequest.getStartDate(),
                 getScheduleRequest.getEndDate()
         );
 
-        Map<LocalDate, Integer> availableCapacities = getLocalDateIntegerMap(getScheduleRequest, schedules, boardingEntity);
+        Map<LocalDate, Integer> availableCapacities = getLocalDateIntegerMap(getScheduleRequest, appointments, boardingEntity);
 
         return ResponseEntity.ok(availableCapacities);
     }
 
-    private static @NotNull Map<LocalDate, Integer> getLocalDateIntegerMap(GetScheduleAndAppointmentDetailsRequest getScheduleRequest, List<BoardingScheduleEntity> schedules, BoardingEntity boardingEntity) {
+    @DeleteMapping("/delete-appointment/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable Integer id) {
+        if (!boardingAppointmentRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boardingAppointmentRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    private static @NotNull Map<LocalDate, Integer> getLocalDateIntegerMap(GetScheduleAndAppointmentDetailsRequest getScheduleRequest, List<BoardingAppointmentEntity> appointments, BoardingEntity boardingEntity) {
         Map<LocalDate, Integer> availableCapacities = new HashMap<>();
         LocalDate currentDate = getScheduleRequest.getStartDate();
         while (!currentDate.isAfter(getScheduleRequest.getEndDate())) {
@@ -153,20 +163,16 @@ public class BoardingAppointmentController extends BaseAppointmentController{
                     currentDate.isBefore(boardingEntity.getStartDate()) || currentDate.isAfter(boardingEntity.getEndDate())) {
                 availableCapacities.put(currentDate, 0);
             } else {
-                BoardingScheduleEntity scheduleForCurrentDate = null;
-                for (BoardingScheduleEntity schedule : schedules) {
-                    if (schedule.getDate().equals(currentDate)) {
-                        scheduleForCurrentDate = schedule;
-                        break;
+                int currentDogCapacity = 0;
+                for (BoardingAppointmentEntity appointment : appointments) {
+                    if ((currentDate.isEqual(appointment.getDate()) || currentDate.isAfter(appointment.getDate())) &&
+                            (currentDate.isEqual(appointment.getEndDate()) || currentDate.isBefore(appointment.getEndDate()))) {
+                        currentDogCapacity++;
                     }
                 }
 
-                if (scheduleForCurrentDate != null) {
-                    int availableCapacity = Math.max(0, scheduleForCurrentDate.getBoardingEntity().getDogCapacity() - scheduleForCurrentDate.getCurrentDogCapacity());
-                    availableCapacities.put(currentDate, availableCapacity);
-                } else {
-                    availableCapacities.put(currentDate, boardingEntity.getDogCapacity());
-                }
+                int availableCapacity = Math.max(0, boardingEntity.getDogCapacity() - currentDogCapacity);
+                availableCapacities.put(currentDate, availableCapacity);
             }
             currentDate = currentDate.plusDays(1);
         }
