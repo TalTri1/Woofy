@@ -19,28 +19,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DogRegisterRequest {
-
-//    private CustomerEntity owner;
-
     @NotEmpty
     private String dogName;
-
     @NotEmpty
     private String dogBreed;
-
     @Enumerated(EnumType.STRING)
     private DogAgeCategoryEnum age;
-
     @Enumerated(EnumType.STRING)
     private DogSizeEnum size;
-
     @Enumerated(EnumType.STRING)
     private DogTrainingEnum trainingLevel;
-
     private String about;
-
     private String specialRequirements;
-
     private List<ImageEntity> pictures;
 
 }
