@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import React, {useState, useEffect} from 'react';
+import {BUSINESS_TYPES} from '../../../../models/Enums/Enums';
+import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import {Box, Button, Grid, Typography} from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { toast, ToastContainer } from 'react-toastify';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { fDate } from '../../../../utils/format-time';
+import {fDate} from '../../../../utils/format-time';
 import {api} from '../../../../api/api';
-import { formatEnumValue } from "../../../../utils/format-enum-text";
-import { useNotifications } from "../../../../provider/NotificationContext";
-import { useRouter } from "../../../../routes/hooks";
+import {formatEnumValue} from "../../../../utils/format-enum-text";
+import {useNotifications} from "../../../../provider/NotificationContext";
+import {useRouter} from "../../../../routes/hooks";
+import {useAuth} from "../../../../provider/AuthProvider";
 
 interface Business {
     id: number;
@@ -27,16 +28,17 @@ interface Props {
     selectedService: string;
 }
 
-const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
+const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [availableSlots, setAvailableSlots] = useState<Record<string, number> | Slot[] | number>([]);
     const [dayCareAvilability, setDayCareAvailability] = useState<number>(0);
     const [isFetching, setIsFetching] = useState(false);
     const [isAvailabilityFetched, setIsAvailabilityFetched] = useState(false);
-    const { addNotification } = useNotifications();
+    const {addNotification} = useNotifications();
     const router = useRouter();
-
+    const {token} = useAuth();
+    const {userDetails} = useAuth();
     const servicePrices = {
         [BUSINESS_TYPES.BOARDING]: business.boardingEntity?.price,
         [BUSINESS_TYPES.DAY_CARE]: business.dayCareEntity?.price,
@@ -116,6 +118,18 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     };
 
     const handleSetAppointment = async (startDate: Date, endDate: Date | null, startTime?: string, endTime?: string) => {
+        if (!token) {
+            router.push('/login')
+        }
+        try {
+            let res = await api.post('dogs/getByUserId', {id: userDetails.id})
+            if (res.data.length === 0) {
+                router.push('/dog-register')
+            }
+        } catch (error) {
+            router.push('/dog-register')
+        }
+
         const appointmentData = {
             businessId: business.id,
             date: fDate(startDate, 'yyyy-MM-dd'),
@@ -175,12 +189,12 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
             const diff = (current.getTime() - previous.getTime()) / (1000 * 3600 * 24);
 
             if (diff > 1) {
-                ranges.push({ start, end });
+                ranges.push({start, end});
                 start = sortedDates[i];
             }
             end = sortedDates[i];
         }
-        ranges.push({ start, end });
+        ranges.push({start, end});
 
         return ranges;
     };
@@ -240,24 +254,56 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
 
                 return (
                     <div>
-                        <Typography variant="body1" color="error" style={{ fontWeight: '600', fontSize: '18px', marginBottom: 20, marginLeft: '-270px' }}>
+                        <Typography variant="body1" color="error" style={{
+                            fontWeight: '600',
+                            fontSize: '18px',
+                            marginBottom: 20,
+                            marginLeft: '-270px'
+                        }}>
                             This business has no availability from {ranges.map(range => {
-                                const startDate = new Date(range.start).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
-                                const endDate = new Date(range.end).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
-                                return startDate === endDate ? startDate : `${startDate} to ${endDate}`;
-                            }).join(', ')}
+                            const startDate = new Date(range.start).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: '2-digit'
+                            });
+                            const endDate = new Date(range.end).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: '2-digit'
+                            });
+                            return startDate === endDate ? startDate : `${startDate} to ${endDate}`;
+                        }).join(', ')}
                         </Typography>
                         {validSuggestions.map((suggestion, index) => (
                             <div key={index}>
-                                <Typography variant="body1" style={{ fontWeight: '600', marginBottom: 20, marginLeft: '-262px' }}>
+                                <Typography variant="body1"
+                                            style={{fontWeight: '600', marginBottom: 20, marginLeft: '-262px'}}>
                                     These dates are still available:
-                                    <span style={{ color: '#006CBF', fontSize: '18px', fontWeight: 'bold', marginLeft: '4px' }}>
-                                        {suggestion.start.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })} -
-                                        {suggestion.end.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })}
+                                    <span style={{
+                                        color: '#006CBF',
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        marginLeft: '4px'
+                                    }}>
+                                        {suggestion.start.toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: '2-digit'
+                                        })} -
+                                        {suggestion.end.toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: '2-digit'
+                                        })}
                                     </span>
                                 </Typography>
 
-                                <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '158px', marginRight: '24px' }}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    marginLeft: '158px',
+                                    marginRight: '24px'
+                                }}>
                                     <Typography
                                         variant="body1"
                                         style={{
@@ -266,7 +312,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         }}
                                     >
                                         {`Price for ${Math.ceil((new Date(suggestion.end) - new Date(suggestion.start)) / (1000 * 60 * 60 * 24))} ${Math.ceil((new Date(suggestion.end) - new Date(suggestion.start)) / (1000 * 60 * 60 * 24)) === 1 ? 'Night' : 'Nights'
-                                            }: ${calculateTotalPrice(suggestion.start, suggestion.end)} ₪`}
+                                        }: ${calculateTotalPrice(suggestion.start, suggestion.end)} ₪`}
                                     </Typography>
 
                                     <Button
@@ -322,7 +368,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                             }}
                         >
                             {`Price for ${Math.ceil((new Date(endDate) - new Date(selectedDate)) / (1000 * 60 * 60 * 24))} ${Math.ceil((new Date(endDate) - new Date(selectedDate)) / (1000 * 60 * 60 * 24)) === 1 ? 'Night' : 'Nights'
-                                }: ${calculateTotalPrice(selectedDate, endDate)} ₪`}
+                            }: ${calculateTotalPrice(selectedDate, endDate)} ₪`}
                         </Typography>
 
                         <Button
@@ -347,7 +393,6 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                     </div>
 
 
-
                 );
             }
         } else if (selectedService === BUSINESS_TYPES.DAY_CARE) {
@@ -356,11 +401,12 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
             return (
                 <div>
                     {slots > 0 ? (
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body1" style={{ fontWeight: '600', marginLeft: '272px', marginRight: '16px' }}>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                            <Typography variant="body1"
+                                        style={{fontWeight: '600', marginLeft: '272px', marginRight: '16px'}}>
                                 Total Price: {servicePrices[selectedService]} ₪
                                 {slots < 10 && (
-                                    <span style={{ fontSize: '16px', fontWeight: 'normal', marginLeft: '8px' }}>
+                                    <span style={{fontSize: '16px', fontWeight: 'normal', marginLeft: '8px'}}>
                                         ({slots} left on this day)
                                     </span>
                                 )}
@@ -379,8 +425,8 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    whiteSpace: 'nowrap', 
-                                    padding: '0 16px', 
+                                    whiteSpace: 'nowrap',
+                                    padding: '0 16px',
                                 }}
                             >
                                 Book now
@@ -394,7 +440,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                 style={{
                                     fontWeight: '600',
                                     fontSize: '18px',
-                                    marginBottom: 0, 
+                                    marginBottom: 0,
 
                                 }}
                             >
@@ -406,7 +452,7 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                     color: 'black',
                                     fontWeight: '550',
                                     fontSize: '16px',
-                                    marginTop: 20 
+                                    marginTop: 20
                                 }}
                             >
                                 Please try another day
@@ -420,74 +466,74 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
             );
         } else if ((selectedService === BUSINESS_TYPES.DOG_SITTER || selectedService === BUSINESS_TYPES.DOG_WALK) && Array.isArray(availableSlots)) {
             if (availableSlots.length === 0) {
-                return  <Box>
-                <Typography
-                    variant="body1"
-                    color="error"
-                    style={{
-                        fontWeight: '600',
-                        fontSize: '18px',
-                        marginBottom: 0, 
+                return <Box>
+                    <Typography
+                        variant="body1"
+                        color="error"
+                        style={{
+                            fontWeight: '600',
+                            fontSize: '18px',
+                            marginBottom: 0,
 
-                    }}
-                >
-                    This business has no availability on this day
-                </Typography>
-                <Typography
-                    variant="body1"
-                    style={{
-                        color: 'black',
-                        fontWeight: '550',
-                        fontSize: '16px',
-                        marginTop: 20 
-                    }}
-                >
-                    Please try another day
-                </Typography>
-            </Box>;
+                        }}
+                    >
+                        This business has no availability on this day
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        style={{
+                            color: 'black',
+                            fontWeight: '550',
+                            fontSize: '16px',
+                            marginTop: 20
+                        }}
+                    >
+                        Please try another day
+                    </Typography>
+                </Box>;
             }
             return (availableSlots as Slot[]).map((slot, index) => (
-                <Box key={index} mb={4} sx={{ ml: '-103px' }}>
-    <Box display="flex" alignItems="center" justifyContent="center" sx={{ gap: '40px' }}>
-      <Typography
-        variant="body1"
-        style={{
-          fontWeight: '600',
-          fontSize: '16px'
-        }}
-      >
-        Appointment: {slot.startTime.split(':').slice(0, 2).join(':')} - {slot.endTime.split(':').slice(0, 2).join(':')}
-      </Typography>
-      <Typography
-        variant="body1"
-        style={{
-          fontWeight: '600',
-          fontSize: '16px'
-        }}
-      >
-        Price: {servicePrices[selectedService]} ₪
-      </Typography>
-      <Button
-        variant="contained"
-        onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}
-        sx={{
-          borderRadius: '30px',
-          backgroundColor: '#006CBF',
-          '&:hover': {
-            backgroundColor: '#0056A4'
-          },
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          whiteSpace: 'nowrap',
-          padding: '0 16px',
-        }}
-      >
-        Book now
-      </Button>
-    </Box>
-  </Box>
+                <Box key={index} mb={4} sx={{ml: '-103px'}}>
+                    <Box display="flex" alignItems="center" justifyContent="center" sx={{gap: '40px'}}>
+                        <Typography
+                            variant="body1"
+                            style={{
+                                fontWeight: '600',
+                                fontSize: '16px'
+                            }}
+                        >
+                            Appointment: {slot.startTime.split(':').slice(0, 2).join(':')} - {slot.endTime.split(':').slice(0, 2).join(':')}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            style={{
+                                fontWeight: '600',
+                                fontSize: '16px'
+                            }}
+                        >
+                            Price: {servicePrices[selectedService]} ₪
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSetAppointment(selectedDate!, selectedDate!, slot.startTime, slot.endTime)}
+                            sx={{
+                                borderRadius: '30px',
+                                backgroundColor: '#006CBF',
+                                '&:hover': {
+                                    backgroundColor: '#0056A4'
+                                },
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                whiteSpace: 'nowrap',
+                                padding: '0 16px',
+                            }}
+                        >
+                            Book now
+                        </Button>
+                    </Box>
+                </Box>
             ))
         }
         return null;
@@ -495,10 +541,18 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
                 <Typography
                     variant="h3"
-                    sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit', textAlign: 'center' }}
+                    sx={{
+                        m: 0,
+                        width: '100%',
+                        fontSize: 'inherit',
+                        lineHeight: '34px',
+                        fontWeight: 'bold',
+                        fontFamily: 'inherit',
+                        textAlign: 'center'
+                    }}
                 >
                     <Grid container spacing={2} justifyContent="center" alignItems="center">
                         {selectedService === BUSINESS_TYPES.BOARDING && (
@@ -509,7 +563,9 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         value={selectedDate}
                                         minDate={new Date()} // Prevent selection of past dates
                                         onChange={(date) => setSelectedDate(date)}
-                                        renderInput={(params) => <TextField {...params} />}
+                                        slots={{
+                                            textField: (params) => <TextField {...params} />,
+                                        }}
                                         format="dd.MM.yy"
                                     />
                                 </Grid>
@@ -519,7 +575,9 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                         value={endDate}
                                         minDate={new Date()} // Prevent selection of past dates
                                         onChange={(date) => setEndDate(date)}
-                                        renderInput={(params) => <TextField {...params} />}
+                                        slots={{
+                                            textField: (params) => <TextField {...params} />,
+                                        }}
                                         format="dd.MM.yy"
                                     />
                                 </Grid>
@@ -532,7 +590,9 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                                     value={selectedDate}
                                     minDate={new Date()} // Prevent selection of past dates
                                     onChange={(date) => setSelectedDate(date)}
-                                    renderInput={(params) => <TextField {...params} />}
+                                    slots={{
+                                        textField: (params) => <TextField {...params} />,
+                                    }}
                                     format="dd.MM.yy"
                                 />
                             </Grid>
@@ -562,13 +622,13 @@ const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
                         </Grid>
 
                         {isAvailabilityFetched && (
-                            <Grid item xs={40} style={{ marginTop: '30px' }}>
+                            <Grid item xs={40} style={{marginTop: '30px'}}>
                                 {renderAvailableSlots()}
                             </Grid>
                         )}
                     </Grid>
                 </Typography>
-                <ToastContainer />
+                <ToastContainer/>
             </div>
         </LocalizationProvider>
 

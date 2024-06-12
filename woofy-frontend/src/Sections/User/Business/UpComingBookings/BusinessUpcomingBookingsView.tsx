@@ -5,6 +5,8 @@ import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeCom
 import BusinessUpcomingBookingCard from "./BusinessUpcomingBookingCard";
 import {api} from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
+import {getImage} from "../../../../components/image/imageComponent";
+import {toast} from "react-toastify";
 
 const BusinessUpComingBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
@@ -31,9 +33,11 @@ const BusinessUpComingBookings: FunctionComponent = () => {
     };
 
     const handleConfirmCancel = () => {
-        cancelAppointment(selectedBooking.appointmentId);
-        setOpenDialog(false);
-        setSelectedBooking(null);
+        if (selectedBooking) {
+            cancelAppointment(selectedBooking.businessType, selectedBooking.appointmentId);
+            setOpenDialog(false);
+            setSelectedBooking(null);
+        }
     };
 
     const handleCloseDialog = () => {
@@ -41,9 +45,20 @@ const BusinessUpComingBookings: FunctionComponent = () => {
         setSelectedBooking(null);
     };
 
-    const cancelAppointment = (bookingId) => {
-        // Add your API call here to cancel the booking
-        console.log("Cancel booking with ID:", bookingId);
+    const cancelAppointment = async (businessType, appointmentId) => {
+        try {
+            await api.delete(`appointment/${serviceTypeMapping[businessType]}/delete-appointment/${appointmentId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+                }
+            });
+            toast.success('Appointment cancelled successfully');
+
+            setBookings(prevBookings => prevBookings.filter(booking => booking.appointmentId !== appointmentId));
+        } catch (error) {
+            console.error('Error cancelling appointment:', error);
+            toast.error('Failed to cancel appointment');
+        }
     };
 
     useEffect(() => {

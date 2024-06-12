@@ -15,7 +15,7 @@ const Registration: FunctionComponent = () => {
     const location = useLocation();
     const { setIsLoggedIn, setToken } = useAuth();
     const basicSignUpUser = location.state;
-    const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>(null);
+    const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>('dogOwner');
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState(
         new RegistrationModel(basicSignUpUser, USERTYPE.CUSTOMER, '', '', '', '', '', '', '')
     );
@@ -132,10 +132,6 @@ const Registration: FunctionComponent = () => {
                 ...basicSignUpModel,
             });
             setAuthToken(res.data.access_token)
-            setToken(res.data.access_token);
-            localStorage.setItem("token", res.data.access_token);
-            localStorage.setItem("refreshToken", res.data.refresh_token);
-
             let profilePhotoId = 0;
             if (selectedImage) {
                 profilePhotoId = await savePhotoToDB(selectedImage);
@@ -143,6 +139,9 @@ const Registration: FunctionComponent = () => {
                     profilePhotoId: profilePhotoId,
                 });
             }
+            setToken(res.data.access_token);
+            localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("refreshToken", res.data.refresh_token);
             setIsLoggedIn(true);
             router.push("/");
 

@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
 import { api } from "../../../api/api";
 import UserProfileRow from "./UserProfileRow";
 import { getImage } from "../../../components/image/imageComponent";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../provider/AuthProvider";
 
 const UserProfileView = () => {
     const { userDetails } = useContext(UserContext);
+    const { logout } = useAuth();
     const [imageSrc, setImageSrc] = useState("/user-avatar-image@2x.png");
     const [profile, setProfile] = useState({
         businessName: userDetails?.role === "BUSINESS" ? "" : undefined,
@@ -26,6 +28,7 @@ const UserProfileView = () => {
     const [editingField, setEditingField] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
     const [originalImageSrc, setOriginalImageSrc] = useState("");
+    const [open, setOpen] = useState(false); // State for the dialog
 
     useEffect(() => {
         if (userDetails) {
@@ -119,8 +122,7 @@ const UserProfileView = () => {
             toast.success('Profile updated successfully');
         } catch (error) {
             console.error('Error updating profile:', error);
-            toast.error(error.response.data.message|| 'Failed to update profile');
-
+            toast.error(error.response.data.message || 'Failed to update profile');
         }
     };
 
@@ -179,6 +181,27 @@ const UserProfileView = () => {
         setSelectedImage(null);
     };
 
+    // Handle dialog open and close
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            await api.delete('user/delete');
+            toast.success('Account deleted successfully');
+            logout(); // Log out the user after account deletion
+        } catch (error) {
+            toast.error('Error deleting account');
+        } finally {
+            setOpen(false);
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -198,13 +221,13 @@ const UserProfileView = () => {
                 }}
             >
                 <Typography variant="h1" sx={{
-                        fontSize: '48px!important',
-                        lineHeight: '120%',
-                        fontFamily: 'inter',
-                        color: 'white',
-                        textAlign: 'center',
-                        position: 'relative'
-                    }}>
+                    fontSize: '48px!important',
+                    lineHeight: '120%',
+                    fontFamily: 'inter',
+                    color: 'white',
+                    textAlign: 'center',
+                    position: 'relative'
+                }}>
                     Personal Details
                 </Typography>
             </Box>
@@ -391,6 +414,34 @@ const UserProfileView = () => {
                         onEdit={() => handleEdit("password")}
                         isPasswordField={true}
                     />
+                </Box>
+
+                {/* Add Delete Account Button */}
+                <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
+                    <Button variant="contained" color="error" onClick={handleClickOpen}>
+                        Delete Account
+                    </Button>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Confirm Account Deletion"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete your account? This action cannot be undone.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={handleDeleteAccount} color="error">
+                                Delete
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Box>
             </Box>
         </Box>
