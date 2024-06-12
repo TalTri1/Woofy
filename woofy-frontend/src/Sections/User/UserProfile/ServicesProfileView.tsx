@@ -1,16 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, Typography, TextField, Grid, Button, Card, CardContent } from "@mui/material";
+import { Box, Typography, TextField, Grid, Button } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
-import {api} from "../../../api/api";
+import { api } from "../../../api/api";
 import DogSizeInput from "../selectButtons/DogSizeInput";
 import HomeConditionComponent from "../selectButtons/HomeConditionComponent";
 import PetsInHomeComponent from "../selectButtons/PetsInHomeComponent";
+import { toast } from "react-toastify";
+import { getImage } from "../../../components/image/imageComponent";
 
 const ServicesProfileView = () => {
     const { userDetails } = useContext(UserContext);
     const [business, setBusiness] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [serviceData, setServiceData] = useState({});
+    const [businessImages, setBusinessImages] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,7 +22,23 @@ const ServicesProfileView = () => {
                 const response = await api.get(`business/${userDetails.id}`);
                 const data = response.data;
                 setBusiness(data);
-                setServiceData(data);
+
+                const imageUrls = await Promise.all(data.images.map(async (imageId) => {
+                    const url = await getImage(imageId);
+                    return { id: imageId, url };
+                }));
+                const images = imageUrls.length < 4
+                    ? [...imageUrls, ...Array(4 - imageUrls.length).fill({ id: null, url: "/service-avatar-image-1@2x.png" })]
+                    : imageUrls;
+                setBusinessImages(images);
+
+                const updatedData = await Promise.all(Object.keys(data).map(async (serviceType) => {
+                    if (data[serviceType]?.images) {
+                        return { [serviceType]: { ...data[serviceType], images } };
+                    }
+                    return { [serviceType]: data[serviceType] };
+                }));
+                setServiceData(Object.assign({}, ...updatedData));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -40,7 +60,7 @@ const ServicesProfileView = () => {
 
     const handleSizeClick = (size, serviceType) => {
         setServiceData((prevData) => {
-            const currentSizes = prevData[serviceType].acceptableDogSizes || [];
+            const currentSizes = prevData[serviceType]?.acceptableDogSizes || [];
             const updatedSizes = currentSizes.includes(size)
                 ? currentSizes.filter((s) => s !== size)
                 : [...currentSizes, size];
@@ -56,7 +76,7 @@ const ServicesProfileView = () => {
 
     const handleHomeConditionsClick = (condition, serviceType) => {
         setServiceData((prevData) => {
-            const currentConditions = prevData[serviceType].homeConditions || [];
+            const currentConditions = prevData[serviceType]?.homeConditions || [];
             const updatedConditions = currentConditions.includes(condition)
                 ? currentConditions.filter((c) => c !== condition)
                 : [...currentConditions, condition];
@@ -72,7 +92,7 @@ const ServicesProfileView = () => {
 
     const handlePetsInHomeClick = (condition, serviceType) => {
         setServiceData((prevData) => {
-            const currentConditions = prevData[serviceType].petsInHome || [];
+            const currentConditions = prevData[serviceType]?.petsInHome || [];
             const updatedConditions = currentConditions.includes(condition)
                 ? currentConditions.filter((c) => c !== condition)
                 : [...currentConditions, condition];
@@ -86,56 +106,146 @@ const ServicesProfileView = () => {
         });
     };
 
-    const handleImageChange = async (serviceType, newImage) => {
-        try {
-            const formData = new FormData();
-            formData.append('file', newImage);
-            const response = await api.post(`business/${userDetails.id}/upload`, formData);
-            const imageUrl = response.data.url;
+    const handleImageChange = (index, event) => {
+        const file = event.target.files[0];
 
-            setServiceData((prevData) => ({
-                ...prevData,
-                [serviceType]: {
-                    ...prevData[serviceType],
-                    images: [...(prevData[serviceType].images || []), imageUrl],
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select an image file');
+            return;
+        }
+
+        const imageURL = URL.createObjectURL(file);
+        setBusinessImages(prevImages => {
+            const updatedImages = [...prevImages];
+            updatedImages[index] = { url: imageURL, file };
+            return updatedImages;
+        });
+        setSelectedImage({ file, index });
+    };
+
+    const handleImageSave = async () => {
+        if (selectedImage) {
+            const { file, index } = selectedImage;
+            const existingImageId = businessImages[index]?.id;
+            if (existingImageId) {
+                await updatePhotoInDB(existingImageId, file);
+                const url = await getImage(existingImageId);
+                setBusinessImages(prevImages => {
+                    const updatedImages = [...prevImages];
+                    updatedImages[index] = { id: existingImageId, url };
+                    return updatedImages;
+                });
+            } else {
+                const newImageId = await savePhotoToDB(file);
+                const url = await getImage(newImageId);
+                setBusinessImages(prevImages => {
+                    const updatedImages = [...prevImages];
+                    updatedImages[index] = { id: newImageId, url };
+                    handleSave();
+                    return updatedImages;
+                });
+            }
+            setSelectedImage(null);
+            toast.success('Profile photo updated successfully');
+        }
+    };
+
+    const savePhotoToDB = async (file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await api.post('/image/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
                 },
-            }));
+            });
+            return response.data.imageID;
         } catch (error) {
-            console.error('Error uploading image:', error);
+            toast.error("Failed uploading profile photo");
+        }
+    };
+
+    const updatePhotoInDB = async (id, file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            await api.patch(`/image/update/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        } catch (error) {
+            toast.error("Failed updating profile photo");
+        }
+    };
+
+    const handleImageCancel = () => {
+        if (business) {
+            const imageUrls = business.images.map((imageId, index) => ({
+                id: imageId,
+                url: businessImages[index]?.url || "/service-avatar-image-1@2x.png"
+            }));
+            setBusinessImages(imageUrls);
+            setSelectedImage(null);
         }
     };
 
     const handleSave = async () => {
         try {
-            await api.put(`business/${userDetails.id}`, serviceData);
+            await Promise.all(Object.keys(serviceData).map(async (serviceType) => {
+                const serviceDetails = {
+                    images: serviceData[serviceType].images.map(image => image.id),
+                };
+                await api.put(`business/business-type/${serviceType}/edit`, serviceDetails, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+            }));
             setIsEditing(false);
-            alert('Service details updated successfully');
+            toast.success('Service details updated successfully');
         } catch (error) {
             console.error('Error updating service details:', error);
+            toast.error('Failed to update service details');
         }
     };
-
-    if (!business) {
-        return <Typography>Loading...</Typography>;
-    }
 
     const renderService = (service, serviceType) => (
         <Box key={serviceType} sx={{ marginBottom: 4, paddingBottom: 4, borderBottom: '1px solid #ddd' }}>
             <Grid item xs={12}>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    {serviceData[serviceType].images && serviceData[serviceType].images.map((image, index) => (
-                        <Card key={index} sx={{ width: 150, height: 150, position: 'relative' }}>
-                            <CardContent>
-                                <img src={image} alt={`Service ${serviceType} image ${index}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            </CardContent>
-                        </Card>
-                    ))}
-                    {isEditing && (
-                        <Box sx={{ width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc' }}>
-                            {/*<ImageUploader onImageUpload={(image) => handleImageChange(serviceType, image)} />*/}
+                    {businessImages.map((image, index) => (
+                        <Box key={index} sx={{ position: 'relative' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                id={`photo-upload-${index}`}
+                                onChange={(event) => handleImageChange(index, event)}
+                            />
+                            <img
+                                src={image.url}
+                                alt={`Service ${serviceType} image ${index}`}
+                                style={{ height: "100px", width: "100px", borderRadius: "50%", cursor: "pointer" }}
+                                onClick={() => document.getElementById(`photo-upload-${index}`).click()}
+                            />
                         </Box>
-                    )}
+                    ))}
                 </Box>
+                {selectedImage && (
+                    <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+                        <Button variant="contained" onClick={handleImageSave}>
+                            Save photo
+                        </Button>
+                        <Button variant="outlined" onClick={handleImageCancel}>
+                            Cancel
+                        </Button>
+                    </Box>
+                )}
             </Grid>
             <Typography variant="h6">{serviceType.replace(/([A-Z])/g, ' $1').trim()}</Typography>
             <Grid container spacing={2}>
@@ -145,7 +255,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="price"
-                        value={serviceData[serviceType].price}
+                        value={serviceData[serviceType]?.price || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                     />
@@ -156,7 +266,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="dogCapacity"
-                        value={serviceData[serviceType].dogCapacity || ""}
+                        value={serviceData[serviceType]?.dogCapacity || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                     />
@@ -168,7 +278,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="startDate"
-                        value={serviceData[serviceType].startDate}
+                        value={serviceData[serviceType]?.startDate || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                         InputLabelProps={{ shrink: true }}
@@ -181,7 +291,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="endDate"
-                        value={serviceData[serviceType].endDate}
+                        value={serviceData[serviceType]?.endDate || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                         InputLabelProps={{ shrink: true }}
@@ -194,7 +304,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="startTime"
-                        value={serviceData[serviceType].startTime}
+                        value={serviceData[serviceType]?.startTime || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                         InputLabelProps={{ shrink: true }}
@@ -207,7 +317,7 @@ const ServicesProfileView = () => {
                         variant="outlined"
                         fullWidth
                         name="endTime"
-                        value={serviceData[serviceType].endTime}
+                        value={serviceData[serviceType]?.endTime || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                         InputLabelProps={{ shrink: true }}
@@ -221,7 +331,7 @@ const ServicesProfileView = () => {
                         multiline
                         rows={4}
                         name="about"
-                        value={serviceData[serviceType].about}
+                        value={serviceData[serviceType]?.about || ""}
                         onChange={(event) => handleChange(event, serviceType)}
                         disabled={!isEditing}
                     />
@@ -232,13 +342,13 @@ const ServicesProfileView = () => {
                     <>
                         <Grid item xs={12} sm={6}>
                             <HomeConditionComponent
-                                selectedHomeConditions={serviceData[serviceType].homeConditions || []}
+                                selectedHomeConditions={serviceData[serviceType]?.homeConditions || []}
                                 clickHomeConditionsHandler={(condition) => handleHomeConditionsClick(condition, serviceType)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <PetsInHomeComponent
-                                selectedPetsInHome={serviceData[serviceType].petsInHome || []}
+                                selectedPetsInHome={serviceData[serviceType]?.petsInHome || []}
                                 clickPetsInHomeHandler={(condition) => handlePetsInHomeClick(condition, serviceType)}
                             />
                         </Grid>
@@ -250,13 +360,13 @@ const ServicesProfileView = () => {
                     <>
                         <Grid item xs={12} sm={6}>
                             <HomeConditionComponent
-                                selectedHomeConditions={serviceData[serviceType].homeConditions || []}
+                                selectedHomeConditions={serviceData[serviceType]?.homeConditions || []}
                                 clickHomeConditionsHandler={(condition) => handleHomeConditionsClick(condition, serviceType)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <PetsInHomeComponent
-                                selectedPetsInHome={serviceData[serviceType].petsInHome || []}
+                                selectedPetsInHome={serviceData[serviceType]?.petsInHome || []}
                                 clickPetsInHomeHandler={(condition) => handlePetsInHomeClick(condition, serviceType)}
                             />
                         </Grid>
@@ -265,7 +375,7 @@ const ServicesProfileView = () => {
 
                 <Grid item xs={12}>
                     <DogSizeInput
-                        selectedSize={serviceData[serviceType].acceptableDogSizes || []}
+                        selectedSize={serviceData[serviceType]?.acceptableDogSizes || []}
                         onSizeClick={(size) => handleSizeClick(size, serviceType)}
                         multiple={true}
                     />
@@ -273,6 +383,10 @@ const ServicesProfileView = () => {
             </Grid>
         </Box>
     );
+
+    if (!business) {
+        return <Typography>Loading...</Typography>;
+    }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -288,67 +402,45 @@ const ServicesProfileView = () => {
                     py: 8,
                 }}
             >
-                 <Typography variant="h1" sx={{
-                        fontSize: '48px!important',
-                        lineHeight: '120%',
-                        fontFamily: 'inter',
-                        color: 'white',
-                        textAlign: 'center',
-                        position: 'relative'
-                    }}>
+                <Typography variant="h1" sx={{
+                    fontSize: '48px!important',
+                    lineHeight: '120%',
+                    fontFamily: 'inter',
+                    color: 'white',
+                    textAlign: 'center',
+                    position: 'relative'
+                }}>
                     Services Profile
                 </Typography>
             </Box>
             <Box sx={{ padding: 4, flexGrow: 1, overflowY: 'auto' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Button
-        variant="outlined"
-        onClick={() => setIsEditing(!isEditing)}
-        sx={{
-            py: 1,
-            px: 2,
-            borderRadius: "30px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 1,
-            color: isEditing ? 'black' : '#444444', // Change text color to black when editing
-            border: '1px solid',
-            borderColor: isEditing ? 'grey.500' : 'grey.500',
-            backgroundColor: 'transparent',
-            textTransform: "none",
-            '&:hover': {
-                backgroundColor: isEditing ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
-                borderColor: 'grey.700',
-            },
-        }}
-    >
-        {isEditing ? (
-            <>
-                <img
-                    src="/manage-button-icon--editalt.svg"
-                    alt=""
-                    style={{ height: "24px", width: "24px" }}
-                />
-                <Typography
-                    sx={{
-                        fontSize: "base",
-                        fontFamily: "text.medium.normal",
-                        color: "color.neutral.darker",
-                        textAlign: "left",
-                        minWidth: "30px",
-                    }}
-                >
-                    Edit
-                </Typography>
-            </>
-        ) : (
-            "Cancel"
-        )}
-    </Button>
-</Box>
-
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => setIsEditing(!isEditing)}
+                        sx={{
+                            py: 1,
+                            px: 2,
+                            borderRadius: "30px",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 1,
+                            color: isEditing ? 'black' : '#444444', // Change text color to black when editing
+                            border: '1px solid',
+                            borderColor: isEditing ? 'grey.500' : 'grey.500',
+                            backgroundColor: 'transparent',
+                            textTransform: "none",
+                            '&:hover': {
+                                backgroundColor: isEditing ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+                                borderColor: 'grey.700',
+                            },
+                        }}
+                    >
+                        {isEditing ? "Cancel" : "Edit"}
+                    </Button>
+                </Box>
 
                 <Box sx={{ marginTop: 4 }}>
                     {business.dogSitterEntity && renderService(business.dogSitterEntity, 'dogSitterEntity')}
@@ -359,25 +451,23 @@ const ServicesProfileView = () => {
                 {isEditing && (
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
                         <Button
-    variant="contained"
-    color="primary"
-    onClick={handleSave}
-    sx={{
-        borderRadius: '30px',
-        backgroundColor: '#006CBF',
-        '&:hover': {
-            backgroundColor: '#0056A4',
-        },
-        padding: '10px 20px', // Add padding to ensure text stays in one line
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }}
->
-    Save Changes
-</Button>
-
-
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSave}
+                            sx={{
+                                borderRadius: '30px',
+                                backgroundColor: '#006CBF',
+                                '&:hover': {
+                                    backgroundColor: '#0056A4',
+                                },
+                                padding: '10px 20px', // Add padding to ensure text stays in one line
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            Save Changes
+                        </Button>
                     </Box>
                 )}
             </Box>

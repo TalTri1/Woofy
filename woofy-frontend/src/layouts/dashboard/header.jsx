@@ -25,7 +25,7 @@ export default function Header({ onOpenNav }) {
 
     const renderContent = (
         <>
-            <Box component={RouterLink} to="/" sx={{ mt: 3.5, ml: { xs: 2, sm: 3, md: 4 }, display: 'inline-block' }}>
+            <Box sx={{ mt: 3.5, ml: { xs: 2, sm: 3, md: 4 }, display: 'inline-block' }}>
                 <Logo />
             </Box>
             <Box sx={{ flexGrow: 1 }} />

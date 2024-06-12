@@ -7,17 +7,19 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState(localStorage.getItem('token') || sessionStorage.getItem('token'));
+    const [token, setToken] = useState(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
-        if (token) {
-            setAuthToken(token);
+        const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+        if (storedToken) {
+            setAuthToken(storedToken);
+            setToken(storedToken);
             setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
         }
-    }, [token]);
+        setLoading(false); // Set loading to false after checking the token
+    }, []);
 
     const login = async (basicSignInUser, rememberMe) => {
         try {
@@ -34,7 +36,7 @@ const AuthProvider = ({ children }) => {
                 sessionStorage.setItem('refreshToken', res.data.refresh_token);
             }
             setIsLoggedIn(true);
-            router.push("/");
+            router.back();
         } catch (error) {
             console.error('Error occurred while logging in: ', error);
             toast.error(error.response?.data || 'An error occurred');
@@ -46,6 +48,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('refreshToken');
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('refreshToken');
+        setAuthToken(null);
         setToken(null);
         setIsLoggedIn(false);
         router.push('/');

@@ -2,10 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { Box, Typography, Button, TextField, Grid, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { UserContext } from "../../../provider/UserProvider";
 import { api } from "../../../api/api";
-import { getImage } from "../../../components/image/imageComponent";
 import { Age, Size, TrainingLevel } from "../../../models/Enums/Enums";
 import { formatEnumValue } from "../../../utils/format-enum-text";
 import { toast } from "react-toastify";
+import {getImage} from "../../../components/image/imageComponent";
+import RegisterYourDogCTA from "../Customer/DogRegister/RegisterYourDogCTA";
+
 
 const DogProfileView = () => {
     const { userDetails } = useContext(UserContext);
@@ -65,10 +67,7 @@ const DogProfileView = () => {
 
     const handleSave = async () => {
         try {
-            const dogDTO = {
-                ...dogProfile,
-                pictures: dogProfile.pictures.map(picture => picture.id)
-            };
+            const { pictures, ...dogDTO } = dogProfile;
 
             await api.put(`/dogs/update`, dogDTO, { headers: { "Content-Type": "application/json" } });
             setIsEditing(false);
@@ -82,10 +81,7 @@ const DogProfileView = () => {
     const handleCancel = () => {
         setIsEditing(false);
         if (dogData) {
-            const pictures = dogData.pictures.length < 4
-                ? [...dogData.pictures, ...Array(4 - dogData.pictures.length).fill({ id: null, url: "/service-avatar-image-1@2x.png" })]
-                : dogData.pictures.map(picture => ({ id: picture, url: `/api/v1/image/get/${picture}` }));
-            setDogProfile({ ...dogData, pictures });
+            setDogProfile({ ...dogProfile, ...dogData, pictures: dogProfile.pictures });
         }
     };
 
@@ -121,9 +117,7 @@ const DogProfileView = () => {
                 newImageId = await savePhotoToDB(selectedImage.file);
                 const updatedPictures = [...dogProfile.pictures];
                 updatedPictures[selectedImage.index] = { id: newImageId, url: URL.createObjectURL(selectedImage.file) };
-                console.log(updatedPictures)
                 setDogProfile(prevProfile => ({ ...prevProfile, pictures: updatedPictures }));
-                console.log(dogProfile)
                 await updateImagesForDogEntity([...updatedPictures.map(picture => picture.id)]);
             }
             setSelectedImage(null);
@@ -174,15 +168,15 @@ const DogProfileView = () => {
 
     const handleImageCancel = () => {
         if (dogData) {
-            const pictures = dogData.pictures.length < 4
-                ? [...dogData.pictures, ...Array(4 - dogData.pictures.length).fill({ id: null, url: "/service-avatar-image-1@2x.png" })]
-                : dogData.pictures.map(picture => ({ id: picture, url: `/api/v1/image/get/${picture}` }));
-            setDogProfile({ ...dogData, pictures });
+            setDogProfile(prevProfile => ({ ...prevProfile, pictures: prevProfile.pictures.map(picture => {
+                    const originalPicture = dogData.pictures.find(p => p.id === picture.id);
+                    return originalPicture ? { id: originalPicture.id, url: picture.url } : picture;
+                }) }));
         }
     };
 
     if (!dogData) {
-        return <Typography>Loading...</Typography>;
+        return <Typography><RegisterYourDogCTA/></Typography>;
     }
 
     return (
@@ -241,9 +235,11 @@ const DogProfileView = () => {
                     </Box>
                 )}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? "Cancel" : "Edit"}
-                    </Button>
+                    {!isEditing && (
+                        <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)}>
+                            {"Edit"}
+                        </Button>
+                    )}
                 </Box>
                 <Box sx={{ marginTop: 4 }}>
                     <Grid container spacing={2}>
@@ -379,4 +375,3 @@ const DogProfileView = () => {
 };
 
 export default DogProfileView;
-
