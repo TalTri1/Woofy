@@ -5,7 +5,7 @@ import HeroContainer from "../Sections/User/Business/Search/HeroContainer";
 import FiltersHeader from "../Sections/User/Business/Search/FiltersHeader";
 import Card from "../Sections/User/Business/Search/Card";
 import {api} from "../api/api";
-import { Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, Size } from "../models/Enums/Enums";
+import {Age, BUSINESS_TYPES, HOME_CONDITIONS, PETS_IN_HOME, ROLE, Size} from "../models/Enums/Enums";
 import { UserContext } from "../provider/UserProvider";
 import RegisterYourDogCTA from "../Sections/User/Customer/DogRegister/RegisterYourDogCTA";
 import MapComponent from "../layouts/Map/components/MapComponent";
@@ -250,7 +250,7 @@ const WebSearchPage: FunctionComponent = () => {
                     setSelectedStartDate={setSelectedStartDate} selectedStartDate={selectedStartDate}
                     setSelectedEndDate={setSelectedEndDate} selectedEndDate={selectedEndDate}
                 />
-                {!hasDog && <RegisterYourDogCTA />}
+                {!hasDog && userDetails?.role == ROLE.CUSTOMER  && <RegisterYourDogCTA />}
                 <Box
                     component="main"
                     sx={{
