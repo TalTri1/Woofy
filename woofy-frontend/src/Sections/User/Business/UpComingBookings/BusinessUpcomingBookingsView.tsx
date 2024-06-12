@@ -1,12 +1,22 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { BUSINESS_TYPES } from "../../../../models/Enums/Enums";
+import React, {FunctionComponent, useState, useEffect} from "react";
+import {
+    Box,
+    Button,
+    Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from "@mui/material";
+import {BUSINESS_TYPES} from "../../../../models/Enums/Enums";
 import SelectServiceTypeComponent from "../../selectButtons/SelectServiceTypeComponent";
 import BusinessUpcomingBookingCard from "./BusinessUpcomingBookingCard";
 import {api} from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 import {getImage} from "../../../../components/image/imageComponent";
 import {toast} from "react-toastify";
+import {Helmet} from "react-helmet-async";
 
 const BusinessUpComingBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
@@ -70,7 +80,7 @@ const BusinessUpComingBookings: FunctionComponent = () => {
                         let dogProfileImage = defaultProfilePicture;
                         let dogDetails = {};
                         try {
-                            const dogResponse = await api.post('dogs/getByUserId', { id: booking.userId });
+                            const dogResponse = await api.post('dogs/getByUserId', {id: booking.userId});
                             if (dogResponse.data) {
                                 if (dogResponse.data.profilePhotoID) {
                                     dogProfileImage = await getImage(dogResponse.data.profilePhotoID);
@@ -100,121 +110,126 @@ const BusinessUpComingBookings: FunctionComponent = () => {
     }, []);
 
     return (
-        <Box
-            className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
-            <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
-                <Box className="self-stretch flex flex-col items-center justify-start">
-                    <Typography
-                        style={{ fontFamily: 'Inter', fontSize: '40px', fontWeight: 'bold' }}
-                        className="m-0 self-stretch relative leading-[58px] mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
-                        Upcoming Bookings
-                    </Typography>
+        <>
+            <Helmet>
+                <title> Upcoming Bookings | Woofy </title>
+            </Helmet>
+            <Box
+                className="self-stretch overflow-hidden flex flex-col items-center justify-start pt-12 px-5 pb-8 box-border gap-5 max-w-full text-center text-4xl text-text-primary font-medium">
+                <Box className="w-full max-w-[768px] flex flex-col items-start justify-start">
+                    <Box className="self-stretch flex flex-col items-center justify-start">
+                        <Typography
+                            style={{fontFamily: 'Inter', fontSize: '40px', fontWeight: 'bold'}}
+                            className="m-0 self-stretch relative leading-[58px] mq450:text-10xl mq450:leading-[35px] mq1050:text-19xl mq1050:leading-[46px]">
+                            Upcoming Bookings
+                        </Typography>
+                    </Box>
                 </Box>
-            </Box>
 
-            <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
-                sx={{ alignItems: "center" }}>
-                <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
-                    selectedServices={selectedServices} />
-                <Button
-                    onClick={handleViewAll}
-                    variant={selectedServices === null ? "contained" : "outlined"}
-                    sx={{
-                        marginRight: 10,
-                        marginTop: 2,
-                        width: '130px',
-                        height: '45px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        textTransform: 'none',
-                        borderRadius: '30px',
-                        fontFamily: 'Inter',
-                        fontSize: '16px',
-                        fontWeight: 'regular',
-                        color: selectedServices === null ? 'white' : 'black',
-                        borderColor: selectedServices !== null ? 'grey.500' : 'primary.main',
-                        backgroundColor: selectedServices === null ? '#006CBF' : 'transparent',
-                        '&:hover': {
-                            borderColor: selectedServices !== null ? 'grey.700' : '#006CBF',
-                            backgroundColor: selectedServices === null ? '#0056A4' : 'transparent',
-                        },
-                    }}
-                >
-                    <Box
-                        className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
-                        sx={{ marginLeft: 0, whiteSpace: 'nowrap' }}
+                <Box className="w-full max-w-[768px] flex flex-row items-center justify-center mb-3"
+                     sx={{alignItems: "center"}}>
+                    <SelectServiceTypeComponent setSelectedServices={setSelectedServices}
+                                                selectedServices={selectedServices}/>
+                    <Button
+                        onClick={handleViewAll}
+                        variant={selectedServices === null ? "contained" : "outlined"}
+                        sx={{
+                            marginRight: 10,
+                            marginTop: 2,
+                            width: '130px',
+                            height: '45px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            textTransform: 'none',
+                            borderRadius: '30px',
+                            fontFamily: 'Inter',
+                            fontSize: '16px',
+                            fontWeight: 'regular',
+                            color: selectedServices === null ? 'white' : 'black',
+                            borderColor: selectedServices !== null ? 'grey.500' : 'primary.main',
+                            backgroundColor: selectedServices === null ? '#006CBF' : 'transparent',
+                            '&:hover': {
+                                borderColor: selectedServices !== null ? 'grey.700' : '#006CBF',
+                                backgroundColor: selectedServices === null ? '#0056A4' : 'transparent',
+                            },
+                        }}
                     >
-                        View All
-                    </Box>
-                </Button>
-            </Box>
+                        <Box
+                            className={`ServiceTypeButtonText ${selectedServices === null ? "white-text" : ""}`}
+                            sx={{marginLeft: 0, whiteSpace: 'nowrap'}}
+                        >
+                            View All
+                        </Box>
+                    </Button>
+                </Box>
 
-            <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
-                <Box
-                    className="self-stretch flex flex-col items-start justify-start border-solid border-text-primary pb-3">
+                <Box className="w-full max-w-[768px] flex flex-col items-center justify-center gap-7 text-left text-xl">
                     <Box
-                        className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-solid border-gray-500 pt-7">
-                        {bookings
-                            .filter(booking => selectedServices === null || booking.businessType === selectedServices)
-                            .slice(0, displayedBookings)
-                            .map(booking => (
-                                <BusinessUpcomingBookingCard
-                                    key={booking.appointmentId}
-                                    icon={getIconForType(booking.businessType)}
-                                    businessType={booking.businessType}
-                                    customerName={booking.customerName}
-                                    date={booking.date}
-                                    endDate={booking.endDate}
-                                    startTime={booking.startTime}
-                                    customerProfilePhotoID={booking.customerProfilePhotoID}
-                                    profileImage={booking.profileImage}
-                                    dogName={booking.dogDetails.dogName}
-                                    dogDetails={booking.dogDetails}
-                                    onCancel={() => handleCancelBooking(booking)}
-                                />
-                            ))}
+                        className="self-stretch flex flex-col items-start justify-start border-solid border-text-primary pb-3">
+                        <Box
+                            className="self-stretch flex flex-col items-center justify-start gap-8 max-w-full border-solid border-gray-500 pt-7">
+                            {bookings
+                                .filter(booking => selectedServices === null || booking.businessType === selectedServices)
+                                .slice(0, displayedBookings)
+                                .map(booking => (
+                                    <BusinessUpcomingBookingCard
+                                        key={booking.appointmentId}
+                                        icon={getIconForType(booking.businessType)}
+                                        businessType={booking.businessType}
+                                        customerName={booking.customerName}
+                                        date={booking.date}
+                                        endDate={booking.endDate}
+                                        startTime={booking.startTime}
+                                        customerProfilePhotoID={booking.customerProfilePhotoID}
+                                        profileImage={booking.profileImage}
+                                        dogName={booking.dogDetails.dogName}
+                                        dogDetails={booking.dogDetails}
+                                        onCancel={() => handleCancelBooking(booking)}
+                                    />
+                                ))}
+                        </Box>
+                    </Box>
+
+                    <Box className="flex flex-row gap-5">
+                        {displayedBookings < bookings.length && (
+                            <Button onClick={handleShowMore} variant="outlined"
+                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                Show More
+                            </Button>
+                        )}
+                        {displayedBookings > 3 && (
+                            <Button onClick={handleShowLess} variant="outlined"
+                                    className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
+                                Show Less
+                            </Button>
+                        )}
                     </Box>
                 </Box>
 
-                <Box className="flex flex-row gap-5">
-                    {displayedBookings < bookings.length && (
-                        <Button onClick={handleShowMore} variant="outlined"
-                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
-                            Show More
+                <Dialog
+                    open={openDialog}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Cancel Booking"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to cancel this booking?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog} color="primary">
+                            No
                         </Button>
-                    )}
-                    {displayedBookings > 3 && (
-                        <Button onClick={handleShowLess} variant="outlined"
-                            className="rounded-11xl border border-solid border-gray-300 hover:bg-gray-500 hover:border-gray-100">
-                            Show Less
+                        <Button onClick={handleConfirmCancel} color="primary" autoFocus>
+                            Yes
                         </Button>
-                    )}
-                </Box>
+                    </DialogActions>
+                </Dialog>
             </Box>
-
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Cancel Booking"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to cancel this booking?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        No
-                    </Button>
-                    <Button onClick={handleConfirmCancel} color="primary" autoFocus>
-                        Yes
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
+        </>
     );
 };
 

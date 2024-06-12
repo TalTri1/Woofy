@@ -30,5 +30,5 @@ public class BusinessTypeBaseRequest {
     @Enumerated(EnumType.STRING)
     private List<WorkingDaysEnum> workingDays;
     private String about;
-    private final List<Integer> images = new ArrayList<>();
+
 }

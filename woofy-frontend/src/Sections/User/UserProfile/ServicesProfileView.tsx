@@ -8,6 +8,13 @@ import PetsInHomeComponent from "../selectButtons/PetsInHomeComponent";
 import { toast } from "react-toastify";
 import { getImage } from "../../../components/image/imageComponent";
 
+const serviceTypeMapping = {
+    dogSitterEntity: 'dog-sitter',
+    dogWalkerEntity: 'dog-walker',
+    dayCareEntity: 'day-care',
+    boardingEntity: 'boarding'
+};
+
 const ServicesProfileView = () => {
     const { userDetails } = useContext(UserContext);
     const [business, setBusiness] = useState(null);
@@ -32,13 +39,14 @@ const ServicesProfileView = () => {
                     : imageUrls;
                 setBusinessImages(images);
 
-                const updatedData = await Promise.all(Object.keys(data).map(async (serviceType) => {
-                    if (data[serviceType]?.images) {
-                        return { [serviceType]: { ...data[serviceType], images } };
+                const updatedData = Object.keys(serviceTypeMapping).reduce((acc, serviceType) => {
+                    const mappedType = serviceTypeMapping[serviceType];
+                    if (data[serviceType]) {
+                        acc[mappedType] = data[serviceType];
                     }
-                    return { [serviceType]: data[serviceType] };
-                }));
-                setServiceData(Object.assign({}, ...updatedData));
+                    return acc;
+                }, {});
+                setServiceData(updatedData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -118,7 +126,7 @@ const ServicesProfileView = () => {
 
         const imageURL = URL.createObjectURL(file);
         setBusinessImages(prevImages => {
-            const updatedImages = [...prevImages];
+            const updatedImages = Array.isArray(prevImages) ? [...prevImages] : [];
             updatedImages[index] = { url: imageURL, file };
             return updatedImages;
         });
@@ -133,7 +141,7 @@ const ServicesProfileView = () => {
                 await updatePhotoInDB(existingImageId, file);
                 const url = await getImage(existingImageId);
                 setBusinessImages(prevImages => {
-                    const updatedImages = [...prevImages];
+                    const updatedImages = Array.isArray(prevImages) ? [...prevImages] : [];
                     updatedImages[index] = { id: existingImageId, url };
                     return updatedImages;
                 });
@@ -141,9 +149,10 @@ const ServicesProfileView = () => {
                 const newImageId = await savePhotoToDB(file);
                 const url = await getImage(newImageId);
                 setBusinessImages(prevImages => {
-                    const updatedImages = [...prevImages];
+                    const updatedImages = Array.isArray(prevImages) ? [...prevImages] : [];
                     updatedImages[index] = { id: newImageId, url };
-                    handleSave();
+                    const updatedImageIds = updatedImages.map(image => image.id);
+                    api.patch(`/business/update`, { images: updatedImageIds });
                     return updatedImages;
                 });
             }
@@ -185,10 +194,10 @@ const ServicesProfileView = () => {
 
     const handleImageCancel = () => {
         if (business) {
-            const imageUrls = business.images.map((imageId, index) => ({
+            const imageUrls = Array.isArray(business.images) ? business.images.map((imageId, index) => ({
                 id: imageId,
                 url: businessImages[index]?.url || "/service-avatar-image-1@2x.png"
-            }));
+            })) : [];
             setBusinessImages(imageUrls);
             setSelectedImage(null);
         }
@@ -197,15 +206,17 @@ const ServicesProfileView = () => {
     const handleSave = async () => {
         try {
             await Promise.all(Object.keys(serviceData).map(async (serviceType) => {
-                const serviceDetails = {
-                    images: serviceData[serviceType].images.map(image => image.id),
-                };
+                const { AppointmentEntities, ScheduleEntities, ...serviceDetails } = serviceData[serviceType]; // Exclude AppointmentEntities and ScheduleEntities
                 await api.put(`business/business-type/${serviceType}/edit`, serviceDetails, {
                     headers: {
                         "Content-Type": "application/json"
                     }
                 });
             }));
+
+            const updatedImageIds = businessImages.map(image => image.id);
+            await api.patch(`/business/update`, { images: updatedImageIds });
+
             setIsEditing(false);
             toast.success('Service details updated successfully');
         } catch (error) {
@@ -216,37 +227,6 @@ const ServicesProfileView = () => {
 
     const renderService = (service, serviceType) => (
         <Box key={serviceType} sx={{ marginBottom: 4, paddingBottom: 4, borderBottom: '1px solid #ddd' }}>
-            <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    {businessImages.map((image, index) => (
-                        <Box key={index} sx={{ position: 'relative' }}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                id={`photo-upload-${index}`}
-                                onChange={(event) => handleImageChange(index, event)}
-                            />
-                            <img
-                                src={image.url}
-                                alt={`Service ${serviceType} image ${index}`}
-                                style={{ height: "100px", width: "100px", borderRadius: "50%", cursor: "pointer" }}
-                                onClick={() => document.getElementById(`photo-upload-${index}`).click()}
-                            />
-                        </Box>
-                    ))}
-                </Box>
-                {selectedImage && (
-                    <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
-                        <Button variant="contained" onClick={handleImageSave}>
-                            Save photo
-                        </Button>
-                        <Button variant="outlined" onClick={handleImageCancel}>
-                            Cancel
-                        </Button>
-                    </Box>
-                )}
-            </Grid>
             <Typography variant="h6">{serviceType.replace(/([A-Z])/g, ' $1').trim()}</Typography>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -338,7 +318,7 @@ const ServicesProfileView = () => {
                 </Grid>
 
                 {/* Unique fields for boarding */}
-                {serviceType === 'boardingEntity' && (
+                {serviceType === 'boarding' && (
                     <>
                         <Grid item xs={12} sm={6}>
                             <HomeConditionComponent
@@ -356,7 +336,7 @@ const ServicesProfileView = () => {
                 )}
 
                 {/* Unique fields for day care */}
-                {serviceType === 'dayCareEntity' && (
+                {serviceType === 'day-care' && (
                     <>
                         <Grid item xs={12} sm={6}>
                             <HomeConditionComponent
@@ -414,7 +394,37 @@ const ServicesProfileView = () => {
                 </Typography>
             </Box>
             <Box sx={{ padding: 4, flexGrow: 1, overflowY: 'auto' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ marginTop: 4, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    {Array.isArray(businessImages) && businessImages.map((image, index) => (
+                        <Box key={index} sx={{ position: 'relative' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                id={`photo-upload-${index}`}
+                                onChange={(event) => handleImageChange(index, event)}
+                            />
+                            <img
+                                src={image.url}
+                                alt={`Service image ${index}`}
+                                style={{ height: "100px", width: "100px", borderRadius: "50%", cursor: "pointer" }}
+                                onClick={() => document.getElementById(`photo-upload-${index}`).click()}
+                            />
+                        </Box>
+                    ))}
+                </Box>
+                {selectedImage && (
+                    <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+                        <Button variant="contained" onClick={handleImageSave}>
+                            Save photo
+                        </Button>
+                        <Button variant="outlined" onClick={handleImageCancel}>
+                            Cancel
+                        </Button>
+                    </Box>
+                )}
+
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
                     <Button
                         variant="outlined"
                         onClick={() => setIsEditing(!isEditing)}
@@ -440,36 +450,34 @@ const ServicesProfileView = () => {
                     >
                         {isEditing ? "Cancel" : "Edit"}
                     </Button>
+                    {isEditing && (
+                        <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSave}
+                                sx={{
+                                    borderRadius: '30px',
+                                    backgroundColor: '#006CBF',
+                                    '&:hover': {
+                                        backgroundColor: '#0056A4',
+                                    },
+                                    padding: '10px 20px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                Save Changes
+                            </Button>
+                    )}
                 </Box>
 
                 <Box sx={{ marginTop: 4 }}>
-                    {business.dogSitterEntity && renderService(business.dogSitterEntity, 'dogSitterEntity')}
-                    {business.dogWalkerEntity && renderService(business.dogWalkerEntity, 'dogWalkerEntity')}
-                    {business.boardingEntity && renderService(business.boardingEntity, 'boardingEntity')}
-                    {business.dayCareEntity && renderService(business.dayCareEntity, 'dayCareEntity')}
+                    {serviceData['dog-sitter'] && renderService(serviceData['dog-sitter'], 'dog-sitter')}
+                    {serviceData['dog-walker'] && renderService(serviceData['dog-walker'], 'dog-walker')}
+                    {serviceData['boarding'] && renderService(serviceData['boarding'], 'boarding')}
+                    {serviceData['day-care'] && renderService(serviceData['day-care'], 'day-care')}
                 </Box>
-                {isEditing && (
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSave}
-                            sx={{
-                                borderRadius: '30px',
-                                backgroundColor: '#006CBF',
-                                '&:hover': {
-                                    backgroundColor: '#0056A4',
-                                },
-                                padding: '10px 20px', // Add padding to ensure text stays in one line
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            Save Changes
-                        </Button>
-                    </Box>
-                )}
             </Box>
         </Box>
     );

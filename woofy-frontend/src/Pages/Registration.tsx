@@ -1,19 +1,20 @@
-import React, { FormEvent, FunctionComponent, useCallback, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, {FormEvent, FunctionComponent, useCallback, useState} from "react";
+import {useLocation} from "react-router-dom";
 import RegistrationView from "../Sections/LoginAndRegister/RegistrationView";
 import {api, setAuthToken} from "../api/api";
-import RegistrationModel, { USERTYPE } from "../models/RegistrationModel";
-import { useAuth } from "../provider/AuthProvider";
-import { toast } from "react-toastify";
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import { useRouter } from "../routes/hooks";
-import { useNotifications } from "../provider/NotificationContext";
+import RegistrationModel, {USERTYPE} from "../models/RegistrationModel";
+import {useAuth} from "../provider/AuthProvider";
+import {toast} from "react-toastify";
+import {Box, Button, Container, Grid, Typography} from '@mui/material';
+import {useRouter} from "../routes/hooks";
+import {useNotifications} from "../provider/NotificationContext";
 import backgroundImage from '/assets/Registration-background.jpg';
+import {Helmet} from "react-helmet-async";
 
 const Registration: FunctionComponent = () => {
     const router = useRouter();
     const location = useLocation();
-    const { setIsLoggedIn, setToken } = useAuth();
+    const {setIsLoggedIn, setToken} = useAuth();
     const basicSignUpUser = location.state;
     const [DogOwnerOrCareGiverActiveButton, setDogOwnerOrCareGiverActiveButton] = useState<string | null>('dogOwner');
     const [completeRegistrationUser, setCompleteRegistrationUser] = useState(
@@ -21,7 +22,7 @@ const Registration: FunctionComponent = () => {
     );
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const { addNotification } = useNotifications();
+    const {addNotification} = useNotifications();
 
     const updateCompleteRegistrationUser = (updatedData: Partial<RegistrationModel>) => {
         setCompleteRegistrationUser(prevState => ({
@@ -123,7 +124,7 @@ const Registration: FunctionComponent = () => {
             return;
         }
 
-        const { basicSignUpModel, ...rest } = completeRegistrationUser;
+        const {basicSignUpModel, ...rest} = completeRegistrationUser;
         const apiEndpoint = rest.userType === USERTYPE.BUSINESS ? '/auth/register-business' : '/auth/register-customer';
 
         try {
@@ -176,6 +177,9 @@ const Registration: FunctionComponent = () => {
 
     return (
         <>
+            <Helmet>
+                <title> Registration | Woofy </title>
+            </Helmet>
             <Box
                 sx={{
                     width: '100%',
@@ -237,12 +241,12 @@ const Registration: FunctionComponent = () => {
             <Container maxWidth="lg">
                 <form onSubmit={signupHandler}>
                     <Box mt={6} display="flex" flexDirection="column" alignItems="center">
-                        <Typography variant="h5" style={{ fontSize: '24px' }}>Welcome to Woofy!</Typography>
+                        <Typography variant="h5" style={{fontSize: '24px'}}>Welcome to Woofy!</Typography>
                         <Typography variant="body1">Please complete your account information and settings.</Typography>
                     </Box>
                     <Box mt={5} display="flex" flexDirection="column" alignItems="center">
                         <Typography variant="h6">I consider myself a...</Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, overflow: 'auto', mt: 2, mb: 2 }}>
+                        <Box sx={{display: 'flex', flexDirection: 'row', gap: 1, overflow: 'auto', mt: 2, mb: 2}}>
                             <Button
                                 variant={DogOwnerOrCareGiverActiveButton === 'dogOwner' ? "contained" : "outlined"}
                                 onClick={onDogOwnerButtonClick}

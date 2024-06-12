@@ -6,6 +6,7 @@ import { getImage } from "../../../components/image/imageComponent";
 import {api} from "../../../api/api";
 import defaultProfilePicture from "../../../../public/avatar-image@2x.png";
 import CustomerPastBookingCard from "./CustomerPastBookingCard";
+import {Helmet} from "react-helmet-async";
 
 const CustomerPreviousBookings: FunctionComponent = () => {
     const [selectedServices, setSelectedServices] = useState<BUSINESS_TYPES | null>(null);
@@ -67,6 +68,9 @@ const CustomerPreviousBookings: FunctionComponent = () => {
 
     return (
         <>
+                <Helmet>
+                    <title> Previous Bookings | Woofy </title>
+                </Helmet>
             <Box sx={{
                 width: '100%',
                 backgroundColor: '#006cbf',

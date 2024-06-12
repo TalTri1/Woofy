@@ -38,7 +38,6 @@ public class BusinessTypeService {
         entity.setEndTime(request.getEndTime());
         entity.setWorkingDays(request.getWorkingDays());
         entity.setAbout(request.getAbout());
-        entity.setImages(request.getImages());
         return entity;
     }
 }

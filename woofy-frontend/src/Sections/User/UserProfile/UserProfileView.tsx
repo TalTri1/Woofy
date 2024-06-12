@@ -194,7 +194,7 @@ const UserProfileView = () => {
         try {
             await api.delete('user/delete');
             toast.success('Account deleted successfully');
-            logout(); // Log out the user after account deletion
+            logout();
         } catch (error) {
             toast.error('Error deleting account');
         } finally {

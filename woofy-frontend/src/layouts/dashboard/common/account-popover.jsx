@@ -46,6 +46,11 @@ export default function AccountPopover() {
             path: '/bookings',
             icon: <UpComingIcon/>,
         },
+        {
+            label: 'History',
+            path: '/past-bookings',
+            icon: <HistoryIcon/>,
+        },
     ];
     const customerNavConfig = [
         {
