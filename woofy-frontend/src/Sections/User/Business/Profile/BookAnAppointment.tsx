@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {BUSINESS_TYPES} from '../../../../models/Enums/Enums';
-import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
-import {Box, Button, Grid, Typography} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { BUSINESS_TYPES } from '../../../../models/Enums/Enums';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
-import {toast, ToastContainer} from 'react-toastify';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {fDate} from '../../../../utils/format-time';
-import {api} from '../../../../api/api';
-import {formatEnumValue} from "../../../../utils/format-enum-text";
-import {useNotifications} from "../../../../provider/NotificationContext";
-import {useRouter} from "../../../../routes/hooks";
-import {useAuth} from "../../../../provider/AuthProvider";
+import { fDate } from '../../../../utils/format-time';
+import { api } from '../../../../api/api';
+import { formatEnumValue } from "../../../../utils/format-enum-text";
+import { useNotifications } from "../../../../provider/NotificationContext";
+import { useRouter } from "../../../../routes/hooks";
+import { useAuth } from "../../../../provider/AuthProvider";
 
 interface Business {
     id: number;
@@ -28,17 +28,17 @@ interface Props {
     selectedService: string;
 }
 
-const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
+const BookAnAppointment: React.FC<Props> = ({ business, selectedService }) => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [availableSlots, setAvailableSlots] = useState<Record<string, number> | Slot[] | number>([]);
     const [dayCareAvilability, setDayCareAvailability] = useState<number>(0);
     const [isFetching, setIsFetching] = useState(false);
     const [isAvailabilityFetched, setIsAvailabilityFetched] = useState(false);
-    const {addNotification} = useNotifications();
+    const { addNotification } = useNotifications();
     const router = useRouter();
-    const {token} = useAuth();
-    const {userDetails} = useAuth();
+    const { token } = useAuth();
+    const { userDetails } = useAuth();
     const servicePrices = {
         [BUSINESS_TYPES.BOARDING]: business.boardingEntity?.price,
         [BUSINESS_TYPES.DAY_CARE]: business.dayCareEntity?.price,
@@ -63,6 +63,10 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
 
         if (!endDate && selectedService === BUSINESS_TYPES.BOARDING) {
             toast.error('End Date is required');
+            isValid = false;
+        }
+        if (selectedService === BUSINESS_TYPES.BOARDING && selectedDate && endDate && selectedDate >= endDate) {
+            toast.error('Start Date must be before End Date');
             isValid = false;
         }
         if (!selectedDate) {
@@ -122,7 +126,7 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
             router.push('/login')
         }
         try {
-            let res = await api.post('dogs/getByUserId', {id: userDetails.id})
+            let res = await api.post('dogs/getByUserId', { id: userDetails.id })
             if (res.data.length === 0) {
                 router.push('/dog-register')
             }
@@ -189,12 +193,12 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
             const diff = (current.getTime() - previous.getTime()) / (1000 * 3600 * 24);
 
             if (diff > 1) {
-                ranges.push({start, end});
+                ranges.push({ start, end });
                 start = sortedDates[i];
             }
             end = sortedDates[i];
         }
-        ranges.push({start, end});
+        ranges.push({ start, end });
 
         return ranges;
     };
@@ -401,12 +405,12 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
             return (
                 <div>
                     {slots > 0 ? (
-                        <div style={{display: 'flex', alignItems: 'center'}}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Typography variant="body1"
-                                        style={{fontWeight: '600', marginLeft: '272px', marginRight: '16px'}}>
+                                        style={{ fontWeight: '600', marginLeft: '272px', marginRight: '16px' }}>
                                 Total Price: {servicePrices[selectedService]} ₪
                                 {slots < 10 && (
-                                    <span style={{fontSize: '16px', fontWeight: 'normal', marginLeft: '8px'}}>
+                                    <span style={{ fontSize: '16px', fontWeight: 'normal', marginLeft: '8px' }}>
                                         ({slots} left on this day)
                                     </span>
                                 )}
@@ -493,8 +497,8 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
                 </Box>;
             }
             return (availableSlots as Slot[]).map((slot, index) => (
-                <Box key={index} mb={4} sx={{ml: '-103px'}}>
-                    <Box display="flex" alignItems="center" justifyContent="center" sx={{gap: '40px'}}>
+                <Box key={index} mb={4} sx={{ ml: '-103px' }}>
+                    <Box display="flex" alignItems="center" justifyContent="center" sx={{ gap: '40px' }}>
                         <Typography
                             variant="body1"
                             style={{
@@ -541,7 +545,7 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography
                     variant="h3"
                     sx={{
@@ -573,7 +577,7 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
                                     <DatePicker
                                         label="End Date"
                                         value={endDate}
-                                        minDate={new Date()} // Prevent selection of past dates
+                                        minDate={selectedDate ? new Date(selectedDate) : new Date()} // Prevent selection of past dates and ensure end date is after start date
                                         onChange={(date) => setEndDate(date)}
                                         slots={{
                                             textField: (params) => <TextField {...params} />,
@@ -622,13 +626,13 @@ const BookAnAppointment: React.FC<Props> = ({business, selectedService}) => {
                         </Grid>
 
                         {isAvailabilityFetched && (
-                            <Grid item xs={40} style={{marginTop: '30px'}}>
+                            <Grid item xs={40} style={{ marginTop: '30px' }}>
                                 {renderAvailableSlots()}
                             </Grid>
                         )}
                     </Grid>
                 </Typography>
-                <ToastContainer/>
+                <ToastContainer />
             </div>
         </LocalizationProvider>
 
