@@ -50,9 +50,5 @@ public class BusinessTypeBaseEntity {
     @Column(name = "about", length = 2000)
     private String about;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "service_images", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "image_id")
-    private List<Integer> images = new ArrayList<>();
 
 }

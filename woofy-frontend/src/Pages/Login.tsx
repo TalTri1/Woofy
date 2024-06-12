@@ -9,7 +9,7 @@ export default function LoginPage() {
     return (
         <>
             <Helmet>
-                <title> Login | Join Woofy </title>
+                <title> Login | Woofy </title>
             </Helmet>
 
             <SignInComponent />

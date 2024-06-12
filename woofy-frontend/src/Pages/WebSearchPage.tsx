@@ -232,7 +232,7 @@ const WebSearchPage: FunctionComponent = () => {
     return (
         <>
             <Helmet>
-                <title> Discover </title>
+                <title> Discover | Woofy </title>
             </Helmet>
             <Box
                 sx={{

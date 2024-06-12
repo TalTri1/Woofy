@@ -38,18 +38,7 @@ function Navigation() {
             icon: <UpComingIcon/>,
         },
     ];
-    const unsignedConfig = [
-        {
-            title: 'Login',
-            path: '/login',
-            icon: <LoginIcon/>,
-        },
-        {
-            title: 'Sign Up',
-            path: "/sign-up",
-            icon: <SignUpIcon/>,
-        },
-    ];
+
 
     const customerNavConfig = [
         {

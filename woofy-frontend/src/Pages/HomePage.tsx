@@ -9,7 +9,7 @@ const HomePage: FunctionComponent = () => {
     return (
         <>
             <Helmet>
-                <title> Home </title>
+                <title> Home | Woofy </title>
             </Helmet>
             <Box
                 sx={{

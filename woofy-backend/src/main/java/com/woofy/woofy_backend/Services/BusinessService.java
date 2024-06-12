@@ -38,6 +38,9 @@ public class BusinessService {
         if (request.getBusinessName() != null) {
             business.setBusinessName(request.getBusinessName());
         }
+        if (request.getImages() != null) {
+            business.setImages(request.getImages());
+        }
 
         businessRepository.save(business);
 

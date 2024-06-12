@@ -16,6 +16,7 @@ import {getImage} from "../../../../components/image/imageComponent";
 import {api} from "../../../../api/api";
 import defaultProfilePicture from "../../../../../public/avatar-image@2x.png";
 import {toast} from "react-toastify";
+import {Helmet} from "react-helmet-async";
 
 const serviceTypeMapping = {
     [BUSINESS_TYPES.DOG_WALK]: 'dog-walker',
@@ -111,6 +112,9 @@ const CustomerUpComingBookings: FunctionComponent = () => {
 
     return (
         <>
+            <Helmet>
+                <title> Upcoming Bookings | Woofy </title>
+            </Helmet>
             <Box sx={{
                 width: '100%',
                 backgroundColor: '#006cbf',
