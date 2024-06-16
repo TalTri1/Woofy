@@ -35,10 +35,10 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
   const [endDateInput, setEndDateInput] = useState<Date | null>(null);
 
   const dogSizes = [
-    { size: 'Small', weight: '2-9 kg' },
-    { size: 'Medium', weight: '9-22 kg' },
-    { size: 'Large', weight: '22-45 kg' },
-    { size: 'Giant', weight: '45 kg +' },
+    { label: 'Small', value: Size.SMALL, weight: '1-9 kg' },
+    { label: 'Medium', value: Size.MEDIUM, weight: '9-22 kg' },
+    { label: 'Large', value: Size.LARGE, weight: '22-45 kg' },
+    { label: 'Giant', value: Size.GIANT, weight: '45 kg +' },
   ];
 
   const dogAges = [
@@ -132,7 +132,7 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
             },
           }}
         >
-          
+
           <Box
             sx={{
               width: '100%',
@@ -195,21 +195,21 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
 
             </Box>
             <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              justifyContent: 'start',
-              maxWidth: '1280px',
-              marginBottom: '24px',
-            }}
-          >
-            <SelectServiceTypeComponentIncludeAll
-              setSelectedServices={setSelectedServices}
-              selectedServices={selectedServices}
-            />
-          </Box>
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+                justifyContent: 'start',
+                maxWidth: '1280px',
+                marginBottom: '24px',
+              }}
+            >
+              <SelectServiceTypeComponentIncludeAll
+                setSelectedServices={setSelectedServices}
+                selectedServices={selectedServices}
+              />
+            </Box>
             <Box
               sx={{
                 display: 'flex',
@@ -415,9 +415,9 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                 >
                   {dogSizes.map((size) => (
                     <Button
-                      key={size.size}
-                      variant={selectedDogSize === size.size ? "contained" : "outlined"}
-                      onClick={() => handleDogSizeClick(size.size)}
+                      key={size.value}
+                      variant={selectedDogSize === size.value ? "contained" : "outlined"}
+                      onClick={() => handleDogSizeClick(size.value)}
                       sx={{
                         minWidth: '80px',
                         height: '48px',
@@ -431,16 +431,16 @@ const HeroContainer: FunctionComponent<HeroContainerProps> = ({
                         fontSize: '16px',
                         fontWeight: 'normal',
                         border: '1px solid transparent',
-                        color: selectedDogSize === size.size ? 'white' : 'text.primary',
-                        backgroundColor: selectedDogSize === size.size ? '#006CBF' : 'transparent',
+                        color: selectedDogSize === size.value ? 'white' : 'text.primary',
+                        backgroundColor: selectedDogSize === size.value ? '#006CBF' : 'transparent',
 
                         '&:hover': {
                           borderColor: 'transparent',
-                          backgroundColor: selectedDogSize === size.size ? '#0056A4' : 'transparent',
+                          backgroundColor: selectedDogSize === size.value ? '#0056A4' : 'transparent',
                         },
                       }}
                     >
-                      <Typography sx={{ m: 0 }}>{size.size}</Typography>
+                      <Typography sx={{ m: 0 }}>{size.label}</Typography>
                       <Typography sx={{ m: 0 }}>{size.weight}</Typography>
                     </Button>
                   ))}
