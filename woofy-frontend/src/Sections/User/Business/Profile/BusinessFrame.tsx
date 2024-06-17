@@ -129,7 +129,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
           <Divider />
           <Box sx={{ mt: 0 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-              <img src="/tablerpaw.svg" alt="tablerpaw" style={{ height: 32, width: 32 }} />
+              <img src="/tablerpaw.svg" alt="tablerpaw" style={{ height: 32, width: 32, marginRight:8 }} />
               <Typography variant="h5" fontWeight="bold">Services</Typography>
             </Box>
             <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
@@ -224,6 +224,12 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
               </Box>
             ))}
           </Box>
+          <Divider />
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt:4, mb: 3 }}>
+          <img src="/icon--shekel.svg" alt="calendercheck" style={{ height: 32, width: 32, marginRight: 8 }} />
+          <Typography variant="h5" fontWeight="bold"> Service Rates</Typography>
+        </Box>
           <Grid container spacing={2}>
             {business.boardingEntity && (
               <Grid item xs={12}>
@@ -286,7 +292,7 @@ const BusinessFrame: FunctionComponent<BusinessFrameProps> = ({ business, servic
       </Box>
       <Box sx={{ mt: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <img src="/icon--calendarcheck.svg" alt="calendercheck" style={{ height: 32, width: 32 }} />
+          <img src="/icon--calendarcheck.svg" alt="calendercheck" style={{ height: 32, width: 32, marginRight: 8 }} />
           <Typography variant="h5" fontWeight="bold">Availability</Typography>
         </Box>
         <Box display="flex" flexDirection="row" gap={2} justifyContent="center" alignItems="center" mb={4}>
