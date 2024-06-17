@@ -182,25 +182,26 @@ const DogRegisterView: FunctionComponent = () => {
 
     return (
         <Box sx={{ width: '100%', position: 'relative', backgroundColor: 'text.alternate', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', lineHeight: 'normal', tracking: 'normal' }}>
-            <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'start', px: { md: 5 } }}>
+            <Box sx={{ width: '100vw', position: 'relative', left: 0, backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 8, px: 2.5, pb: 7.5, gap: 0 }}>
+                <Typography component="h1" sx={{ fontSize: '36px', lineHeight: '120%', fontFamily: 'Inter', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '20px' }}>
+                Set Up Your Dog Details
+                </Typography>
+                <Typography sx={{ fontSize: '16px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
+                Complete the forms below to provide information about your dog.
+                </Typography>
+            </Box>
+            <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', px: { md: 5 } }}>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', maxWidth: 'calc(100% - 312px)', textAlign: 'center', fontSize: '29xl', color: 'text.alternate', fontFamily: 'text-medium-normal', px: { md: 5 } }}>
-                    <Box sx={{ width: '100%', backgroundColor: '#006cbf', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'start', pt: 4, px: 2.5, pb: 7.5, gap: 0 }}>
-                        <Typography variant="h1" sx={{ fontSize: '48px', lineHeight: '120%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
-                            Set Up Your Dog Details
-                        </Typography>
-                        <Typography sx={{ fontSize: '18px', lineHeight: '150%', fontFamily: 'Inter', color: 'white', textAlign: 'center' }}>
-                            Complete the forms below to provide information about your dog.
-                        </Typography>
-                    </Box>
                     <Box sx={{ width: '100%', backgroundColor: 'text.alternate', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%', fontSize: '5xl', color: 'text.primary', gap: 2.5 }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' }}>
                             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'end', justifyContent: 'start', pt: 2, pb: 1.5 }}>
-                                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: 1 }}>
-                                    <Typography variant="h3" sx={{ m: 0, width: '100%', fontSize: 'inherit', lineHeight: '34px', fontWeight: 'bold', fontFamily: 'inherit' }}>
-                                        Dog Details Form
+                                
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1 }}>
+                                    <Typography variant="h4" sx={{ fontFamily: 'Inter', fontWeight: 'bold', color: 'text.primary', textAlign: 'center' }}>
+                                    Dog Details Form
                                     </Typography>
-                                    <Typography sx={{ width: '100%', fontSize: 'base', lineHeight: '150%' }}>
-                                        Please fill the necessary information found in the following questions.
+                                    <Typography variant="body1" sx={{ fontFamily: 'Inter', color: 'text.primary', textAlign: 'center' }}>
+                                    Please fill the necessary information found in the following questions.
                                     </Typography>
                                 </Box>
                             </Box>

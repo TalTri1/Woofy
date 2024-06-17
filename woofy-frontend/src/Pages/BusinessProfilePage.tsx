@@ -70,7 +70,6 @@ const BusinessProfilePage: FunctionComponent = () => {
             <Box
                 sx={{
                     width: '100%',
-                    backgroundColor: '#f8f9fa',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
